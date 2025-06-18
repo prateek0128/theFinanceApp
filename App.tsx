@@ -1,16 +1,17 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import Navigation from "./src/navigation/index";
-
+import { colors } from "./src/assets/styles/colors";
 export default function App() {
-  return <Navigation />;
+  return (
+    <>
+      <StatusBar
+        backgroundColor={colors.primaryBackground} // Android background color
+        //@ts-ignore
+        barStyle="dark" // iOS & Android text/icons
+        translucent={true}
+      />
+      <Navigation />
+    </>
+  );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

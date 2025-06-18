@@ -8,9 +8,14 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Image,
 } from "react-native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "../../../types/navigation";
+import { colors } from "../../../assets/styles/colors";
+import globalStyles from "../../../assets/styles/globalStyles";
+import typography from "../../../assets/styles/typography";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 const SignUpScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -42,14 +47,8 @@ const SignUpScreen = () => {
       style={styles.container}
     >
       <ScrollView contentContainerStyle={styles.innerContainer}>
-        <Text style={styles.title}>Create Account</Text>
-
-        <TextInput
-          style={styles.input}
-          placeholder="Full Name"
-          value={form.name}
-          onChangeText={(text) => handleChange("name", text)}
-        />
+        <Text style={styles.title}>Let’s get you started</Text>
+        <Text style={styles.subtitle}>Create an Account</Text>
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -65,21 +64,47 @@ const SignUpScreen = () => {
           value={form.password}
           onChangeText={(text) => handleChange("password", text)}
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Confirm Password"
-          secureTextEntry
-          value={form.confirmPassword}
-          onChangeText={(text) => handleChange("confirmPassword", text)}
-        />
-
         <TouchableOpacity style={styles.button} onPress={handleSignUp}>
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
+        <View style={styles.inlineLinkContainer}>
+          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+            <Text style={styles.alreadyLinkText}>Already have an account?</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+            <Text style={styles.loginLinkText}>Log In</Text>
+          </TouchableOpacity>
+        </View>
+        {/* Icons row */}
+        <View style={styles.iconRow}>
+          <TouchableOpacity onPress={() => console.log("Google pressed")}>
+            <FontAwesome
+              name="google"
+              size={32}
+              color="#DB4437"
+              style={styles.icon}
+            />
+            {/* <Image
+              source={require("../../../assets/images/auth/googleIcon.svg")} // Replace with your logo path
+              style={styles.icon}
+              resizeMode="contain"
+            /> */}
+          </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-          <Text style={styles.linkText}>Already have an account? Login</Text>
-        </TouchableOpacity>
+          <TouchableOpacity onPress={() => console.log("Facebook pressed")}>
+            <FontAwesome
+              name="apple"
+              size={32}
+              color="#4267B2"
+              style={styles.icon}
+            />
+            {/* <Image
+              source={require("../../../assets/images/auth/appleIcon.svg")} // Replace with your logo path
+              style={styles.icon}
+              resizeMode="contain"
+            /> */}
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -97,18 +122,31 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    marginBottom: 24,
+    color: colors.primaryText,
+    fontFamily: typography.fontFamily.secondary,
+    fontSize: 32,
+    fontWeight: 600,
+    marginBottom: 80,
+    textAlign: "left",
+  },
+  subtitle: {
+    color: colors.primaryText,
+    fontFamily: typography.fontFamily.secondary,
+    fontSize: 24,
+    fontWeight: 500,
+    marginBottom: 10,
     textAlign: "center",
   },
   input: {
-    height: 48,
-    borderColor: "#ccc",
-    borderWidth: 1,
+    height: 36,
+    backgroundColor: colors.secondaryBackground,
     borderRadius: 8,
-    paddingHorizontal: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
     marginBottom: 16,
+    gap: 10,
+    color: colors.primaryText,
+    fontFamily: typography.fontFamily.secondary,
   },
   button: {
     backgroundColor: "#007AFF",
@@ -121,9 +159,34 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
   },
-  linkText: {
-    textAlign: "center",
-    color: "#007AFF",
+  inlineLinkContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 16,
+  },
+  alreadyLinkText: {
+    textAlign: "center",
+    fontWeight: 300,
+    fontSize: 14,
+    color: colors.primaryText,
+    fontFamily: typography.fontFamily.secondary,
+  },
+  loginLinkText: {
+    textAlign: "center",
+    marginLeft: 4,
+    fontWeight: 600,
+    fontSize: 16,
+    color: colors.primaryText,
+    fontFamily: typography.fontFamily.secondary,
+  },
+  iconRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 24,
+    gap: 20, // if using React Native >= 0.71
+  },
+  icon: {
+    marginHorizontal: 10,
   },
 });

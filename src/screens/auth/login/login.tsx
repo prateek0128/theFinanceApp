@@ -11,7 +11,9 @@ import {
 } from "react-native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "../../../types/navigation";
-
+import { colors } from "../../../assets/styles/colors";
+import globalStyles from "../../../assets/styles/globalStyles";
+import typography from "../../../assets/styles/typography";
 const LoginScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -41,8 +43,9 @@ const LoginScreen = () => {
       style={styles.container}
     >
       <ScrollView contentContainerStyle={styles.innerContainer}>
-        <Text style={styles.title}>Welcome Back</Text>
+        <Text style={styles.title}>Let’s get you started</Text>
 
+        <Text style={styles.subtitle}>Login</Text>
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -59,14 +62,17 @@ const LoginScreen = () => {
           value={form.password}
           onChangeText={(text) => handleChange("password", text)}
         />
-
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-          <Text style={styles.linkText}>Don't have an account? Sign Up</Text>
-        </TouchableOpacity>
+        <View style={styles.inlineLinkContainer}>
+          <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+            <Text style={styles.alreadyLinkText}>Dont have an account?</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+            <Text style={styles.loginLinkText}>Sign In</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -77,25 +83,40 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.primaryBackground,
   },
   innerContainer: {
-    padding: 24,
-    justifyContent: "center",
+    padding: 20,
+    //justifyContent: "center",
+    paddingTop: 150,
     flexGrow: 1,
   },
   title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    marginBottom: 24,
+    color: colors.primaryText,
+    fontFamily: typography.fontFamily.secondary,
+    fontSize: 32,
+    fontWeight: 600,
+    marginBottom: 80,
+    textAlign: "left",
+  },
+  subtitle: {
+    color: colors.primaryText,
+    fontFamily: typography.fontFamily.secondary,
+    fontSize: 24,
+    fontWeight: 500,
+    marginBottom: 10,
     textAlign: "center",
   },
   input: {
-    height: 48,
-    borderColor: "#ccc",
-    borderWidth: 1,
+    height: 36,
+    backgroundColor: colors.secondaryBackground,
     borderRadius: 8,
-    paddingHorizontal: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
     marginBottom: 16,
+    gap: 10,
+    color: colors.primaryText,
+    fontFamily: typography.fontFamily.secondary,
   },
   button: {
     backgroundColor: "#007AFF",
@@ -112,5 +133,26 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#007AFF",
     marginTop: 16,
+  },
+  inlineLinkContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 16,
+  },
+  alreadyLinkText: {
+    textAlign: "center",
+    fontWeight: 300,
+    fontSize: 14,
+    color: colors.primaryText,
+    fontFamily: typography.fontFamily.secondary,
+  },
+  loginLinkText: {
+    textAlign: "center",
+    marginLeft: 4,
+    fontWeight: 600,
+    fontSize: 16,
+    color: colors.primaryText,
+    fontFamily: typography.fontFamily.secondary,
   },
 });
