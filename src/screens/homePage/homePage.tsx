@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+import { colors } from "../../assets/styles/colors";
 
 const HomeScreen = () => {
   // TODO: Replace with real user data and finance info
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 24,
     flexGrow: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.primaryBackground,
   },
   welcome: {
     fontSize: 24,
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
     color: "#e74c3c",
   },
   button: {
-    backgroundColor: "#007AFF",
+    backgroundColor: colors.primaryButtonColor,
     paddingVertical: 16,
     borderRadius: 8,
     marginBottom: 12,
@@ -116,14 +117,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   buttonSecondary: {
-    borderColor: "#007AFF",
+    borderColor: colors.primaryButtonColor,
     borderWidth: 1,
     paddingVertical: 16,
     borderRadius: 8,
     alignItems: "center",
   },
   buttonSecondaryText: {
-    color: "#007AFF",
+    color: colors.primaryButtonColor,
     fontWeight: "700",
     fontSize: 16,
   },

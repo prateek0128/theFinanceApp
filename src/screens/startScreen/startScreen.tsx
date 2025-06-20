@@ -74,7 +74,7 @@ const StartScreen = () => {
   const handleNext = () => {
     let nextIndex = 0;
     if (cardIndex === cardData.length - 1) {
-      navigation.navigate("Welcome");
+      navigation.navigate("Login");
     } else {
       nextIndex = (cardIndex + 1) % cardData.length;
       const nextImage = cardData[nextIndex].image;

@@ -17,6 +17,7 @@ export const colors = {
   tertiaryText: "#5B5C60",
   primaryBorderColor: "#3C3744",
   secondaryBorderColor: "#6B7280",
+  primaryButtonColor: "#007AFF",
   //startScreen
   blueCard: "#CDE3F3",
   greenCard: "#D4ECCD",

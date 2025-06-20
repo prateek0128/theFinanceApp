@@ -19,8 +19,8 @@ import SocialLoginButton from "../../../components/socialLoginButton/socialLogin
 const WelcomeScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const appleIcon = require("../../../assets/images/welcome/appleIcon.png");
-  const googleIcon = require("../../../assets/images/welcome/googleIcon.png");
-  const facebookIcon = require("../../../assets/images/welcome/facebookIcon.png");
+  const googleIcon = require("../../../assets/images/welcome/appleIcon.png");
+  const facebookIcon = require("../../../assets/images/welcome/appleIcon.png");
 
   return (
     <KeyboardAvoidingView

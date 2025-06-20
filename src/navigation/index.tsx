@@ -8,6 +8,8 @@ import HomeScreen from "../screens/homePage/homePage";
 import SplashScreen from "../screens/splashScreen/splashScreen";
 import StartScreen from "../screens/startScreen/startScreen";
 import WelcomeScreen from "../screens/auth/welcomeScreen/welcomeScreen";
+import TellUsSomething from "../screens/tellUsSomething/tellUsSomething";
+import BottomTabNavigator from "../screens/bottomNavigation/bottomNavigation";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -23,7 +25,8 @@ export default function Navigation() {
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="TellUsSomething" component={TellUsSomething} />
+        <Stack.Screen name="Home" component={BottomTabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -13,7 +13,7 @@ const SplashScreen = () => {
   useEffect(() => {
     // Simulate loading or fetch initial data
     const timer = setTimeout(() => {
-      navigation.replace("Login"); // You could check auth state here
+      // navigation.replace("Login"); // You could check auth state h8ere
       navigation.replace("Start");
     }, 2000);
 
