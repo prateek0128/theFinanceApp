@@ -19,6 +19,8 @@ import { TextInput as RNTextInput } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { showMessage } from "react-native-flash-message";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import InputTextField from "../../../components/inputTextField/inputTextField";
+import Button from "../../../components/button/button";
 const LoginScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -133,72 +135,65 @@ const LoginScreen = () => {
       style={styles.container}
     >
       <ScrollView contentContainerStyle={styles.innerContainer}>
-        <Text style={styles.title}>Let’s get you onboard</Text>
-
-        <Text style={styles.subtitle}>Login</Text>
-        <Text style={styles.infoText}>
-          Use only your WhatsApp number to login
-        </Text>
-        <View style={styles.labelRow}>
-          <Text style={styles.label}>Phone Number or Email</Text>
-          {showOTPInputs && (
-            <TouchableOpacity onPress={handleEditPress}>
-              <MaterialIcons
-                name="edit"
-                size={18}
-                color={colors.primaryText}
-                style={{ marginLeft: 8 }}
-              />
-            </TouchableOpacity>
-          )}
+        <View style={styles.headingContainer}>
+          <Text style={styles.subtitle}>Log In</Text>
         </View>
-        <TextInput
-          style={[
-            styles.input,
-            // showOTPInputs && { backgroundColor: "#ddd" }, // Optional: visually indicate it's disabled
-          ]}
-          placeholder="Enter phone number or email address"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          value={input}
-          onChangeText={validateInput}
-          editable={!showOTPInputs} // <-- disable input when OTP inputs are shown
-        />
-        {showOTPInputs && (
-          <View style={styles.otpContainer}>
-            {otp.map((digit, index) => (
-              <TextInput
-                key={index}
-                ref={(ref) => {
-                  otpInputs.current[index] = ref;
-                }}
-                style={styles.otpInput}
-                keyboardType="numeric"
-                maxLength={1}
-                value={digit}
-                onChangeText={(value) => handleOTPChange(index, value)}
-                onKeyPress={({ nativeEvent }) =>
-                  handleOTPKeyPress(index, nativeEvent.key)
-                }
-                returnKeyType="next"
-                blurOnSubmit={false}
-              />
-            ))}
-          </View>
-        )}
-        <TouchableOpacity
-          style={[
-            styles.button,
-            (!isValid || (showOTPInputs && !isOtpComplete)) && { opacity: 0.5 },
-          ]}
-          onPress={showOTPInputs ? handleVerifyOTP : handleSendOTP}
-          disabled={!isValid || (showOTPInputs && !isOtpComplete)}
-        >
-          <Text style={styles.buttonText}>
-            {showOTPInputs ? "Verify OTP" : "Send OTP"}
-          </Text>
-        </TouchableOpacity>
 
+        {/* <Text style={styles.infoText}>
+          Use only your WhatsApp number to login
+        </Text> */}
+        <View style={styles.formContainer}>
+          <View style={styles.formFieldContainer}>
+            <View style={styles.labelRow}>
+              <Text style={styles.label}>Phone Number or Email</Text>
+              {showOTPInputs && (
+                <TouchableOpacity onPress={handleEditPress}>
+                  <MaterialIcons
+                    name="edit"
+                    size={18}
+                    color={colors.primaryText}
+                    style={{ marginLeft: 8 }}
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
+            <InputTextField
+              placeholder="Enter phone number or email address"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              value={input}
+              onChangeText={validateInput}
+              editable={!showOTPInputs}
+            />
+          </View>
+          {showOTPInputs && (
+            <View style={styles.otpContainer}>
+              {otp.map((digit, index) => (
+                <InputTextField
+                  key={index}
+                  ref={(ref: any) => {
+                    otpInputs.current[index] = ref;
+                  }}
+                  style={styles.otpInput}
+                  keyboardType="numeric"
+                  maxLength={1}
+                  value={digit}
+                  onChangeText={(value) => handleOTPChange(index, value)}
+                  onKeyPress={({ nativeEvent }) =>
+                    handleOTPKeyPress(index, nativeEvent.key)
+                  }
+                  returnKeyType="next"
+                  blurOnSubmit={false}
+                />
+              ))}
+            </View>
+          )}
+          <Button
+            title={showOTPInputs ? "Verify OTP" : "Send OTP"}
+            onPress={showOTPInputs ? handleVerifyOTP : handleSendOTP}
+            disabled={!isValid || (showOTPInputs && !isOtpComplete)}
+          />
+        </View>
         <View style={styles.inlineLinkContainer}>
           <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
             <Text style={styles.alreadyLinkText}>Don't have an account?</Text>
@@ -207,19 +202,7 @@ const LoginScreen = () => {
             <Text style={styles.loginLinkText}>Sign Up</Text>
           </TouchableOpacity>
         </View>
-        {/* <View style={styles.buttonContainers}>
-          <SocialLoginButton
-            icon={appleIcon}
-            text="Continue with Apple"
-            onPress={() => console.log("Apple pressed")}
-          />
-          <SocialLoginButton
-            icon={googleIcon}
-            text="Continue with Google"
-            onPress={() => console.log("Google pressed")}
-          />
-        </View> */}
-        <View style={styles.iconRow}>
+        {/* <View style={styles.iconRow}>
           <TouchableOpacity onPress={() => console.log("Google pressed")}>
             <FontAwesome
               name="google"
@@ -237,7 +220,7 @@ const LoginScreen = () => {
               style={styles.icon}
             />
           </TouchableOpacity>
-        </View>
+        </View> */}
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -248,12 +231,13 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.primaryBackground,
+    backgroundColor: colors.septenaryBackground,
   },
   innerContainer: {
     padding: 20,
     justifyContent: "center",
     flexGrow: 1,
+    gap: 64,
   },
   title: {
     color: colors.primaryText,
@@ -263,13 +247,22 @@ const styles = StyleSheet.create({
     marginBottom: 80,
     textAlign: "left",
   },
+  headingContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
   subtitle: {
     color: colors.primaryText,
-    //  fontFamily: fontFamily.secondary,
-    fontSize: 24,
-    fontWeight: "500",
+    fontFamily: fontFamily.titleFont,
+    fontSize: 40,
     marginBottom: 10,
     textAlign: "center",
+  },
+  formContainer: {
+    gap: 20,
+  },
+  formFieldContainer: {
+    gap: 6,
   },
   infoText: {
     color: colors.primaryText,
@@ -284,15 +277,12 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   label: {
-    marginBottom: 4,
-    fontSize: 14,
-    color: colors.primaryText,
-    // fontFamily: fontFamily.secondary,
-    fontWeight: "500",
+    fontSize: 20,
+    color: colors.octonaryText,
+    fontFamily: fontFamily.titleFont,
   },
   input: {
     height: 36,
-    backgroundColor: colors.secondaryBackground,
     borderRadius: 8,
     paddingVertical: 8,
     paddingHorizontal: 10,
@@ -321,23 +311,21 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 16,
+    // marginTop: 16,
     marginBottom: 10,
   },
   alreadyLinkText: {
     textAlign: "center",
-    fontWeight: "300",
     fontSize: 14,
-    color: colors.primaryText,
-    // fontFamily: fontFamily.secondary,
+    color: colors.secondaryText,
+    fontFamily: fontFamily.textFont400,
   },
   loginLinkText: {
     textAlign: "center",
     marginLeft: 4,
-    fontWeight: "600",
-    fontSize: 16,
-    color: colors.primary,
-    //  fontFamily: fontFamily.secondary,
+    fontSize: 14,
+    color: colors.secondaryText,
+    fontFamily: fontFamily.titleFont,
   },
   buttonContainers: {
     gap: 16,
@@ -356,9 +344,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     textAlign: "center",
     fontSize: 20,
-    backgroundColor: colors.secondaryBackground,
     color: colors.primaryText,
-    //fontFamily: fontFamily.secondary,
+    // fontFamily: fontFamily.textFont500,
   },
   iconRow: {
     flexDirection: "row",

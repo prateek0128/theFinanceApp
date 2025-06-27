@@ -1,55 +1,49 @@
 {
   "expo": {
-    "name": "theFinanceApp",
-    "slug": "theFinanceApp",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
+    "name": "FinSimply",
+    "slug": "finsimply",
+    "platforms": ["ios", "android", "web"],
     "runtimeVersion": {
       "policy": "appVersion"
     },
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "src/assets/icon.png",
+    "icon": "src/assets/FinSimplyLogo.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "src/assets/splash-icon.png",
+      "image": "src/assets/FinSimplyLogo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.prateek2812.theFinanceApp",
+      "bundleIdentifier": "com.prateek2812.finsimply",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "src/assets/adaptive-icon.png",
+        "foregroundImage": "src/assets/FinSimplyLogo.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.prateek2812.theFinanceApp"
+      "package": "com.prateek2812.finsimply"
     },
     "web": {
       "favicon": "src/assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "fa847994-2c1f-4fa8-8239-4ca2031be835"
-      }
     },
     "updates": {
       "enabled": true,
       "fallbackToCacheTimeout": 0,
       "url": "https://u.expo.dev/fa847994-2c1f-4fa8-8239-4ca2031be835"
     },
-    "plugins": [
-      "expo-font"
-    ]
+    "plugins": ["expo-font"],
+    "extra": {
+      "eas": {
+        "projectId": "5e5173ff-2eb6-4e34-8a24-40eef2afe9cb"
+      }
+    }
   }
 }

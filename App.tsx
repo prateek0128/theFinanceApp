@@ -14,6 +14,7 @@ export default function App() {
     "Satoshi-Regular": require("./src/assets/fonts/SatoshiVariable/Satoshi-Regular.otf"),
     "Satoshi-Medium": require("./src/assets/fonts/SatoshiVariable/Satoshi-Medium.otf"),
     "Satoshi-Bold": require("./src/assets/fonts/SatoshiVariable/Satoshi-Bold.otf"),
+    "Satoshi-Black": require("./src/assets/fonts/SatoshiVariable/Satoshi-Black.otf"),
     "CabinetGrotesk-Regular": require("./src/assets/fonts/CabinetGrotesk/CabinetGrotesk-Regular.otf"),
     "CabinetGrotesk-Bold": require("./src/assets/fonts/CabinetGrotesk/CabinetGrotesk-Bold.otf"),
     "Chillax-Medium": require("./src/assets/fonts/ChillaxVariable/Chillax-Medium.otf"),
