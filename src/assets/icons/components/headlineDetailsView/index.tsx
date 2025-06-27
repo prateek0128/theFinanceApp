@@ -1,0 +1,7 @@
+export { default as CommentIcon } from "./CommentIcon";
+export { default as CurrencyImage2 } from "./CurrencyImage2";
+export { default as FemaleProfileIcon } from "./FemaleProfileIcon";
+export { default as GraphImage2 } from "./GraphImage2";
+export { default as LikeIcon } from "./LikeIcon";
+export { default as MaleProfileIcon } from "./MaleProfileIcon";
+export { default as UnlikeIcon } from "./UnlikeIcon";
