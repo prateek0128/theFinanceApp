@@ -14,7 +14,7 @@ import { RootStackParamList } from "../../types/navigation";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { colors } from "../../assets/styles/colors";
 import globalStyles from "../../assets/styles/globalStyles";
-import typography from "../../assets/styles/typography";
+import fontFamily from "../../assets/styles/fontFamily";
 const { width, height } = Dimensions.get("window");
 const StartScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -168,6 +168,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.primaryBackground,
     padding: 20,
+    gap: 20,
   },
   card: {
     height: height * 0.8,
@@ -180,12 +181,12 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   cardTitle: {
-    fontWeight: 500,
+    fontFamily: fontFamily.titleFont,
     fontSize: 40,
     color: colors.secondaryText,
   },
   cardText: {
-    fontWeight: 400,
+    fontFamily: fontFamily.textFont400,
     fontSize: 16,
     color: colors.tertiaryText,
   },
@@ -196,9 +197,9 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   floatingButtonContainer: {
-    position: "absolute",
-    bottom: 40,
-    right: 20,
+    // position: "absolute",
+    // bottom: 20,
+    // right: 20,
     alignSelf: "flex-end",
     // backgroundColor: colors.accent || "#007BFF", // fallback color
     padding: 16,
@@ -209,7 +210,6 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     borderWidth: 1,
   },
-
   floatingButton: {
     color: "#000",
     fontSize: 16,

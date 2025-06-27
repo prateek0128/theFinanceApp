@@ -2,7 +2,14 @@
   "expo": {
     "name": "theFinanceApp",
     "slug": "theFinanceApp",
-    "runtimeVersion": "1.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "src/assets/icon.png",
@@ -36,13 +43,13 @@
         "projectId": "fa847994-2c1f-4fa8-8239-4ca2031be835"
       }
     },
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
     "updates": {
       "enabled": true,
       "fallbackToCacheTimeout": 0,
       "url": "https://u.expo.dev/fa847994-2c1f-4fa8-8239-4ca2031be835"
-    }
+    },
+    "plugins": [
+      "expo-font"
+    ]
   }
 }

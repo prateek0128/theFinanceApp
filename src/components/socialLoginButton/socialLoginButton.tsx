@@ -9,7 +9,7 @@ import {
   ImageSourcePropType,
 } from "react-native";
 import { colors } from "../../assets/styles/colors";
-import typography from "../../assets/styles/typography";
+import fontFamily from "../../assets/styles/fontFamily";
 
 interface SocialLoginButtonProps {
   icon?: ImageSourcePropType;
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: colors.primaryText,
-    fontFamily: typography.fontFamily.secondary,
+    fontFamily: fontFamily.secondary,
     fontSize: 16,
     fontWeight: "500",
   },

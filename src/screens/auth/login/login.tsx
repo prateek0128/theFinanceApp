@@ -13,7 +13,7 @@ import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "../../../types/navigation";
 import { colors } from "../../../assets/styles/colors";
 import globalStyles from "../../../assets/styles/globalStyles";
-import typography from "../../../assets/styles/typography";
+import fontFamily from "../../../assets/styles/fontFamily";
 import SocialLoginButton from "../../../components/socialLoginButton/socialLoginButton";
 import { TextInput as RNTextInput } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -35,18 +35,18 @@ const LoginScreen = () => {
     if (input.trim() === "") {
       showMessage({
         message: "Please enter your phone or email.",
-        type: "success", // can be "danger", "info", "warning"
-        backgroundColor: colors.primary, // optional: customize color
-        color: "#fff", // text color
+        type: "success",
+        backgroundColor: colors.primary,
+        color: "#fff",
       });
       return;
     }
     if (!isValid) {
       showMessage({
         message: "Please enter a valid phone number or email.",
-        type: "danger", // can be "danger", "info", "warning"
-        backgroundColor: colors.primary, // optional: customize color
-        color: "#fff", // text color
+        type: "danger",
+        backgroundColor: colors.primary,
+        color: "#fff",
       });
       return;
     }
@@ -55,18 +55,18 @@ const LoginScreen = () => {
     showMessage({
       message: "OTP sent",
       description: `We’ve sent it to your phone number`,
-      type: "success", // can be "danger", "info", "warning"
-      backgroundColor: colors.primary, // optional: customize color
-      color: "#fff", // text color
+      type: "success",
+      backgroundColor: colors.primary,
+      color: "#fff",
     });
   };
   const handleVerifyOTP = () => {
     if (otp.some((digit) => digit === "")) {
       showMessage({
         message: "Please enter all OTP digits.",
-        type: "danger", // can be "danger", "info", "warning"
-        backgroundColor: colors.primary, // optional: customize color
-        color: "#fff", // text color
+        type: "danger",
+        backgroundColor: colors.primary,
+        color: "#fff",
       });
       return;
     }
@@ -74,19 +74,20 @@ const LoginScreen = () => {
     if (otpString !== otpValue) {
       showMessage({
         message: "Invalid OTP. Please try again.",
-        type: "danger", // can be "danger", "info", "warning"
-        backgroundColor: colors.primary, // optional: customize color
-        color: "#fff", // text color
+        type: "danger",
+        backgroundColor: colors.primary,
+        color: "#fff",
       });
       return;
     } else {
       showMessage({
         message: "OTP verified successfully!",
-        type: "success", // can be "danger", "info", "warning"
-        backgroundColor: colors.primary, // optional: customize color
-        color: "#fff", // text color
+        type: "success",
+        backgroundColor: colors.primary,
+        color: "#fff",
       });
-      navigation.navigate("Home"); // Navigate to home screen on successful verification
+      //navigation.navigate("Home");
+      navigation.navigate("ChooseYourInterests");
     }
     console.log("OTP entered:", otpString);
   };
@@ -97,7 +98,6 @@ const LoginScreen = () => {
     updatedOtp[index] = value;
     setOtp(updatedOtp);
 
-    // Move to next input if value entered
     if (value && index < otpInputs.current.length - 1) {
       otpInputs.current[index + 1]?.focus();
     }
@@ -125,8 +125,6 @@ const LoginScreen = () => {
   const handleEditPress = () => {
     setShowOTPInputs(false);
     setOtp(["", "", "", ""]);
-
-    //setIsValid(false);
   };
   const isOtpComplete = otp.every((digit) => digit !== "");
   return (
@@ -259,7 +257,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: colors.primaryText,
-    fontFamily: typography.fontFamily.secondary,
+    // fontFamily: fontFamily.secondary,
     fontSize: 32,
     fontWeight: "600",
     marginBottom: 80,
@@ -267,7 +265,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     color: colors.primaryText,
-    fontFamily: typography.fontFamily.secondary,
+    //  fontFamily: fontFamily.secondary,
     fontSize: 24,
     fontWeight: "500",
     marginBottom: 10,
@@ -275,7 +273,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     color: colors.primaryText,
-    fontFamily: typography.fontFamily.secondary,
+    // fontFamily: fontFamily.secondary,
     fontSize: 14,
     marginBottom: 8,
   },
@@ -289,7 +287,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     fontSize: 14,
     color: colors.primaryText,
-    fontFamily: typography.fontFamily.secondary,
+    // fontFamily: fontFamily.secondary,
     fontWeight: "500",
   },
   input: {
@@ -300,7 +298,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 16,
     color: colors.primaryText,
-    fontFamily: typography.fontFamily.secondary,
+    // fontFamily: fontFamily.secondary,
   },
   button: {
     backgroundColor: colors.primaryButtonColor,
@@ -331,7 +329,7 @@ const styles = StyleSheet.create({
     fontWeight: "300",
     fontSize: 14,
     color: colors.primaryText,
-    fontFamily: typography.fontFamily.secondary,
+    // fontFamily: fontFamily.secondary,
   },
   loginLinkText: {
     textAlign: "center",
@@ -339,7 +337,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 16,
     color: colors.primary,
-    fontFamily: typography.fontFamily.secondary,
+    //  fontFamily: fontFamily.secondary,
   },
   buttonContainers: {
     gap: 16,
@@ -360,7 +358,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     backgroundColor: colors.secondaryBackground,
     color: colors.primaryText,
-    fontFamily: typography.fontFamily.secondary,
+    //fontFamily: fontFamily.secondary,
   },
   iconRow: {
     flexDirection: "row",

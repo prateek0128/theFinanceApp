@@ -14,7 +14,7 @@ import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "../../../types/navigation";
 import { colors } from "../../../assets/styles/colors";
 import globalStyles from "../../../assets/styles/globalStyles";
-import typography from "../../../assets/styles/typography";
+import fontFamily from "../../../assets/styles/fontFamily";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { TextInput as RNTextInput } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: colors.primaryText,
-    fontFamily: typography.fontFamily.secondary,
+    // fontFamily: fontFamily.secondary,
     fontSize: 32,
     fontWeight: 600,
     marginBottom: 80,
@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     color: colors.primaryText,
-    fontFamily: typography.fontFamily.secondary,
+    //  fontFamily: fontFamily.secondary,
     fontSize: 24,
     fontWeight: 500,
     marginBottom: 10,
@@ -288,11 +288,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     gap: 10,
     color: colors.primaryText,
-    fontFamily: typography.fontFamily.secondary,
+    //  fontFamily: fontFamily.secondary,
   },
   infoText: {
     color: colors.primaryText,
-    fontFamily: typography.fontFamily.secondary,
+    //  fontFamily: fontFamily.secondary,
     fontSize: 14,
     marginBottom: 8,
   },
@@ -306,7 +306,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     fontSize: 14,
     color: colors.primaryText,
-    fontFamily: typography.fontFamily.secondary,
+    //  fontFamily: fontFamily.secondary,
     fontWeight: "500",
   },
   button: {
@@ -337,7 +337,7 @@ const styles = StyleSheet.create({
     fontWeight: 300,
     fontSize: 14,
     color: colors.primaryText,
-    fontFamily: typography.fontFamily.secondary,
+    //  fontFamily: fontFamily.secondary,
   },
   loginLinkText: {
     textAlign: "center",
@@ -345,7 +345,7 @@ const styles = StyleSheet.create({
     fontWeight: 600,
     fontSize: 16,
     color: colors.primary,
-    fontFamily: typography.fontFamily.secondary,
+    //  fontFamily: fontFamily.secondary,
   },
   iconRow: {
     flexDirection: "row",
@@ -372,6 +372,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     backgroundColor: colors.secondaryBackground,
     color: colors.primaryText,
-    fontFamily: typography.fontFamily.secondary,
+    //  fontFamily: fontFamily.secondary,
   },
 });

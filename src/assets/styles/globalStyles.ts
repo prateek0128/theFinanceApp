@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { colors } from "./colors";
 import spacing from "./spacing";
-import typography from "./typography";
+import typography from "./fontFamily";
 
 const globalStyles = StyleSheet.create({
   container: {

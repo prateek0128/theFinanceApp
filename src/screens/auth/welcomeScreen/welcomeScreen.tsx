@@ -14,7 +14,7 @@ import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "../../../types/navigation";
 import { colors } from "../../../assets/styles/colors";
 import globalStyles from "../../../assets/styles/globalStyles";
-import typography from "../../../assets/styles/typography";
+import fontFamily from "../../../assets/styles/fontFamily";
 import SocialLoginButton from "../../../components/socialLoginButton/socialLoginButton";
 const WelcomeScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -87,14 +87,14 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: colors.primaryText,
-    fontFamily: typography.fontFamily.secondary,
+    //  fontFamily: fontFamily.secondary,
     fontSize: 36,
     fontWeight: 600,
     textAlign: "center",
   },
   headerText: {
     color: colors.primaryText,
-    fontFamily: typography.fontFamily.secondary,
+    // fontFamily: fontFamily.secondary,
     fontSize: 16,
     fontWeight: 500,
     textAlign: "center",
@@ -118,6 +118,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: colors.primaryBorderColor,
-    fontFamily: typography.fontFamily.secondary,
+    //  fontFamily: fontFamily.secondary,
   },
 });

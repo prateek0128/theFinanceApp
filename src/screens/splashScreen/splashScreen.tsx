@@ -6,7 +6,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import globalStyles from "../../assets/styles/globalStyles";
 import { colors } from "../../assets/styles/colors";
 import spacing from "../../assets/styles/spacing";
-import typography from "../../assets/styles/typography";
+import fontFamily from "../../assets/styles/fontFamily";
 const SplashScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
@@ -43,14 +43,14 @@ const styles = StyleSheet.create({
     fontSize: 64,
     fontWeight: 700,
     textAlign: "center",
-    fontFamily: typography.fontFamily.regular,
+    fontFamily: fontFamily.regular,
     color: colors.white,
   },
   subtitle: {
     fontSize: 20,
     fontWeight: 600,
     textAlign: "center",
-    fontFamily: typography.fontFamily.regular,
+    fontFamily: fontFamily.regular,
     color: colors.white,
   },
 });
