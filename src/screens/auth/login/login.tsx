@@ -264,6 +264,7 @@ const styles = StyleSheet.create({
   formFieldContainer: {
     gap: 6,
   },
+
   infoText: {
     color: colors.primaryText,
     // fontFamily: fontFamily.secondary,

@@ -19,6 +19,14 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { TextInput as RNTextInput } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { showMessage } from "react-native-flash-message";
+import Button from "../../../components/button/button";
+import InputTextField from "../../../components/inputTextField/inputTextField";
+import SocialLoginButton from "../../../components/socialLoginButton/socialLoginButton";
+import {
+  AppleIcon,
+  GoogleIcon,
+  FacebookIcon,
+} from "../../../assets/icons/components/welcome";
 const SignUpScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [form, setForm] = useState({
@@ -144,11 +152,10 @@ const SignUpScreen = () => {
       style={styles.container}
     >
       <ScrollView contentContainerStyle={styles.innerContainer}>
-        <Text style={styles.title}>Let’s get you started</Text>
-        <Text style={styles.subtitle}>Create an Account</Text>
-        <Text style={styles.infoText}>
-          Use only your WhatsApp number to login
-        </Text>
+
+        <View style={styles.headingContainer}>
+          <Text style={styles.subtitle}>Sign up</Text>
+        </View>
         <View style={styles.labelRow}>
           <Text style={styles.label}>Phone Number or Email</Text>
           {showOTPInputs && (
@@ -162,19 +169,15 @@ const SignUpScreen = () => {
             </TouchableOpacity>
           )}
         </View>
-        <TextInput
-          style={[
-            styles.input,
-            // showOTPInputs && { backgroundColor: "#ddd" }, // Optional: visually indicate it's disabled
-          ]}
-          placeholder="Enter phone number or email address"
+        <InputTextField
+          placeholder="TFA@application"
           keyboardType="email-address"
           autoCapitalize="none"
           value={input}
           onChangeText={validateInput}
           editable={!showOTPInputs} // <-- disable input when OTP inputs are shown
         />
-        {showOTPInputs && (
+        {/* {showOTPInputs && (
           <View style={styles.otpContainer}>
             {otp.map((digit, index) => (
               <TextInput
@@ -195,8 +198,36 @@ const SignUpScreen = () => {
               />
             ))}
           </View>
+
+        )} */}
+        {showOTPInputs && (
+          <View style={styles.otpContainer}>
+            {otp.map((digit, index) => (
+              <InputTextField
+                key={index}
+                ref={(ref: any) => {
+                  otpInputs.current[index] = ref;
+                }}
+                style={styles.otpInput}
+                keyboardType="numeric"
+                maxLength={1}
+                value={digit}
+                onChangeText={(value) => handleOTPChange(index, value)}
+                onKeyPress={({ nativeEvent }) =>
+                  handleOTPKeyPress(index, nativeEvent.key)
+                }
+                returnKeyType="next"
+                blurOnSubmit={false}
+              />
+            ))}
+          </View>
         )}
-        <TouchableOpacity
+        <Button
+          title={showOTPInputs ? "Sign Up" : "Send OTP"}
+          onPress={showOTPInputs ? handleSignUp : handleSendOTP}
+          disabled={!isValid || (showOTPInputs && !isOtpComplete)}
+        />
+        {/* <TouchableOpacity
           style={[
             styles.button,
             (!isValid || (showOTPInputs && !isOtpComplete)) && { opacity: 0.5 },
@@ -207,17 +238,17 @@ const SignUpScreen = () => {
           <Text style={styles.buttonText}>
             {showOTPInputs ? "Sign Up" : "Send OTP"}
           </Text>
-        </TouchableOpacity>
-        <View style={styles.inlineLinkContainer}>
+        </TouchableOpacity> */}
+        {/* <View style={styles.inlineLinkContainer}>
           <TouchableOpacity onPress={() => navigation.navigate("Login")}>
             <Text style={styles.alreadyLinkText}>Already have an account?</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate("Login")}>
             <Text style={styles.loginLinkText}>Log In</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
         {/* Icons row */}
-        <View style={styles.iconRow}>
+        {/* <View style={styles.iconRow}>
           <TouchableOpacity onPress={() => console.log("Google pressed")}>
             <FontAwesome
               name="google"
@@ -225,11 +256,7 @@ const SignUpScreen = () => {
               color="#DB4437"
               style={styles.icon}
             />
-            {/* <Image
-              source={require("../../../assets/images/auth/googleIcon.svg")} // Replace with your logo path
-              style={styles.icon}
-              resizeMode="contain"
-            /> */}
+        
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => console.log("Facebook pressed")}>
@@ -239,12 +266,30 @@ const SignUpScreen = () => {
               color="#4267B2"
               style={styles.icon}
             />
-            {/* <Image
-              source={require("../../../assets/images/auth/appleIcon.svg")} // Replace with your logo path
-              style={styles.icon}
-              resizeMode="contain"
-            /> */}
+   
           </TouchableOpacity>
+        </View> */}
+        <View style={styles.orDivider}>
+          <View style={styles.line} />
+          <Text style={styles.orText}>OR</Text>
+          <View style={styles.line} />
+        </View>
+        <View style={styles.buttonContainers}>
+          <SocialLoginButton
+            IconComponent={AppleIcon}
+            text="Continue with Apple"
+            onPress={() => console.log("Apple pressed")}
+          />
+          <SocialLoginButton
+            IconComponent={GoogleIcon}
+            text="Continue with Google"
+            onPress={() => console.log("Google pressed")}
+          />
+          <SocialLoginButton
+            IconComponent={FacebookIcon}
+            text="Continue with Facebook"
+            onPress={() => console.log("Facebook pressed")}
+          />
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -272,10 +317,9 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   subtitle: {
-    color: colors.primaryText,
-    //  fontFamily: fontFamily.secondary,
-    fontSize: 24,
-    fontWeight: 500,
+    color: colors.secondaryText,
+    fontFamily: fontFamily.titleFont,
+    fontSize: 40,
     marginBottom: 10,
     textAlign: "center",
   },
@@ -362,6 +406,10 @@ const styles = StyleSheet.create({
     marginTop: 16,
     marginBottom: 12,
   },
+  headingContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
   otpInput: {
     width: 50,
     height: 50,
@@ -370,8 +418,27 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     textAlign: "center",
     fontSize: 20,
-    backgroundColor: colors.secondaryBackground,
     color: colors.primaryText,
-    //  fontFamily: fontFamily.secondary,
+    // fontFamily: fontFamily.textFont500,
+  },
+  buttonContainers: {
+    gap: 16,
+  },
+  orDivider: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 24,
+  },
+  line: {
+    flex: 1,
+    height: 1,
+    backgroundColor: colors.secondaryBorderColor,
+    marginHorizontal: 8,
+  },
+  orText: {
+    fontSize: 12,
+    color: colors.secondaryBorderColor,
+    fontFamily: fontFamily.textFont500,
   },
 });
