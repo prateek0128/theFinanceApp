@@ -12,23 +12,32 @@ import { colors } from "../../assets/styles/colors";
 import fontFamily from "../../assets/styles/fontFamily";
 
 interface SocialLoginButtonProps {
-  icon?: ImageSourcePropType;
+  IconComponent?: React.ComponentType<{
+    width?: number;
+    height?: any;
+  }>;
   text: string;
+  backgroundColor?: string;
   onPress?: () => void;
 }
 
 const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
-  icon,
+  IconComponent,
   text,
   onPress,
+  backgroundColor,
 }) => {
   return (
     <TouchableOpacity
-      style={styles.button}
+      style={[
+        styles.button,
+        { backgroundColor: backgroundColor || colors.denaryBackground },
+      ]}
       onPress={onPress}
       activeOpacity={0.7}
     >
-      <Image source={icon} style={styles.icon} resizeMode="contain" />
+      {/* <Image source={icon} style={styles.icon} resizeMode="contain" /> */}
+      {IconComponent && <IconComponent width={24} height={24} />}
       <Text style={styles.text}>{text}</Text>
     </TouchableOpacity>
   );
@@ -40,10 +49,10 @@ const styles = StyleSheet.create({
   button: {
     paddingVertical: 12,
     paddingHorizontal: 16,
-    backgroundColor: colors.tertiaryBackground,
+    backgroundColor: colors.denaryBackground,
     borderRadius: 100,
     borderWidth: 1,
-    borderColor: colors.primaryBorderColor,
+    borderColor: colors.quaternaryBorderColor,
     gap: 12,
     flexDirection: "row",
     justifyContent: "center",
@@ -54,9 +63,8 @@ const styles = StyleSheet.create({
     height: 24,
   },
   text: {
-    color: colors.primaryText,
-    fontFamily: fontFamily.secondary,
+    color: colors.primaryBorderColor,
+    fontFamily: fontFamily.textFont500,
     fontSize: 16,
-    fontWeight: "500",
   },
 });

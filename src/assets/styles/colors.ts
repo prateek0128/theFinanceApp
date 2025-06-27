@@ -1,4 +1,5 @@
 export const colors = {
+  //Demo Colors
   primary: "#007AFF",
   secondary: "#FF9500",
   background: "#F5F5F5",
@@ -8,6 +9,7 @@ export const colors = {
   gray: "#888888",
   border: "#CCCCCC",
   //////////////////////
+  //Background Colors
   splashBackground: "#3D52D5",
   primaryBackground: "#F9F5FF",
   secondaryBackground: "#B4C5E4",
@@ -17,6 +19,9 @@ export const colors = {
   senaryBackground: "#26EF6E4D",
   septenaryBackground: "#FAFAFA",
   octonaryBackground: "#443DFF",
+  nonaryBackground: "#FBFBFE",
+  denaryBackground: "#DDDBFF",
+  //Text Colors
   primaryText: "#28262C",
   secondaryText: "#111111",
   tertiaryText: "#5B5C60",
@@ -27,10 +32,12 @@ export const colors = {
   octonaryText: "#40444C",
   nonaryText: "#FAF7F2",
   // denaryText: "#F8F8F8",
+  //Border Colors
   primaryBorderColor: "#3C3744",
   secondaryBorderColor: "#6B7280",
   tertiaryBorderColor: "#3C374433",
   quaternaryBorderColor: "#B6BAC3",
+  //Button Colors
   primaryButtonColor: "#007AFF",
 
   //startScreen

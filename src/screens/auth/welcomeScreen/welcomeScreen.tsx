@@ -16,6 +16,11 @@ import { colors } from "../../../assets/styles/colors";
 import globalStyles from "../../../assets/styles/globalStyles";
 import fontFamily from "../../../assets/styles/fontFamily";
 import SocialLoginButton from "../../../components/socialLoginButton/socialLoginButton";
+import {
+  AppleIcon,
+  GoogleIcon,
+  FacebookIcon,
+} from "../../../assets/icons/components/welcome";
 const WelcomeScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const appleIcon = require("../../../assets/images/welcome/appleIcon.png");
@@ -29,25 +34,24 @@ const WelcomeScreen = () => {
     >
       <ScrollView contentContainerStyle={styles.innerContainer}>
         <View style={styles.headerContainer}>
-          <Text style={styles.headerTitle}>Welcome to TFA</Text>
+          <Text style={styles.headerTitle}>Welcome to FinSimply</Text>
           <Text style={styles.headerText}>
             Your Every Day Financial News App
           </Text>
         </View>
-
         <View style={styles.buttonContainers}>
           <SocialLoginButton
-            icon={appleIcon}
+            IconComponent={AppleIcon}
             text="Continue with Apple"
             onPress={() => console.log("Apple pressed")}
           />
           <SocialLoginButton
-            icon={googleIcon}
+            IconComponent={GoogleIcon}
             text="Continue with Google"
             onPress={() => console.log("Google pressed")}
           />
           <SocialLoginButton
-            icon={facebookIcon}
+            IconComponent={FacebookIcon}
             text="Continue with Facebook"
             onPress={() => console.log("Facebook pressed")}
           />
@@ -60,8 +64,17 @@ const WelcomeScreen = () => {
         <View style={styles.buttonContainers}>
           <SocialLoginButton
             text="Continue as a Guest !"
-            onPress={() => console.log("Guest pressed")}
+            onPress={() => navigation.navigate("Login")}
+            backgroundColor={colors.tertiaryBackground}
           />
+        </View>
+        <View style={styles.inlineLinkContainer}>
+          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+            <Text style={styles.alreadyLinkText}>Already have an account?</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+            <Text style={styles.loginLinkText}>Log In</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -86,17 +99,15 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   headerTitle: {
-    color: colors.primaryText,
-    //  fontFamily: fontFamily.secondary,
+    color: colors.secondaryText,
+    fontFamily: fontFamily.titleFont,
     fontSize: 36,
-    fontWeight: 600,
     textAlign: "center",
   },
   headerText: {
     color: colors.primaryText,
-    // fontFamily: fontFamily.secondary,
+    fontFamily: fontFamily.textFont400,
     fontSize: 16,
-    fontWeight: 500,
     textAlign: "center",
   },
   buttonContainers: {
@@ -115,9 +126,28 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
   orText: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: colors.primaryBorderColor,
-    //  fontFamily: fontFamily.secondary,
+    fontSize: 12,
+    color: colors.secondaryBorderColor,
+    fontFamily: fontFamily.textFont500,
+  },
+  inlineLinkContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 64,
+    marginBottom: 10,
+  },
+  alreadyLinkText: {
+    textAlign: "center",
+    fontSize: 14,
+    color: colors.secondaryText,
+    fontFamily: fontFamily.textFont400,
+  },
+  loginLinkText: {
+    textAlign: "center",
+    marginLeft: 4,
+    fontSize: 14,
+    color: colors.secondaryText,
+    fontFamily: fontFamily.titleFont,
   },
 });
