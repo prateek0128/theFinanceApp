@@ -14,6 +14,7 @@ import ClippedSVG from "../clippedSVG/clippedSVG";
 const { width } = Dimensions.get("window");
 
 type HeadlineDetailCardProps = {
+  index: number;
   authorName: string;
   timeAgo: string;
   impactScore: number | string;
@@ -32,6 +33,7 @@ type HeadlineDetailCardProps = {
 };
 
 const HeadlineDetailCard = ({
+  index,
   authorName,
   timeAgo,
   impactScore,
@@ -43,7 +45,7 @@ const HeadlineDetailCard = ({
   onPress,
 }: HeadlineDetailCardProps) => {
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={onPress} key={index}>
       <View style={styles.detailsHeadlineContainer}>
         <View style={styles.detailsHeader}>
           <View style={styles.profileNameContainer}>

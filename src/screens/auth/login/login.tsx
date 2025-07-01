@@ -109,21 +109,47 @@ const LoginScreen = () => {
       otpInputs.current[index - 1]?.focus();
     }
   };
+  // 👇🏼 1) keep your existing validateInput
   const validateInput = (text: string) => {
     const isNumeric = /^\d+$/.test(text);
-
-    // Improved regex for realistic email validation
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if (isNumeric) {
-      const trimmed = text.slice(0, 10); // Only allow max 10 digits
+      const trimmed = text.slice(0, 10);
       setInput(trimmed);
-      setIsValid(trimmed.length === 10); // Valid only if exactly 10 digits
+      setIsValid(trimmed.length === 10);
     } else {
       setInput(text);
       setIsValid(emailRegex.test(text));
     }
   };
+
+  /* ──────────────────────────────────────────────────────────────
+     2) add an onBlur handler to your <InputTextField> so the toast
+        pops up only when the user finishes editing the field.
+  ──────────────────────────────────────────────────────────────── */
+
+  <InputTextField
+    placeholder="Phone or Email"
+    keyboardType="email-address"
+    autoCapitalize="none"
+    value={input}
+    onChangeText={validateInput}
+    onBlur={() => {
+      // show a toast **only** if user typed something and it’s invalid
+      if (input && !isValid) {
+        showMessage({
+          message: "Invalid input",
+          description: "Enter a 10-digit number or a valid email address.",
+          type: "danger",
+          backgroundColor: colors.primary,
+          color: "#fff",
+        });
+      }
+    }}
+    editable={!showOTPInputs}
+  />
+
   const handleEditPress = () => {
     setShowOTPInputs(false);
     setOtp(["", "", "", ""]);

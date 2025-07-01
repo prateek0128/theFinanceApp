@@ -2,10 +2,10 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const apiUrl = "https://api.example.com"; // Replace with your actual API URL
-const token = await AsyncStorage.getItem("authToken"); // or whatever key you're using
+const apiUrl = "https://api.example.com";
 // Create a basic axios instance without interceptors
 export const apiClient = async () => {
+  const token = await AsyncStorage.getItem("authToken");
   return axios.create({
     baseURL: apiUrl,
     headers: {

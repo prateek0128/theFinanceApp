@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -39,6 +39,7 @@ import fontFamily from "../../../assets/styles/fontFamily";
 import { TextInput } from "react-native-gesture-handler";
 import Header from "../../../components/header/header";
 import ClippedSVG from "../../../components/clippedSVG/clippedSVG";
+import { getComments } from "../../../apiServices/newsEngagement";
 const { width, height } = Dimensions.get("window");
 interface Discussion {
   id: string;
@@ -81,6 +82,19 @@ const HeadlineDetailsScreen = () => {
       )
     );
   };
+
+  // useEffect(() => {
+  //   getCommentsAPI();
+  // }, []);
+
+  // const getCommentsAPI = async () => {
+  //   try {
+  //     const response = await getComments();
+  //     console.log(response);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const getProfileIcon = (type: "male" | "female") => {
     return type === "female" ? (
