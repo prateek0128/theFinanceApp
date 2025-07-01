@@ -1,0 +1,122 @@
+import {
+  GraphImage,
+  IncrementArrow,
+  ProfileIcon,
+  CurrencyImage,
+} from "../../../assets/icons/components/homepage";
+import {
+  CurrencyImage2,
+  GraphImage2,
+} from "../../../assets/icons/components/headlineDetailsView";
+export const cards = [
+  {
+    imageKey: "graph",
+    author: "Akhil Salunkhe",
+    time: "1 Day ago",
+    impactScore: 90,
+    title: "RBI’s rate pause: Impact on Lending Rates",
+    subHeading:
+      "Experts analyze the potential impact of the RBI's decision on lending rates, assessing implications for borrowers and the overall economy.",
+    HeadlineImageComponent: GraphImage2,
+    ProfileIconComponent: ProfileIcon,
+    ImpactIconComponent: IncrementArrow,
+    points: [
+      "The Reserve Bank of India (RBI) concluded its monetary policy review today, maintaining the repo rate at 6.5%.",
+      "This decision aligns with market expectations, reflecting a cautious approach amid global economic uncertainties.",
+      "The RBI's statement highlighted concerns about inflation, projecting it to remain above the target range in the near term.",
+    ],
+    discussions: [
+      {
+        id: "1",
+        name: "Anika Sharma",
+        time: "1h",
+        text: "I think the RBI's decision is prudent...",
+        likes: 12,
+        unlikes: 2,
+        profileType: "female",
+      },
+      {
+        id: "2",
+        name: "Rohan Verma",
+        time: "2h",
+        text: "The market seems to have priced in this decision...",
+        likes: 12,
+        unlikes: 2,
+        profileType: "male",
+      },
+    ],
+  },
+  {
+    imageKey: "currency",
+    author: "Neha Kapoor",
+    time: "3 Days ago",
+    impactScore: 85,
+    title: "India’s GDP Growth Surges: What It Means for Investors",
+    subHeading:
+      "India's GDP growth beats expectations, driven by strong domestic consumption and manufacturing output.",
+    HeadlineImageComponent: CurrencyImage2,
+    ProfileIconComponent: ProfileIcon,
+    ImpactIconComponent: IncrementArrow,
+    points: [
+      "India's GDP growth beats expectations, driven by strong domestic consumption and manufacturing output.",
+      "Experts weigh in on how this growth trend might affect stock markets, foreign investments, and inflation targets.",
+    ],
+    discussions: [
+      {
+        id: "1",
+        name: "Siddharth Rao",
+        time: "45m",
+        text: "This is a very positive sign for long-term investors. The fundamentals look strong.",
+        likes: 18,
+        unlikes: 1,
+        profileType: "male",
+      },
+      {
+        id: "2",
+        name: "Meera Joshi",
+        time: "2h",
+        text: "While the numbers are impressive, we need to be cautious about rising inflation and global volatility.",
+        likes: 10,
+        unlikes: 3,
+        profileType: "female",
+      },
+    ],
+  },
+  {
+    imageKey: "currency",
+    author: "Priya Desai",
+    time: "2 Days ago",
+    impactScore: 78,
+    title: "SEBI Introduces New IPO Guidelines for Startups",
+    subHeading:
+      "The Securities and Exchange Board of India has released new norms to simplify the IPO process for tech startups, aiming to boost innovation and investor trust.",
+    HeadlineImageComponent: CurrencyImage2,
+    ProfileIconComponent: ProfileIcon,
+    ImpactIconComponent: IncrementArrow,
+    points: [
+      "The SEBI's updated IPO policy will allow tech startups to go public with fewer compliance hurdles.",
+      "Startups will benefit from relaxed disclosure norms and reduced lock-in periods for early investors.",
+      "This move is expected to attract more domestic and international interest in India's startup ecosystem.",
+    ],
+    discussions: [
+      {
+        id: "1",
+        name: "Arjun Mehta",
+        time: "1h",
+        text: "This is a fantastic step for the startup ecosystem. It opens doors for many companies that previously found the IPO route complex.",
+        likes: 22,
+        unlikes: 1,
+        profileType: "male",
+      },
+      {
+        id: "2",
+        name: "Kavita Reddy",
+        time: "3h",
+        text: "I hope this doesn't compromise investor protection. SEBI needs to strike the right balance.",
+        likes: 15,
+        unlikes: 2,
+        profileType: "female",
+      },
+    ],
+  },
+];

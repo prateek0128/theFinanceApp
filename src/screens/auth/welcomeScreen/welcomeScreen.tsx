@@ -64,12 +64,12 @@ const WelcomeScreen = () => {
         <View style={styles.buttonContainers}>
           <SocialLoginButton
             text="Continue as a Guest !"
-            onPress={() => navigation.navigate("Login")}
+            onPress={() => navigation.navigate("ChooseYourInterests")}
             backgroundColor={colors.tertiaryBackground}
           />
         </View>
         <View style={styles.inlineLinkContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+          <TouchableOpacity>
             <Text style={styles.alreadyLinkText}>Already have an account?</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate("Login")}>
