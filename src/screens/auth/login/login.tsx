@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -21,19 +21,21 @@ import { showMessage } from "react-native-flash-message";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import InputTextField from "../../../components/inputTextField/inputTextField";
 import Button from "../../../components/button/button";
+import { verifyOTP, sendOTP } from "../../../apiServices/auth";
+import { AuthContext } from "../../../context/authContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const LoginScreen = () => {
+  const { user, isLoggedIn, login, logout, isLoading } =
+    useContext(AuthContext);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-
   const [input, setInput] = useState("");
+  const [inputType, setInputType] = useState("");
   const [showOTPInputs, setShowOTPInputs] = useState(false);
-  const [otp, setOtp] = useState(["", "", "", ""]);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const otpInputs = useRef<Array<RNTextInput | null>>([]);
-  const otpValue = "1111";
   const [isValid, setIsValid] = useState(false);
-  const appleIcon = require("../../../assets/images/welcome/appleIcon.png");
-  const googleIcon = require("../../../assets/images/welcome/googleIcon.png");
 
-  const handleSendOTP = () => {
+  const handleSendOTP = async () => {
     if (input.trim() === "") {
       showMessage({
         message: "Please enter your phone or email.",
@@ -53,16 +55,26 @@ const LoginScreen = () => {
       return;
     }
     setShowOTPInputs(true); // Show OTP inputs
-
-    showMessage({
-      message: "OTP sent",
-      description: `We’ve sent it to your phone number`,
-      type: "success",
-      backgroundColor: colors.primary,
-      color: "#fff",
-    });
+    const otpData = {
+      identifier: input,
+      identifier_type: inputType,
+    };
+    console.log("otpData", otpData);
+    try {
+      const response = await sendOTP(otpData);
+      console.log("OTPResponse", response);
+      showMessage({
+        message: "OTP sent",
+        description: `We’ve sent it to your phone number`,
+        type: "success",
+        backgroundColor: colors.primary,
+        color: "#fff",
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
-  const handleVerifyOTP = () => {
+  const handleVerifyOTP = async () => {
     if (otp.some((digit) => digit === "")) {
       showMessage({
         message: "Please enter all OTP digits.",
@@ -72,26 +84,29 @@ const LoginScreen = () => {
       });
       return;
     }
-    const otpString = otp.join("");
-    if (otpString !== otpValue) {
-      showMessage({
-        message: "Invalid OTP. Please try again.",
-        type: "danger",
-        backgroundColor: colors.primary,
-        color: "#fff",
-      });
-      return;
-    } else {
+    const loginData = {
+      identifier: input,
+      identifier_type: inputType,
+      otp: otp.join(""),
+    };
+    try {
+      await login(loginData); // if OTP is invalid, this will throw
+      navigation.navigate("ChooseYourInterests");
       showMessage({
         message: "OTP verified successfully!",
         type: "success",
         backgroundColor: colors.primary,
         color: "#fff",
       });
-      //navigation.navigate("Home");
-      navigation.navigate("ChooseYourInterests");
+    } catch (e) {
+      console.log(e);
+      showMessage({
+        message: "Failed to verify OTP. Please try again.",
+        type: "danger",
+        backgroundColor: colors.primary,
+        color: "#fff",
+      });
     }
-    console.log("OTP entered:", otpString);
   };
   const handleOTPChange = (index: number, value: string) => {
     if (!/^\d*$/.test(value)) return;
@@ -117,39 +132,14 @@ const LoginScreen = () => {
     if (isNumeric) {
       const trimmed = text.slice(0, 10);
       setInput(trimmed);
-      setIsValid(trimmed.length === 10);
+      setIsValid(trimmed.length === 10); // Valid only if exactly 10 digits
+      setInputType("phone");
     } else {
       setInput(text);
       setIsValid(emailRegex.test(text));
+      setInputType("email");
     }
   };
-
-  /* ──────────────────────────────────────────────────────────────
-     2) add an onBlur handler to your <InputTextField> so the toast
-        pops up only when the user finishes editing the field.
-  ──────────────────────────────────────────────────────────────── */
-
-  <InputTextField
-    placeholder="Phone or Email"
-    keyboardType="email-address"
-    autoCapitalize="none"
-    value={input}
-    onChangeText={validateInput}
-    onBlur={() => {
-      // show a toast **only** if user typed something and it’s invalid
-      if (input && !isValid) {
-        showMessage({
-          message: "Invalid input",
-          description: "Enter a 10-digit number or a valid email address.",
-          type: "danger",
-          backgroundColor: colors.primary,
-          color: "#fff",
-        });
-      }
-    }}
-    editable={!showOTPInputs}
-  />
-
   const handleEditPress = () => {
     setShowOTPInputs(false);
     setOtp(["", "", "", ""]);
@@ -166,8 +156,8 @@ const LoginScreen = () => {
         </View>
 
         {/* <Text style={styles.infoText}>
-          Use only your WhatsApp number to login
-        </Text> */}
+            Use only your WhatsApp number to login
+          </Text> */}
         <View style={styles.formContainer}>
           <View style={styles.formFieldContainer}>
             <View style={styles.labelRow}>
@@ -190,6 +180,7 @@ const LoginScreen = () => {
               value={input}
               onChangeText={validateInput}
               editable={!showOTPInputs}
+              autoComplete="email"
             />
           </View>
           {showOTPInputs && (
@@ -228,25 +219,6 @@ const LoginScreen = () => {
             <Text style={styles.loginLinkText}>Sign Up</Text>
           </TouchableOpacity>
         </View>
-        {/* <View style={styles.iconRow}>
-          <TouchableOpacity onPress={() => console.log("Google pressed")}>
-            <FontAwesome
-              name="google"
-              size={32}
-              color="#DB4437"
-              style={styles.icon}
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => console.log("Facebook pressed")}>
-            <FontAwesome
-              name="apple"
-              size={32}
-              color="#4267B2"
-              style={styles.icon}
-            />
-          </TouchableOpacity>
-        </View> */}
       </ScrollView>
     </KeyboardAvoidingView>
   );

@@ -43,14 +43,12 @@ const styles = StyleSheet.create({
     fontSize: 64,
     fontWeight: 700,
     textAlign: "center",
-    fontFamily: fontFamily.regular,
     color: colors.white,
   },
   subtitle: {
     fontSize: 20,
     fontWeight: 600,
     textAlign: "center",
-    fontFamily: fontFamily.regular,
     color: colors.white,
   },
 });

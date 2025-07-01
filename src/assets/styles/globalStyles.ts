@@ -10,7 +10,6 @@ const globalStyles = StyleSheet.create({
     padding: spacing.md,
   },
   title: {
-    fontSize: typography.fontSize.xl,
     //@ts-ignore
     fontWeight: typography.fontWeight.bold,
     color: colors.text,
@@ -37,7 +36,6 @@ const globalStyles = StyleSheet.create({
     color: colors.white,
     //@ts-ignore
     fontWeight: typography.fontWeight.bold,
-    fontSize: typography.fontSize.md,
   },
   linkText: {
     color: colors.primary,

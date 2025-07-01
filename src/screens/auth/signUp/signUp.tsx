@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -27,6 +27,8 @@ import {
   GoogleIcon,
   FacebookIcon,
 } from "../../../assets/icons/components/welcome";
+import { sendOTP } from "../../../apiServices/auth";
+import { AuthContext } from "../../../context/authContext";
 const SignUpScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [form, setForm] = useState({
@@ -35,16 +37,18 @@ const SignUpScreen = () => {
     password: "",
     // confirmPassword: "",
   });
+  const { user, isLoggedIn, login, logout, isLoading } =
+    useContext(AuthContext);
   const [input, setInput] = useState("");
+  const [inputType, setInputType] = useState("");
   const [showOTPInputs, setShowOTPInputs] = useState(false);
-  const [otp, setOtp] = useState(["", "", "", ""]);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const otpInputs = useRef<Array<RNTextInput | null>>([]);
-  const otpValue = "1111";
   const [isValid, setIsValid] = useState(false);
   const appleIcon = require("../../../assets/images/welcome/appleIcon.png");
   const googleIcon = require("../../../assets/images/welcome/googleIcon.png");
 
-  const handleSendOTP = () => {
+  const handleSendOTP = async () => {
     if (input.trim() === "") {
       showMessage({
         message: "Please enter your phone or email.",
@@ -64,16 +68,29 @@ const SignUpScreen = () => {
       return;
     }
     setShowOTPInputs(true); // Show OTP inputs
-
-    showMessage({
-      message: "OTP sent",
-      description: `We’ve sent it to your phone number`,
-      type: "success", // can be "danger", "info", "warning"
-      backgroundColor: colors.primary, // optional: customize color
-      color: "#fff", // text color
-    });
+    const otpData = {
+      identifier: input,
+      identifier_type: inputType,
+    };
+    const otpData2 = {
+      identifier: "s.ronit2812@gmail.com",
+      identifier_type: "email",
+    };
+    try {
+      const response = await sendOTP(otpData);
+      console.log("OTPResponse", response);
+      showMessage({
+        message: "OTP sent",
+        description: `We’ve sent it to your phone number`,
+        type: "success",
+        backgroundColor: colors.primary,
+        color: "#fff",
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     if (otp.some((digit) => digit === "")) {
       showMessage({
         message: "Please enter all OTP digits.",
@@ -83,25 +100,29 @@ const SignUpScreen = () => {
       });
       return;
     }
-    const otpString = otp.join("");
-    if (otpString !== otpValue) {
-      showMessage({
-        message: "Invalid OTP. Please try again.",
-        type: "danger", // can be "danger", "info", "warning"
-        backgroundColor: colors.primary, // optional: customize color
-        color: "#fff", // text color
-      });
-      return;
-    } else {
+    const loginData = {
+      identifier: input,
+      identifier_type: inputType,
+      otp: otp.join(""),
+    };
+    try {
+      await login(loginData); // if OTP is invalid, this will throw
+      navigation.navigate("TellUsSomething");
       showMessage({
         message: "OTP verified successfully!",
-        type: "success", // can be "danger", "info", "warning"
-        backgroundColor: colors.primary, // optional: customize color
-        color: "#fff", // text color
+        type: "success",
+        backgroundColor: colors.primary,
+        color: "#fff",
       });
-      navigation.navigate("Home"); // Navigate to home screen on successful verification
+    } catch (e) {
+      console.log(e);
+      showMessage({
+        message: "Failed to verify OTP. Please try again.",
+        type: "danger",
+        backgroundColor: colors.primary,
+        color: "#fff",
+      });
     }
-    console.log("OTP entered:", otpString);
   };
   const handleOTPChange = (index: number, value: string) => {
     if (!/^\d*$/.test(value)) return;
@@ -152,7 +173,6 @@ const SignUpScreen = () => {
       style={styles.container}
     >
       <ScrollView contentContainerStyle={styles.innerContainer}>
-
         <View style={styles.headingContainer}>
           <Text style={styles.subtitle}>Sign up</Text>
         </View>
@@ -248,27 +268,6 @@ const SignUpScreen = () => {
           </TouchableOpacity>
         </View> */}
         {/* Icons row */}
-        {/* <View style={styles.iconRow}>
-          <TouchableOpacity onPress={() => console.log("Google pressed")}>
-            <FontAwesome
-              name="google"
-              size={32}
-              color="#DB4437"
-              style={styles.icon}
-            />
-        
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => console.log("Facebook pressed")}>
-            <FontAwesome
-              name="apple"
-              size={32}
-              color="#4267B2"
-              style={styles.icon}
-            />
-   
-          </TouchableOpacity>
-        </View> */}
         <View style={styles.orDivider}>
           <View style={styles.line} />
           <Text style={styles.orText}>OR</Text>
