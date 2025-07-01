@@ -25,7 +25,7 @@ const TellUsSomething = () => {
     );
     // You can also do something like:
     // navigation.navigate("NextScreen", { role: selectedOption1, goal: selectedOption2, category: selectedOption3 });
-    navigation.navigate("Home");
+    navigation.navigate("ChooseYourInterests");
   };
 
   const isFormValid =

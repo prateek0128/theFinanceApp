@@ -22,6 +22,7 @@ import {
   CurrencyImage2,
   GraphImage2,
 } from "../../../assets/icons/components/headlineDetailsView";
+import { getNewsFeed } from "../../../apiServices/news";
 const { width, height } = Dimensions.get("window");
 const HomeScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -99,6 +100,15 @@ const HomeScreen = () => {
       ],
     },
   ];
+  const getAllNewsAPI = async () => {
+    try {
+      const response = await getNewsFeed();
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.headingContainer}>
