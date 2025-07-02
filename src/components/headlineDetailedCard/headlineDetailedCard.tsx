@@ -17,9 +17,10 @@ type HeadlineDetailCardProps = {
   index: number;
   authorName: string;
   timeAgo: string;
+  impactLabel: string;
   impactScore: number | string;
   heading: string;
-  subHeading: string;
+  summary: string;
   HeadlineImageComponent?: React.ComponentType<{
     width?: number;
     height?: any;
@@ -36,9 +37,10 @@ const HeadlineDetailCard = ({
   index,
   authorName,
   timeAgo,
+  impactLabel,
   impactScore,
   heading,
-  subHeading,
+  summary,
   HeadlineImageComponent,
   ProfileIconComponent,
   ImpactIconComponent,
@@ -59,14 +61,14 @@ const HeadlineDetailCard = ({
             {ImpactIconComponent && <ImpactIconComponent width={24} />}
             <View style={styles.impactLabel}>
               <Text style={styles.impactLabelText}>
-                Impact Score : {impactScore}
+                {impactLabel} : {impactScore}
               </Text>
             </View>
           </View>
         </View>
         <View style={styles.articleDetailsHeadingContainer}>
           <Text style={styles.articleDetailsHeading}>{heading}</Text>
-          <Text style={styles.articleDetailsSubHeading}>{subHeading}</Text>
+          <Text style={styles.articleDetailsSubHeading}>{summary}</Text>
         </View>
         <View style={{ alignItems: "center", justifyContent: "center" }}>
           <ClippedSVG

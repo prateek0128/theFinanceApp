@@ -66,8 +66,16 @@ const HeadlineDetailsScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [comment, setComment] = useState("");
   const route = useRoute<HeadlineDetailsRouteProp>();
-  const { title, author, time, impactScore, points, discussions, imageKey } =
-    route.params;
+  const {
+    title,
+    author,
+    time,
+    impactLabel,
+    impactScore,
+    points,
+    discussions,
+    imageKey,
+  } = route.params || {};
 
   const renderImage = () => {
     const ImageComponent = imageMap[imageKey];

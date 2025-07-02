@@ -14,6 +14,7 @@ export type RootStackParamList = {
     title: string;
     author: string;
     time: string;
+    impactLabel: string;
     impactScore: number;
     points: string[];
     discussions: {
