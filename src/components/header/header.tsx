@@ -16,6 +16,7 @@ import {
 } from "../../assets/icons/components/header";
 import { colors } from "../../assets/styles/colors";
 import fontFamily from "../../assets/styles/fontFamily";
+import ShareButtons from "../sharedButton/sharedButtons";
 
 const { width } = Dimensions.get("window");
 
@@ -34,7 +35,11 @@ const Header = ({ onPress }: HeaderProps) => {
       <View style={styles.rightHeaderPart}>
         <HeartIcon />
         <BookmarkIcon />
-        <ShareIcon />
+        {/* <ShareIcon /> */}
+        <ShareButtons
+          url={`https://www.moneycontrol.com/news/business/markets/emkay-global-sees-22-upside-for-hdb-financial-shares-from-ipo-s-upper-price-band-13216416.html`}
+          message={`Have a look at  "URL"`}
+        />
       </View>
     </View>
   );

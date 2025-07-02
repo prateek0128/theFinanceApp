@@ -12,12 +12,13 @@ import CommunityIcon from "../../assets/icons/components/bottomNavigation/Commun
 import CommunityBlack from "../../assets/icons/components/bottomNavigation/CommunityBlack";
 import ProfileIcon from "../../assets/icons/components/bottomNavigation/ProfileIcon";
 import NewsScreen from "../../screens/newsScreen/newsScreen";
-import MarketScreen from "../../screens/marketScreen/marketScreen";
 import CommunityScreen from "../../screens/communityScreen/communityScreen";
 import ProfileScreen from "../../screens/profileScreen/profileScreen";
 import fontFamily from "../../assets/styles/fontFamily";
 import HomeScreenStack from "../homeScreenStack/homeScreenStack";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import InterestsScreen from "../../screens/InterestsScreen/InterestsScreen";
+import { IntrestIcon } from "../../assets/icons/components/bottomNavigation";
 const Tab = createBottomTabNavigator();
 const { width, height } = Dimensions.get("window");
 const tabsData = [
@@ -34,17 +35,17 @@ const tabsData = [
     FocusedIcon: NewsBlack,
   },
   {
-    name: "Market",
-    component: MarketScreen,
-    Icon: MarketIcon,
-    FocusedIcon: MarketIcon,
+    name: "Interests",
+    component: InterestsScreen,
+    Icon: IntrestIcon,
+    FocusedIcon: IntrestIcon,
   }, // No focused version provided
-  {
-    name: "Community",
-    component: CommunityScreen,
-    Icon: CommunityIcon,
-    FocusedIcon: CommunityBlack,
-  },
+  // {
+  //   name: "Community",
+  //   component: CommunityScreen,
+  //   Icon: CommunityIcon,
+  //   FocusedIcon: CommunityBlack,
+  // },
   {
     name: "Profile",
     component: ProfileScreen,
