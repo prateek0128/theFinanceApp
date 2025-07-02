@@ -40,6 +40,7 @@ import { TextInput } from "react-native-gesture-handler";
 import Header from "../../../components/header/header";
 import ClippedSVG from "../../../components/clippedSVG/clippedSVG";
 import { getComments } from "../../../apiServices/newsEngagement";
+import { getNewsByID } from "../../../apiServices/news";
 const { width, height } = Dimensions.get("window");
 interface Discussion {
   id: string;
@@ -67,6 +68,7 @@ const HeadlineDetailsScreen = () => {
   const [comment, setComment] = useState("");
   const route = useRoute<HeadlineDetailsRouteProp>();
   const {
+    newsId,
     title,
     author,
     time,
@@ -78,31 +80,62 @@ const HeadlineDetailsScreen = () => {
   } = route.params || {};
 
   const renderImage = () => {
-    const ImageComponent = imageMap[imageKey];
-    return (
-      ImageComponent && (
-        <ClippedSVG
-          width={width * 0.89}
-          height={200}
-          radius={16}
-          ImageComponent={ImageComponent}
-        />
-      )
-    );
+    if (typeof imageKey === "string" && imageKey in imageMap) {
+      const ImageComponent = imageMap[imageKey];
+      return (
+        ImageComponent && (
+          <ClippedSVG
+            width={width * 0.89}
+            height={200}
+            radius={16}
+            ImageComponent={ImageComponent}
+          />
+        )
+      );
+    }
+    return null;
+  };
+  const newsData = {
+    categories: null,
+    engagement: { comments: 0, likes: 0 },
+    id: "6864d77687eec4ab944144f6",
+    impact_label: "Significant Impact",
+    impact_score: 6.5,
+    published_at: "2025-07-02T07:28:59.209Z",
+    reaction_stats: { bearish: 0, bullish: 0, important: 0, neutral: 0 },
+    related_stocks: null,
+    sentiment_score: 0.3181818181818181,
+    source: "MoneyControl",
+    summary:
+      "Emkay Global predicts a 22% increase in HDB Financial Services' share price based on its strong fundamentals. This positive outlook could lead to increased investor interest and higher stock prices in the financial sector. Its like finding a promising new restaurant that everyone wants to try, boosting its popularity and sales.",
+    tags: null,
+    title: "HDB Financial Shares Expected to Surge",
+    url: "https://www.moneycontrol.com/news/business/markets/emkay-global-sees-22-upside-for-hdb-financial-shares-from-ipo-s-upper-price-band-13216416.html",
   };
 
-  // useEffect(() => {
-  //   getCommentsAPI();
-  // }, []);
+  useEffect(() => {
+    if (newsId) {
+      getCommentsAPI(newsId);
+      getNewsByIDAPI(newsId);
+    }
+  }, []);
 
-  // const getCommentsAPI = async () => {
-  //   try {
-  //     const response = await getComments();
-  //     console.log(response);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const getNewsByIDAPI = async (newsId: string) => {
+    try {
+      const response = await getNewsByID(newsId);
+      console.log("newsResponseByID:", response.data);
+    } catch (e) {
+      console.log("API Error:", e);
+    }
+  };
+  const getCommentsAPI = async (newsId: string) => {
+    try {
+      const response = await getComments(newsId);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getProfileIcon = (type: "male" | "female") => {
     return type === "female" ? (
@@ -155,7 +188,7 @@ const HeadlineDetailsScreen = () => {
               </View>
             </View>
             <View style={styles.headingDetails}>
-              {points.map((point, index) => (
+              {points?.map((point, index) => (
                 <View key={index} style={styles.listItem}>
                   <Text style={styles.listIndex}>{index + 1}.</Text>
                   <Text style={styles.listPoints}>{point}</Text>
@@ -168,32 +201,36 @@ const HeadlineDetailsScreen = () => {
               Related Discussions
             </Text>
             <View style={styles.relatedDiscussionsDetails}>
-              {discussions.map((d) => (
-                <View key={d.id} style={styles.relatedDiscussionsArticle}>
-                  {getProfileIcon(d.profileType)}
-                  <View style={{ flex: 1 }}>
-                    <View style={styles.relatedDiscussionsArticle}>
-                      <Text style={styles.authorName}>{d.name}</Text>
-                      <Text style={styles.articleTime}>{d.time}</Text>
-                    </View>
-                    <Text style={styles.relatedArticleText}>{d.text}</Text>
-                    <View style={styles.likeUnlikeContainer}>
-                      <View style={styles.iconCountContainer}>
-                        <TouchableOpacity>
-                          <LikeIcon width={16} height={16} />
-                        </TouchableOpacity>
-                        <Text style={styles.articleTime}>{d.likes}</Text>
+              {Array.isArray(discussions) &&
+                discussions.map((d) => (
+                  <View key={d.id} style={styles.relatedDiscussionsArticle}>
+                    {
+                      //@ts-ignore
+                      getProfileIcon(d.profileType)
+                    }
+                    <View style={{ flex: 1 }}>
+                      <View style={styles.relatedDiscussionsArticle}>
+                        <Text style={styles.authorName}>{d.name}</Text>
+                        <Text style={styles.articleTime}>{d.time}</Text>
                       </View>
-                      <View style={styles.iconCountContainer}>
-                        <TouchableOpacity>
-                          <UnlikeIcon width={16} height={16} />
-                        </TouchableOpacity>
-                        <Text style={styles.articleTime}>{d.unlikes}</Text>
+                      <Text style={styles.relatedArticleText}>{d.text}</Text>
+                      <View style={styles.likeUnlikeContainer}>
+                        <View style={styles.iconCountContainer}>
+                          <TouchableOpacity>
+                            <LikeIcon width={16} height={16} />
+                          </TouchableOpacity>
+                          <Text style={styles.articleTime}>{d.likes}</Text>
+                        </View>
+                        <View style={styles.iconCountContainer}>
+                          <TouchableOpacity>
+                            <UnlikeIcon width={16} height={16} />
+                          </TouchableOpacity>
+                          <Text style={styles.articleTime}>{d.unlikes}</Text>
+                        </View>
                       </View>
                     </View>
                   </View>
-                </View>
-              ))}
+                ))}
             </View>
           </View>
           <View style={styles.commentContainer}>

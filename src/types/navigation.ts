@@ -10,21 +10,22 @@ export type RootStackParamList = {
   BottomTabNavigator: undefined;
   Home: undefined;
   HeadlineDetailsScreen: {
-    imageKey: string;
-    title: string;
-    author: string;
-    time: string;
-    impactLabel: string;
-    impactScore: number;
-    points: string[];
-    discussions: {
-      id: string;
-      name: string;
-      time: string;
-      text: string;
-      likes: number;
-      unlikes: number;
-      profileType: "male" | "female";
+    newsId?: string;
+    imageKey?: string;
+    title?: string;
+    author?: string;
+    time?: string;
+    impactLabel?: string;
+    impactScore?: number;
+    points?: string[];
+    discussions?: {
+      id?: string;
+      name?: string;
+      time?: string;
+      text?: string;
+      likes?: number;
+      unlikes?: number;
+      profileType?: "male" | "female";
     }[];
   };
 };
