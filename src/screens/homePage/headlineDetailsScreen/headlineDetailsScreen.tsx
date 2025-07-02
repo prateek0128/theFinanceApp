@@ -41,21 +41,18 @@ import Header from "../../../components/header/header";
 import ClippedSVG from "../../../components/clippedSVG/clippedSVG";
 import {
   addComments,
+  addReaction,
   checkLikeStatus,
   checkUserLikeStatus,
   getComments,
+  toggleLike,
 } from "../../../apiServices/newsEngagement";
 import { getNewsByID } from "../../../apiServices/news";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
 const { width, height } = Dimensions.get("window");
-interface Discussion {
-  id: string;
-  name: string;
-  time: string;
-  text: string;
-  likes: number;
-  unlikes: number;
-  profileType: "male" | "female";
-}
 
 type HeadlineDetailsRouteProp = RouteProp<
   RootStackParamList,
@@ -71,6 +68,9 @@ const imageMap: Record<
 const HeadlineDetailsScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [comment, setComment] = useState("");
+  const [commentsData, setCommentsData] = useState("");
+  const [liked, setLiked] = useState(false);
+  const [bookmarked, setBookmarked] = useState(false);
   const route = useRoute<HeadlineDetailsRouteProp>();
   const {
     newsId,
@@ -83,7 +83,14 @@ const HeadlineDetailsScreen = () => {
     discussions,
     imageKey,
   } = route.params || {};
-  // const [newsData, setNewsData] = useState({});
+  interface NewsData {
+    title?: string;
+    impact_label?: string;
+    impact_score?: number;
+    summary?: string;
+    // add other properties as needed
+  }
+  const [newsData, setNewsData] = useState<NewsData>({});
   const renderImage = () => {
     if (typeof imageKey === "string" && imageKey in imageMap) {
       const ImageComponent = imageMap[imageKey];
@@ -100,7 +107,7 @@ const HeadlineDetailsScreen = () => {
     }
     return null;
   };
-  const newsData = {
+  const newsData2 = {
     categories: null,
     engagement: { comments: 0, likes: 0 },
     id: "6864d77687eec4ab944144f6",
@@ -144,23 +151,23 @@ const HeadlineDetailsScreen = () => {
     }
   }, []);
 
-  // const addReactionAPI = async () => {
-  //   try {
-  //     const response = await addReaction();
-  //     console.log(response.data);
-  //   } catch (error) {
-  //  console.log("API Error:", error);
-  //   }
-  // }
+  const addReactionAPI = async (newsId: any) => {
+    try {
+      const response = await addReaction(newsId);
+      console.log(response.data);
+    } catch (error) {
+      console.log("API Error:", error);
+    }
+  };
 
-  // const toggleLikeAPI = async () => {
-  //   try {
-  //     const response = await toggleLike();
-  //     console.log(response.data);
-  //   } catch (error) {
-  //     console.log("API Error:", error);
-  //   }
-  // }
+  const toggleLikeAPI = async (newsId: any) => {
+    try {
+      const response = await toggleLike(newsId);
+      console.log(response.data);
+    } catch (error) {
+      console.log("API Error:", error);
+    }
+  };
 
   const checkLikeStatusAPI = async (newsId: string) => {
     try {
@@ -178,6 +185,8 @@ const HeadlineDetailsScreen = () => {
     try {
       const response = await addComments(newsId, commentData);
       console.log(response.data);
+      setComment("");
+      getCommentsAPI(newsId);
     } catch (error) {
       console.log("API Error:", error);
     }
@@ -206,7 +215,7 @@ const HeadlineDetailsScreen = () => {
     try {
       const response = await getNewsByID(newsId);
       console.log("newsResponseByID:", response.data);
-      //setNewsData(response.data);
+      setNewsData(response.data);
     } catch (e) {
       console.log("API Error:", e);
     }
@@ -215,6 +224,7 @@ const HeadlineDetailsScreen = () => {
     try {
       const response = await getComments(newsId);
       console.log("Comments", response.data);
+      setCommentsData(response.data);
     } catch (error) {
       console.log("API Error:", error);
     }
@@ -227,7 +237,21 @@ const HeadlineDetailsScreen = () => {
       <MaleProfileIcon width={40} height={40} />
     );
   };
+  const getShortTimeAgo = (dateString: any) => {
+    const now = dayjs();
+    const past = dayjs(dateString);
+    const diffInMinutes = now.diff(past, "minute");
+    const diffInHours = now.diff(past, "hour");
+    const diffInDays = now.diff(past, "day");
 
+    if (diffInMinutes < 60) {
+      return `${diffInMinutes}m`;
+    } else if (diffInHours < 24) {
+      return `${diffInHours}h`;
+    } else {
+      return `${diffInDays}d`;
+    }
+  };
   return (
     <>
       <KeyboardAvoidingView
@@ -237,7 +261,13 @@ const HeadlineDetailsScreen = () => {
       >
         <ScrollView contentContainerStyle={styles.container}>
           <View style={styles.headerContainer}>
-            <Header onPress={() => navigation.navigate("Home")} />
+            <Header
+              onPress={() => navigation.navigate("Home")}
+              liked={liked}
+              setLiked={setLiked}
+              bookmarked={bookmarked}
+              setBookmarked={setBookmarked}
+            />
           </View>
           <View style={styles.headingDetailsContainer}>
             <View
@@ -288,31 +318,40 @@ const HeadlineDetailsScreen = () => {
               Related Discussions
             </Text>
             <View style={styles.relatedDiscussionsDetails}>
-              {Array.isArray(discussions) &&
-                discussions.map((d) => (
-                  <View key={d.id} style={styles.relatedDiscussionsArticle}>
+              {Array.isArray(commentsData) &&
+                commentsData.map((comment) => (
+                  <View
+                    key={comment.id}
+                    style={styles.relatedDiscussionsArticle}
+                  >
                     {
                       //@ts-ignore
-                      getProfileIcon(d.profileType)
+                      getProfileIcon("male")
                     }
                     <View style={{ flex: 1 }}>
                       <View style={styles.relatedDiscussionsArticle}>
-                        <Text style={styles.authorName}>{d.name}</Text>
-                        <Text style={styles.articleTime}>{d.time}</Text>
+                        <Text style={styles.authorName}>{"--"}</Text>
+                        <Text style={styles.articleTime}>
+                          {getShortTimeAgo(comment.commented_at)}
+                        </Text>
                       </View>
-                      <Text style={styles.relatedArticleText}>{d.text}</Text>
+                      <Text style={styles.relatedArticleText}>
+                        {comment.comment}
+                      </Text>
                       <View style={styles.likeUnlikeContainer}>
                         <View style={styles.iconCountContainer}>
                           <TouchableOpacity>
                             <LikeIcon width={16} height={16} />
                           </TouchableOpacity>
-                          <Text style={styles.articleTime}>{d.likes}</Text>
+                          <Text style={styles.articleTime}>
+                            {comment.likes}
+                          </Text>
                         </View>
                         <View style={styles.iconCountContainer}>
                           <TouchableOpacity>
                             <UnlikeIcon width={16} height={16} />
                           </TouchableOpacity>
-                          <Text style={styles.articleTime}>{d.unlikes}</Text>
+                          <Text style={styles.articleTime}>{0}</Text>
                         </View>
                       </View>
                     </View>
