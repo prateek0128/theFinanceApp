@@ -20,7 +20,8 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.prateek2812.finsimply",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+         "LSApplicationQueriesSchemes": ["whatsapp", "instagram", "twitter"]
       }
     },
     "android": {
@@ -29,7 +30,15 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.prateek2812.finsimply"
+      "package": "com.prateek2812.finsimply",
+      "intentFilters": [],  
+      "manifest": {
+        "queries": [
+          { "package": "com.whatsapp" },
+          { "package": "com.instagram.android" },
+          { "package": "com.twitter.android" }
+        ]
+      }
     },
     "web": {
       "favicon": "src/assets/favicon.png"
