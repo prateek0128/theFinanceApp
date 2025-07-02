@@ -158,7 +158,7 @@ const SignUpScreen = () => {
   };
   const handleEditPress = () => {
     setShowOTPInputs(false);
-    setOtp(["", "", "", ""]);
+    setOtp(["", "", "", "", "", ""]);
 
     //setIsValid(false);
   };

@@ -142,7 +142,7 @@ const LoginScreen = () => {
   };
   const handleEditPress = () => {
     setShowOTPInputs(false);
-    setOtp(["", "", "", ""]);
+    setOtp(["", "", "", "", "", ""]);
   };
   const isOtpComplete = otp.every((digit) => digit !== "");
   return (

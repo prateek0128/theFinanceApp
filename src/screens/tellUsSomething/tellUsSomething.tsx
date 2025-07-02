@@ -30,6 +30,21 @@ const TellUsSomething = () => {
 
   const isFormValid =
     selectedWhoAreYou !== "" && selectedGoal !== "" && selectedCategory !== "";
+  const roles = [
+    { label: "Select your role", value: "" },
+    { label: "Student", value: "student" },
+    { label: "Professional", value: "professional" },
+    { label: "Business Owner", value: "business_owner" },
+    { label: "Retired", value: "retired" },
+  ];
+  const goals = [
+    { label: "Select your goal", value: "" },
+    { label: "Long-term Investing", value: "long_term" },
+    { label: "Day Trading", value: "day_trading" },
+    { label: "Portfolio Tracking", value: "tracking" },
+    { label: "Market Research", value: "research" },
+  ];
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tell Us Something About Yourself</Text>
@@ -46,11 +61,13 @@ const TellUsSomething = () => {
             style={styles.picker}
             dropdownIconColor="#333"
           >
-            <Picker.Item label="Select your role" value="" />
-            <Picker.Item label="Student" value="student" />
-            <Picker.Item label="Professional" value="professional" />
-            <Picker.Item label="Business Owner" value="business_owner" />
-            <Picker.Item label="Retired" value="retired" />
+            {roles.map((role) => (
+              <Picker.Item
+                key={role.value}
+                label={role.label}
+                value={role.value}
+              />
+            ))}
           </Picker>
         </View>
       </View>
@@ -85,21 +102,28 @@ const TellUsSomething = () => {
       <View style={styles.dropdownContainer}>
         <Text style={styles.label}>Categories</Text>
         <View
-          style={[styles.pickerWrapper, !selectedGoal && styles.disabledPicker]}
+          style={[
+            styles.pickerWrapper,
+            !selectedWhoAreYou && styles.disabledPicker,
+          ]}
         >
           <Picker
-            selectedValue={selectedCategory}
-            onValueChange={(itemValue) => setSelectedCategory(itemValue)}
-            enabled={!!selectedGoal}
+            selectedValue={selectedGoal}
+            onValueChange={(itemValue) => {
+              setSelectedGoal(itemValue);
+              setSelectedCategory(""); // Reset dependent field
+            }}
+            enabled={!!selectedWhoAreYou}
             style={styles.picker}
             dropdownIconColor="#333"
           >
-            <Picker.Item label="Select a sector" value="" />
-            <Picker.Item label="Technology" value="technology" />
-            <Picker.Item label="Healthcare" value="healthcare" />
-            <Picker.Item label="Energy" value="energy" />
-            <Picker.Item label="Finance" value="finance" />
-            <Picker.Item label="Consumer Goods" value="consumer_goods" />
+            {goals.map((goal) => (
+              <Picker.Item
+                key={goal.value}
+                label={goal.label}
+                value={goal.value}
+              />
+            ))}
           </Picker>
         </View>
       </View>
