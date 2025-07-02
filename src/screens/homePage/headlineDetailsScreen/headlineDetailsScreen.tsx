@@ -174,6 +174,16 @@ const HeadlineDetailsScreen = () => {
           //   }
           // }
 
+          // const checkUserLikeAPI = async () => {
+          // try {
+          //   const response = await checkUserLike();
+          //   console.log(response.data);
+          //   } catch (error) {
+          //       console.log("API Error:", error);
+          //   }
+
+          // }
+
   const getNewsByIDAPI = async (newsId: string) => {
     try {
       const response = await getNewsByID(newsId);
