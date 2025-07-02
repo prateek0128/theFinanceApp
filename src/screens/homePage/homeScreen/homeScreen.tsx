@@ -151,37 +151,6 @@ const HomeScreen = () => {
           </View>
         ))}
       </View>
-      {/* <View style={styles.swiperWrapper}>
-        {cards.map((card, index) => {
-          return (
-            <>
-              <HeadlineDetailCard
-                index={index}
-                authorName={card.author}
-                timeAgo={card.time}
-                impactScore={card.impactScore}
-                heading={card.title}
-                subHeading={card.subHeading}
-                HeadlineImageComponent={card.HeadlineImageComponent}
-                ProfileIconComponent={card.ProfileIconComponent}
-                ImpactIconComponent={card.ImpactIconComponent}
-                onPress={() =>
-                  navigation.navigate("HeadlineDetailsScreen", {
-                    imageKey: card.imageKey,
-                    title: card.title,
-                    author: card.author,
-                    time: card.time,
-                    impactScore: card.impactScore,
-                    points: card.points,
-                    //@ts-ignore
-                    discussions: card.discussions,
-                  })
-                }
-              />
-            </>
-          );
-        })}
-      </View> */}
       <View style={styles.swiperWrapper}>
         {allNews.map((news, index) => {
           return (
