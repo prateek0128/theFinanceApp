@@ -117,14 +117,30 @@ const HeadlineDetailsScreen = () => {
     title: "HDB Financial Shares Expected to Surge",
     url: "https://www.moneycontrol.com/news/business/markets/emkay-global-sees-22-upside-for-hdb-financial-shares-from-ipo-s-upper-price-band-13216416.html",
   };
-
+  const comments = [
+    {
+      comment: "Impressive news",
+      commented_at: "2025-07-02T11:02:27Z",
+      id: "686511c313b9bfbabd948fc0",
+      likes: 0,
+      news_id: "6864f165e47cdd0e79348df6",
+      user_id: "6864f3be13b9bfbabd948fb6",
+    },
+    {
+      comment: "News is good.",
+      commented_at: "2025-07-02T11:01:52Z",
+      id: "686511a013b9bfbabd948fbf",
+      likes: 0,
+      news_id: "6864f165e47cdd0e79348df6",
+      user_id: "6864f3be13b9bfbabd948fb6",
+    },
+  ];
   useEffect(() => {
     if (newsId) {
       getCommentsAPI(newsId);
       getNewsByIDAPI(newsId);
       checkUserLikeStatusAPI(newsId);
       checkLikeStatusAPI(newsId);
-      addCommentsAPI(newsId);
     }
   }, []);
 
@@ -155,7 +171,7 @@ const HeadlineDetailsScreen = () => {
     }
   };
 
-  const addCommentsAPI = async (newsId: string) => {
+  const addCommentsAPI = async (newsId: any) => {
     const commentData = {
       comment: comment,
     };
@@ -198,9 +214,9 @@ const HeadlineDetailsScreen = () => {
   const getCommentsAPI = async (newsId: string) => {
     try {
       const response = await getComments(newsId);
-      console.log(response);
+      console.log("Comments", response.data);
     } catch (error) {
-      console.log(error);
+      console.log("API Error:", error);
     }
   };
 
@@ -255,12 +271,16 @@ const HeadlineDetailsScreen = () => {
               </View>
             </View>
             <View style={styles.headingDetails}>
-              {points?.map((point, index) => (
+              {/* {points?.map((point, index) => (
                 <View key={index} style={styles.listItem}>
                   <Text style={styles.listIndex}>{index + 1}.</Text>
                   <Text style={styles.listPoints}>{point}</Text>
                 </View>
-              ))}
+              ))} */}
+              <View style={styles.listItem}>
+                <Text style={styles.listIndex}>{1}.</Text>
+                <Text style={styles.listPoints}>{newsData.summary}</Text>
+              </View>
             </View>
           </View>
           <View style={styles.relatedDiscussionsContainer}>
@@ -310,9 +330,15 @@ const HeadlineDetailsScreen = () => {
                 setComment(text);
               }}
             />
-            <View style={styles.commentButton}>
-              <CommentIcon />
-            </View>
+            <TouchableOpacity
+              onPress={() => {
+                addCommentsAPI(newsId);
+              }}
+            >
+              <View style={styles.commentButton}>
+                <CommentIcon />
+              </View>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
