@@ -11,18 +11,18 @@ import { colors } from "../../assets/styles/colors";
 import { RootStackParamList } from "../../types/navigation";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 const { width, height } = Dimensions.get("window");
-const MarketScreen = () => {
+const InterestsScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.headingContainer}>
-        <Text style={styles.heading}>Market Screen</Text>
+        <Text style={styles.heading}>InterestsScreen Screen</Text>
       </View>
     </ScrollView>
   );
 };
 
-export default MarketScreen;
+export default InterestsScreen;
 
 const styles = StyleSheet.create({
   container: {

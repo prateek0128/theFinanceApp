@@ -2,6 +2,7 @@ export { default as CommunityBlack } from "./CommunityBlack";
 export { default as CommunityIcon } from "./CommunityIcon";
 export { default as HomeBlack } from "./HomeBlack";
 export { default as HomeIcon } from "./HomeIcon";
+export { default as IntrestIcon } from "./IntrestIcon";
 export { default as MarketIcon } from "./MarketIcon";
 export { default as NewsBlack } from "./NewsBlack";
 export { default as NewsIcon } from "./NewsIcon";
