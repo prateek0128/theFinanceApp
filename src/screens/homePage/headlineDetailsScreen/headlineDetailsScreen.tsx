@@ -100,9 +100,55 @@ const HeadlineDetailsScreen = () => {
   //     const response = await getComments();
   //     console.log(response);
   //   } catch (error) {
-  //     console.log(error);
+  //     console.log("API Error:", error);
   //   }
   // };
+    // const addReactionAPI = async () => {
+    //   try {
+    //     const response = await addReaction();
+    //     console.log(response.data);
+    //   } catch (error) {
+    //  console.log("API Error:", error);
+    //   }
+    // }
+
+      // const toggleLikeAp = async () => {
+      //   try {
+      //     const response = await toggleLike();
+      //     console.log(response.data);
+      //   } catch (error) {
+      //     console.log("API Error:", error);
+      //   }
+      // }
+
+          // const checkLikeStatusAPI = async () => {
+          //   try {
+          //     const response = await checkLikeStatus();
+          //     console.log(response.data);
+          //   } catch (error) {
+          //     console.log("API Error:", error);
+          //   }
+          // }
+
+          // const addCommentsAPI = async () => {
+          //   try {
+          //     const response = await addComments();
+          //     console.log(response.data);
+          //   } catch (error) {
+          //     console.log("API Error:", error);
+          //   }
+          // }
+
+          // const deleteComments = async () => {
+          //   try {
+          //     const response = await deleteComments();
+          //     console.log(response.data);
+
+          //   } catch (error) {
+          //     console.log("API Error:", error);
+          //   }
+          // }
+
 
   const getProfileIcon = (type: "male" | "female") => {
     return type === "female" ? (
