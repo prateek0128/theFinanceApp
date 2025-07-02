@@ -57,7 +57,9 @@ const Header = ({
         >
           {bookmarked ? <BookmarkIconFilled /> : <BookmarkIcon />}
         </TouchableOpacity>
-        {/* <ShareIcon /> */}
+        <TouchableOpacity onPress={() => setOpen(true)}>
+          <ShareIcon />
+        </TouchableOpacity>
         <ShareSheet
           visible={open}
           onClose={() => setOpen(false)}
