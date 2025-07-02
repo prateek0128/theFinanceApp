@@ -22,6 +22,9 @@ import {
   LikeIconFilled,
   BookmarkIconFilled,
 } from "../../assets/icons/components/headlineDetailsView";
+import ShareButtons from "../sharedSheet/sharedSheet";
+import ShareSheet from "../sharedSheet/sharedSheet";
+
 const { width } = Dimensions.get("window");
 
 type HeaderProps = {
