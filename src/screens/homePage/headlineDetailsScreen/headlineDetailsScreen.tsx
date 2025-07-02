@@ -78,7 +78,7 @@ const HeadlineDetailsScreen = () => {
     discussions,
     imageKey,
   } = route.params || {};
-
+  // const [newsData, setNewsData] = useState({});
   const renderImage = () => {
     if (typeof imageKey === "string" && imageKey in imageMap) {
       const ImageComponent = imageMap[imageKey];
@@ -128,66 +128,67 @@ const HeadlineDetailsScreen = () => {
   //     console.log("API Error:", error);
   //   }
   // };
-    // const addReactionAPI = async () => {
-    //   try {
-    //     const response = await addReaction();
-    //     console.log(response.data);
-    //   } catch (error) {
-    //  console.log("API Error:", error);
-    //   }
-    // }
+  // const addReactionAPI = async () => {
+  //   try {
+  //     const response = await addReaction();
+  //     console.log(response.data);
+  //   } catch (error) {
+  //  console.log("API Error:", error);
+  //   }
+  // }
 
-      // const toggleLikeAp = async () => {
-      //   try {
-      //     const response = await toggleLike();
-      //     console.log(response.data);
-      //   } catch (error) {
-      //     console.log("API Error:", error);
-      //   }
-      // }
+  // const toggleLikeAp = async () => {
+  //   try {
+  //     const response = await toggleLike();
+  //     console.log(response.data);
+  //   } catch (error) {
+  //     console.log("API Error:", error);
+  //   }
+  // }
 
-          // const checkLikeStatusAPI = async () => {
-          //   try {
-          //     const response = await checkLikeStatus();
-          //     console.log(response.data);
-          //   } catch (error) {
-          //     console.log("API Error:", error);
-          //   }
-          // }
+  // const checkLikeStatusAPI = async () => {
+  //   try {
+  //     const response = await checkLikeStatus();
+  //     console.log(response.data);
+  //   } catch (error) {
+  //     console.log("API Error:", error);
+  //   }
+  // }
 
-          // const addCommentsAPI = async () => {
-          //   try {
-          //     const response = await addComments();
-          //     console.log(response.data);
-          //   } catch (error) {
-          //     console.log("API Error:", error);
-          //   }
-          // }
+  // const addCommentsAPI = async () => {
+  //   try {
+  //     const response = await addComments();
+  //     console.log(response.data);
+  //   } catch (error) {
+  //     console.log("API Error:", error);
+  //   }
+  // }
 
-          // const deleteComments = async () => {
-          //   try {
-          //     const response = await deleteComments();
-          //     console.log(response.data);
+  // const deleteComments = async () => {
+  //   try {
+  //     const response = await deleteComments();
+  //     console.log(response.data);
 
-          //   } catch (error) {
-          //     console.log("API Error:", error);
-          //   }
-          // }
+  //   } catch (error) {
+  //     console.log("API Error:", error);
+  //   }
+  // }
 
-          // const checkUserLikeAPI = async () => {
-          // try {
-          //   const response = await checkUserLike();
-          //   console.log(response.data);
-          //   } catch (error) {
-          //       console.log("API Error:", error);
-          //   }
+  // const checkUserLikeAPI = async () => {
+  // try {
+  //   const response = await checkUserLike();
+  //   console.log(response.data);
+  //   } catch (error) {
+  //       console.log("API Error:", error);
+  //   }
 
-          // }
+  // }
 
   const getNewsByIDAPI = async (newsId: string) => {
     try {
       const response = await getNewsByID(newsId);
       console.log("newsResponseByID:", response.data);
+      //setNewsData(response.data);
     } catch (e) {
       console.log("API Error:", e);
     }
@@ -232,7 +233,7 @@ const HeadlineDetailsScreen = () => {
               {renderImage()}
             </View>
             <View style={styles.headingContainer}>
-              <Text style={styles.articleDetailsHeading}>{title}</Text>
+              <Text style={styles.articleDetailsHeading}>{newsData.title}</Text>
               <View style={styles.detailsHeader}>
                 <View style={styles.profileNameContainer}>
                   <ProfileIcon width={30} height={30} />
@@ -245,7 +246,7 @@ const HeadlineDetailsScreen = () => {
                   <IncrementArrow width={16} height={16} />
                   <View style={styles.impactLabel}>
                     <Text style={styles.impactLabelText}>
-                      Impact Score : {impactScore}
+                      {newsData.impact_label} : {newsData.impact_score}
                     </Text>
                   </View>
                 </View>
