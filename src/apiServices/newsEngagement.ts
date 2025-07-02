@@ -70,7 +70,7 @@ export const deleteComments = async (commentId: any) => {
 export const checkUserLike = async (newsId: any) => {
   const client = await apiClient();
   try {
-    const response = await client.delete(`/news/${newsId}/user-like`);
+    const response = await client.get(`/news/${newsId}/user-like`);
     return response;
   } catch (error) {
     throw error;
