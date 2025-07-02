@@ -34,7 +34,7 @@ export const checkLikeStatus = async (newsId: any) => {
 };
 
 // Add Comments
-export const addComments = async (newsId: any) => {
+export const addComments = async (newsId: any, comments: any) => {
   const client = await apiClient();
   try {
     const response = await client.post(`/news/${newsId}/comments`);
@@ -67,7 +67,7 @@ export const deleteComments = async (commentId: any) => {
 };
 
 // Check User Like
-export const checkUserLike = async (newsId: any) => {
+export const checkUserLikeStatus = async (newsId: any) => {
   const client = await apiClient();
   try {
     const response = await client.get(`/news/${newsId}/user-like`);

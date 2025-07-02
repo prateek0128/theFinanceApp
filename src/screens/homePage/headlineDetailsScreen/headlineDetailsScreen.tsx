@@ -39,7 +39,12 @@ import fontFamily from "../../../assets/styles/fontFamily";
 import { TextInput } from "react-native-gesture-handler";
 import Header from "../../../components/header/header";
 import ClippedSVG from "../../../components/clippedSVG/clippedSVG";
-import { getComments } from "../../../apiServices/newsEngagement";
+import {
+  addComments,
+  checkLikeStatus,
+  checkUserLikeStatus,
+  getComments,
+} from "../../../apiServices/newsEngagement";
 import { getNewsByID } from "../../../apiServices/news";
 const { width, height } = Dimensions.get("window");
 interface Discussion {
@@ -117,72 +122,69 @@ const HeadlineDetailsScreen = () => {
     if (newsId) {
       getCommentsAPI(newsId);
       getNewsByIDAPI(newsId);
+      checkUserLikeStatusAPI(newsId);
+      checkLikeStatusAPI(newsId);
+      addCommentsAPI(newsId);
     }
   }, []);
 
-  // const getCommentsAPI = async () => {
+  // const addReactionAPI = async () => {
   //   try {
-  //     const response = await getComments();
-  //     console.log(response);
+  //     const response = await addReaction();
+  //     console.log(response.data);
+  //   } catch (error) {
+  //  console.log("API Error:", error);
+  //   }
+  // }
+
+  // const toggleLikeAPI = async () => {
+  //   try {
+  //     const response = await toggleLike();
+  //     console.log(response.data);
   //   } catch (error) {
   //     console.log("API Error:", error);
   //   }
-  // };
-    // const addReactionAPI = async () => {
-    //   try {
-    //     const response = await addReaction();
-    //     console.log(response.data);
-    //   } catch (error) {
-    //  console.log("API Error:", error);
-    //   }
-    // }
+  // }
 
-      // const toggleLikeAp = async () => {
-      //   try {
-      //     const response = await toggleLike();
-      //     console.log(response.data);
-      //   } catch (error) {
-      //     console.log("API Error:", error);
-      //   }
-      // }
+  const checkLikeStatusAPI = async (newsId: string) => {
+    try {
+      const response = await checkLikeStatus(newsId);
+      console.log(response.data);
+    } catch (error) {
+      console.log("API Error:", error);
+    }
+  };
 
-          // const checkLikeStatusAPI = async () => {
-          //   try {
-          //     const response = await checkLikeStatus();
-          //     console.log(response.data);
-          //   } catch (error) {
-          //     console.log("API Error:", error);
-          //   }
-          // }
+  const addCommentsAPI = async (newsId: string) => {
+    const commentData = {
+      comment: comment,
+    };
+    try {
+      const response = await addComments(newsId, commentData);
+      console.log(response.data);
+    } catch (error) {
+      console.log("API Error:", error);
+    }
+  };
 
-          // const addCommentsAPI = async () => {
-          //   try {
-          //     const response = await addComments();
-          //     console.log(response.data);
-          //   } catch (error) {
-          //     console.log("API Error:", error);
-          //   }
-          // }
+  // const deleteCommentsAPI = async () => {
+  //   try {
+  //     const response = await deleteComments();
+  //     console.log(response.data);
 
-          // const deleteComments = async () => {
-          //   try {
-          //     const response = await deleteComments();
-          //     console.log(response.data);
+  //   } catch (error) {
+  //     console.log("API Error:", error);
+  //   }
+  // }
 
-          //   } catch (error) {
-          //     console.log("API Error:", error);
-          //   }
-          // }
-
-          // const checkUserLikeAPI = async () => {
-          // try {
-          //   const response = await checkUserLike();
-          //   console.log(response.data);
-          //   } catch (error) {
-          //       console.log("API Error:", error);
-          //   }
-
-          // }
+  const checkUserLikeStatusAPI = async (newsId: string) => {
+    try {
+      const response = await checkUserLikeStatus(newsId);
+      console.log(response.data);
+    } catch (error) {
+      console.log("API Error:", error);
+    }
+  };
 
   const getNewsByIDAPI = async (newsId: string) => {
     try {
