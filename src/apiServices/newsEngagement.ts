@@ -34,7 +34,7 @@ export const checkLikeStatus = async (newsId: any) => {
 };
 
 // Add Comments
-export const addComments = async (newsId: any) => {
+export const addComments = async (newsId: any, comments: any) => {
   const client = await apiClient();
   try {
     const response = await client.post(`/news/${newsId}/comments`);
