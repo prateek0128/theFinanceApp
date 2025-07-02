@@ -26,9 +26,35 @@ import {
   GraphImage2,
 } from "../../../assets/icons/components/headlineDetailsView";
 const { width, height } = Dimensions.get("window");
+type NewsItem = {
+  id: string;
+  title: string;
+  summary: string;
+  url: string;
+  source: string;
+  published_at: string;
+  categories: any;
+  tags: any;
+  related_stocks: any;
+  impact_score: number;
+  impact_label: string;
+  sentiment_score: number;
+  reaction_stats: {
+    bullish: number;
+    bearish: number;
+    important: number;
+    neutral: number;
+  };
+  engagement: {
+    likes: number;
+    comments: number;
+  };
+  discussions?: any;
+};
+
 const HomeScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const [allNewsData, setAllNewsData] = useState([]);
+  const [allNewsData, setAllNewsData] = useState<NewsItem[]>([]);
   const articles = [
     {
       title: "RBI holds rates steady, signals caution on inflation",
@@ -41,91 +67,14 @@ const HomeScreen = () => {
       time: "4h ago",
     },
   ];
-  const allNews = [
-    {
-      id: "6863e623dcb62080ba1a8ae5",
-      title: "Reliance Power Stock Hits 7-Year High",
-      summary:
-        "Shares of Reliance Power surged 8% to ₹62.80, reaching their highest level since January 2018.\nThis significant increase could indicate strong investor confidence and may attract more buyers, potentially boosting the overall market.\nIt's similar to how a popular restaurant's sudden rise in customers can lead to longer wait times and increased interest from new diners.",
-      url: "https://www.business-standard.com/markets/news/anil-ambani-reliance-group-stock-hit-7-year-high-zooms-101-from-march-low-125060200374_1.html",
-      source: "BusinessStandard",
-      published_at: "2025-07-01T13:49:55.587Z",
-      categories: null,
-      tags: null,
-      related_stocks: null,
-      impact_score: 5.5,
-      impact_label: "Medium Impact",
-      sentiment_score: 0.2954545454545454,
-      reaction_stats: {
-        bullish: 0,
-        bearish: 0,
-        important: 0,
-        neutral: 0,
-      },
-      engagement: {
-        likes: 0,
-        comments: 0,
-      },
-    },
-    {
-      id: "6863e624dcb62080ba1a8ae6",
-      title: "Bharti Hexacom Stock Hits New High",
-      summary:
-        "The stock price of Bharti Hexacom has surged 58% from its low in April.\nThis significant increase could attract more investors, boosting the company's market value.\nIt's similar to how a popular new restaurant can draw in crowds, increasing its revenue and reputation.",
-      url: "https://www.business-standard.com/markets/news/bharti-hexacom-stock-hits-new-high-zooms-58-from-april-low-here-s-why-125060300297_1.html",
-      source: "BusinessStandard",
-      published_at: "2025-07-01T13:49:55.587Z",
-      categories: null,
-      tags: null,
-      related_stocks: null,
-      impact_score: 5,
-      impact_label: "Medium Impact",
-      sentiment_score: 0.36363636363636365,
-      reaction_stats: {
-        bullish: 0,
-        bearish: 0,
-        important: 0,
-        neutral: 0,
-      },
-      engagement: {
-        likes: 0,
-        comments: 0,
-      },
-    },
-    {
-      id: "6863e622dcb62080ba1a8ae3",
-      title: "Zen Technologies Soars On Strong Q4 (Fourth Quarter) Results",
-      summary:
-        "Zen Technologies' share price reached the 5% upper circuit limit due to impressive Q4 (Fourth Quarter) results.\nThis significant increase in profit could attract more investors and boost the company's market position.\nIt's like a student scoring top marks in an exam, which makes them more appealing to colleges.",
-      url: "https://www.business-standard.com/markets/news/zen-technologies-hit-5-upper-circuit-on-strong-q4-results-pat-up-189-125051900183_1.html",
-      source: "BusinessStandard",
-      published_at: "2025-07-01T13:49:55.586Z",
-      categories: null,
-      tags: null,
-      related_stocks: null,
-      impact_score: 7,
-      impact_label: "High Impact",
-      sentiment_score: 0.25,
-      reaction_stats: {
-        bullish: 0,
-        bearish: 0,
-        important: 0,
-        neutral: 0,
-      },
-      engagement: {
-        likes: 0,
-        comments: 0,
-      },
-    },
-  ];
 
   const getAllNewsAPI = async () => {
     try {
       const response = await getNewsFeed();
-      console.log(response.data);
-      //setAllNewsData()
+      console.log("newsResponse:", response.data);
+      setAllNewsData(response.data);
     } catch (error) {
-      console.log(error);
+      console.log("API Error:", error);
     }
   };
   useEffect(() => {
@@ -152,7 +101,7 @@ const HomeScreen = () => {
         ))}
       </View>
       <View style={styles.swiperWrapper}>
-        {allNews.map((news, index) => {
+        {allNewsData.map((news, index) => {
           return (
             <HeadlineDetailCard
               key={news.id}
@@ -168,6 +117,7 @@ const HomeScreen = () => {
               ImpactIconComponent={IncrementArrow}
               onPress={() =>
                 navigation.navigate("HeadlineDetailsScreen", {
+                  newsId: news.id,
                   imageKey: "",
                   title: news.title,
                   author: "news.author",
