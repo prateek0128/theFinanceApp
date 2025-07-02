@@ -1,6 +1,6 @@
 // components/HeadlineDetailCard.js
 
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -16,7 +16,8 @@ import {
 } from "../../assets/icons/components/header";
 import { colors } from "../../assets/styles/colors";
 import fontFamily from "../../assets/styles/fontFamily";
-import ShareButtons from "../sharedButton/sharedButtons";
+import ShareButtons from "../sharedSheet/sharedSheet";
+import ShareSheet from "../sharedSheet/sharedSheet";
 
 const { width } = Dimensions.get("window");
 
@@ -25,6 +26,7 @@ type HeaderProps = {
 };
 
 const Header = ({ onPress }: HeaderProps) => {
+  const [open, setOpen] = useState(false);
   return (
     <View style={styles.headerConatiner}>
       <TouchableOpacity onPress={onPress}>
@@ -35,8 +37,13 @@ const Header = ({ onPress }: HeaderProps) => {
       <View style={styles.rightHeaderPart}>
         <HeartIcon />
         <BookmarkIcon />
-        {/* <ShareIcon /> */}
-        <ShareButtons
+        <TouchableOpacity onPress={() => setOpen(true)}>
+          <ShareIcon />
+        </TouchableOpacity>
+
+        <ShareSheet
+          visible={open}
+          onClose={() => setOpen(false)}
           url={`https://www.moneycontrol.com/news/business/markets/emkay-global-sees-22-upside-for-hdb-financial-shares-from-ipo-s-upper-price-band-13216416.html`}
           message={`Have a look at  "URL"`}
         />
