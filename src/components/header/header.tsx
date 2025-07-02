@@ -16,13 +16,11 @@ import {
 } from "../../assets/icons/components/header";
 import { colors } from "../../assets/styles/colors";
 import fontFamily from "../../assets/styles/fontFamily";
-import ShareButtons from "../sharedButton/sharedButtons";
 import {
   LikeIcon,
   LikeIconFilled,
   BookmarkIconFilled,
 } from "../../assets/icons/components/headlineDetailsView";
-import ShareButtons from "../sharedSheet/sharedSheet";
 import ShareSheet from "../sharedSheet/sharedSheet";
 
 const { width } = Dimensions.get("window");
@@ -42,6 +40,7 @@ const Header = ({
   bookmarked,
   setBookmarked,
 }: HeaderProps) => {
+  const [open, setOpen] = useState(false);
   return (
     <View style={styles.headerConatiner}>
       <TouchableOpacity onPress={onPress}>
@@ -59,7 +58,9 @@ const Header = ({
           {bookmarked ? <BookmarkIconFilled /> : <BookmarkIcon />}
         </TouchableOpacity>
         {/* <ShareIcon /> */}
-        <ShareButtons
+        <ShareSheet
+          visible={open}
+          onClose={() => setOpen(false)}
           url={`https://www.moneycontrol.com/news/business/markets/emkay-global-sees-22-upside-for-hdb-financial-shares-from-ipo-s-upper-price-band-13216416.html`}
           message={`Have a look at  "URL"`}
         />
