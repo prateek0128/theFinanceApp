@@ -1,9 +1,11 @@
+export { default as BookmarkIcon } from "./BookmarkIcon";
 export { default as BookmarkIconFilled } from "./BookmarkIconFilled";
 export { default as CommentIcon } from "./CommentIcon";
 export { default as CurrencyImage2 } from "./CurrencyImage2";
 export { default as FemaleProfileIcon } from "./FemaleProfileIcon";
 export { default as GraphImage2 } from "./GraphImage2";
-export { default as LikeIcon } from "./LikeIcon";
-export { default as LikeIconFilled } from "./LikeIconFilled";
+export { default as LikeCommentIcon } from "./LikeCommentIcon";
+export { default as LikePostIcon } from "./LikePostIcon";
+export { default as LikePostIconFilled } from "./LikePostIconFilled";
 export { default as MaleProfileIcon } from "./MaleProfileIcon";
-export { default as UnlikeIcon } from "./UnlikeIcon";
+export { default as UnlikeCommentIcon } from "./UnlikeCommentIcon";

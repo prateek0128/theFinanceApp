@@ -8,53 +8,53 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import {
-  BackArrowIcon,
-  HeartIcon,
-  ShareIcon,
-  BookmarkIcon,
-} from "../../assets/icons/components/header";
+import { BackArrowIcon, ShareIcon } from "../../assets/icons/components/header";
 import { colors } from "../../assets/styles/colors";
 import fontFamily from "../../assets/styles/fontFamily";
 import {
-  LikeIcon,
-  LikeIconFilled,
+  LikePostIconFilled,
+  LikePostIcon,
+  BookmarkIcon,
   BookmarkIconFilled,
 } from "../../assets/icons/components/headlineDetailsView";
 import ShareSheet from "../sharedSheet/sharedSheet";
 
 const { width } = Dimensions.get("window");
-
 type HeaderProps = {
-  onPress?: () => void;
+  onBackClick?: () => void;
   liked?: boolean;
   setLiked?: React.Dispatch<React.SetStateAction<boolean>>;
+  onToggleLikeClick?: () => void;
   bookmarked?: boolean;
   setBookmarked?: React.Dispatch<React.SetStateAction<boolean>>;
+  onToggleBookmarkClick?: () => void;
+  shareUrl?: string;
 };
 
 const Header = ({
-  onPress,
+  onBackClick,
   liked,
   setLiked,
+  onToggleLikeClick,
   bookmarked,
   setBookmarked,
+  onToggleBookmarkClick,
+  shareUrl,
 }: HeaderProps) => {
   const [open, setOpen] = useState(false);
+  console.log("LikedStatus=>", liked);
   return (
     <View style={styles.headerConatiner}>
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity onPress={onBackClick}>
         <View style={styles.leftHeaderPart}>
           <BackArrowIcon />
         </View>
       </TouchableOpacity>
       <View style={styles.rightHeaderPart}>
-        <TouchableOpacity onPress={() => setLiked && setLiked(!liked)}>
-          {liked ? <LikeIconFilled /> : <HeartIcon />}
+        <TouchableOpacity onPress={onToggleLikeClick}>
+          {liked ? <LikePostIconFilled /> : <LikePostIcon />}
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => setBookmarked && setBookmarked(!bookmarked)}
-        >
+        <TouchableOpacity onPress={onToggleBookmarkClick}>
           {bookmarked ? <BookmarkIconFilled /> : <BookmarkIcon />}
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setOpen(true)}>
@@ -63,7 +63,7 @@ const Header = ({
         <ShareSheet
           visible={open}
           onClose={() => setOpen(false)}
-          url={`https://www.moneycontrol.com/news/business/markets/emkay-global-sees-22-upside-for-hdb-financial-shares-from-ipo-s-upper-price-band-13216416.html`}
+          url={shareUrl}
           message={`Have a look at  "URL"`}
         />
       </View>

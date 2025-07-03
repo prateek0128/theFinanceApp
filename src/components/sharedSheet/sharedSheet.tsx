@@ -16,7 +16,7 @@ import { FontAwesome } from "@expo/vector-icons";
 interface Props {
   visible: boolean;
   onClose: () => void;
-  url: string;
+  url: any;
   message?: string;
 }
 

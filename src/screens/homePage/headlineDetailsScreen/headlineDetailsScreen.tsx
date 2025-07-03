@@ -21,8 +21,8 @@ import {
   GraphImage2,
   FemaleProfileIcon,
   MaleProfileIcon,
-  LikeIcon,
-  UnlikeIcon,
+  LikeCommentIcon,
+  UnlikeCommentIcon,
   CommentIcon,
   CurrencyImage2,
 } from "../../../assets/icons/components/headlineDetailsView";
@@ -50,6 +50,11 @@ import {
 import { getNewsByID } from "../../../apiServices/news";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import {
+  getPinnedNews,
+  pinNews,
+  unpinNews,
+} from "../../../apiServices/newsManagement";
 
 dayjs.extend(relativeTime);
 const { width, height } = Dimensions.get("window");
@@ -65,12 +70,15 @@ const imageMap: Record<
   graph: GraphImage2,
   currency: CurrencyImage2,
 };
+interface NewsData {
+  title?: string;
+  impact_label?: string;
+  impact_score?: number;
+  summary?: string;
+  url?: string;
+}
 const HeadlineDetailsScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const [comment, setComment] = useState("");
-  const [commentsData, setCommentsData] = useState("");
-  const [liked, setLiked] = useState(false);
-  const [bookmarked, setBookmarked] = useState(false);
   const route = useRoute<HeadlineDetailsRouteProp>();
   const {
     newsId,
@@ -83,13 +91,10 @@ const HeadlineDetailsScreen = () => {
     discussions,
     imageKey,
   } = route.params || {};
-  interface NewsData {
-    title?: string;
-    impact_label?: string;
-    impact_score?: number;
-    summary?: string;
-    // add other properties as needed
-  }
+  const [comment, setComment] = useState("");
+  const [commentsData, setCommentsData] = useState("");
+  const [liked, setLiked] = useState(false);
+  const [bookmarked, setBookmarked] = useState(false);
   const [newsData, setNewsData] = useState<NewsData>({});
   const renderImage = () => {
     if (typeof imageKey === "string" && imageKey in imageMap) {
@@ -149,7 +154,8 @@ const HeadlineDetailsScreen = () => {
       checkUserLikeStatusAPI(newsId);
       checkLikeStatusAPI(newsId);
     }
-  }, []);
+    getBookmarkAPI();
+  }, [newsId]);
 
   const addReactionAPI = async (newsId: any) => {
     try {
@@ -159,25 +165,67 @@ const HeadlineDetailsScreen = () => {
       console.log("API Error:", error);
     }
   };
-
+  const handleToggleLike = () => {
+    setLiked((prev) => !prev);
+    if (newsId) {
+      toggleLikeAPI(newsId);
+    }
+  };
   const toggleLikeAPI = async (newsId: any) => {
     try {
       const response = await toggleLike(newsId);
-      console.log(response.data);
+      console.log("Toggle Like=>", response.data);
     } catch (error) {
       console.log("API Error:", error);
     }
   };
+  const getBookmarkAPI = async () => {
+    try {
+      const response = await getPinnedNews();
+      console.log("getBookmarkResponse", response.data);
+      setBookmarked(response.data);
+    } catch (error) {
+      console.log("API Error:", error);
+    }
+  };
+  const handleToggleBookmark = () => {
+    setBookmarked((prev) => {
+      const newStatus = !prev;
+      if (newsId) {
+        if (newStatus) {
+          handlePinNews(newsId);
+        } else {
+          handleUnPinNews(newsId);
+        }
+      }
+      return newStatus;
+    });
+  };
 
+  const handlePinNews = async (newsId: string) => {
+    try {
+      const response = await pinNews(newsId);
+      console.log("PinNews=>", response.data);
+    } catch (e) {
+      console.log("API Error:", e);
+    }
+  };
+  const handleUnPinNews = async (newsId: string) => {
+    try {
+      const response = await unpinNews(newsId);
+      console.log("UninNews=>", response.data);
+    } catch (e) {
+      console.log("API Error:", e);
+    }
+  };
   const checkLikeStatusAPI = async (newsId: string) => {
     try {
       const response = await checkLikeStatus(newsId);
-      console.log(response.data);
+      console.log("CheckLikeStatusAPI", response.data);
     } catch (error) {
       console.log("API Error:", error);
     }
   };
-
   const addCommentsAPI = async (newsId: any) => {
     const commentData = {
       comment: comment,
@@ -191,26 +239,23 @@ const HeadlineDetailsScreen = () => {
       console.log("API Error:", error);
     }
   };
-
   // const deleteCommentsAPI = async () => {
   //   try {
   //     const response = await deleteComments();
   //     console.log(response.data);
-
   //   } catch (error) {
   //     console.log("API Error:", error);
   //   }
   // }
-
   const checkUserLikeStatusAPI = async (newsId: string) => {
     try {
       const response = await checkUserLikeStatus(newsId);
-      console.log(response.data);
+      console.log("CheckUserLikeStatus=>", response.data.liked);
+      setLiked(response.data.liked);
     } catch (error) {
       console.log("API Error:", error);
     }
   };
-
   const getNewsByIDAPI = async (newsId: string) => {
     try {
       const response = await getNewsByID(newsId);
@@ -229,7 +274,6 @@ const HeadlineDetailsScreen = () => {
       console.log("API Error:", error);
     }
   };
-
   const getProfileIcon = (type: "male" | "female") => {
     return type === "female" ? (
       <FemaleProfileIcon width={40} height={40} />
@@ -262,11 +306,14 @@ const HeadlineDetailsScreen = () => {
         <ScrollView contentContainerStyle={styles.container}>
           <View style={styles.headerContainer}>
             <Header
-              onPress={() => navigation.navigate("Home")}
+              onBackClick={() => navigation.navigate("Home")}
               liked={liked}
               setLiked={setLiked}
               bookmarked={bookmarked}
               setBookmarked={setBookmarked}
+              onToggleLikeClick={handleToggleLike}
+              shareUrl={newsData.url}
+              onToggleBookmarkClick={handleToggleBookmark}
             />
           </View>
           <View style={styles.headingDetailsContainer}>
@@ -341,7 +388,7 @@ const HeadlineDetailsScreen = () => {
                       <View style={styles.likeUnlikeContainer}>
                         <View style={styles.iconCountContainer}>
                           <TouchableOpacity>
-                            <LikeIcon width={16} height={16} />
+                            <LikeCommentIcon width={20} height={20} />
                           </TouchableOpacity>
                           <Text style={styles.articleTime}>
                             {comment.likes}
@@ -349,7 +396,7 @@ const HeadlineDetailsScreen = () => {
                         </View>
                         <View style={styles.iconCountContainer}>
                           <TouchableOpacity>
-                            <UnlikeIcon width={16} height={16} />
+                            <UnlikeCommentIcon width={20} height={20} />
                           </TouchableOpacity>
                           <Text style={styles.articleTime}>{0}</Text>
                         </View>

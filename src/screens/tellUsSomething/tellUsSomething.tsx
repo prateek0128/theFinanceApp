@@ -102,28 +102,21 @@ const TellUsSomething = () => {
       <View style={styles.dropdownContainer}>
         <Text style={styles.label}>Categories</Text>
         <View
-          style={[
-            styles.pickerWrapper,
-            !selectedWhoAreYou && styles.disabledPicker,
-          ]}
+          style={[styles.pickerWrapper, !selectedGoal && styles.disabledPicker]}
         >
           <Picker
-            selectedValue={selectedGoal}
-            onValueChange={(itemValue) => {
-              setSelectedGoal(itemValue);
-              setSelectedCategory(""); // Reset dependent field
-            }}
-            enabled={!!selectedWhoAreYou}
+            selectedValue={selectedCategory}
+            onValueChange={(itemValue) => setSelectedCategory(itemValue)}
+            enabled={!!selectedGoal}
             style={styles.picker}
             dropdownIconColor="#333"
           >
-            {goals.map((goal) => (
-              <Picker.Item
-                key={goal.value}
-                label={goal.label}
-                value={goal.value}
-              />
-            ))}
+            <Picker.Item label="Select a sector" value="" />
+            <Picker.Item label="Technology" value="technology" />
+            <Picker.Item label="Healthcare" value="healthcare" />
+            <Picker.Item label="Energy" value="energy" />
+            <Picker.Item label="Finance" value="finance" />
+            <Picker.Item label="Consumer Goods" value="consumer_goods" />
           </Picker>
         </View>
       </View>
