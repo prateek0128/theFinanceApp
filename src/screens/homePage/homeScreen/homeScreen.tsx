@@ -8,12 +8,14 @@ import {
   Dimensions,
 } from "react-native";
 import { colors } from "../../../assets/styles/colors";
+import EmptyState from "../../../components/EmptyStatte/emptyState";
 import HeadlineDetailCard from "../../../components/headlineDetailedCard/headlineDetailedCard";
 import { RootStackParamList } from "../../../types/navigation";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import fontFamily from "../../../assets/styles/fontFamily";
 import axios from "axios";
 import { getNewsFeed } from "../../../apiServices/news";
+import Loader from "../../../components/Loader/loader";
 import { cards } from "./homeScreenData";
 import {
   GraphImage,
@@ -55,6 +57,7 @@ type NewsItem = {
 const HomeScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [allNewsData, setAllNewsData] = useState<NewsItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const articles = [
     {
       title: "RBI holds rates steady, signals caution on inflation",
@@ -75,11 +78,14 @@ const HomeScreen = () => {
       setAllNewsData(response.data);
     } catch (error) {
       console.log("API Error:", error);
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
     getAllNewsAPI();
   }, []);
+  if (loading) return <Loader />;
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.headingContainer}>
@@ -101,6 +107,9 @@ const HomeScreen = () => {
         ))}
       </View>
       <View style={styles.swiperWrapper}>
+        {!loading && allNewsData.length === 0 && (
+          <EmptyState message="No data found. Pull to refresh." />
+        )}
         {allNewsData.map((news, index) => {
           return (
             <HeadlineDetailCard
