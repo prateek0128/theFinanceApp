@@ -16,7 +16,7 @@ const InterestsScreen = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.headingContainer}>
-        <Text style={styles.heading}>InterestsScreen Screen</Text>
+        <Text style={styles.heading}>Interests Screen</Text>
       </View>
     </ScrollView>
   );
