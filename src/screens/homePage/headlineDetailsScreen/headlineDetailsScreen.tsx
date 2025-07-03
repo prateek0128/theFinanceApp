@@ -11,6 +11,10 @@ import {
   Platform,
 } from "react-native";
 import { colors } from "../../../assets/styles/colors";
+import Loader from "../../../components/Loader/loader";
+import { getNewsFeed } from "../../../apiServices/news";
+import LoaderOverlay from "../../../components/LoadOverlay/loadOverlay";
+
 import {
   CurrencyImage,
   GraphImage,
@@ -91,6 +95,9 @@ const HeadlineDetailsScreen = () => {
     // add other properties as needed
   }
   const [newsData, setNewsData] = useState<NewsData>({});
+  // const [allNewsData, setAllNewsData] = useState<NewsItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [addCommentsLoader, setAddcommentsLoader] = useState<boolean>(false);
   const renderImage = () => {
     if (typeof imageKey === "string" && imageKey in imageMap) {
       const ImageComponent = imageMap[imageKey];
@@ -179,6 +186,7 @@ const HeadlineDetailsScreen = () => {
   };
 
   const addCommentsAPI = async (newsId: any) => {
+    setAddcommentsLoader(true);
     const commentData = {
       comment: comment,
     };
@@ -189,6 +197,8 @@ const HeadlineDetailsScreen = () => {
       getCommentsAPI(newsId);
     } catch (error) {
       console.log("API Error:", error);
+    } finally {
+      setAddcommentsLoader(false);
     }
   };
 
@@ -218,8 +228,11 @@ const HeadlineDetailsScreen = () => {
       setNewsData(response.data);
     } catch (e) {
       console.log("API Error:", e);
+    } finally {
+      setLoading(false);
     }
   };
+
   const getCommentsAPI = async (newsId: string) => {
     try {
       const response = await getComments(newsId);
@@ -252,6 +265,9 @@ const HeadlineDetailsScreen = () => {
       return `${diffInDays}d`;
     }
   };
+  if (loading) return <Loader />;
+  if (addCommentsLoader) return <LoaderOverlay visible={true} />;
+
   return (
     <>
       <KeyboardAvoidingView
