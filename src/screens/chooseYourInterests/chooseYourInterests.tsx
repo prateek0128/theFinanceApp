@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { ThemeContext } from "../../context/themeContext";
 import {
   View,
   Text,
@@ -43,15 +44,52 @@ export default function ChooseYourInterests() {
         : [...prevSelected, item]
     );
   };
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const handleContinue = () => {
     navigation.navigate("BottomTabNavigator");
   };
 
   return (
-    <View style={styles.interestsContainer}>
+    <View
+      style={[
+        styles.interestsContainer,
+        {
+          backgroundColor:
+            theme === "dark"
+              ? colors.darkPrimaryBackground
+              : colors.primaryBackground,
+        },
+      ]}
+    >
       <View style={styles.headingContainer}>
-        <Text style={styles.heading}>Choose Your Interests</Text>
+        <Text
+          style={[
+            styles.heading,
+            {
+              color:
+                theme === "dark"
+                  ? colors.darkPrimaryText
+                  : colors.quaternaryText,
+            },
+          ]}
+        >
+          Choose Your Interests
+        </Text>
+        <Text
+          style={[
+            styles.paragraph,
+            {
+              color:
+                theme === "dark"
+                  ? colors.darkPrimaryText // pick a muted light color
+                  : colors.tertiaryText, // pick a muted dark color
+            },
+          ]}
+        >
+          Choose at least 5 fields
+        </Text>
       </View>
+
       <View style={styles.cardsContainer}>
         {groupedInterests.map((group: any, rowIndex: any) => (
           <View key={rowIndex} style={styles.cardRow}>
@@ -85,7 +123,19 @@ export default function ChooseYourInterests() {
         onPress={handleContinue}
         disabled={selected.length === 0}
       >
-        <Text style={styles.continueText}>Continue</Text>
+        <Text
+          style={[
+            styles.continueText,
+            {
+              color:
+                theme === "dark"
+                  ? colors.darkPrimaryText
+                  : colors.tertiaryBackground,
+            },
+          ]}
+        >
+          Continue
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -108,6 +158,11 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.titleFont,
     textAlign: "left",
     color: colors.quaternaryText,
+  },
+  paragraph: {
+    fontSize: 16,
+    color: colors.octonaryText,
+    fontFamily: fontFamily.textFont400,
   },
   cardsContainer: {
     marginTop: 40,

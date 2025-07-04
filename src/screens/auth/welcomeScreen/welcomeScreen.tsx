@@ -107,7 +107,7 @@ const WelcomeScreen = () => {
           <Text style={styles.orText}>OR</Text>
           <View style={styles.line} />
         </View>
-        <View style={styles.buttonContainers}>
+        {/* <View style={styles.buttonContainers}>
           <SocialLoginButton
             text="Continue as a Guest !"
             onPress={() => navigation.navigate("ChooseYourInterests")}
@@ -117,7 +117,7 @@ const WelcomeScreen = () => {
                 : colors.tertiaryBackground
             }
           />
-        </View>
+        </View> */}
         <View style={styles.inlineLinkContainer}>
           <TouchableOpacity>
             <Text
@@ -146,7 +146,7 @@ const WelcomeScreen = () => {
                 },
               ]}
             >
-              Log In
+              LOG IN
             </Text>
           </TouchableOpacity>
         </View>
