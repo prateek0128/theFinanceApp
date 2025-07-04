@@ -13,7 +13,7 @@ import {
 import { colors } from "../../../assets/styles/colors";
 import Loader from "../../../components/Loader/loader";
 import { getNewsFeed } from "../../../apiServices/news";
-import LoaderOverlay from "../../../components/LoadOverlay/loadOverlay";
+import LoaderOverlay from "../../../components/LoadOverlay/loadOverlayTransparent";
 
 import {
   CurrencyImage,
