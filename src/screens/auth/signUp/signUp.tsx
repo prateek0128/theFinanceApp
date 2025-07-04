@@ -300,7 +300,7 @@ export default SignUpScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.primaryBackground,
+    backgroundColor: colors.nonaryBackground,
   },
   innerContainer: {
     padding: 20,

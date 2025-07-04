@@ -229,7 +229,7 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.septenaryBackground,
+    backgroundColor: colors.nonaryBackground,
   },
   innerContainer: {
     padding: 20,
