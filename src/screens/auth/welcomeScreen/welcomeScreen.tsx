@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   View,
   Text,
@@ -10,11 +10,16 @@ import {
   ScrollView,
   Image,
 } from "react-native";
-import { useNavigation, NavigationProp } from "@react-navigation/native";
+import {
+  useNavigation,
+  NavigationProp,
+  DarkTheme,
+} from "@react-navigation/native";
 import { RootStackParamList } from "../../../types/navigation";
 import { colors } from "../../../assets/styles/colors";
 import globalStyles from "../../../assets/styles/globalStyles";
 import fontFamily from "../../../assets/styles/fontFamily";
+import { ThemeContext } from "../../../context/themeContext";
 import SocialLoginButton from "../../../components/socialLoginButton/socialLoginButton";
 import {
   AppleIcon,
@@ -22,26 +27,57 @@ import {
   FacebookIcon,
 } from "../../../assets/icons/components/welcome";
 const WelcomeScreen = () => {
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const appleIcon = require("../../../assets/images/welcome/appleIcon.png");
-  const googleIcon = require("../../../assets/images/welcome/appleIcon.png");
-  const facebookIcon = require("../../../assets/images/welcome/appleIcon.png");
+  const AppleColored = () => {
+    return theme === "dark" ? <AppleIcon color={"#ffffff"} /> : <AppleIcon />;
+  };
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
-      style={styles.container}
+      style={[
+        styles.container,
+        {
+          backgroundColor:
+            theme === "dark"
+              ? colors.darkPrimaryBackground
+              : colors.nonaryBackground,
+        },
+      ]}
     >
       <ScrollView contentContainerStyle={styles.innerContainer}>
         <View style={styles.headerContainer}>
-          <Text style={styles.headerTitle}>Welcome to FinSimply</Text>
-          <Text style={styles.headerText}>
+          <Text
+            style={[
+              styles.headerTitle,
+              {
+                color:
+                  theme === "dark"
+                    ? colors.darkPrimaryText
+                    : colors.secondaryText,
+              },
+            ]}
+          >
+            Welcome to FinSimply
+          </Text>
+          <Text
+            style={[
+              styles.headerText,
+              {
+                color:
+                  theme === "dark"
+                    ? colors.darkPrimaryText
+                    : colors.primaryText,
+              },
+            ]}
+          >
             Your Every Day Financial News App
           </Text>
         </View>
         <View style={styles.buttonContainers}>
           <SocialLoginButton
-            IconComponent={AppleIcon}
+            IconComponent={AppleColored}
             text="Continue with Apple"
             onPress={() => console.log("Apple pressed")}
           />
@@ -65,15 +101,43 @@ const WelcomeScreen = () => {
           <SocialLoginButton
             text="Continue as a Guest !"
             onPress={() => navigation.navigate("ChooseYourInterests")}
-            backgroundColor={colors.tertiaryBackground}
+            backgroundColor={
+              theme === "dark"
+                ? colors.darkTertiaryBackground
+                : colors.tertiaryBackground
+            }
           />
         </View>
         <View style={styles.inlineLinkContainer}>
           <TouchableOpacity>
-            <Text style={styles.alreadyLinkText}>Already have an account?</Text>
+            <Text
+              style={[
+                styles.alreadyLinkText,
+                {
+                  color:
+                    theme === "dark"
+                      ? colors.darkPrimaryText
+                      : colors.secondaryText,
+                },
+              ]}
+            >
+              Already have an account?
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-            <Text style={styles.loginLinkText}>Log In</Text>
+            <Text
+              style={[
+                styles.loginLinkText,
+                {
+                  color:
+                    theme === "dark"
+                      ? colors.darkPrimaryText
+                      : colors.primaryText,
+                },
+              ]}
+            >
+              Log In
+            </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -86,7 +150,7 @@ export default WelcomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.nonaryBackground,
+    //backgroundColor: colors.nonaryBackground,
   },
   headerContainer: {
     gap: 6,

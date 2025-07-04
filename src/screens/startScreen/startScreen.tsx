@@ -16,6 +16,10 @@ import { colors } from "../../assets/styles/colors";
 import globalStyles from "../../assets/styles/globalStyles";
 import fontFamily from "../../assets/styles/fontFamily";
 import { ThemeContext } from "../../context/themeContext";
+import {
+  NextCardArrowWhite,
+  NextCardArrowBlack,
+} from "../../assets/icons/components/startScreen";
 const { width, height } = Dimensions.get("window");
 const StartScreen = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -126,7 +130,9 @@ const StartScreen = () => {
         styles.container,
         {
           backgroundColor:
-            theme === "dark" ? "#010104" : colors.nonaryBackground,
+            theme === "dark"
+              ? colors.darkPrimaryBackground
+              : colors.nonaryBackground,
         },
       ]}
     >
@@ -162,10 +168,18 @@ const StartScreen = () => {
       </View>
       {/* Floating Button */}
       <TouchableOpacity
-        style={styles.floatingButtonContainer}
+        style={[
+          styles.floatingButtonContainer,
+          {
+            borderColor:
+              theme === "dark"
+                ? colors.nonaryBackground
+                : colors.darkPrimaryBackground,
+          },
+        ]}
         onPress={handleNext}
       >
-        <Image source={nextImage} resizeMode="contain" />
+        {theme === "dark" ? <NextCardArrowWhite /> : <NextCardArrowBlack />}
       </TouchableOpacity>
     </View>
   );
@@ -208,11 +222,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   floatingButtonContainer: {
-    // position: "absolute",
-    // bottom: 20,
-    // right: 20,
     alignSelf: "flex-end",
-    // backgroundColor: colors.accent || "#007BFF", // fallback color
     padding: 16,
     justifyContent: "center",
     alignItems: "center",

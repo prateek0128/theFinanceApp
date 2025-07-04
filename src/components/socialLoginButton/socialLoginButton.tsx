@@ -1,5 +1,6 @@
 // components/SocialLoginButton.tsx
 import React from "react";
+import { useContext } from "react";
 import {
   View,
   Text,
@@ -10,6 +11,7 @@ import {
 } from "react-native";
 import { colors } from "../../assets/styles/colors";
 import fontFamily from "../../assets/styles/fontFamily";
+import { ThemeContext } from "../../context/themeContext";
 
 interface SocialLoginButtonProps {
   IconComponent?: React.ComponentType<{
@@ -27,18 +29,39 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
   onPress,
   backgroundColor,
 }) => {
+  const { theme, toggleTheme } = useContext(ThemeContext);
   return (
     <TouchableOpacity
       style={[
         styles.button,
-        { backgroundColor: backgroundColor || colors.denaryBackground },
+        {
+          backgroundColor: backgroundColor
+            ? backgroundColor
+            : theme === "dark"
+            ? colors.darkSecondaryBackground
+            : colors.denaryBackground,
+          borderColor:
+            theme === "dark" ? "transparent" : colors.darkPrimaryText,
+        },
       ]}
       onPress={onPress}
       activeOpacity={0.7}
     >
       {/* <Image source={icon} style={styles.icon} resizeMode="contain" /> */}
       {IconComponent && <IconComponent width={24} height={24} />}
-      <Text style={styles.text}>{text}</Text>
+      <Text
+        style={[
+          styles.text,
+          {
+            color:
+              theme === "dark"
+                ? colors.darkPrimaryText
+                : colors.primaryBorderColor,
+          },
+        ]}
+      >
+        {text}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -63,7 +86,7 @@ const styles = StyleSheet.create({
     height: 24,
   },
   text: {
-    color: colors.primaryBorderColor,
+    //color: colors.primaryBorderColor,
     fontFamily: fontFamily.textFont500,
     fontSize: 16,
   },

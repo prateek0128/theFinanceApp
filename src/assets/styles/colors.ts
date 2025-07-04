@@ -21,6 +21,9 @@ export const colors = {
   octonaryBackground: "#443DFF",
   nonaryBackground: "#FBFBFE",
   denaryBackground: "#DDDBFF",
+  darkPrimaryBackground: "#010104",
+  darkSecondaryBackground: "#110F24",
+  darkTertiaryBackground:"#141414",
   //Text Colors
   primaryText: "#28262C",
   secondaryText: "#111111",
@@ -32,6 +35,7 @@ export const colors = {
   octonaryText: "#40444C",
   nonaryText: "#FAF7F2",
   // denaryText: "#F8F8F8",
+  darkPrimaryText: "#EDEDED",
   //Border Colors
   primaryBorderColor: "#3C3744",
   secondaryBorderColor: "#6B7280",
