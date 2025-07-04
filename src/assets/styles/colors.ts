@@ -21,9 +21,22 @@ export const colors = {
   octonaryBackground: "#443DFF",
   nonaryBackground: "#FBFBFE",
   denaryBackground: "#DDDBFF",
-  darkPrimaryBackground: "#010104",
+  undenaryBackground: "#191D23", // 11
+  duodenaryBackground: "#E7EAEE", // 12
+  tridenaryBackground: "#3460DC", // 13
+  // quattuordenaryBackground: "#C6C6FF", // 14
+  // quindenaryBackground: "#BDBDFF",  // 15
+  // sexdenaryBackground: "#B4B4FF",   // 16
+  // septendenaryBackground: "#ABABFF", // 17
+  // octodenaryBackground: "#A2A2FF",  // 18
+  // novemdenaryBackground: "#9999FF", // 19
+  // vigenaryBackground: "#9090FF",    // 20
+  //Dark Background Colors
+  darkPrimaryBackground: "#0F0F0F",
   darkSecondaryBackground: "#110F24",
-  darkTertiaryBackground:"#141414",
+  darkTertiaryBackground: "#141414",
+  darkQuaternaryBackground: "#191919",
+  darkQuinaryBackground: "#010104",
   //Text Colors
   primaryText: "#28262C",
   secondaryText: "#111111",
@@ -34,8 +47,12 @@ export const colors = {
   septenaryText: "#4A709C",
   octonaryText: "#40444C",
   nonaryText: "#FAF7F2",
-  // denaryText: "#F8F8F8",
+  denaryText: "#4B5768",
+  undenaryText: "#5B5C60",
+  //Dark Text Colors
   darkPrimaryText: "#EDEDED",
+  darkSecondaryText: "#F7F8F9",
+  darkTertiaryText: "#A0ABBB",
   //Border Colors
   primaryBorderColor: "#3C3744",
   secondaryBorderColor: "#6B7280",

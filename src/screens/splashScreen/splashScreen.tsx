@@ -22,7 +22,7 @@ const SplashScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>TFA</Text>
+      <Text style={styles.title}>FinSimply</Text>
       <Text style={styles.subtitle}>The Finance App</Text>
     </View>
   );

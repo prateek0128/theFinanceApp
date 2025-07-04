@@ -36,7 +36,7 @@ export default function App() {
                     ? colors.darkPrimaryBackground
                     : colors.nonaryBackground
                 } // Android background color
-                barStyle="dark-content" // iOS & Android text/icons
+                barStyle={theme === "dark" ? "light-content" : "dark-content"} // iOS & Android text/icons
                 // translucent={true}
               />
               <Navigation />

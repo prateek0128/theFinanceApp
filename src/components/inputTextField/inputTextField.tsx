@@ -27,13 +27,13 @@ const InputTextField = forwardRef<TextInput, InputTextFieldProps>(
             color: theme === "dark" ? colors.darkPrimaryText : colors.black,
             borderColor:
               theme === "dark"
-                ? colors.darkPrimaryText
+                ? colors.quaternaryBorderColor
                 : colors.quaternaryBorderColor,
           },
         ]}
         placeholderTextColor={
           theme === "dark"
-            ? colors.darkPrimaryText
+            ? colors.darkTertiaryText
             : colors.secondaryBorderColor
         }
         {...props}

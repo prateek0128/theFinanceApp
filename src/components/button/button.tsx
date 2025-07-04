@@ -52,7 +52,7 @@ const Button: React.FC<ButtonProps> = ({
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: colors.octonaryBackground,
+    backgroundColor: colors.tridenaryBackground,
     paddingVertical: 20,
     paddingHorizontal: 16,
     borderRadius: 100,

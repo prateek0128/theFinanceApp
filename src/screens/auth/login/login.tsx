@@ -169,7 +169,7 @@ const LoginScreen = () => {
               {
                 color:
                   theme === "dark"
-                    ? colors.darkPrimaryText
+                    ? colors.darkSecondaryText
                     : colors.primaryText,
               },
             ]}
@@ -190,7 +190,7 @@ const LoginScreen = () => {
                   {
                     color:
                       theme === "dark"
-                        ? colors.darkPrimaryText
+                        ? colors.darkSecondaryText
                         : colors.primaryText,
                   },
                 ]}
@@ -274,7 +274,7 @@ const LoginScreen = () => {
                 },
               ]}
             >
-              Sign Up
+              SIGN UP
             </Text>
           </TouchableOpacity>
         </View>

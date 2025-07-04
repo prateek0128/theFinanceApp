@@ -33,12 +33,6 @@ import { ThemeContext } from "../../../context/themeContext";
 const SignUpScreen = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-    // confirmPassword: "",
-  });
   const { user, isLoggedIn, login, logout, isLoading } =
     useContext(AuthContext);
   const [input, setInput] = useState("");
@@ -162,6 +156,9 @@ const SignUpScreen = () => {
 
     //setIsValid(false);
   };
+  const AppleColored = () => {
+    return theme === "dark" ? <AppleIcon color={"#ffffff"} /> : <AppleIcon />;
+  };
   const isOtpComplete = otp.every((digit) => digit !== "");
   return (
     <KeyboardAvoidingView
@@ -184,7 +181,7 @@ const SignUpScreen = () => {
               {
                 color:
                   theme === "dark"
-                    ? colors.darkPrimaryText
+                    ? colors.darkSecondaryText
                     : colors.secondaryText,
               },
             ]}
@@ -199,7 +196,7 @@ const SignUpScreen = () => {
               {
                 color:
                   theme === "dark"
-                    ? colors.darkPrimaryText
+                    ? colors.darkSecondaryText
                     : colors.primaryText,
               },
             ]}
@@ -225,29 +222,6 @@ const SignUpScreen = () => {
           onChangeText={validateInput}
           editable={!showOTPInputs} // <-- disable input when OTP inputs are shown
         />
-        {/* {showOTPInputs && (
-          <View style={styles.otpContainer}>
-            {otp.map((digit, index) => (
-              <TextInput
-                key={index}
-                ref={(ref) => {
-                  otpInputs.current[index] = ref;
-                }}
-                style={styles.otpInput}
-                keyboardType="numeric"
-                maxLength={1}
-                value={digit}
-                onChangeText={(value) => handleOTPChange(index, value)}
-                onKeyPress={({ nativeEvent }) =>
-                  handleOTPKeyPress(index, nativeEvent.key)
-                }
-                returnKeyType="next"
-                blurOnSubmit={false}
-              />
-            ))}
-          </View>
-
-        )} */}
         {showOTPInputs && (
           <View style={styles.otpContainer}>
             {otp.map((digit, index) => (
@@ -287,14 +261,6 @@ const SignUpScreen = () => {
             {showOTPInputs ? "Sign Up" : "Send OTP"}
           </Text>
         </TouchableOpacity> */}
-        {/* <View style={styles.inlineLinkContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-            <Text style={styles.alreadyLinkText}>Already have an account?</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-            <Text style={styles.loginLinkText}>Log In</Text>
-          </TouchableOpacity>
-        </View> */}
         {/* Icons row */}
         <View style={styles.orDivider}>
           <View style={styles.line} />
@@ -303,7 +269,7 @@ const SignUpScreen = () => {
         </View>
         <View style={styles.buttonContainers}>
           <SocialLoginButton
-            IconComponent={AppleIcon}
+            IconComponent={AppleColored}
             text="Continue with Apple"
             onPress={() => console.log("Apple pressed")}
           />

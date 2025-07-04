@@ -19,45 +19,39 @@ import { ThemeContext } from "../../context/themeContext";
 import {
   NextCardArrowWhite,
   NextCardArrowBlack,
+  StartScreen1,
+  StartScreen2,
+  StartScreen3,
 } from "../../assets/icons/components/startScreen";
 const { width, height } = Dimensions.get("window");
 const StartScreen = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const imageName = "finance"; // could come from state or props
-  //const imageSource = require(`../../assets/images/${imageName}.png`);
-  //   const imageSource = require("../../assets/images/start/startBlue.svg");
-  const imageBlueCard = require("../../assets/images/start/blueCard.png");
-  const imageGreenCard = require("../../assets/images/start/greenCard.png");
-  const imageYellowCard = require("../../assets/images/start/yellowCard.png");
-  const nextImage = require("../../assets/images/start/nextCard.png");
   const translateAnim = useState(new Animated.ValueXY({ x: 100, y: 100 }))[0]; // start off-screen bottom right
   const opacityAnim = useState(new Animated.Value(0))[0];
   const [cardIndex, setCardIndex] = useState(0);
-  const [cardLayout, setCardLayout] = useState({ width: 0, height: 0 });
   const cardData = [
     {
       title: "Your Everyday Financial News App",
       text: "Now your finances are in one place and always under control",
-      image: imageBlueCard,
+      image: StartScreen1,
       backgroundColor: colors.blueCard,
     },
     {
       title: "Read News on the GO !",
       text: "All expenses by cards are reflected automatically in the application, and the analytics system helps to control them",
-      image: imageGreenCard,
+      image: StartScreen2,
       backgroundColor: colors.greenCard,
     },
     {
       title: "Learn what & could happen to the Market",
       text: "The system notices where you're slipping on the budget and tells you how to optimize costs",
-      image: imageYellowCard,
+      image: StartScreen3,
       backgroundColor: colors.yellowCard,
     },
   ];
 
   const currentCard = cardData[cardIndex];
-  const [displayedImage, setDisplayedImage] = useState(cardData[0].image);
 
   useEffect(() => {
     // Initial entry animation (optional)
@@ -78,50 +72,13 @@ const StartScreen = () => {
     ]).start();
   }, []);
   const handleNext = () => {
-    let nextIndex = 0;
     if (cardIndex === cardData.length - 1) {
-      //navigation.navigate("Login");
       navigation.navigate("Welcome");
+      setCardIndex(0);
     } else {
-      nextIndex = (cardIndex + 1) % cardData.length;
-      const nextImage = cardData[nextIndex].image;
-    }
-
-    // Animate exit
-    Animated.parallel([
-      Animated.timing(translateAnim, {
-        toValue: { x: 100, y: 100 },
-        duration: 400,
-        useNativeDriver: true,
-      }),
-      Animated.timing(opacityAnim, {
-        toValue: 0,
-        duration: 400,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
-      // Swap image and card
+      const nextIndex = cardIndex + 1;
       setCardIndex(nextIndex);
-      setDisplayedImage(nextImage);
-
-      // Reset position off-screen and opacity
-      translateAnim.setValue({ x: 100, y: 100 });
-      opacityAnim.setValue(0);
-
-      // Animate entry
-      Animated.parallel([
-        Animated.timing(translateAnim, {
-          toValue: { x: 0, y: 0 },
-          duration: 400,
-          useNativeDriver: true,
-        }),
-        Animated.timing(opacityAnim, {
-          toValue: 1,
-          duration: 400,
-          useNativeDriver: true,
-        }),
-      ]).start();
-    });
+    }
   };
 
   return (
@@ -136,37 +93,32 @@ const StartScreen = () => {
         },
       ]}
     >
-      <View
-        style={[
-          styles.card,
-          {
-            backgroundColor: currentCard.backgroundColor,
-          },
-        ]}
-      >
-        <View style={styles.textContainer}>
-          <Text style={styles.cardTitle}>{currentCard.title}</Text>
-          <Text style={styles.cardText}>{currentCard.text}</Text>
-        </View>
-        <View style={styles.imageContainer}>
-          {/* <Image
-            source={imageBlueCard} // update with your image path
-            //style={styles.cardImage}
-            resizeMode="contain"
-          /> */}
-          <Animated.Image
-            source={currentCard.image}
-            resizeMode="contain"
-            style={[
-              {
-                transform: translateAnim.getTranslateTransform(),
-                opacity: opacityAnim,
-              },
-            ]}
-          />
-        </View>
+      <View style={styles.textContainer}>
+        <Text
+          style={[
+            styles.cardTitle,
+            {
+              color:
+                theme === "dark" ? colors.white : colors.undenaryBackground,
+            },
+          ]}
+        >
+          {currentCard.title}
+        </Text>
+        <Text
+          style={[
+            styles.cardText,
+            {
+              color: theme === "dark" ? colors.undenaryText : colors.denaryText,
+            },
+          ]}
+        >
+          {currentCard.text}
+        </Text>
       </View>
-      {/* Floating Button */}
+      <View style={styles.imageContainer}>
+        <currentCard.image />
+      </View>
       <TouchableOpacity
         style={[
           styles.floatingButtonContainer,
@@ -175,11 +127,15 @@ const StartScreen = () => {
               theme === "dark"
                 ? colors.nonaryBackground
                 : colors.darkPrimaryBackground,
+            backgroundColor:
+              theme === "dark"
+                ? colors.duodenaryBackground
+                : colors.undenaryBackground,
           },
         ]}
         onPress={handleNext}
       >
-        {theme === "dark" ? <NextCardArrowWhite /> : <NextCardArrowBlack />}
+        {theme === "dark" ? <NextCardArrowBlack /> : <NextCardArrowWhite />}
       </TouchableOpacity>
     </View>
   );
@@ -188,11 +144,13 @@ export default StartScreen;
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
     // backgroundColor: colors.primaryBackground,
     padding: 20,
+    // paddingLeft: 52,
     gap: 20,
   },
   card: {
@@ -202,13 +160,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   textContainer: {
-    gap: 20,
-    margin: 20,
+    gap: 12,
+    marginLeft: 32,
+    marginRight: 32,
   },
   cardTitle: {
     fontFamily: fontFamily.titleFont,
     fontSize: 40,
-    color: colors.secondaryText,
+    //color: colors.secondaryText,
   },
   cardText: {
     fontFamily: fontFamily.textFont400,
@@ -216,13 +175,16 @@ const styles = StyleSheet.create({
     color: colors.tertiaryText,
   },
   imageContainer: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
+    // flex: 1,
+    //flexDirection: "row",
+    // justifyContent: "flex-end",
+    // alignItems: "flex-end",
   },
   floatingButtonContainer: {
-    alignSelf: "flex-end",
+    position: "absolute",
+    bottom: 30,
+    right: 20,
+    // alignSelf: "flex-end",
     padding: 16,
     justifyContent: "center",
     alignItems: "center",
