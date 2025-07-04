@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Animated,
   View,
@@ -15,8 +15,10 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { colors } from "../../assets/styles/colors";
 import globalStyles from "../../assets/styles/globalStyles";
 import fontFamily from "../../assets/styles/fontFamily";
+import { ThemeContext } from "../../context/themeContext";
 const { width, height } = Dimensions.get("window");
 const StartScreen = () => {
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const imageName = "finance"; // could come from state or props
   //const imageSource = require(`../../assets/images/${imageName}.png`);
@@ -119,7 +121,15 @@ const StartScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor:
+            theme === "dark" ? "#010104" : colors.primaryBackground,
+        },
+      ]}
+    >
       <View
         style={[
           styles.card,
@@ -167,7 +177,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
-    backgroundColor: colors.primaryBackground,
+    // backgroundColor: colors.primaryBackground,
     padding: 20,
     gap: 20,
   },

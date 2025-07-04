@@ -8,6 +8,8 @@ import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AuthProvider } from "./src/context/authContext";
+import { ThemeProvider } from "./src/context/themeContext";
+import ThemeToggleButton from "./src/components/themeToggleButton/themeToggleButton";
 export default function App() {
   const [fontsLoaded] = useFonts({
     Inter_400Regular,
@@ -22,17 +24,20 @@ export default function App() {
   return (
     <>
       <AuthProvider>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <SafeAreaProvider>
-            <StatusBar
-              backgroundColor={colors.primaryBackground} // Android background color
-              barStyle="dark-content" // iOS & Android text/icons
-              // translucent={true}
-            />
-            <Navigation />
-            <FlashMessage position="top" />
-          </SafeAreaProvider>
-        </GestureHandlerRootView>
+        <ThemeProvider>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <SafeAreaProvider>
+              <StatusBar
+                backgroundColor={colors.primaryBackground} // Android background color
+                barStyle="dark-content" // iOS & Android text/icons
+                // translucent={true}
+              />
+              <Navigation />
+              <ThemeToggleButton />
+              <FlashMessage position="top" />
+            </SafeAreaProvider>
+          </GestureHandlerRootView>
+        </ThemeProvider>
       </AuthProvider>
     </>
   );
