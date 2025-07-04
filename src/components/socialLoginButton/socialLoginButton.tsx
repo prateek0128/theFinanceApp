@@ -38,10 +38,12 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
           backgroundColor: backgroundColor
             ? backgroundColor
             : theme === "dark"
-            ? colors.darkSecondaryBackground
+            ? colors.darkQuaternaryBackground
             : colors.denaryBackground,
           borderColor:
-            theme === "dark" ? "transparent" : colors.darkPrimaryText,
+            theme === "dark"
+              ? colors.primaryBorderColor
+              : colors.darkPrimaryText,
         },
       ]}
       onPress={onPress}

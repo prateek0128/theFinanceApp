@@ -57,7 +57,7 @@ export const colors = {
   primaryBorderColor: "#3C3744",
   secondaryBorderColor: "#6B7280",
   tertiaryBorderColor: "#3C374433",
-  quaternaryBorderColor: "#B6BAC3",
+  c: "#B6BAC3",
   //Button Colors
   primaryButtonColor: "#007AFF",
 
