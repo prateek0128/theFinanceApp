@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import {
   View,
   Text,
@@ -27,6 +27,7 @@ import {
   CurrencyImage2,
   GraphImage2,
 } from "../../../assets/icons/components/headlineDetailsView";
+import { ThemeContext } from "../../../context/themeContext";
 const { width, height } = Dimensions.get("window");
 type NewsItem = {
   id: string;
@@ -55,6 +56,7 @@ type NewsItem = {
 };
 
 const HomeScreen = () => {
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [allNewsData, setAllNewsData] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
