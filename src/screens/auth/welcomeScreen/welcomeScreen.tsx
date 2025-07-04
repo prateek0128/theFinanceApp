@@ -19,13 +19,13 @@ import { RootStackParamList } from "../../../types/navigation";
 import { colors } from "../../../assets/styles/colors";
 import globalStyles from "../../../assets/styles/globalStyles";
 import fontFamily from "../../../assets/styles/fontFamily";
-import { ThemeContext } from "../../../context/themeContext";
 import SocialLoginButton from "../../../components/socialLoginButton/socialLoginButton";
 import {
   AppleIcon,
   GoogleIcon,
   FacebookIcon,
 } from "../../../assets/icons/components/welcome";
+import { ThemeContext } from "../../../context/themeContext";
 const WelcomeScreen = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -46,7 +46,17 @@ const WelcomeScreen = () => {
         },
       ]}
     >
-      <ScrollView contentContainerStyle={styles.innerContainer}>
+      <ScrollView
+        contentContainerStyle={[
+          styles.innerContainer,
+          {
+            backgroundColor:
+              theme === "dark"
+                ? colors.darkPrimaryBackground
+                : colors.nonaryBackground,
+          },
+        ]}
+      >
         <View style={styles.headerContainer}>
           <Text
             style={[

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   TouchableOpacity,
   Text,
@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { colors } from "../../assets/styles/colors";
 import fontFamily from "../../assets/styles/fontFamily";
+import { ThemeContext } from "../../context/themeContext";
 
 interface ButtonProps {
   title: string;
@@ -25,13 +26,26 @@ const Button: React.FC<ButtonProps> = ({
   buttonStyle,
   textStyle,
 }) => {
+  const { theme, toggleTheme } = useContext(ThemeContext);
+
   return (
     <TouchableOpacity
       onPress={onPress}
       disabled={disabled}
       style={[styles.button, disabled && styles.disabledButton, buttonStyle]}
     >
-      <Text style={[styles.buttonText, textStyle]}>{title}</Text>
+      <Text
+        style={[
+          styles.buttonText,
+          textStyle,
+          {
+            color:
+              theme === "dark" ? colors.darkPrimaryText : colors.nonaryText,
+          },
+        ]}
+      >
+        {title}
+      </Text>
     </TouchableOpacity>
   );
 };
