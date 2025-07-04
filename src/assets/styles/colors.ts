@@ -21,9 +21,12 @@ export const colors = {
   octonaryBackground: "#443DFF",
   nonaryBackground: "#FBFBFE",
   denaryBackground: "#DDDBFF",
-  darkPrimaryBackground: "#010104",
-  darkSecondaryBackground: "#110F24",
-  darkTertiaryBackground:"#141414",
+//Dark Background
+darkPrimaryBackground: "#0F0F0F",
+darkSecondaryBackground: "#110F24",
+darkTertiaryBackground: "#141414",
+darkQuaternaryBackground: "#191919",
+darkQuinaryBackground: "#010104",
   //Text Colors
   primaryText: "#28262C",
   secondaryText: "#111111",
@@ -35,12 +38,15 @@ export const colors = {
   octonaryText: "#40444C",
   nonaryText: "#FAF7F2",
   // denaryText: "#F8F8F8",
-  darkPrimaryText: "#EDEDED",
+ //Dark Text
+ darkPrimaryText: "#EDEDED",
+ darkSecondaryText: "#F7F8F9",
+ darkTertiaryText: "#A0ABBB",
   //Border Colors
   primaryBorderColor: "#3C3744",
   secondaryBorderColor: "#6B7280",
   tertiaryBorderColor: "#3C374433",
-  quaternaryBorderColor: "#B6BAC3",
+  c: "#B6BAC3",
   //Button Colors
   primaryButtonColor: "#007AFF",
 
