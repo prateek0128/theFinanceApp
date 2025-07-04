@@ -126,7 +126,9 @@ const StartScreen = () => {
         styles.container,
         {
           backgroundColor:
-            theme === "dark" ? "#010104" : colors.nonaryBackground,
+            theme === "dark"
+              ? colors.darkPrimaryBackground
+              : colors.nonaryBackground,
         },
       ]}
     >

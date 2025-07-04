@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   Text,
@@ -21,18 +21,27 @@ import {
   GoogleIcon,
   FacebookIcon,
 } from "../../../assets/icons/components/welcome";
+import { ThemeContext } from "../../../context/themeContext";
 const WelcomeScreen = () => {
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const appleIcon = require("../../../assets/images/welcome/appleIcon.png");
-  const googleIcon = require("../../../assets/images/welcome/appleIcon.png");
-  const facebookIcon = require("../../../assets/images/welcome/appleIcon.png");
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
       style={styles.container}
     >
-      <ScrollView contentContainerStyle={styles.innerContainer}>
+      <ScrollView
+        contentContainerStyle={[
+          styles.innerContainer,
+          {
+            backgroundColor:
+              theme === "dark"
+                ? colors.darkPrimaryBackground
+                : colors.nonaryBackground,
+          },
+        ]}
+      >
         <View style={styles.headerContainer}>
           <Text style={styles.headerTitle}>Welcome to FinSimply</Text>
           <Text style={styles.headerText}>

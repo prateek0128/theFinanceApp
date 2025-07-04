@@ -29,7 +29,9 @@ import {
 } from "../../../assets/icons/components/welcome";
 import { sendOTP } from "../../../apiServices/auth";
 import { AuthContext } from "../../../context/authContext";
+import { ThemeContext } from "../../../context/themeContext";
 const SignUpScreen = () => {
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [form, setForm] = useState({
     name: "",
@@ -45,8 +47,6 @@ const SignUpScreen = () => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const otpInputs = useRef<Array<RNTextInput | null>>([]);
   const [isValid, setIsValid] = useState(false);
-  const appleIcon = require("../../../assets/images/welcome/appleIcon.png");
-  const googleIcon = require("../../../assets/images/welcome/googleIcon.png");
 
   const handleSendOTP = async () => {
     if (input.trim() === "") {
@@ -163,21 +163,49 @@ const SignUpScreen = () => {
     //setIsValid(false);
   };
   const isOtpComplete = otp.every((digit) => digit !== "");
-  const handleChange = (key: keyof typeof form, value: string) => {
-    setForm({ ...form, [key]: value });
-  };
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
-      style={styles.container}
+      style={[
+        styles.container,
+        {
+          backgroundColor:
+            theme === "dark"
+              ? colors.darkPrimaryBackground
+              : colors.nonaryBackground,
+        },
+      ]}
     >
       <ScrollView contentContainerStyle={styles.innerContainer}>
         <View style={styles.headingContainer}>
-          <Text style={styles.subtitle}>Sign up</Text>
+          <Text
+            style={[
+              styles.subtitle,
+              {
+                color:
+                  theme === "dark"
+                    ? colors.darkPrimaryText
+                    : colors.secondaryText,
+              },
+            ]}
+          >
+            Sign up
+          </Text>
         </View>
         <View style={styles.labelRow}>
-          <Text style={styles.label}>Phone Number or Email</Text>
+          <Text
+            style={[
+              styles.label,
+              {
+                color:
+                  theme === "dark"
+                    ? colors.darkPrimaryText
+                    : colors.primaryText,
+              },
+            ]}
+          >
+            Phone Number or Email
+          </Text>
           {showOTPInputs && (
             <TouchableOpacity onPress={handleEditPress}>
               <MaterialIcons

@@ -24,7 +24,10 @@ import Button from "../../../components/button/button";
 import { verifyOTP, sendOTP } from "../../../apiServices/auth";
 import { AuthContext } from "../../../context/authContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ThemeContext } from "../../../context/themeContext";
+
 const LoginScreen = () => {
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const { user, isLoggedIn, login, logout, isLoading } =
     useContext(AuthContext);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -148,11 +151,31 @@ const LoginScreen = () => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
-      style={styles.container}
+      style={[
+        styles.container,
+        {
+          backgroundColor:
+            theme === "dark"
+              ? colors.darkPrimaryBackground
+              : colors.nonaryBackground,
+        },
+      ]}
     >
       <ScrollView contentContainerStyle={styles.innerContainer}>
         <View style={styles.headingContainer}>
-          <Text style={styles.subtitle}>Log In</Text>
+          <Text
+            style={[
+              styles.subtitle,
+              {
+                color:
+                  theme === "dark"
+                    ? colors.darkPrimaryText
+                    : colors.primaryText,
+              },
+            ]}
+          >
+            Log In
+          </Text>
         </View>
 
         {/* <Text style={styles.infoText}>
@@ -161,7 +184,19 @@ const LoginScreen = () => {
         <View style={styles.formContainer}>
           <View style={styles.formFieldContainer}>
             <View style={styles.labelRow}>
-              <Text style={styles.label}>Phone Number or Email</Text>
+              <Text
+                style={[
+                  styles.label,
+                  {
+                    color:
+                      theme === "dark"
+                        ? colors.darkPrimaryText
+                        : colors.primaryText,
+                  },
+                ]}
+              >
+                Phone Number or Email
+              </Text>
               {showOTPInputs && (
                 <TouchableOpacity onPress={handleEditPress}>
                   <MaterialIcons
@@ -213,10 +248,34 @@ const LoginScreen = () => {
         </View>
         <View style={styles.inlineLinkContainer}>
           <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-            <Text style={styles.alreadyLinkText}>Don't have an account?</Text>
+            <Text
+              style={[
+                styles.alreadyLinkText,
+                {
+                  color:
+                    theme === "dark"
+                      ? colors.darkPrimaryText
+                      : colors.secondaryText,
+                },
+              ]}
+            >
+              Don't have an account?
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-            <Text style={styles.loginLinkText}>Sign Up</Text>
+            <Text
+              style={[
+                styles.loginLinkText,
+                {
+                  color:
+                    theme === "dark"
+                      ? colors.darkPrimaryText
+                      : colors.secondaryText,
+                },
+              ]}
+            >
+              Sign Up
+            </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -229,7 +288,7 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.nonaryBackground,
+    //backgroundColor: colors.nonaryBackground,
   },
   innerContainer: {
     padding: 20,

@@ -1,3 +1,4 @@
+import React, { useContext } from "react";
 import { StyleSheet, Text, View, StatusBar } from "react-native";
 import Navigation from "./src/navigation/navigationStack/navigation";
 import { colors } from "./src/assets/styles/colors";
@@ -10,7 +11,9 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AuthProvider } from "./src/context/authContext";
 import { ThemeProvider } from "./src/context/themeContext";
 import ThemeToggleButton from "./src/components/themeToggleButton/themeToggleButton";
+import { ThemeContext } from "./src/context/themeContext";
 export default function App() {
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const [fontsLoaded] = useFonts({
     Inter_400Regular,
     "Satoshi-Regular": require("./src/assets/fonts/SatoshiVariable/Satoshi-Regular.otf"),
@@ -28,7 +31,11 @@ export default function App() {
           <GestureHandlerRootView style={{ flex: 1 }}>
             <SafeAreaProvider>
               <StatusBar
-                backgroundColor={colors.nonaryBackground} // Android background color
+                backgroundColor={
+                  theme === "dark"
+                    ? colors.darkPrimaryBackground
+                    : colors.nonaryBackground
+                } // Android background color
                 barStyle="dark-content" // iOS & Android text/icons
                 // translucent={true}
               />
