@@ -28,7 +28,7 @@ export default function App() {
           <GestureHandlerRootView style={{ flex: 1 }}>
             <SafeAreaProvider>
               <StatusBar
-                backgroundColor={colors.primaryBackground} // Android background color
+                backgroundColor={colors.nonaryBackground} // Android background color
                 barStyle="dark-content" // iOS & Android text/icons
                 // translucent={true}
               />
