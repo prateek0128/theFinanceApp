@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   interestsContainer: {
     flex: 1,
     padding: 20,
-    backgroundColor: colors.primaryBackground,
+    backgroundColor: colors.nonaryBackground,
     alignItems: "center",
     justifyContent: "center",
   },

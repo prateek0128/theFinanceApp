@@ -86,7 +86,7 @@ export default WelcomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.primaryBackground,
+    backgroundColor: colors.nonaryBackground,
   },
   headerContainer: {
     gap: 6,

@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     //flexGrow: 1,
-    backgroundColor: colors.primaryBackground,
+    backgroundColor: colors.nonaryBackground,
   },
   headingContainer: {
     marginTop: 30,
