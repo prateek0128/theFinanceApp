@@ -8,6 +8,7 @@ import {
   Dimensions,
 } from "react-native";
 import { colors } from "../../../assets/styles/colors";
+import { allNews } from "./homeScreenData";
 import EmptyState from "../../../components/EmptyStatte/emptyState";
 import HeadlineDetailCard from "../../../components/headlineDetailedCard/headlineDetailedCard";
 import { RootStackParamList } from "../../../types/navigation";

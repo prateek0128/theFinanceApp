@@ -14,7 +14,7 @@ import { colors } from "../../../assets/styles/colors";
 import Loader from "../../../components/Loader/loader";
 import { getNewsFeed } from "../../../apiServices/news";
 import LoaderOverlay from "../../../components/LoadOverlay/loadOverlayTransparent";
-
+import MarketTag from "../../../assets/icons/components/Market/marketTag";
 import {
   CurrencyImage,
   GraphImage,
@@ -31,6 +31,7 @@ import {
   CurrencyImage2,
 } from "../../../assets/icons/components/headlineDetailsView";
 import HeadlineDetailCard from "../../../components/headlineDetailedCard/headlineDetailedCard";
+import Tag from "../../../components/tag/tag";
 import { RootStackParamList } from "../../../types/navigation";
 import {
   useNavigation,
@@ -95,6 +96,8 @@ const HeadlineDetailsScreen = () => {
     discussions,
     imageKey,
   } = route.params || {};
+  const [market, setMarket] = useState("");
+  const [bearish, setBearish] = useState("");
   const [comment, setComment] = useState("");
   const [commentsData, setCommentsData] = useState("");
   const [liked, setLiked] = useState(false);
@@ -346,15 +349,21 @@ const HeadlineDetailsScreen = () => {
             <View style={styles.headingContainer}>
               <Text style={styles.articleDetailsHeading}>{newsData.title}</Text>
               <View style={styles.detailsHeader}>
-                <View style={styles.profileNameContainer}>
-                  <ProfileIcon width={30} height={30} />
-                  <View style={styles.profileName}>
-                    <Text style={styles.headingName}>{author}</Text>
-                    <Text style={styles.meta}>{time}</Text>
-                  </View>
+                <View style={styles.tagContainer}>
+                  <Tag
+                    label={"Market"}
+                    backgroundColor={"#D1FAE5"}
+                    textColor={"#047852"}
+                  />
+                  <Tag
+                    label={"Bearish"}
+                    backgroundColor={"#FEE2E2"}
+                    textColor={"#DC2626"}
+                  />
                 </View>
+
                 <View style={styles.profileNameContainer}>
-                  <IncrementArrow width={16} height={16} />
+                  {/* <IncrementArrow width={16} height={16} /> */}
                   <View style={styles.impactLabel}>
                     <Text style={styles.impactLabelText}>
                       {newsData.impact_label} : {newsData.impact_score}
@@ -363,6 +372,7 @@ const HeadlineDetailsScreen = () => {
                 </View>
               </View>
             </View>
+
             <View style={styles.headingDetails}>
               {/* {points?.map((point, index) => (
                 <View key={index} style={styles.listItem}>
@@ -381,8 +391,8 @@ const HeadlineDetailsScreen = () => {
               Related Discussions
             </Text>
             <View style={styles.relatedDiscussionsDetails}>
-              {Array.isArray(commentsData) &&
-                commentsData.map((comment) => (
+              {Array.isArray(comments) &&
+                comments.map((comment) => (
                   <View
                     key={comment.id}
                     style={styles.relatedDiscussionsArticle}
@@ -465,6 +475,21 @@ const styles = StyleSheet.create({
   headingContainer: {
     gap: 16,
   },
+
+  bearishTagContainer: {
+    backgroundColor: "##FEE2E2",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 100,
+    alignSelf: "flex-start",
+    gap: 8,
+  },
+  bearishTagText: {
+    color: "##DC2626",
+    fontWeight: "600",
+    fontSize: 14,
+    fontFamily: fontFamily.textFont500,
+  },
   headingDetails: {
     gap: 12,
   },
@@ -486,6 +511,11 @@ const styles = StyleSheet.create({
   detailsHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
+  },
+  tagContainer: {
+    gap: 8,
+    flexDirection: "row",
     alignItems: "center",
   },
   profileNameContainer: {
