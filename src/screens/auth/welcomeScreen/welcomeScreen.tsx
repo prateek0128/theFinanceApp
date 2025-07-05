@@ -24,13 +24,14 @@ import {
   AppleIcon,
   GoogleIcon,
   FacebookIcon,
+  AppleIconWhite,
 } from "../../../assets/icons/components/welcome";
 import { ThemeContext } from "../../../context/themeContext";
 const WelcomeScreen = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const AppleColored = () => {
-    return theme === "dark" ? <AppleIcon color={"#ffffff"} /> : <AppleIcon />;
+    return theme === "dark" ? <AppleIconWhite /> : <AppleIcon />;
   };
 
   return (
@@ -87,7 +88,7 @@ const WelcomeScreen = () => {
         </View>
         <View style={styles.buttonContainers}>
           <SocialLoginButton
-            IconComponent={AppleColored}
+            IconComponent={theme === "dark" ? AppleIconWhite : AppleIcon}
             text="Continue with Apple"
             onPress={() => console.log("Apple pressed")}
           />

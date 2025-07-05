@@ -15,6 +15,8 @@ import {
   ViewIcon,
   DiscoverLikeIcon,
 } from "../../assets/icons/components/headlineDetailsView";
+import Tag from "../tag/tag";
+import ImpactLabel from "../impactLabel/impactLabel";
 const { width } = Dimensions.get("window");
 
 type DiscoverDetailsCardProps = {
@@ -63,23 +65,30 @@ const DiscoverDetailsCard = ({
       <View style={styles.detailsHeadlineContainer}>
         <View style={styles.tagsContainer}>
           <View style={styles.marketTagsContainer}>
-            <View style={styles.impactLabel}>
-              <Text style={styles.impactLabelText}>
-                {impactLabel} : {impactScore}
-              </Text>
-            </View>
-            <View style={styles.impactLabel}>
-              <Text style={styles.impactLabelText}>
-                {impactLabel} : {impactScore}
-              </Text>
-            </View>
+            <Tag
+              label={"Market"}
+              backgroundColor={"#D1FAE5"}
+              textColor={"#047852"}
+            />
+            <Tag
+              label={"Bearish"}
+              backgroundColor={"#FEE2E2"}
+              textColor={"#DC2626"}
+            />
           </View>
           <View>
-            <View style={styles.impactLabel}>
+            {/* <View style={styles.impactLabel}>
               <Text style={styles.impactLabelText}>
                 {impactLabel} : {impactScore}
               </Text>
-            </View>
+            </View> */}
+            <ImpactLabel
+              variant={"outlined"}
+              label={impactLabel}
+              value={impactScore}
+              backgroundColor={colors.quattuordenaryBackground}
+              textColor={colors.quindenaryBackground}
+            />
           </View>
         </View>
         <View style={styles.articleDetailsHeadingContainer}>
@@ -91,9 +100,7 @@ const DiscoverDetailsCard = ({
         <View style={styles.authorLikesContainer}>
           <View style={styles.authorTimeContainer}>
             <Text style={styles.authorTimeText}>
-              {`${authorName ? "via" : ""} ${authorName} ${
-                authorName ? "·" : ""
-              } ${timeAgo}`}
+              {`via ${authorName || "--"} · ${timeAgo || "--"}`}
             </Text>
           </View>
           <View style={styles.viewLikesContainer}>
@@ -118,7 +125,7 @@ const styles = StyleSheet.create({
   detailsHeadlineContainer: {
     flexDirection: "column",
     gap: 16,
-    marginTop: 40,
+    marginTop: 20,
     padding: 12,
     borderWidth: 1,
     borderRadius: 20,

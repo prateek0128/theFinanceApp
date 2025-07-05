@@ -26,6 +26,7 @@ import {
   AppleIcon,
   GoogleIcon,
   FacebookIcon,
+  AppleIconWhite,
 } from "../../../assets/icons/components/welcome";
 import { sendOTP } from "../../../apiServices/auth";
 import { AuthContext } from "../../../context/authContext";
@@ -157,7 +158,7 @@ const SignUpScreen = () => {
     //setIsValid(false);
   };
   const AppleColored = () => {
-    return theme === "dark" ? <AppleIcon color={"#ffffff"} /> : <AppleIcon />;
+    return theme === "dark" ? <AppleIconWhite /> : <AppleIcon />;
   };
   const isOtpComplete = otp.every((digit) => digit !== "");
   return (
@@ -269,7 +270,7 @@ const SignUpScreen = () => {
         </View>
         <View style={styles.buttonContainers}>
           <SocialLoginButton
-            IconComponent={AppleColored}
+            IconComponent={theme === "dark" ? AppleIconWhite : AppleIcon}
             text="Continue with Apple"
             onPress={() => console.log("Apple pressed")}
           />

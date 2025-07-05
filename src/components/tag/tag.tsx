@@ -21,12 +21,11 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 100,
-    alignSelf: "flex-start",
     gap: 8,
   },
   marketTagText: {
     // color: colors.tridenaryText,
     fontSize: 14,
-    fontFamily: fontFamily.textFont500,
+    fontFamily: fontFamily.Satoshi500,
   },
 });

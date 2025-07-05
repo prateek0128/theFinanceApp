@@ -60,6 +60,7 @@ import {
   pinNews,
   unpinNews,
 } from "../../../apiServices/newsManagement";
+import ImpactLabel from "../../../components/impactLabel/impactLabel";
 
 dayjs.extend(relativeTime);
 const { width, height } = Dimensions.get("window");
@@ -344,7 +345,13 @@ const HeadlineDetailsScreen = () => {
                 justifyContent: "center",
               }}
             >
-              {renderImage()}
+              {/* {renderImage()} */}
+              <ClippedSVG
+                width={width * 0.89}
+                height={200}
+                radius={16}
+                ImageComponent={CurrencyImage2}
+              />
             </View>
             <View style={styles.headingContainer}>
               <Text style={styles.articleDetailsHeading}>{newsData.title}</Text>
@@ -364,11 +371,18 @@ const HeadlineDetailsScreen = () => {
 
                 <View style={styles.profileNameContainer}>
                   {/* <IncrementArrow width={16} height={16} /> */}
-                  <View style={styles.impactLabel}>
+                  {/* <View style={styles.impactLabel}>
                     <Text style={styles.impactLabelText}>
                       {newsData.impact_label} : {newsData.impact_score}
                     </Text>
-                  </View>
+                  </View> */}
+                  <ImpactLabel
+                    variant={"contained"}
+                    label={newsData.impact_label}
+                    value={newsData.impact_score}
+                    backgroundColor={colors.quindenaryBackground}
+                    textColor={colors.quattuordenaryBackground}
+                  />
                 </View>
               </View>
             </View>
@@ -488,7 +502,7 @@ const styles = StyleSheet.create({
     color: "##DC2626",
     fontWeight: "600",
     fontSize: 14,
-    fontFamily: fontFamily.textFont500,
+    fontFamily: fontFamily.Satoshi500,
   },
   headingDetails: {
     gap: 12,

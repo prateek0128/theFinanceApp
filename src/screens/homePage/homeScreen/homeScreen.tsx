@@ -8,7 +8,6 @@ import {
   Dimensions,
 } from "react-native";
 import { colors } from "../../../assets/styles/colors";
-import { allNews } from "./homeScreenData";
 import EmptyState from "../../../components/EmptyStatte/emptyState";
 import HeadlineDetailCard from "../../../components/headlineDetailedCard/headlineDetailedCard";
 import { RootStackParamList } from "../../../types/navigation";
@@ -129,7 +128,6 @@ const HomeScreen = () => {
           onPress={() => setSelectedTab("Mutual Funds")}
         />
       </ScrollView>
-
       <View style={styles.swiperWrapper}>
         {!loading && allNewsData.length === 0 && (
           <EmptyState message="No data found. Pull to refresh." />
@@ -139,33 +137,6 @@ const HomeScreen = () => {
             /* {allNewsDiscover.map((news, index) => { */
           }
           return (
-            // <HeadlineDetailCard
-            //   key={news.id}
-            //   index={index}
-            //   authorName={""}
-            //   timeAgo={""}
-            //   impactLabel={news.impact_label}
-            //   impactScore={news.impact_score}
-            //   heading={news.title}
-            //   summary={news.summary}
-            //   HeadlineImageComponent={GraphImage2}
-            //   ProfileIconComponent={ProfileIcon}
-            //   ImpactIconComponent={IncrementArrow}
-            //   onPress={() =>
-            //     navigation.navigate("HeadlineDetailsScreen", {
-            //       newsId: news.id,
-            //       imageKey: "",
-            //       title: news.title,
-            //       author: "",
-            //       time: "",
-            //       impactLabel: news.impact_label,
-            //       impactScore: news.impact_score,
-            //       points: [],
-            //       //@ts-ignore
-            //       discussions: news.discussions,
-            //     })
-            //   }
-            // />
             <DiscoverDetailsCard
               key={news.id}
               index={index}
@@ -222,37 +193,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: 12,
-  },
-  articleRow: {
-    marginTop: 30,
-    flexDirection: "row",
-    gap: 12,
-  },
-  articleCard: {
-    width: width * 0.433,
-    //height: 165,
-    // marginTop: 62,
-    borderRadius: 24,
-    borderWidth: 1,
-    padding: 12,
-    gap: 16,
-    backgroundColor: colors.white,
-    borderColor: colors.tertiaryBorderColor,
-  },
-  articleDetails: {
-    gap: 8,
-    flexDirection: "column",
-    justifyContent: "space-between",
-  },
-  title: {
-    fontSize: 14,
-    fontFamily: fontFamily.Satoshi700,
-    color: colors.primaryText,
-  },
-  meta: {
-    fontSize: 10,
-    fontFamily: fontFamily.Satoshi500,
-    color: colors.tertiaryText,
+    marginBottom: 20,
   },
   button: {
     backgroundColor: colors.quinaryBackground,
@@ -267,7 +208,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   swiperWrapper: {
-    ///height: CARD_HEIGHT,
-    marginTop: 8,
+    // marginTop: 8,
+    marginBottom: 20,
   },
 });
