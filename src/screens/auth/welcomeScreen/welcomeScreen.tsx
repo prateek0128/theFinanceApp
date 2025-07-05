@@ -102,11 +102,11 @@ const WelcomeScreen = () => {
             onPress={() => console.log("Facebook pressed")}
           />
         </View>
-        <View style={styles.orDivider}>
+        {/* <View style={styles.orDivider}>
           <View style={styles.line} />
           <Text style={styles.orText}>OR</Text>
           <View style={styles.line} />
-        </View>
+        </View> */}
         {/* <View style={styles.buttonContainers}>
           <SocialLoginButton
             text="Continue as a Guest !"
@@ -174,13 +174,13 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: colors.secondaryText,
-    fontFamily: fontFamily.titleFont,
+    fontFamily: fontFamily.Cabinet700,
     fontSize: 36,
     textAlign: "center",
   },
   headerText: {
     color: colors.primaryText,
-    fontFamily: fontFamily.textFont400,
+    fontFamily: fontFamily.Satoshi400,
     fontSize: 16,
     textAlign: "center",
   },
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
   orText: {
     fontSize: 12,
     color: colors.secondaryBorderColor,
-    fontFamily: fontFamily.textFont500,
+    fontFamily: fontFamily.Satoshi500,
   },
   inlineLinkContainer: {
     flexDirection: "row",
@@ -215,13 +215,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 14,
     color: colors.secondaryText,
-    fontFamily: fontFamily.textFont400,
+    fontFamily: fontFamily.Satoshi400,
   },
   loginLinkText: {
     textAlign: "center",
     marginLeft: 4,
     fontSize: 14,
     color: colors.secondaryText,
-    fontFamily: fontFamily.titleFont,
+    fontFamily: fontFamily.Cabinet700,
   },
 });

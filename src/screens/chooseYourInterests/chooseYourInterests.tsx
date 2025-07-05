@@ -155,14 +155,14 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 32,
-    fontFamily: fontFamily.titleFont,
+    fontFamily: fontFamily.Cabinet700,
     textAlign: "left",
     color: colors.quaternaryText,
   },
   paragraph: {
     fontSize: 16,
     color: colors.octonaryText,
-    fontFamily: fontFamily.textFont400,
+    fontFamily: fontFamily.Satoshi400,
   },
   cardsContainer: {
     marginTop: 40,
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   cardText: {
-    fontFamily: fontFamily.textFont500,
+    fontFamily: fontFamily.Satoshi500,
     textAlign: "center",
     fontSize: 14,
     color: colors.primaryBorderColor,
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
   continueText: {
     color: colors.tertiaryBackground,
     fontSize: 20,
-    fontFamily: fontFamily.titleFont,
+    fontFamily: fontFamily.Cabinet700,
   },
   continueButtonDisabled: {
     backgroundColor: colors.primaryText, // Use a lighter/disabled tone

@@ -311,7 +311,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     color: colors.secondaryText,
-    fontFamily: fontFamily.titleFont,
+    fontFamily: fontFamily.Cabinet700,
     fontSize: 40,
     marginBottom: 10,
     textAlign: "center",
@@ -412,7 +412,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
     color: colors.primaryText,
-    // fontFamily: fontFamily.textFont500,
+    // fontFamily: fontFamily.Satoshi500,
   },
   buttonContainers: {
     gap: 16,
@@ -432,6 +432,6 @@ const styles = StyleSheet.create({
   orText: {
     fontSize: 12,
     color: colors.secondaryBorderColor,
-    fontFamily: fontFamily.textFont500,
+    fontFamily: fontFamily.Satoshi500,
   },
 });
