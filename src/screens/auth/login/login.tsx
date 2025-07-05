@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     color: colors.primaryText,
-    fontFamily: fontFamily.titleFont,
+    fontFamily: fontFamily.Cabinet700,
     fontSize: 40,
     marginBottom: 10,
     textAlign: "center",
@@ -337,7 +337,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 20,
     color: colors.octonaryText,
-    fontFamily: fontFamily.titleFont,
+    fontFamily: fontFamily.Cabinet700,
   },
   input: {
     height: 36,
@@ -376,14 +376,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 14,
     color: colors.secondaryText,
-    fontFamily: fontFamily.textFont400,
+    fontFamily: fontFamily.Satoshi400,
   },
   loginLinkText: {
     textAlign: "center",
     marginLeft: 4,
     fontSize: 14,
     color: colors.secondaryText,
-    fontFamily: fontFamily.titleFont,
+    fontFamily: fontFamily.Cabinet700,
   },
   buttonContainers: {
     gap: 16,
@@ -403,7 +403,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
     color: colors.primaryText,
-    // fontFamily: fontFamily.textFont500,
+    // fontFamily: fontFamily.Satoshi500,
   },
   iconRow: {
     flexDirection: "row",

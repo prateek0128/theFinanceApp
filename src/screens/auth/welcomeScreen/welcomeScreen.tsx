@@ -24,13 +24,14 @@ import {
   AppleIcon,
   GoogleIcon,
   FacebookIcon,
+  AppleIconWhite,
 } from "../../../assets/icons/components/welcome";
 import { ThemeContext } from "../../../context/themeContext";
 const WelcomeScreen = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const AppleColored = () => {
-    return theme === "dark" ? <AppleIcon color={"#ffffff"} /> : <AppleIcon />;
+    return theme === "dark" ? <AppleIconWhite /> : <AppleIcon />;
   };
 
   return (
@@ -87,7 +88,7 @@ const WelcomeScreen = () => {
         </View>
         <View style={styles.buttonContainers}>
           <SocialLoginButton
-            IconComponent={AppleColored}
+            IconComponent={theme === "dark" ? AppleIconWhite : AppleIcon}
             text="Continue with Apple"
             onPress={() => console.log("Apple pressed")}
           />
@@ -174,13 +175,13 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: colors.secondaryText,
-    fontFamily: fontFamily.titleFont,
+    fontFamily: fontFamily.Cabinet700,
     fontSize: 36,
     textAlign: "center",
   },
   headerText: {
     color: colors.primaryText,
-    fontFamily: fontFamily.textFont400,
+    fontFamily: fontFamily.Satoshi400,
     fontSize: 16,
     textAlign: "center",
   },
@@ -202,7 +203,7 @@ const styles = StyleSheet.create({
   orText: {
     fontSize: 12,
     color: colors.secondaryBorderColor,
-    fontFamily: fontFamily.textFont500,
+    fontFamily: fontFamily.Satoshi500,
   },
   inlineLinkContainer: {
     flexDirection: "row",
@@ -215,13 +216,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 14,
     color: colors.secondaryText,
-    fontFamily: fontFamily.textFont400,
+    fontFamily: fontFamily.Satoshi400,
   },
   loginLinkText: {
     textAlign: "center",
     marginLeft: 4,
     fontSize: 14,
     color: colors.secondaryText,
-    fontFamily: fontFamily.titleFont,
+    fontFamily: fontFamily.Cabinet700,
   },
 });

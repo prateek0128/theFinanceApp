@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.black,
     gap: 10,
-    fontFamily: fontFamily.textFont500,
+    fontFamily: fontFamily.Satoshi500,
   },
 });
 

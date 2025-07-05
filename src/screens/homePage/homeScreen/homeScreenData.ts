@@ -14,7 +14,7 @@ export const cards = [
     author: "Akhil Salunkhe",
     time: "1 Day ago",
     impactScore: 90,
-    title: "RBI’s rate pause: Impact on Lending Rates",
+    title: "Reliance industries Q3 Results Beat Estimates, Stocks Surges 4%",
     subHeading:
       "Experts analyze the potential impact of the RBI's decision on lending rates, assessing implications for borrowers and the overall economy.",
     HeadlineImageComponent: GraphImage2,
@@ -126,6 +126,83 @@ export const allNews = [
     title: "Reliance Power Stock Hits 7-Year High",
     summary:
       "Shares of Reliance Power surged 8% to ₹62.80, reaching their highest level since January 2018.\nThis significant increase could indicate strong investor confidence and may attract more buyers, potentially boosting the overall market.\nIt's similar to how a popular restaurant's sudden rise in customers can lead to longer wait times and increased interest from new diners.",
+    url: "https://www.business-standard.com/markets/news/anil-ambani-reliance-group-stock-hit-7-year-high-zooms-101-from-march-low-125060200374_1.html",
+    source: "BusinessStandard",
+    published_at: "2025-07-01T13:49:55.587Z",
+    categories: null,
+    tags: null,
+    related_stocks: null,
+    impact_score: 5.5,
+    impact_label: "Medium Impact",
+    sentiment_score: 0.2954545454545454,
+    reaction_stats: {
+      bullish: 0,
+      bearish: 0,
+      important: 0,
+      neutral: 0,
+    },
+    engagement: {
+      likes: 0,
+      comments: 0,
+    },
+  },
+  {
+    id: "6863e624dcb62080ba1a8ae6",
+    title: "Bharti Hexacom Stock Hits New High",
+    summary:
+      "The stock price of Bharti Hexacom has surged 58% from its low in April.\nThis significant increase could attract more investors, boosting the company's market value.\nIt's similar to how a popular new restaurant can draw in crowds, increasing its revenue and reputation.",
+    url: "https://www.business-standard.com/markets/news/bharti-hexacom-stock-hits-new-high-zooms-58-from-april-low-here-s-why-125060300297_1.html",
+    source: "BusinessStandard",
+    published_at: "2025-07-01T13:49:55.587Z",
+    categories: null,
+    tags: null,
+    related_stocks: null,
+    impact_score: 5,
+    impact_label: "Medium Impact",
+    sentiment_score: 0.36363636363636365,
+    reaction_stats: {
+      bullish: 0,
+      bearish: 0,
+      important: 0,
+      neutral: 0,
+    },
+    engagement: {
+      likes: 0,
+      comments: 0,
+    },
+  },
+  {
+    id: "6863e622dcb62080ba1a8ae3",
+    title: "Zen Technologies Soars On Strong Q4 (Fourth Quarter) Results",
+    summary:
+      "Zen Technologies' share price reached the 5% upper circuit limit due to impressive Q4 (Fourth Quarter) results.\nThis significant increase in profit could attract more investors and boost the company's market position.\nIt's like a student scoring top marks in an exam, which makes them more appealing to colleges.",
+    url: "https://www.business-standard.com/markets/news/zen-technologies-hit-5-upper-circuit-on-strong-q4-results-pat-up-189-125051900183_1.html",
+    source: "BusinessStandard",
+    published_at: "2025-07-01T13:49:55.586Z",
+    categories: null,
+    tags: null,
+    related_stocks: null,
+    impact_score: 7,
+    impact_label: "High Impact",
+    sentiment_score: 0.25,
+    reaction_stats: {
+      bullish: 0,
+      bearish: 0,
+      important: 0,
+      neutral: 0,
+    },
+    engagement: {
+      likes: 0,
+      comments: 0,
+    },
+  },
+];
+export const allNewsDiscover = [
+  {
+    id: "6863e623dcb62080ba1a8ae5",
+    title: "Reliance industries Q3 Results Beat Estimates, Stocks Surges 4%",
+    summary:
+      "Reliance Industries reported strong Q3 earnings with the revenue growth of 15% YoY..",
     url: "https://www.business-standard.com/markets/news/anil-ambani-reliance-group-stock-hit-7-year-high-zooms-101-from-march-low-125060200374_1.html",
     source: "BusinessStandard",
     published_at: "2025-07-01T13:49:55.587Z",

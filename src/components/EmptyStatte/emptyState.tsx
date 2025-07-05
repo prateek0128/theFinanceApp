@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     color: colors.tertiaryText,
-    fontFamily: fontFamily.textFont500,
+    fontFamily: fontFamily.Satoshi500,
     textAlign: "center",
   },
 });

@@ -62,6 +62,7 @@ import {
   pinNews,
   unpinNews,
 } from "../../../apiServices/newsManagement";
+import ImpactLabel from "../../../components/impactLabel/impactLabel";
 
 dayjs.extend(relativeTime);
 const { width, height } = Dimensions.get("window");
@@ -358,7 +359,13 @@ const HeadlineDetailsScreen = () => {
                 justifyContent: "center",
               }}
             >
-              {renderImage()}
+              {/* {renderImage()} */}
+              <ClippedSVG
+                width={width * 0.89}
+                height={200}
+                radius={16}
+                ImageComponent={CurrencyImage2}
+              />
             </View>
             <View style={styles.headingContainer}>
               <Text
@@ -390,11 +397,18 @@ const HeadlineDetailsScreen = () => {
 
                 <View style={styles.profileNameContainer}>
                   {/* <IncrementArrow width={16} height={16} /> */}
-                  <View style={styles.impactLabel}>
+                  {/* <View style={styles.impactLabel}>
                     <Text style={styles.impactLabelText}>
                       {newsData.impact_label} : {newsData.impact_score}
                     </Text>
-                  </View>
+                  </View> */}
+                  <ImpactLabel
+                    variant={"contained"}
+                    label={newsData.impact_label}
+                    value={newsData.impact_score}
+                    backgroundColor={colors.quindenaryBackground}
+                    textColor={colors.quattuordenaryBackground}
+                  />
                 </View>
               </View>
             </View>
@@ -567,7 +581,7 @@ const styles = StyleSheet.create({
     color: "##DC2626",
     fontWeight: "600",
     fontSize: 14,
-    fontFamily: fontFamily.textFont500,
+    fontFamily: fontFamily.Satoshi500,
   },
   headingDetails: {
     gap: 12,
@@ -583,7 +597,7 @@ const styles = StyleSheet.create({
     color: colors.tertiaryText,
   },
   articleDetailsHeading: {
-    fontFamily: fontFamily.titleFont,
+    fontFamily: fontFamily.Cabinet700,
     fontSize: 32,
     color: colors.primaryText,
   },
@@ -607,13 +621,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   headingName: {
-    fontFamily: fontFamily.titleFont,
+    fontFamily: fontFamily.Cabinet700,
     fontSize: 12,
     color: colors.primaryText,
   },
   meta: {
     fontSize: 8,
-    fontFamily: fontFamily.textFont500,
+    fontFamily: fontFamily.Satoshi500,
     color: colors.tertiaryText,
   },
 
@@ -625,12 +639,12 @@ const styles = StyleSheet.create({
   },
   impactLabelText: {
     fontSize: 12,
-    fontFamily: fontFamily.textFont500,
+    fontFamily: fontFamily.Satoshi500,
     color: colors.quaternaryText,
   },
   listPoints: {
     fontSize: 16,
-    fontFamily: fontFamily.textFont500,
+    fontFamily: fontFamily.Satoshi500,
     color: colors.tertiaryText,
   },
   relatedDiscussionsContainer: {
@@ -638,7 +652,7 @@ const styles = StyleSheet.create({
     gap: 28,
   },
   relatedDiscussionsHeading: {
-    fontFamily: fontFamily.titleFont,
+    fontFamily: fontFamily.Cabinet700,
     fontSize: 20,
     color: colors.senaryText,
   },
@@ -650,18 +664,18 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   authorName: {
-    fontFamily: fontFamily.titleFont,
+    fontFamily: fontFamily.Cabinet700,
     fontSize: 16,
     color: colors.senaryText,
   },
   articleTime: {
     fontSize: 14,
-    fontFamily: fontFamily.timeText,
+    fontFamily: fontFamily.Inter400,
     color: colors.septenaryText,
   },
   relatedArticleText: {
     fontSize: 14,
-    fontFamily: fontFamily.textFont400,
+    fontFamily: fontFamily.Satoshi400,
     color: colors.tertiaryText,
   },
   likeUnlikeContainer: {
@@ -689,7 +703,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     gap: 8,
     borderColor: colors.tertiaryBorderColor,
-    fontFamily: fontFamily.textFont500,
+    fontFamily: fontFamily.Satoshi500,
     fontSize: 16,
     height: 48,
   },

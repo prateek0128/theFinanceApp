@@ -24,7 +24,9 @@ export const colors = {
   undenaryBackground: "#191D23", // 11
   duodenaryBackground: "#E7EAEE", // 12
   tridenaryBackground: "#3460DC", // 13
- quattuordenaryBackground: "#D1FAE5", // 14
+  quattuordenaryBackground: "#E8EDFB", // 14
+  quindenaryBackground: "#1D4ED8", // 15
+  sexdenaryBackground: "#D1FAE5", // 16
   // quindenaryBackground: "#BDBDFF",  // 15
   // sexdenaryBackground: "#B4B4FF",   // 16
   // septendenaryBackground: "#ABABFF", // 17
@@ -49,7 +51,9 @@ export const colors = {
   nonaryText: "#FAF7F2",
   denaryText: "#4B5768",
   undenaryText: "#5B5C60",
-   tridenaryText: "#047852",
+  duodenaryText: "#64748B",
+  quattuordenaryText: "#323A46",
+  tridenaryText: "#047852",
   //Dark Text Colors
   darkPrimaryText: "#EDEDED",
   darkSecondaryText: "#F7F8F9",

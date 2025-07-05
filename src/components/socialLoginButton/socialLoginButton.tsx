@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   },
   text: {
     //color: colors.primaryBorderColor,
-    fontFamily: fontFamily.textFont500,
+    fontFamily: fontFamily.Satoshi500,
     fontSize: 16,
   },
 });

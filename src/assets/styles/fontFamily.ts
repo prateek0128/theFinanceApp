@@ -1,11 +1,11 @@
 const fontFamily = {
-  titleFont: "CabinetGrotesk-Bold",
-  textFont400: "Satoshi-Regular",
-  textFont500: "Satoshi-Medium",
-  textFont700: "Satoshi-Bold",
-  textFont900: "Satoshi-Black",
+  Cabinet700: "CabinetGrotesk-Bold",
+  Satoshi400: "Satoshi-Regular",
+  Satoshi500: "Satoshi-Medium",
+  Satoshi700: "Satoshi-Bold",
+  Satoshi900: "Satoshi-Black",
   bottomNavigationText: "Chillax-Medium",
-  timeText: "Inter_400Regular",
+  Inter400: "Inter_400Regular",
 };
 
 export default fontFamily;

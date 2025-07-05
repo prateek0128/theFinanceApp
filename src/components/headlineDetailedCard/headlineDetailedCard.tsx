@@ -112,13 +112,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   headingName: {
-    fontFamily: fontFamily.titleFont,
+    fontFamily: fontFamily.Cabinet700,
     fontSize: 12,
     color: colors.primaryText,
   },
   meta: {
     fontSize: 10,
-    fontFamily: fontFamily.textFont500,
+    fontFamily: fontFamily.Satoshi500,
     color: colors.tertiaryText,
   },
   impactLabel: {
@@ -129,19 +129,19 @@ const styles = StyleSheet.create({
   },
   impactLabelText: {
     fontSize: 12,
-    fontFamily: fontFamily.textFont500,
+    fontFamily: fontFamily.Satoshi500,
     color: colors.quaternaryText,
   },
   articleDetailsHeadingContainer: {
     gap: 12,
   },
   articleDetailsHeading: {
-    fontFamily: fontFamily.titleFont,
+    fontFamily: fontFamily.Cabinet700,
     fontSize: 24,
     color: colors.primaryText,
   },
   articleDetailsSubHeading: {
-    fontFamily: fontFamily.textFont400,
+    fontFamily: fontFamily.Satoshi400,
     fontSize: 14,
     color: colors.tertiaryText,
   },

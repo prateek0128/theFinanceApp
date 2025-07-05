@@ -165,12 +165,12 @@ const styles = StyleSheet.create({
     marginRight: 32,
   },
   cardTitle: {
-    fontFamily: fontFamily.titleFont,
+    fontFamily: fontFamily.Cabinet700,
     fontSize: 40,
     //color: colors.secondaryText,
   },
   cardText: {
-    fontFamily: fontFamily.textFont400,
+    fontFamily: fontFamily.Satoshi400,
     fontSize: 16,
     color: colors.tertiaryText,
   },

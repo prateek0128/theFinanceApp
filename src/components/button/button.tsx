@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: colors.nonaryText,
     fontSize: 16,
-    fontFamily: fontFamily.textFont900,
+    fontFamily: fontFamily.Satoshi900,
   },
 });
 
