@@ -102,11 +102,11 @@ const WelcomeScreen = () => {
             onPress={() => console.log("Facebook pressed")}
           />
         </View>
-        <View style={styles.orDivider}>
+        {/* <View style={styles.orDivider}>
           <View style={styles.line} />
           <Text style={styles.orText}>OR</Text>
           <View style={styles.line} />
-        </View>
+        </View> */}
         {/* <View style={styles.buttonContainers}>
           <SocialLoginButton
             text="Continue as a Guest !"

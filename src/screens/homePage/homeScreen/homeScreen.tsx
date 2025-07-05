@@ -8,6 +8,7 @@ import {
   Dimensions,
 } from "react-native";
 import { colors } from "../../../assets/styles/colors";
+import { allNews } from "./homeScreenData";
 import EmptyState from "../../../components/EmptyStatte/emptyState";
 import HeadlineDetailCard from "../../../components/headlineDetailedCard/headlineDetailedCard";
 import { RootStackParamList } from "../../../types/navigation";
@@ -113,6 +114,9 @@ const HomeScreen = () => {
           <EmptyState message="No data found. Pull to refresh." />
         )}
         {allNewsData.map((news, index) => {
+          {
+            /* {allNews.map((news, index) => { */
+          }
           return (
             <HeadlineDetailCard
               key={news.id}
