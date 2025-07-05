@@ -96,12 +96,12 @@ const HomeScreen = () => {
     <ScrollView
       contentContainerStyle={[
         styles.container,
-        {
-          backgroundColor:
-            theme === "dark"
-              ? colors.darkPrimaryBackground
-              : colors.primaryBackground,
-        },
+        // {
+        //   backgroundColor:
+        //     theme === "dark"
+        //       ? colors.darkPrimaryBackground
+        //       : colors.primaryBackground,
+        // },
       ]}
     >
       <View style={styles.headingContainer}>
