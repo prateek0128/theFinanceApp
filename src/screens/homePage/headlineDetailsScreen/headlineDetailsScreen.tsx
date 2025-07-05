@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { colors } from "../../../assets/styles/colors";
 import Loader from "../../../components/Loader/loader";
+import { ThemeContext } from "../../../context/themeContext";
 import { getNewsFeed } from "../../../apiServices/news";
 import LoaderOverlay from "../../../components/LoadOverlay/loadOverlayTransparent";
 import MarketTag from "../../../assets/icons/components/Market/marketTag";
@@ -28,6 +29,7 @@ import {
   LikeCommentIcon,
   UnlikeCommentIcon,
   CommentIcon,
+  CommentIconBlack,
   CurrencyImage2,
 } from "../../../assets/icons/components/headlineDetailsView";
 import HeadlineDetailCard from "../../../components/headlineDetailedCard/headlineDetailedCard";
@@ -68,6 +70,7 @@ type HeadlineDetailsRouteProp = RouteProp<
   RootStackParamList,
   "HeadlineDetailsScreen"
 >;
+
 const imageMap: Record<
   string,
   React.ComponentType<{ width?: number; height?: number }>
@@ -99,6 +102,7 @@ const HeadlineDetailsScreen = () => {
   const [market, setMarket] = useState("");
   const [bearish, setBearish] = useState("");
   const [comment, setComment] = useState("");
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const [commentsData, setCommentsData] = useState("");
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
@@ -322,7 +326,17 @@ const HeadlineDetailsScreen = () => {
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         //keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0} // tweak this if needed
       >
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView
+          contentContainerStyle={[
+            styles.container,
+            {
+              backgroundColor:
+                theme === "dark"
+                  ? colors.darkPrimaryBackground
+                  : colors.primaryBackground,
+            },
+          ]}
+        >
           <View style={styles.headerContainer}>
             <Header
               onBackClick={() => navigation.navigate("Home")}
@@ -347,7 +361,19 @@ const HeadlineDetailsScreen = () => {
               {renderImage()}
             </View>
             <View style={styles.headingContainer}>
-              <Text style={styles.articleDetailsHeading}>{newsData.title}</Text>
+              <Text
+                style={[
+                  styles.articleDetailsHeading,
+                  {
+                    color:
+                      theme === "dark"
+                        ? colors.darkPrimaryText
+                        : colors.primaryText,
+                  },
+                ]}
+              >
+                {newsData.title}
+              </Text>
               <View style={styles.detailsHeader}>
                 <View style={styles.tagContainer}>
                   <Tag
@@ -382,12 +408,34 @@ const HeadlineDetailsScreen = () => {
               ))} */}
               <View style={styles.listItem}>
                 <Text style={styles.listIndex}>{1}.</Text>
-                <Text style={styles.listPoints}>{newsData.summary}</Text>
+                <Text
+                  style={[
+                    styles.listPoints,
+                    {
+                      color:
+                        theme === "dark"
+                          ? colors.darkPrimaryText
+                          : colors.primaryText,
+                    },
+                  ]}
+                >
+                  {newsData.summary}
+                </Text>
               </View>
             </View>
           </View>
           <View style={styles.relatedDiscussionsContainer}>
-            <Text style={styles.relatedDiscussionsHeading}>
+            <Text
+              style={[
+                styles.relatedDiscussionsHeading,
+                {
+                  color:
+                    theme === "dark"
+                      ? colors.darkPrimaryText
+                      : colors.primaryText,
+                },
+              ]}
+            >
               Related Discussions
             </Text>
             <View style={styles.relatedDiscussionsDetails}>
@@ -432,9 +480,30 @@ const HeadlineDetailsScreen = () => {
                 ))}
             </View>
           </View>
-          <View style={styles.commentContainer}>
+          <View
+            style={[
+              styles.commentContainer,
+              // {
+              //   backgroundColor:
+              //     theme === "dark"
+              //       ? colors.darkPrimaryBackground
+              //       : colors.primaryBackground,
+              // },
+            ]}
+          >
             <TextInput
-              style={styles.commentInput}
+              style={[
+                styles.commentInput,
+                // {
+                //   backgroundColor:
+                //     theme === "dark"
+                //       ? colors.duodenaryBackground
+                //       : colors.undenaryBackground,
+
+                //   color:
+                //     theme === "dark" ? colors.white : colors.undenaryBackground,
+                // },
+              ]}
               placeholder="Write a comment..."
               keyboardType="email-address"
               value={comment}
@@ -447,8 +516,18 @@ const HeadlineDetailsScreen = () => {
                 addCommentsAPI(newsId);
               }}
             >
-              <View style={styles.commentButton}>
-                <CommentIcon />
+              <View
+                style={[
+                  styles.commentButton,
+                  {
+                    backgroundColor:
+                      theme === "dark"
+                        ? colors.duodenaryBackground
+                        : colors.undenaryBackground,
+                  },
+                ]}
+              >
+                {theme === "light" ? <CommentIcon /> : <CommentIconBlack />}
               </View>
             </TouchableOpacity>
           </View>

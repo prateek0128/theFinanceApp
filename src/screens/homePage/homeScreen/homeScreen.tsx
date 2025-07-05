@@ -90,9 +90,29 @@ const HomeScreen = () => {
   }, []);
   if (loading) return <Loader />;
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView
+      contentContainerStyle={[
+        styles.container,
+        {
+          backgroundColor:
+            theme === "dark"
+              ? colors.darkPrimaryBackground
+              : colors.primaryBackground,
+        },
+      ]}
+    >
       <View style={styles.headingContainer}>
-        <Text style={styles.heading}>Top Headlines</Text>
+        <Text
+          style={[
+            styles.heading,
+            {
+              color:
+                theme === "dark" ? colors.darkPrimaryText : colors.primaryText,
+            },
+          ]}
+        >
+          Top Headlines
+        </Text>
       </View>
       <View style={styles.articleRow}>
         {articles.map((item, index) => (
