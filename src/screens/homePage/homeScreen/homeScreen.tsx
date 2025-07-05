@@ -93,7 +93,17 @@ const HomeScreen = () => {
   }, []);
   if (loading) return <Loader />;
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView
+      contentContainerStyle={[
+        styles.container,
+        {
+          backgroundColor:
+            theme === "dark"
+              ? colors.darkPrimaryBackground
+              : colors.primaryBackground,
+        },
+      ]}
+    >
       <View style={styles.headingContainer}>
         <Text style={styles.heading}>Discover</Text>
       </View>

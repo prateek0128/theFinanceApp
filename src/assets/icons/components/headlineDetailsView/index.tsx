@@ -1,6 +1,7 @@
 export { default as BookmarkIcon } from "./BookmarkIcon";
 export { default as BookmarkIconFilled } from "./BookmarkIconFilled";
 export { default as CommentIcon } from "./CommentIcon";
+export { default as CommentIconBlack } from "./CommentIconBlack";
 export { default as CurrencyImage2 } from "./CurrencyImage2";
 export { default as DiscoverLikeIcon } from "./DiscoverLikeIcon";
 export { default as FemaleProfileIcon } from "./FemaleProfileIcon";
