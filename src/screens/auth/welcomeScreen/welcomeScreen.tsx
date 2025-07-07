@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   View,
   Text,
@@ -27,13 +27,50 @@ import {
   AppleIconWhite,
 } from "../../../assets/icons/components/welcome";
 import { ThemeContext } from "../../../context/themeContext";
+import * as WebBrowser from "expo-web-browser";
+import * as AuthSession from "expo-auth-session";
+// Fix redirect on iOS
+WebBrowser.maybeCompleteAuthSession();
+
+// Your Google OAuth client ID
+const CLIENT_ID =
+  "828693204724-nsceevot9v42pfjml3eit3kjg9e1e1li.apps.googleusercontent.com";
 const WelcomeScreen = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const AppleColored = () => {
-    return theme === "dark" ? <AppleIconWhite /> : <AppleIcon />;
-  };
+  // Automatically fetch Google's OAuth 2.0 discovery doc
+  const discovery = AuthSession.useAutoDiscovery("https://accounts.google.com");
+  // Create the auth request
+  const [request, response, promptAsync] = AuthSession.useAuthRequest(
+    {
+      clientId: CLIENT_ID,
+      scopes: ["openid", "profile", "email"],
+      redirectUri: AuthSession.makeRedirectUri({
+        useProxy: true,
+      } as any),
+    },
+    discovery
+  );
+  // Listen for response
+  useEffect(() => {
+    if (response?.type === "success") {
+      const { authentication } = response;
+      console.log("Access token:", authentication?.accessToken);
 
+      // You can now fetch user info from Google
+      getUserInfo(authentication?.accessToken);
+    }
+  }, [response]);
+  // Fetch user's profile info
+  async function getUserInfo(token: string | undefined) {
+    if (!token) return;
+    const res = await fetch("https://www.googleapis.com/userinfo/v2/me", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const user = await res.json();
+    console.log("User info:", user);
+  }
+  console.log("Redirect URI:", AuthSession.makeRedirectUri({ useProxy: true }));
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -95,7 +132,7 @@ const WelcomeScreen = () => {
           <SocialLoginButton
             IconComponent={GoogleIcon}
             text="Continue with Google"
-            onPress={() => console.log("Google pressed")}
+            onPress={() => promptAsync({ useProxy: true })}
           />
           <SocialLoginButton
             IconComponent={FacebookIcon}

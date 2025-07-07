@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   StyleSheet,
   Text,
   Alert,
-  Button,
   Platform,
   TouchableOpacity,
 } from "react-native";
@@ -12,24 +11,25 @@ import { Picker } from "@react-native-picker/picker";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "../../types/navigation";
 import { colors } from "../../assets/styles/colors";
+import fontFamily from "../../assets/styles/fontFamily";
+import Button from "../../components/button/button";
+import DropDownPicker from "react-native-dropdown-picker";
+import { ThemeContext } from "../../context/themeContext";
 const TellUsSomething = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const { theme, toggleTheme } = useContext(ThemeContext);
+  const [openRole, setOpenRole] = useState(false);
+  const [openGoal, setOpenGoal] = useState(false);
   const [selectedWhoAreYou, setSelectedWhoAreYou] = useState("");
   const [selectedGoal, setSelectedGoal] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
 
   const handleSubmit = () => {
-    Alert.alert(
-      "Submitted",
-      `Role: ${selectedWhoAreYou}\nGoal: ${selectedGoal}\nCategory: ${selectedCategory}`
-    );
-    // You can also do something like:
     // navigation.navigate("NextScreen", { role: selectedOption1, goal: selectedOption2, category: selectedOption3 });
     navigation.navigate("ChooseYourInterests");
   };
 
-  const isFormValid =
-    selectedWhoAreYou !== "" && selectedGoal !== "" && selectedCategory !== "";
+  const isFormValid = selectedWhoAreYou !== "" && selectedGoal !== "";
   const roles = [
     { label: "Select your role", value: "" },
     { label: "Student", value: "student" },
@@ -44,12 +44,57 @@ const TellUsSomething = () => {
     { label: "Portfolio Tracking", value: "tracking" },
     { label: "Market Research", value: "research" },
   ];
-
+  const [roles2, setRoles2] = useState([
+    { label: "Select your role", value: "" },
+    { label: "Student", value: "student" },
+    { label: "Professional", value: "professional" },
+    { label: "Business Owner", value: "business_owner" },
+    { label: "Retired", value: "retired" },
+  ]);
+  const [goals2, setGoals2] = useState([
+    { label: "Select your goal", value: "" },
+    { label: "Long-term Investing", value: "long_term" },
+    { label: "Day Trading", value: "day_trading" },
+    { label: "Portfolio Tracking", value: "tracking" },
+    { label: "Market Research", value: "research" },
+  ]);
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tell Us Something About Yourself</Text>
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor:
+            theme === "dark"
+              ? colors.darkPrimaryBackground
+              : colors.primaryBackground,
+        },
+      ]}
+    >
+      <Text
+        style={[
+          styles.title,
+          {
+            color:
+              theme === "dark" ? colors.darkPrimaryText : colors.quindenaryText,
+          },
+        ]}
+      >
+        Tell Us Something About Yourself
+      </Text>
       <View style={styles.dropdownContainer}>
-        <Text style={styles.label}>Who are you?</Text>
+        <Text
+          style={[
+            styles.label,
+            {
+              color:
+                theme === "dark"
+                  ? colors.darkPrimaryText
+                  : colors.undenaryBackground,
+            },
+          ]}
+        >
+          What is your Role ?
+        </Text>
         <View style={styles.pickerWrapper}>
           <Picker
             selectedValue={selectedWhoAreYou}
@@ -58,8 +103,20 @@ const TellUsSomething = () => {
               setSelectedGoal(""); // Reset dependent fields
               setSelectedCategory("");
             }}
-            style={styles.picker}
-            dropdownIconColor="#333"
+            style={[
+              styles.picker,
+              {
+                color:
+                  theme === "dark"
+                    ? colors.darkPrimaryText
+                    : colors.undenaryBackground,
+              },
+            ]}
+            dropdownIconColor={
+              theme === "dark"
+                ? colors.darkPrimaryText
+                : colors.undenaryBackground
+            }
           >
             {roles.map((role) => (
               <Picker.Item
@@ -69,11 +126,36 @@ const TellUsSomething = () => {
               />
             ))}
           </Picker>
+          {/* <DropDownPicker
+            open={openRole}
+            value={selectedWhoAreYou}
+            items={roles}
+            setOpen={setOpenRole}
+            setValue={(callback) => {
+              setSelectedWhoAreYou(callback(selectedWhoAreYou));
+              setSelectedGoal(""); // Reset dependent fields
+              setSelectedCategory("");
+            }}
+            setItems={setRoles2}
+            placeholder="Select your role"
+          /> */}
         </View>
       </View>
 
       <View style={styles.dropdownContainer}>
-        <Text style={styles.label}>Goal</Text>
+        <Text
+          style={[
+            styles.label,
+            {
+              color:
+                theme === "dark"
+                  ? colors.darkPrimaryText
+                  : colors.undenaryBackground,
+            },
+          ]}
+        >
+          What is your goal for using this app
+        </Text>
         <View
           style={[
             styles.pickerWrapper,
@@ -87,8 +169,20 @@ const TellUsSomething = () => {
               setSelectedCategory(""); // Reset dependent field
             }}
             enabled={!!selectedWhoAreYou}
-            style={styles.picker}
-            dropdownIconColor="#333"
+            style={[
+              styles.picker,
+              {
+                color:
+                  theme === "dark"
+                    ? colors.darkPrimaryText
+                    : colors.undenaryBackground,
+              },
+            ]}
+            dropdownIconColor={
+              theme === "dark"
+                ? colors.darkPrimaryText
+                : colors.undenaryBackground
+            }
           >
             <Picker.Item label="Select your goal" value="" />
             <Picker.Item label="Long-term Investing" value="long_term" />
@@ -96,50 +190,22 @@ const TellUsSomething = () => {
             <Picker.Item label="Portfolio Tracking" value="tracking" />
             <Picker.Item label="Market Research" value="research" />
           </Picker>
+          {/* <DropDownPicker
+            open={openGoal}
+            value={selectedGoal}
+            items={goals}
+            setOpen={setOpenGoal}
+            setValue={(callback) => {
+              setSelectedGoal(callback(selectedGoal));
+              setSelectedCategory("");
+            }}
+            setItems={setGoals2}
+            disabled={!selectedWhoAreYou}
+            placeholder="Select your goal"
+          /> */}
         </View>
       </View>
-
-      <View style={styles.dropdownContainer}>
-        <Text style={styles.label}>Categories</Text>
-        <View
-          style={[styles.pickerWrapper, !selectedGoal && styles.disabledPicker]}
-        >
-          <Picker
-            selectedValue={selectedCategory}
-            onValueChange={(itemValue) => setSelectedCategory(itemValue)}
-            enabled={!!selectedGoal}
-            style={styles.picker}
-            dropdownIconColor="#333"
-          >
-            <Picker.Item label="Select a sector" value="" />
-            <Picker.Item label="Technology" value="technology" />
-            <Picker.Item label="Healthcare" value="healthcare" />
-            <Picker.Item label="Energy" value="energy" />
-            <Picker.Item label="Finance" value="finance" />
-            <Picker.Item label="Consumer Goods" value="consumer_goods" />
-          </Picker>
-        </View>
-      </View>
-
-      {/* Submit Button */}
-      {/* <View style={styles.buttonContainer}>
-        <Button
-          title="Submit"
-          onPress={handleSubmit}
-          disabled={!isFormValid}
-          color={isFormValid ? colors.primaryButtonColor : "#ccc"}
-        />
-      </View> */}
-      <TouchableOpacity
-        onPress={handleSubmit}
-        disabled={!isFormValid}
-        style={[
-          styles.submitButton,
-          !isFormValid && styles.submitButtonDisabled,
-        ]}
-      >
-        <Text style={styles.submitButtonText}>Submit</Text>
-      </TouchableOpacity>
+      <Button title={"Submit"} onPress={handleSubmit} disabled={!isFormValid} />
     </View>
   );
 };
@@ -154,47 +220,46 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   title: {
-    fontSize: 24,
-    fontWeight: "700",
+    fontSize: 32,
     marginBottom: 32,
     textAlign: "center",
+    fontFamily: fontFamily.Cabinet700,
+    color: colors.quindenaryText,
   },
   dropdownContainer: {
-    marginBottom: 24,
+    marginBottom: 40,
+    gap: 10,
   },
   label: {
-    fontSize: 16,
-    marginBottom: 8,
-    fontWeight: "600",
+    fontSize: 20,
+    fontFamily: fontFamily.Cabinet700,
+    color: colors.undenaryBackground,
   },
   pickerWrapper: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: colors.quinaryBorderColor,
     borderRadius: 8,
-    backgroundColor: "#f9f9f9",
-    overflow: "hidden",
+    gap: 10,
   },
   picker: {
-    height: Platform.OS === "ios" ? 200 : 50,
+    height: 50,
     width: "100%",
-    paddingHorizontal: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    fontSize: 14,
+    fontFamily: fontFamily.Satoshi500,
+    color: colors.undenaryBackground,
   },
-  //   picker: {
-  //     height: 50,
-  //     borderWidth: 1,
-  //     borderColor: "#ccc",
-  //     backgroundColor: "#f0f0f0",
-  //   },
   disabledPicker: {
     opacity: 0.5,
   },
   buttonContainer: {
-    marginTop: 40,
+    marginTop: 100,
   },
   submitButton: {
     backgroundColor: colors.primaryButtonColor,
     paddingVertical: 14,
-    borderRadius: 8,
+    borderRadius: 100,
     alignItems: "center",
     justifyContent: "center",
     shadowColor: "#000",
