@@ -144,6 +144,23 @@ const HeadlineDetailsScreen = () => {
     title: "HDB Financial Shares Expected to Surge",
     url: "https://www.moneycontrol.com/news/business/markets/emkay-global-sees-22-upside-for-hdb-financial-shares-from-ipo-s-upper-price-band-13216416.html",
   };
+  const newsData3 = {
+    categories: null,
+    engagement: { comments: 0, likes: 0 },
+    id: "68670bd5753499b7e5d9c486",
+    impact_label: "High Impact",
+    impact_score: 7,
+    published_at: "2025-07-04T19:05:49.534Z",
+    reaction_stats: { bearish: 0, bullish: 0, important: 0, neutral: 0 },
+    related_stocks: null,
+    sentiment_score: 0.2575757575757576,
+    source: "BusinessStandard",
+    summary:
+      "CSB Bank shares increased by 3% following a strong business update for the first quarter of financial year 2026.This positive performance indicates that the bank is doing well, which can attract more investors and boost its stock price.It's like a restaurant getting great reviews; more customers are likely to visit and enjoy the food.",
+    tags: null,
+    title: "CSB Bank Shares Surge 3% After Q1 (First Quarter) Results",
+    url: "https://www.business-standard.com/markets/news/csb-bank-share-pops-3-on-healthy-q1-business-show-key-info-inside-125070300192_1.html",
+  };
   const comments = [
     {
       comment: "Impressive news",

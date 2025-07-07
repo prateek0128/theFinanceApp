@@ -197,7 +197,7 @@ export const allNews = [
     },
   },
 ];
-export const allNewsDiscover = [
+export const allNewsDiscover2 = [
   {
     id: "6863e623dcb62080ba1a8ae5",
     title: "Reliance industries Q3 Results Beat Estimates, Stocks Surges 4%",
@@ -272,5 +272,59 @@ export const allNewsDiscover = [
       likes: 0,
       comments: 0,
     },
+  },
+];
+export const allNewsDiscover = [
+  {
+    categories: null,
+    engagement: { comments: 0, likes: 0 },
+    id: "68670bd5753499b7e5d9c486",
+    impact_label: "High Impact",
+    impact_score: 7,
+    published_at: "2025-07-04T19:05:49.534Z",
+    reaction_stats: { bearish: 0, bullish: 0, important: 0, neutral: 0 },
+    related_stocks: null,
+    sentiment_score: 0.2575757575757576,
+    source: "BusinessStandard",
+    summary:
+      "CSB Bank shares increased by 3% following a strong business update for the first quarter of financial year 2026.This positive performance indicates that the bank is doing well, which can attract more investors and boost its stock price.It's like a restaurant getting great reviews; more customers are likely to visit and enjoy the food.",
+    tags: null,
+    title: "CSB Bank Shares Surge 3% After Q1 (First Quarter) Results",
+    url: "https://www.business-standard.com/markets/news/csb-bank-share-pops-3-on-healthy-q1-business-show-key-info-inside-125070300192_1.html",
+  },
+  {
+    categories: null,
+    engagement: { comments: 0, likes: 0 },
+    id: "68670bd5753499b7e5d9c475",
+    impact_label: "Medium Impact",
+    impact_score: 5,
+    published_at: "2025-07-04T19:05:49.534Z",
+    reaction_stats: { bearish: 0, bullish: 0, important: 0, neutral: 0 },
+    related_stocks: null,
+    sentiment_score: -0.3,
+    source: "BusinessStandard",
+    summary:
+      "The Sensex index fell by 170 points, indicating a decline in market performance.This drop affects investor confidence, particularly in public sector banks, metal, and real estate stocks.It's like a popular restaurant losing customers due to a bad review, impacting its overall reputation.",
+    tags: null,
+    title: "Sensex Drops 170 Points Amid Market Weakness",
+    url: "https://www.business-standard.com/markets/news/stock-market-live-updates-july-3-nse-bse-sensex-today-nifty-s-125070300080_1.html",
+  },
+  {
+    categories: null,
+    engagement: { comments: 0, likes: 0 },
+    id: "68670bd5753499b7e5d9c487",
+    impact_label: "Medium Impact",
+    impact_score: 5.5,
+    published_at: "2025-07-04T19:05:49.534Z",
+    reaction_stats: { bearish: 0, bullish: 0, important: 0, neutral: 0 },
+    related_stocks: null,
+    sentiment_score: 0.22727272727272727,
+    source: "BusinessStandard",
+    summary:
+      "HDFC (Housing Development Finance Corporation) Bank, HDFC (Housing Development Finance Corporation) Life, and HDFC (Housing Development Finance Corporation) Asset Management Company stocks are expected to rise by another 14%.This potential increase indicates strong investor confidence in the HDFC (Housing Development Finance Corporation) group, which could lead to higher stock prices.It's like finding a hidden gem in your neighborhood that everyone suddenly wants to buy.",
+    tags: null,
+    title:
+      "HDFC (Housing Development Finance Corporation) Stocks Set for 14% Rally",
+    url: "https://www.business-standard.com/markets/news/how-to-trade-hdfc-group-stocks-buy-sell-or-hold-here-s-what-charts-say-125070300189_1.html",
   },
 ];
