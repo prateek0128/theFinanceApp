@@ -1,5 +1,7 @@
 export { default as BookmarkIcon } from "./BookmarkIcon";
 export { default as BookmarkIconFilled } from "./BookmarkIconFilled";
+export { default as BookmarkIconFilledWhite } from "./BookmarkIconFilledWhite";
+export { default as BookmarkIconWhite } from "./BookmarkIconWhite";
 export { default as CommentIcon } from "./CommentIcon";
 export { default as CommentIconBlack } from "./CommentIconBlack";
 export { default as CurrencyImage2 } from "./CurrencyImage2";
@@ -9,6 +11,8 @@ export { default as GraphImage2 } from "./GraphImage2";
 export { default as LikeCommentIcon } from "./LikeCommentIcon";
 export { default as LikePostIcon } from "./LikePostIcon";
 export { default as LikePostIconFilled } from "./LikePostIconFilled";
+export { default as LikePostIconFilledWhite } from "./LikePostIconFilledWhite";
+export { default as LikePostIconWhite } from "./LikePostIconWhite";
 export { default as MaleProfileIcon } from "./MaleProfileIcon";
 export { default as UnlikeCommentIcon } from "./UnlikeCommentIcon";
 export { default as ViewIcon } from "./ViewIcon";

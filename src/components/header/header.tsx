@@ -1,6 +1,6 @@
 // components/HeadlineDetailCard.js
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   Text,
@@ -8,7 +8,15 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import { BackArrowIcon, ShareIcon } from "../../assets/icons/components/header";
+import { ThemeContext } from "../../context/themeContext";
+
+import {
+  BackArrowIcon,
+  BackArrowIconWhite,
+  ShareIcon,
+  ShareIconWhite,
+} from "../../assets/icons/components/header";
+
 import { colors } from "../../assets/styles/colors";
 import fontFamily from "../../assets/styles/fontFamily";
 import {
@@ -16,6 +24,10 @@ import {
   LikePostIcon,
   BookmarkIcon,
   BookmarkIconFilled,
+  BookmarkIconFilledWhite,
+  BookmarkIconWhite,
+  LikePostIconFilledWhite,
+  LikePostIconWhite,
 } from "../../assets/icons/components/headlineDetailsView";
 import ShareSheet from "../sharedSheet/sharedSheet";
 
@@ -41,24 +53,45 @@ const Header = ({
   onToggleBookmarkClick,
   shareUrl,
 }: HeaderProps) => {
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const [open, setOpen] = useState(false);
   console.log("LikedStatus=>", liked);
   return (
     <View style={styles.headerConatiner}>
       <TouchableOpacity onPress={onBackClick}>
         <View style={styles.leftHeaderPart}>
-          <BackArrowIcon />
+          {theme === "light" ? <BackArrowIcon /> : <BackArrowIconWhite />}
         </View>
       </TouchableOpacity>
       <View style={styles.rightHeaderPart}>
         <TouchableOpacity onPress={onToggleLikeClick}>
-          {liked ? <LikePostIconFilled /> : <LikePostIcon />}
+          {theme === "light" ? (
+            liked ? (
+              <LikePostIconFilled />
+            ) : (
+              <LikePostIcon />
+            )
+          ) : liked ? (
+            <LikePostIconFilledWhite />
+          ) : (
+            <LikePostIconWhite />
+          )}
         </TouchableOpacity>
         <TouchableOpacity onPress={onToggleBookmarkClick}>
-          {bookmarked ? <BookmarkIconFilled /> : <BookmarkIcon />}
+          {theme === "light" ? (
+            bookmarked ? (
+              <BookmarkIconFilled />
+            ) : (
+              <BookmarkIcon />
+            )
+          ) : bookmarked ? (
+            <BookmarkIconFilledWhite />
+          ) : (
+            <BookmarkIconWhite />
+          )}
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setOpen(true)}>
-          <ShareIcon />
+          {theme === "light" ? <ShareIcon /> : <ShareIconWhite />}
         </TouchableOpacity>
         <ShareSheet
           visible={open}

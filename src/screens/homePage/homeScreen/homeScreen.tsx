@@ -96,16 +96,28 @@ const HomeScreen = () => {
     <ScrollView
       contentContainerStyle={[
         styles.container,
-        // {
-        //   backgroundColor:
-        //     theme === "dark"
-        //       ? colors.darkPrimaryBackground
-        //       : colors.primaryBackground,
-        // },
+        {
+          backgroundColor:
+            theme === "dark"
+              ? colors.darkPrimaryBackground
+              : colors.primaryBackground,
+        },
       ]}
     >
       <View style={styles.headingContainer}>
-        <Text style={styles.heading}>Discover</Text>
+        <Text
+          style={[
+            styles.heading,
+            {
+              color:
+                theme === "dark"
+                  ? colors.darkPrimaryText
+                  : colors.quaternaryText,
+            },
+          ]}
+        >
+          Discover
+        </Text>
       </View>
       <ScrollView
         horizontal

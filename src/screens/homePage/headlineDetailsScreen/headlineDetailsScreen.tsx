@@ -482,7 +482,19 @@ const HeadlineDetailsScreen = () => {
                     }
                     <View style={{ flex: 1 }}>
                       <View style={styles.relatedDiscussionsArticle}>
-                        <Text style={styles.authorName}>{"--"}</Text>
+                        <Text
+                          style={[
+                            styles.authorName,
+                            {
+                              color:
+                                theme === "dark"
+                                  ? colors.darkPrimaryText
+                                  : colors.senaryText,
+                            },
+                          ]}
+                        >
+                          {"--"}
+                        </Text>
                         <Text style={styles.articleTime}>
                           {getShortTimeAgo(comment.commented_at)}
                         </Text>
@@ -525,17 +537,29 @@ const HeadlineDetailsScreen = () => {
             <TextInput
               style={[
                 styles.commentInput,
-                // {
-                //   backgroundColor:
-                //     theme === "dark"
-                //       ? colors.duodenaryBackground
-                //       : colors.undenaryBackground,
+                {
+                  backgroundColor:
+                    theme === "dark"
+                      ? colors.darkPrimaryBackground
+                      : colors.primaryBackground,
 
-                //   color:
-                //     theme === "dark" ? colors.white : colors.undenaryBackground,
-                // },
+                  color:
+                    theme === "dark"
+                      ? colors.darkPrimaryText
+                      : colors.undenaryBackground,
+
+                  borderColor:
+                    theme === "dark"
+                      ? colors.quaternaryBorderColor
+                      : colors.tertiaryBorderColor,
+                },
               ]}
               placeholder="Write a comment..."
+              placeholderTextColor={
+                theme == "dark"
+                  ? colors.tertiaryText
+                  : colors.primaryBorderColor
+              }
               keyboardType="email-address"
               value={comment}
               onChangeText={(text) => {
