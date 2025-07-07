@@ -1,6 +1,6 @@
 // components/HeadlineDetailCard.js
 
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   View,
   Text,
@@ -17,6 +17,7 @@ import {
 } from "../../assets/icons/components/headlineDetailsView";
 import Tag from "../tag/tag";
 import ImpactLabel from "../impactLabel/impactLabel";
+import { ThemeContext } from "../../context/themeContext";
 const { width } = Dimensions.get("window");
 
 type DiscoverDetailsCardProps = {
@@ -60,9 +61,20 @@ const DiscoverDetailsCard = ({
   //   LikeIconComponent,
   onPress,
 }: DiscoverDetailsCardProps) => {
+  const { theme, toggleTheme } = useContext(ThemeContext);
   return (
     <TouchableOpacity onPress={onPress} key={index}>
-      <View style={styles.detailsHeadlineContainer}>
+      <View
+        style={[
+          styles.detailsHeadlineContainer,
+          {
+            backgroundColor:
+              theme === "dark"
+                ? colors.darkPrimaryBackground
+                : colors.primaryBackground,
+          },
+        ]}
+      >
         <View style={styles.tagsContainer}>
           <View style={styles.marketTagsContainer}>
             <Tag
@@ -92,14 +104,47 @@ const DiscoverDetailsCard = ({
           </View>
         </View>
         <View style={styles.articleDetailsHeadingContainer}>
-          <Text style={styles.articleDetailsHeading}>{heading}</Text>
-          <Text style={styles.articleDetailsSubHeading} numberOfLines={2}>
+          <Text
+            style={[
+              styles.articleDetailsHeading,
+              {
+                color:
+                  theme === "dark"
+                    ? colors.darkPrimaryText
+                    : colors.primaryText,
+              },
+            ]}
+          >
+            {heading}
+          </Text>
+          <Text
+            style={[
+              styles.articleDetailsSubHeading,
+              {
+                color:
+                  theme === "dark"
+                    ? colors.darkPrimaryText
+                    : colors.primaryText,
+              },
+            ]}
+            numberOfLines={2}
+          >
             {summary}
           </Text>
         </View>
         <View style={styles.authorLikesContainer}>
           <View style={styles.authorTimeContainer}>
-            <Text style={styles.authorTimeText}>
+            <Text
+              style={[
+                styles.authorTimeText,
+                {
+                  color:
+                    theme === "dark"
+                      ? colors.darkPrimaryText
+                      : colors.primaryText,
+                },
+              ]}
+            >
               {`via ${authorName || "--"} · ${timeAgo || "--"}`}
             </Text>
           </View>

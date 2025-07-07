@@ -15,7 +15,7 @@ const ThemeToggleButton: React.FC = () => {
 const styles = StyleSheet.create({
   button: {
     position: "absolute",
-    bottom: 30,
+    bottom: 70,
     left: 20,
     backgroundColor: "#4A90E2",
     width: 50,

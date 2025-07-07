@@ -2,15 +2,23 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Dimensions } from "react-native";
 import HomeScreen from "../../screens/homePage/homeScreen/homeScreen";
-
-import HomeIcon from "../../assets/icons/components/bottomNavigation/HomeIcon";
-import HomeBlack from "../../assets/icons/components/bottomNavigation/HomeBlack";
-import NewsIcon from "../../assets/icons/components/bottomNavigation/NewsIcon";
-import NewsBlack from "../../assets/icons/components/bottomNavigation/NewsBlack";
-import MarketIcon from "../../assets/icons/components/bottomNavigation/MarketIcon";
-import CommunityIcon from "../../assets/icons/components/bottomNavigation/CommunityIcon";
-import CommunityBlack from "../../assets/icons/components/bottomNavigation/CommunityBlack";
-import ProfileIcon from "../../assets/icons/components/bottomNavigation/ProfileIcon";
+import { useContext } from "react";
+import {
+  HomeIcon,
+  HomeBlack,
+  HomeIconFilledWhite,
+  HomeIconIconWhite,
+  NewsIcon,
+  NewsBlack,
+  MarketIcon,
+  CommunityIcon,
+  CommunityBlack,
+  ProfileIcon,
+  IntrestIconWhite,
+  NewsWhiteFilled,
+  NewsIconWhite,
+  ProfileIconWhite,
+} from "../../assets/icons/components/bottomNavigation";
 import NewsScreen from "../../screens/newsScreen/newsScreen";
 import CommunityScreen from "../../screens/communityScreen/communityScreen";
 import ProfileScreen from "../../screens/profileScreen/profileScreen";
@@ -19,42 +27,45 @@ import HomeScreenStack from "../homeScreenStack/homeScreenStack";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import InterestsScreen from "../../screens/InterestsScreen/InterestsScreen";
 import { IntrestIcon } from "../../assets/icons/components/bottomNavigation";
+import { ThemeContext } from "../../context/themeContext";
+import { colors } from "../../assets/styles/colors";
 const Tab = createBottomTabNavigator();
 const { width, height } = Dimensions.get("window");
-const tabsData = [
-  {
-    name: "HomeStack",
-    component: HomeScreenStack,
-    Icon: HomeIcon,
-    FocusedIcon: HomeBlack,
-  },
-  {
-    name: "News",
-    component: NewsScreen,
-    Icon: NewsIcon,
-    FocusedIcon: NewsBlack,
-  },
-  {
-    name: "Interests",
-    component: InterestsScreen,
-    Icon: IntrestIcon,
-    FocusedIcon: IntrestIcon,
-  }, // No focused version provided
-  // {
-  //   name: "Community",
-  //   component: CommunityScreen,
-  //   Icon: CommunityIcon,
-  //   FocusedIcon: CommunityBlack,
-  // },
-  {
-    name: "Profile",
-    component: ProfileScreen,
-    Icon: ProfileIcon,
-    FocusedIcon: ProfileIcon,
-  }, // No focused version provided
-];
 
 export default function BottomTabNavigator() {
+  const { theme, toggleTheme } = useContext(ThemeContext);
+  const tabsData = [
+    {
+      name: "HomeStack",
+      component: HomeScreenStack,
+      Icon: theme === "dark" ? HomeIconIconWhite : HomeIcon,
+      FocusedIcon: theme === "dark" ? HomeIconFilledWhite : HomeBlack,
+    },
+    {
+      name: "News",
+      component: NewsScreen,
+      Icon: theme === "dark" ? NewsIconWhite : NewsIcon,
+      FocusedIcon: theme === "dark" ? NewsWhiteFilled : NewsBlack,
+    },
+    {
+      name: "Interests",
+      component: InterestsScreen,
+      Icon: theme === "dark" ? IntrestIconWhite : IntrestIcon,
+      FocusedIcon: theme === "dark" ? IntrestIconWhite : IntrestIcon,
+    }, // No focused version provided
+    // {
+    //   name: "Community",
+    //   component: CommunityScreen,
+    //   Icon: CommunityIcon,
+    //   FocusedIcon: CommunityBlack,
+    // },
+    {
+      name: "Profile",
+      component: ProfileScreen,
+      Icon: theme === "dark" ? ProfileIconWhite : ProfileIcon,
+      FocusedIcon: theme === "dark" ? ProfileIconWhite : ProfileIcon,
+    }, // No focused version provided
+  ];
   return (
     <Tab.Navigator
       screenOptions={({ route }) => {
@@ -64,11 +75,11 @@ export default function BottomTabNavigator() {
         // Dynamic background logic
         const isOnHeadlineDetails =
           route.name === "HomeStack" && routeName === "HeadlineDetailsScreen";
-
         return {
           headerShown: false,
           tabBarStyle: {
-            backgroundColor: isOnHeadlineDetails ? "#E5E4E2" : "#FBFFF1",
+            backgroundColor:
+              theme === "dark" ? colors.darkPrimaryBackground : "#FBFBFE",
             borderTopWidth: 0,
             elevation: 10,
             height: height * 0.09,
@@ -97,14 +108,21 @@ export default function BottomTabNavigator() {
               fontFamily: fontFamily.bottomNavigationText,
             },
             tabBarIcon: ({ focused }) =>
-              focused &&
-              (name == "HomeStack" || name == "News" || name == "Community") ? (
+              focused && (name == "HomeStack" || name == "News") ? (
                 <FocusedIcon width={24} height={24} />
               ) : (
                 <Icon
                   width={24}
                   height={24}
-                  fill={focused ? "#000000" : "transparent"}
+                  fill={
+                    theme === "dark"
+                      ? focused
+                        ? "#FFFFFF"
+                        : "transparent"
+                      : focused
+                      ? "#000000"
+                      : "transparent"
+                  }
                 />
               ),
           }}
