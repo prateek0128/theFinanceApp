@@ -18,7 +18,6 @@ import SocialLoginButton from "../../../components/socialLoginButton/socialLogin
 import { TextInput as RNTextInput } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { showMessage } from "react-native-flash-message";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
 import InputTextField from "../../../components/inputTextField/inputTextField";
 import Button from "../../../components/button/button";
 import { verifyOTP, sendOTP } from "../../../apiServices/auth";

@@ -20,7 +20,6 @@ import {
   ProfileIconWhite,
 } from "../../assets/icons/components/bottomNavigation";
 import NewsScreen from "../../screens/newsScreen/newsScreen";
-import CommunityScreen from "../../screens/communityScreen/communityScreen";
 import ProfileScreen from "../../screens/profileScreen/profileScreen";
 import fontFamily from "../../assets/styles/fontFamily";
 import HomeScreenStack from "../homeScreenStack/homeScreenStack";
@@ -53,12 +52,6 @@ export default function BottomTabNavigator() {
       Icon: theme === "dark" ? IntrestIconWhite : IntrestIcon,
       FocusedIcon: theme === "dark" ? IntrestIconWhite : IntrestIcon,
     }, // No focused version provided
-    // {
-    //   name: "Community",
-    //   component: CommunityScreen,
-    //   Icon: CommunityIcon,
-    //   FocusedIcon: CommunityBlack,
-    // },
     {
       name: "Profile",
       component: ProfileScreen,

@@ -13,7 +13,6 @@ import { RootStackParamList } from "../../types/navigation";
 import { colors } from "../../assets/styles/colors";
 import fontFamily from "../../assets/styles/fontFamily";
 import Button from "../../components/button/button";
-import DropDownPicker from "react-native-dropdown-picker";
 import { ThemeContext } from "../../context/themeContext";
 const TellUsSomething = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -44,20 +43,6 @@ const TellUsSomething = () => {
     { label: "Portfolio Tracking", value: "tracking" },
     { label: "Market Research", value: "research" },
   ];
-  const [roles2, setRoles2] = useState([
-    { label: "Select your role", value: "" },
-    { label: "Student", value: "student" },
-    { label: "Professional", value: "professional" },
-    { label: "Business Owner", value: "business_owner" },
-    { label: "Retired", value: "retired" },
-  ]);
-  const [goals2, setGoals2] = useState([
-    { label: "Select your goal", value: "" },
-    { label: "Long-term Investing", value: "long_term" },
-    { label: "Day Trading", value: "day_trading" },
-    { label: "Portfolio Tracking", value: "tracking" },
-    { label: "Market Research", value: "research" },
-  ]);
   return (
     <View
       style={[
@@ -126,19 +111,6 @@ const TellUsSomething = () => {
               />
             ))}
           </Picker>
-          {/* <DropDownPicker
-            open={openRole}
-            value={selectedWhoAreYou}
-            items={roles}
-            setOpen={setOpenRole}
-            setValue={(callback) => {
-              setSelectedWhoAreYou(callback(selectedWhoAreYou));
-              setSelectedGoal(""); // Reset dependent fields
-              setSelectedCategory("");
-            }}
-            setItems={setRoles2}
-            placeholder="Select your role"
-          /> */}
         </View>
       </View>
 
@@ -190,19 +162,6 @@ const TellUsSomething = () => {
             <Picker.Item label="Portfolio Tracking" value="tracking" />
             <Picker.Item label="Market Research" value="research" />
           </Picker>
-          {/* <DropDownPicker
-            open={openGoal}
-            value={selectedGoal}
-            items={goals}
-            setOpen={setOpenGoal}
-            setValue={(callback) => {
-              setSelectedGoal(callback(selectedGoal));
-              setSelectedCategory("");
-            }}
-            setItems={setGoals2}
-            disabled={!selectedWhoAreYou}
-            placeholder="Select your goal"
-          /> */}
         </View>
       </View>
       <Button title={"Submit"} onPress={handleSubmit} disabled={!isFormValid} />

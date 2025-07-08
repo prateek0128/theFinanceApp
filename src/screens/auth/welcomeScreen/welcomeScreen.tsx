@@ -33,8 +33,10 @@ import * as AuthSession from "expo-auth-session";
 WebBrowser.maybeCompleteAuthSession();
 
 // Your Google OAuth client ID
+// const CLIENT_ID =
+//   "828693204724-nsceevot9v42pfjml3eit3kjg9e1e1li.apps.googleusercontent.com";
 const CLIENT_ID =
-  "828693204724-nsceevot9v42pfjml3eit3kjg9e1e1li.apps.googleusercontent.com";
+  "261759290639-eavcf9en1gjmi3c7b71g4g86ost2qth2.apps.googleusercontent.com";
 const WelcomeScreen = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -47,7 +49,7 @@ const WelcomeScreen = () => {
       scopes: ["openid", "profile", "email"],
       redirectUri: AuthSession.makeRedirectUri({
         useProxy: true,
-      } as any),
+      }),
     },
     discovery
   );
