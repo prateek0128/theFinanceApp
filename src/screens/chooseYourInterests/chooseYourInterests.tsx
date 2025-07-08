@@ -100,11 +100,26 @@ export default function ChooseYourInterests() {
                 style={[
                   styles.cardDimension,
                   selected.includes(item) && styles.cardSelected,
+                  {
+                    backgroundColor: selected.includes(item)
+                      ? theme === "dark"
+                        ? colors.darkSeptenaryBackground // selected + dark
+                        : colors.splashBackground // selected + light
+                      : theme === "dark"
+                      ? colors.darkSenaryBackground // idle + dark
+                      : colors.quaternaryBackground, // idle + light
+                  },
                 ]}
               >
                 <Text
                   style={[
                     styles.cardText,
+                    {
+                      color:
+                        theme === "dark"
+                          ? colors.darkPrimaryText
+                          : colors.primaryText,
+                    },
                     selected.includes(item) && styles.cardNameSelected,
                   ]}
                 >
@@ -134,7 +149,7 @@ export default function ChooseYourInterests() {
             },
           ]}
         >
-          Continue
+          Get Started
         </Text>
       </TouchableOpacity>
     </View>

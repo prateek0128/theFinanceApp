@@ -74,6 +74,7 @@ const StartScreen = () => {
   const handleNext = () => {
     if (cardIndex === cardData.length - 1) {
       navigation.navigate("Welcome");
+      //navigation.navigate("ChooseYourInterests");
       setCardIndex(0);
     } else {
       const nextIndex = cardIndex + 1;
