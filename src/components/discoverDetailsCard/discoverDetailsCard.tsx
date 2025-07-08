@@ -72,6 +72,10 @@ const DiscoverDetailsCard = ({
               theme === "dark"
                 ? colors.darkPrimaryBackground
                 : colors.primaryBackground,
+            borderColor:
+              theme === "dark"
+                ? colors.quaternaryBorderColor
+                : colors.tertiaryBorderColor,
           },
         ]}
       >

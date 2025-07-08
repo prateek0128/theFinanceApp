@@ -40,6 +40,8 @@ export const colors = {
   darkTertiaryBackground: "#141414",
   darkQuaternaryBackground: "#191919",
   darkQuinaryBackground: "#010104",
+  darkSenaryBackground: "#272727",
+  darkSeptenaryBackground:"#3460DC80",
   //Text Colors
   primaryText: "#28262C",
   secondaryText: "#111111",
