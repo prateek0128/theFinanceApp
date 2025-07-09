@@ -1,12 +1,16 @@
 import React, { useState, useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { ThemeContext } from "../../context/themeContext";
+import { showMessage } from "react-native-flash-message";
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   Dimensions,
+  Alert,
+  ToastAndroid,
+  Platform,
 } from "react-native";
 import { colors } from "../../assets/styles/colors";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
@@ -44,6 +48,8 @@ export default function ChooseYourInterests() {
         : [...prevSelected, item]
     );
   };
+
+  const canContinue = selected.length >= 5;
   const { theme, toggleTheme } = useContext(ThemeContext);
   const handleContinue = () => {
     navigation.navigate("BottomTabNavigator");
@@ -103,11 +109,15 @@ export default function ChooseYourInterests() {
                   {
                     backgroundColor: selected.includes(item)
                       ? theme === "dark"
-                        ? colors.darkSeptenaryBackground // selected + dark
-                        : colors.splashBackground // selected + light
+                        ? colors.darkSeptenaryBackground
+                        : colors.splashBackground
                       : theme === "dark"
-                      ? colors.darkSenaryBackground // idle + dark
-                      : colors.quaternaryBackground, // idle + light
+                      ? colors.darkSenaryBackground
+                      : colors.quaternaryBackground,
+                    borderColor:
+                      selected.includes(item) && theme === "dark"
+                        ? colors.quindenaryBackground
+                        : "transparent",
                   },
                 ]}
               >
@@ -131,12 +141,43 @@ export default function ChooseYourInterests() {
         ))}
       </View>
       <TouchableOpacity
+        activeOpacity={0.8}
         style={[
           styles.continueButton,
-          selected.length < 5 && styles.continueButtonDisabled,
+          !canContinue && styles.continueButtonDisabled,
         ]}
-        onPress={handleContinue}
-        disabled={selected.length === 0}
+        onPress={() => {
+          if (canContinue) {
+            handleContinue(); // navigate next
+
+            // ✅ confirmation toast
+            if (Platform.OS === "android") {
+              ToastAndroid.show(
+                "Your interests saved successfully",
+                ToastAndroid.SHORT
+              );
+            } else {
+              // iOS / web – use your existing flash‑message util or snackbar
+              showMessage?.({
+                message: "Your interests saved successfully",
+                type: "success",
+              });
+            }
+          } else {
+            // 🚫 not enough selections
+            if (Platform.OS === "android") {
+              ToastAndroid.show(
+                "Please choose at least 5 fields",
+                ToastAndroid.SHORT
+              );
+            } else {
+              showMessage?.({
+                message: "Please choose at least 5 fields",
+                type: "warning",
+              });
+            }
+          }
+        }}
       >
         <Text
           style={[
@@ -146,10 +187,11 @@ export default function ChooseYourInterests() {
                 theme === "dark"
                   ? colors.darkPrimaryText
                   : colors.tertiaryBackground,
+              opacity: !canContinue ? 0.4 : 1,
             },
           ]}
         >
-          Get Started
+          Get Started
         </Text>
       </TouchableOpacity>
     </View>

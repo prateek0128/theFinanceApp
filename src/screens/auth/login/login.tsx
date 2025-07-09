@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   KeyboardAvoidingView,
+  ToastAndroid,
   Platform,
   ScrollView,
 } from "react-native";
@@ -65,15 +66,40 @@ const LoginScreen = () => {
     try {
       const response = await sendOTP(otpData);
       console.log("OTPResponse", response);
-      showMessage({
-        message: "OTP sent",
-        description: `We’ve sent it to your phone number`,
-        type: "success",
-        backgroundColor: colors.primary,
-        color: "#fff",
-      });
+
+      if (Platform.OS === "android") {
+        // Small, bottom‑area toast
+        ToastAndroid.showWithGravity(
+          "OTP sent successfully",
+          ToastAndroid.SHORT, // or ToastAndroid.LONG
+          ToastAndroid.BOTTOM // BOTTOM / CENTER / TOP
+        );
+      } else {
+        // iOS (or web) fallback – your existing flash‑message
+        showMessage({
+          message: "OTP sent",
+          description: "OTP sent successfully",
+          type: "success",
+          backgroundColor: colors.primary,
+          color: "#fff",
+        });
+      }
     } catch (e) {
       console.log(e);
+
+      if (Platform.OS === "android") {
+        ToastAndroid.showWithGravity(
+          "OTP sent succesfully",
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM
+        );
+      } else {
+        showMessage({
+          message: "Error",
+          description: "Failed to send OTP",
+          type: "danger",
+        });
+      }
     }
   };
   const handleVerifyOTP = async () => {
@@ -92,22 +118,43 @@ const LoginScreen = () => {
       otp: otp.join(""),
     };
     try {
-      await login(loginData); // if OTP is invalid, this will throw
+      await login(loginData); // throws if OTP invalid
+
       navigation.navigate("ChooseYourInterests");
-      showMessage({
-        message: "OTP verified successfully!",
-        type: "success",
-        backgroundColor: colors.primary,
-        color: "#fff",
-      });
+
+      if (Platform.OS === "android") {
+        // ✅ Android toast
+        ToastAndroid.showWithGravity(
+          "OTP verified successfully!",
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM
+        );
+      } else {
+        // ✅ iOS / web (keeps your flash‑message)
+        showMessage({
+          message: "OTP verified successfully!",
+          type: "success",
+          backgroundColor: colors.primary,
+          color: "#fff",
+        });
+      }
     } catch (e) {
       console.log(e);
-      showMessage({
-        message: "Failed to verify OTP. Please try again.",
-        type: "danger",
-        backgroundColor: colors.primary,
-        color: "#fff",
-      });
+
+      if (Platform.OS === "android") {
+        ToastAndroid.showWithGravity(
+          "Failed to verify OTP. Please try again.",
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM
+        );
+      } else {
+        showMessage({
+          message: "Failed to verify OTP. Please try again.",
+          type: "danger",
+          backgroundColor: colors.primary,
+          color: "#fff",
+        });
+      }
     }
   };
   const handleOTPChange = (index: number, value: string) => {

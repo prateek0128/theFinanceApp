@@ -8,6 +8,7 @@ export const colors = {
   text: "#333333",
   gray: "#888888",
   border: "#CCCCCC",
+  warning: "#FF0000",
   //////////////////////
   //Background Colors
   splashBackground: "#3D52D5",
