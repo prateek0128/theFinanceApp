@@ -2,6 +2,7 @@
   "expo": {
     "name": "FinSimply",
     "slug": "finsimply",
+    "scheme": "finsimply",
     "platforms": ["ios", "android", "web"],
     "runtimeVersion": {
       "policy": "appVersion"

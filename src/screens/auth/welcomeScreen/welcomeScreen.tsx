@@ -29,6 +29,14 @@ import {
 import { ThemeContext } from "../../../context/themeContext";
 import * as WebBrowser from "expo-web-browser";
 import * as AuthSession from "expo-auth-session";
+import * as Google from "expo-auth-session/providers/google";
+import {
+  GoogleSignin,
+  isSuccessResponse,
+  isErrorWithCode,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
+import { showMessage } from "react-native-flash-message";
 // Fix redirect on iOS
 WebBrowser.maybeCompleteAuthSession();
 
@@ -40,39 +48,43 @@ const CLIENT_ID =
 const WelcomeScreen = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  // Automatically fetch Google's OAuth 2.0 discovery doc
-  const discovery = AuthSession.useAutoDiscovery("https://accounts.google.com");
-  // Create the auth request
-  const [request, response, promptAsync] = AuthSession.useAuthRequest(
-    {
-      clientId: CLIENT_ID,
-      scopes: ["openid", "profile", "email"],
-      redirectUri: AuthSession.makeRedirectUri({
-        useProxy: true,
-      }),
-    },
-    discovery
-  );
-  // Listen for response
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    iosClientId:
+      "367090103963-h643bf3uqjoesfmlcmae3uqe5rs51jch.apps.googleusercontent.com",
+    androidClientId:
+      "367090103963-ef9c4a8oq4qmbmte4nkskisf773qnc2n.apps.googleusercontent.com",
+    webClientId:
+      "367090103963-1eek4b10kodood727g6t6hh1seap8h3v.apps.googleusercontent.com",
+    // optionally add:
+    // expoClientId: 'YOUR_EXPO_CLIENT_ID.apps.googleusercontent.com'
+  });
   useEffect(() => {
     if (response?.type === "success") {
       const { authentication } = response;
-      console.log("Access token:", authentication?.accessToken);
 
-      // You can now fetch user info from Google
-      getUserInfo(authentication?.accessToken);
+      // You get accessToken & idToken here:
+      console.log("Access token:", authentication?.accessToken);
+      console.log("ID token:", authentication?.idToken);
+
+      // Fetch user info (optional)
+      fetch("https://www.googleapis.com/userinfo/v2/me", {
+        headers: { Authorization: `Bearer ${authentication?.accessToken}` },
+      })
+        .then((res) => res.json())
+        .then((userInfo) => {
+          console.log("User Info:", userInfo);
+          // userInfo contains name, email, picture etc.
+          navigation.navigate("TellUsSomething", {
+            name: userInfo.name,
+            email: userInfo.email,
+          });
+        })
+        .catch((err) => {
+          console.error("Failed to fetch user info", err);
+        });
     }
   }, [response]);
-  // Fetch user's profile info
-  async function getUserInfo(token: string | undefined) {
-    if (!token) return;
-    const res = await fetch("https://www.googleapis.com/userinfo/v2/me", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const user = await res.json();
-    console.log("User info:", user);
-  }
-  console.log("Redirect URI:", AuthSession.makeRedirectUri({ useProxy: true }));
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -134,7 +146,8 @@ const WelcomeScreen = () => {
           <SocialLoginButton
             IconComponent={GoogleIcon}
             text="Continue with Google"
-            onPress={() => promptAsync({ useProxy: true })}
+            onPress={() => promptAsync()}
+            // disabled={!request}
           />
           <SocialLoginButton
             IconComponent={FacebookIcon}
