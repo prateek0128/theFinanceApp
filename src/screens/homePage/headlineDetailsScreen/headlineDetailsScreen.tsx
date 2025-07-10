@@ -63,6 +63,8 @@ import {
   unpinNews,
 } from "../../../apiServices/newsManagement";
 import ImpactLabel from "../../../components/impactLabel/impactLabel";
+import showToast from "../../../Utilis/showToast";
+import { AxiosError } from "axios";
 
 dayjs.extend(relativeTime);
 const { width, height } = Dimensions.get("window");
@@ -110,7 +112,7 @@ const HeadlineDetailsScreen = () => {
   const [newsData, setNewsData] = useState<NewsData>({});
   // const [allNewsData, setAllNewsData] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [addCommentsLoader, setAddcommentsLoader] = useState<boolean>(false);
+  const [addCommentsLoader, setAddCommentsLoader] = useState<boolean>(false);
   const renderImage = () => {
     if (typeof imageKey === "string" && imageKey in imageMap) {
       const ImageComponent = imageMap[imageKey];
@@ -193,8 +195,17 @@ const HeadlineDetailsScreen = () => {
     try {
       const response = await addReaction(newsId);
       console.log(response.data);
-    } catch (error) {
-      console.log("API Error:", error);
+      showToast(response.data.message, "success");
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      console.log("OTP Error:", errorMessage);
+      showToast(errorMessage, "danger");
     }
   };
   const handleToggleLike = () => {
@@ -207,8 +218,16 @@ const HeadlineDetailsScreen = () => {
     try {
       const response = await toggleLike(newsId);
       console.log("Toggle Like=>", response.data);
-    } catch (error) {
-      console.log("API Error:", error);
+      showToast(response.data.message, "success");
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      showToast(errorMessage, "danger");
     }
   };
   const getBookmarkAPI = async () => {
@@ -238,16 +257,32 @@ const HeadlineDetailsScreen = () => {
     try {
       const response = await pinNews(newsId);
       console.log("PinNews=>", response.data);
-    } catch (e) {
-      console.log("API Error:", e);
+      showToast(response.data.message, "success");
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      showToast(errorMessage, "danger");
     }
   };
   const handleUnPinNews = async (newsId: string) => {
     try {
       const response = await unpinNews(newsId);
       console.log("UninNews=>", response.data);
-    } catch (e) {
-      console.log("API Error:", e);
+      showToast(response.data.message, "success");
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      showToast(errorMessage, "danger");
     }
   };
   const checkLikeStatusAPI = async (newsId: string) => {
@@ -259,19 +294,28 @@ const HeadlineDetailsScreen = () => {
     }
   };
   const addCommentsAPI = async (newsId: any) => {
-    setAddcommentsLoader(true);
+    setAddCommentsLoader(true);
     const commentData = {
       comment: comment,
     };
     try {
       const response = await addComments(newsId, commentData);
       console.log(response.data);
+      await addComments(commentData, newsId);
+      showToast(response.data.message, "success");
       setComment("");
       getCommentsAPI(newsId);
-    } catch (error) {
-      console.log("API Error:", error);
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      showToast(errorMessage, "danger");
     } finally {
-      setAddcommentsLoader(false);
+      setAddCommentsLoader(false);
     }
   };
   // const deleteCommentsAPI = async () => {

@@ -43,6 +43,9 @@ export const colors = {
   darkQuinaryBackground: "#010104",
   darkSenaryBackground: "#272727",
   darkSeptenaryBackground:"#3460DC80",
+  darkOctonary: "#1E1E1E",
+  darkNonaryBackground: "#10B98126",
+  darkDenaryBackground: "#E8EDFB0D",
   //Text Colors
   primaryText: "#28262C",
   secondaryText: "#111111",
@@ -63,12 +66,15 @@ export const colors = {
   darkPrimaryText: "#EDEDED",
   darkSecondaryText: "#F7F8F9",
   darkTertiaryText: "#A0ABBB",
+  darkQuaternaryText: "#B8C0CC",
   //Border Colors
   primaryBorderColor: "#3C3744",
   secondaryBorderColor: "#6B7280",
   tertiaryBorderColor: "#3C374433",
   quaternaryBorderColor: "#B6BAC3",
   quinaryBorderColor: "#D0D5DD",
+  senaryBorderColor: "#383838",
+  septnaryBorderColor: "#1D4ED8",
   //Button Colors
   primaryButtonColor: "#007AFF",
 

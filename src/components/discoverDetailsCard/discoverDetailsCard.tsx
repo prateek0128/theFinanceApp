@@ -69,12 +69,10 @@ const DiscoverDetailsCard = ({
           styles.detailsHeadlineContainer,
           {
             backgroundColor:
-              theme === "dark"
-                ? colors.darkPrimaryBackground
-                : colors.primaryBackground,
+              theme === "dark" ? colors.darkOctonary : colors.primaryBackground,
             borderColor:
               theme === "dark"
-                ? colors.quaternaryBorderColor
+                ? colors.senaryBorderColor
                 : colors.tertiaryBorderColor,
           },
         ]}
@@ -83,13 +81,13 @@ const DiscoverDetailsCard = ({
           <View style={styles.marketTagsContainer}>
             <Tag
               label={"Market"}
-              backgroundColor={"#D1FAE5"}
-              textColor={"#047852"}
+              backgroundColor={"#10B98126"}
+              textColor={"#10B981"}
             />
             <Tag
               label={"Bearish"}
-              backgroundColor={"#FEE2E2"}
-              textColor={"#DC2626"}
+              backgroundColor={"#EF444426"}
+              textColor={"#EF4444"}
             />
           </View>
           <View>
@@ -102,8 +100,9 @@ const DiscoverDetailsCard = ({
               variant={"outlined"}
               label={impactLabel}
               value={impactScore}
-              backgroundColor={colors.quattuordenaryBackground}
+              backgroundColor={colors.darkDenaryBackground}
               textColor={colors.quindenaryBackground}
+              borderColor={colors.septnaryBorderColor}
             />
           </View>
         </View>
@@ -114,7 +113,7 @@ const DiscoverDetailsCard = ({
               {
                 color:
                   theme === "dark"
-                    ? colors.darkPrimaryText
+                    ? colors.darkSecondaryText
                     : colors.primaryText,
               },
             ]}
@@ -127,7 +126,7 @@ const DiscoverDetailsCard = ({
               {
                 color:
                   theme === "dark"
-                    ? colors.darkPrimaryText
+                    ? colors.darkQuaternaryText
                     : colors.primaryText,
               },
             ]}
@@ -144,7 +143,7 @@ const DiscoverDetailsCard = ({
                 {
                   color:
                     theme === "dark"
-                      ? colors.darkPrimaryText
+                      ? colors.darkQuaternaryText
                       : colors.primaryText,
                 },
               ]}
@@ -178,8 +177,6 @@ const styles = StyleSheet.create({
     padding: 12,
     borderWidth: 1,
     borderRadius: 20,
-    backgroundColor: colors.white,
-    borderColor: colors.tertiaryBorderColor,
     width: "100%",
   },
   tagsContainer: {
