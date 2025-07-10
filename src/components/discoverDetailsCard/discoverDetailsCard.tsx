@@ -96,12 +96,21 @@ const DiscoverDetailsCard = ({
                 {impactLabel} : {impactScore}
               </Text>
             </View> */}
+
             <ImpactLabel
               variant={"outlined"}
               label={impactLabel}
               value={impactScore}
-              backgroundColor={colors.darkDenaryBackground}
-              textColor={colors.quindenaryBackground}
+              backgroundColor={
+                theme == "dark"
+                  ? colors.darkDenaryBackground
+                  : colors.quattuordenaryBackground
+              }
+              textColor={
+                theme === "dark"
+                  ? colors.quindenaryBackground
+                  : colors.septnaryBorderColor
+              }
               borderColor={colors.septnaryBorderColor}
             />
           </View>

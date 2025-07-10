@@ -1,17 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import fontFamily from "../../assets/styles/fontFamily";
 import { colors } from "../../assets/styles/colors";
+import { ThemeContext } from "../../context/themeContext";
 const TabLabel = ({ label, selected, onPress }: any) => {
+  const { theme, toggleTheme } = useContext(ThemeContext);
+
   return (
     <TouchableOpacity onPress={onPress}>
       <View
         style={[
           styles.tabLabelContainer,
           {
-            backgroundColor: selected
-              ? colors.quindenaryBackground // active color
-              : colors.darkSenaryBackground, // default color
+            backgroundColor:
+              theme === "light"
+                ? selected
+                  ? colors.quindenaryBackground // active color
+                  : colors.quattuordenaryBackground
+                : selected
+                ? colors.quindenaryBackground
+                : colors.darkSenaryBackground, // default color
           },
         ]}
       >
@@ -19,9 +27,14 @@ const TabLabel = ({ label, selected, onPress }: any) => {
           style={[
             styles.labelText,
             {
-              color: selected
-                ? colors.darkSecondaryText // active text color
-                : colors.darkSecondaryText, // default text color
+              color:
+                theme === "dark"
+                  ? selected
+                    ? colors.darkPrimaryText
+                    : colors.darkSecondaryText
+                  : selected
+                  ? colors.darkSecondaryText // active text color
+                  : colors.quattuordenaryText, // default text color
             },
           ]}
         >
