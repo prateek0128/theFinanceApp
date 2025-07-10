@@ -16,7 +16,7 @@ import { colors } from "../../../assets/styles/colors";
 import globalStyles from "../../../assets/styles/globalStyles";
 import fontFamily from "../../../assets/styles/fontFamily";
 import { TextInput as RNTextInput } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { showMessage } from "react-native-flash-message";
 import Button from "../../../components/button/button";
 import InputTextField from "../../../components/inputTextField/inputTextField";
@@ -101,7 +101,7 @@ const SignUpScreen = () => {
     };
     try {
       await login(loginData); // if OTP is invalid, this will throw
-      navigation.navigate("TellUsSomething");
+      navigation.navigate("TellUsSomething", {});
       showMessage({
         message: "OTP verified successfully!",
         type: "success",

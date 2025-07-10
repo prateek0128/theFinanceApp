@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, StatusBar } from "react-native";
 import Navigation from "./src/navigation/navigationStack/navigation";
 import { colors } from "./src/assets/styles/colors";
 import FlashMessage from "react-native-flash-message";
-import { Inter_400Regular } from "@expo-google-fonts/inter";
+import { Inter_400Regular } from "@expo-google-fonts/inter/400Regular";
 import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";

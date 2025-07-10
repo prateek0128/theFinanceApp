@@ -30,24 +30,24 @@ import { ThemeContext } from "../../../context/themeContext";
 import * as WebBrowser from "expo-web-browser";
 import * as AuthSession from "expo-auth-session";
 import * as Google from "expo-auth-session/providers/google";
-import {
-  GoogleSignin,
-  isSuccessResponse,
-  isErrorWithCode,
-  statusCodes,
-} from "@react-native-google-signin/google-signin";
-import { showMessage } from "react-native-flash-message";
+
 // Fix redirect on iOS
 WebBrowser.maybeCompleteAuthSession();
-
 // Your Google OAuth client ID
 // const CLIENT_ID =
 //   "828693204724-nsceevot9v42pfjml3eit3kjg9e1e1li.apps.googleusercontent.com";
 const CLIENT_ID =
   "261759290639-eavcf9en1gjmi3c7b71g4g86ost2qth2.apps.googleusercontent.com";
+const BASE_URL = "http://localhost:8081";
+
 const WelcomeScreen = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  // generate correct redirect URI
+  const redirectUri = AuthSession.makeRedirectUri({
+    useProxy: true, // valid here
+  } as any);
+  console.log("Redirect URI:", redirectUri);
   const [request, response, promptAsync] = Google.useAuthRequest({
     iosClientId:
       "367090103963-h643bf3uqjoesfmlcmae3uqe5rs51jch.apps.googleusercontent.com",
@@ -57,6 +57,8 @@ const WelcomeScreen = () => {
       "367090103963-1eek4b10kodood727g6t6hh1seap8h3v.apps.googleusercontent.com",
     // optionally add:
     // expoClientId: 'YOUR_EXPO_CLIENT_ID.apps.googleusercontent.com'
+    redirectUri,
+    scopes: ["profile", "email"],
   });
   useEffect(() => {
     if (response?.type === "success") {
@@ -84,7 +86,6 @@ const WelcomeScreen = () => {
         });
     }
   }, [response]);
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -146,7 +147,7 @@ const WelcomeScreen = () => {
           <SocialLoginButton
             IconComponent={GoogleIcon}
             text="Continue with Google"
-            onPress={() => promptAsync()}
+            //onPress={promptAsync}
             // disabled={!request}
           />
           <SocialLoginButton

@@ -21,6 +21,7 @@ interface SocialLoginButtonProps {
   text: string;
   backgroundColor?: string;
   onPress?: () => void;
+  disabled?: boolean;
 }
 
 const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
@@ -28,42 +29,38 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
   text,
   onPress,
   backgroundColor,
+  disabled = false,
 }) => {
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
+
+  const buttonBackgroundColor = backgroundColor
+    ? backgroundColor
+    : theme === "dark"
+    ? colors.darkQuaternaryBackground
+    : colors.denaryBackground;
+
+  const borderColor =
+    theme === "dark" ? colors.primaryBorderColor : colors.darkPrimaryText;
+
+  const textColor =
+    theme === "dark" ? colors.darkPrimaryText : colors.primaryBorderColor;
+
   return (
     <TouchableOpacity
       style={[
         styles.button,
         {
-          backgroundColor: backgroundColor
-            ? backgroundColor
-            : theme === "dark"
-            ? colors.darkQuaternaryBackground
-            : colors.denaryBackground,
-          borderColor:
-            theme === "dark"
-              ? colors.primaryBorderColor
-              : colors.darkPrimaryText,
+          backgroundColor: buttonBackgroundColor,
+          borderColor,
+          opacity: disabled ? 0.5 : 1, // dim when disabled
         },
       ]}
       onPress={onPress}
       activeOpacity={0.7}
+      disabled={disabled}
     >
-      {/* <Image source={icon} style={styles.icon} resizeMode="contain" /> */}
       {IconComponent && <IconComponent width={24} height={24} />}
-      <Text
-        style={[
-          styles.text,
-          {
-            color:
-              theme === "dark"
-                ? colors.darkPrimaryText
-                : colors.primaryBorderColor,
-          },
-        ]}
-      >
-        {text}
-      </Text>
+      <Text style={[styles.text, { color: textColor }]}>{text}</Text>
     </TouchableOpacity>
   );
 };
@@ -88,7 +85,6 @@ const styles = StyleSheet.create({
     height: 24,
   },
   text: {
-    //color: colors.primaryBorderColor,
     fontFamily: fontFamily.Satoshi500,
     fontSize: 16,
   },
