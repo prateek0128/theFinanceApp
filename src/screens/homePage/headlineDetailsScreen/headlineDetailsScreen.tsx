@@ -63,8 +63,9 @@ import {
   unpinNews,
 } from "../../../apiServices/newsManagement";
 import ImpactLabel from "../../../components/impactLabel/impactLabel";
-import showToast from "../../../Utilis/showToast";
+import showToast from "../../../utilis/showToast";
 import { AxiosError } from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 dayjs.extend(relativeTime);
 const { width, height } = Dimensions.get("window");
@@ -113,6 +114,8 @@ const HeadlineDetailsScreen = () => {
   // const [allNewsData, setAllNewsData] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [addCommentsLoader, setAddCommentsLoader] = useState<boolean>(false);
+  const token = AsyncStorage.getItem("authToken");
+  console.log("AccessToken", token);
   const renderImage = () => {
     if (typeof imageKey === "string" && imageKey in imageMap) {
       const ImageComponent = imageMap[imageKey];
@@ -130,39 +133,53 @@ const HeadlineDetailsScreen = () => {
     return null;
   };
   const newsData2 = {
-    categories: null,
-    engagement: { comments: 0, likes: 0 },
-    id: "6864d77687eec4ab944144f6",
-    impact_label: "Significant Impact",
-    impact_score: 6.5,
-    published_at: "2025-07-02T07:28:59.209Z",
-    reaction_stats: { bearish: 0, bullish: 0, important: 0, neutral: 0 },
-    related_stocks: null,
-    sentiment_score: 0.3181818181818181,
+    _id: {
+      $oid: "686f9060e06428525bb24df3",
+    },
+    title:
+      "Crizac Shares Surge After Strong IPO (Initial Public Offering) Performance",
+    url: "https://www.moneycontrol.com/news/business/markets/crizac-shares-jump-5-newly-listed-stock-rallies-32-from-ipo-price-in-two-days-13256951.html",
+    summary:
+      "• Crizac shares jumped 5% and have rallied 32% from their initial public offering (IPO (Initial Public Offering)) price in just two days.\n• This strong performance indicates high investor interest and confidence in the company, which can lead to increased market activity.\n• It's like a new restaurant opening and quickly becoming the talk of the town, attracting more customers every day.",
+    published_at: {
+      $date: "2025-07-10T11:08:37.226Z",
+    },
+    created_at: {
+      $date: "2025-07-10T10:05:20.256Z",
+    },
+    updated_at: {
+      $date: "2025-07-10T11:08:37.252Z",
+    },
     source: "MoneyControl",
-    summary:
-      "Emkay Global predicts a 22% increase in HDB Financial Services' share price based on its strong fundamentals. This positive outlook could lead to increased investor interest and higher stock prices in the financial sector. Its like finding a promising new restaurant that everyone wants to try, boosting its popularity and sales.",
-    tags: null,
-    title: "HDB Financial Shares Expected to Surge",
-    url: "https://www.moneycontrol.com/news/business/markets/emkay-global-sees-22-upside-for-hdb-financial-shares-from-ipo-s-upper-price-band-13216416.html",
-  };
-  const newsData3 = {
-    categories: null,
-    engagement: { comments: 0, likes: 0 },
-    id: "68670bd5753499b7e5d9c486",
-    impact_label: "High Impact",
+    categories: ["Stocks"],
+    authors: ["MoneyControl"],
+    sentiment_score: 0.36363636363636365,
     impact_score: 7,
-    published_at: "2025-07-04T19:05:49.534Z",
-    reaction_stats: { bearish: 0, bullish: 0, important: 0, neutral: 0 },
-    related_stocks: null,
-    sentiment_score: 0.2575757575757576,
-    source: "BusinessStandard",
-    summary:
-      "CSB Bank shares increased by 3% following a strong business update for the first quarter of financial year 2026.This positive performance indicates that the bank is doing well, which can attract more investors and boost its stock price.It's like a restaurant getting great reviews; more customers are likely to visit and enjoy the food.",
-    tags: null,
-    title: "CSB Bank Shares Surge 3% After Q1 (First Quarter) Results",
-    url: "https://www.business-standard.com/markets/news/csb-bank-share-pops-3-on-healthy-q1-business-show-key-info-inside-125070300192_1.html",
+    impact_label: "High Impact",
+    reaction_stats: {
+      bullish: 0,
+      bearish: 0,
+      important: 0,
+      neutral: 0,
+    },
+    metadata: {
+      sentiment_label: "neutral",
+    },
+    scraped_at: {
+      $date: "2025-07-10T11:08:37.226Z",
+    },
+    ingestion_timestamp: {
+      $date: "2025-07-10T11:08:37.226Z",
+    },
+    source_url_fingerprint:
+      "www.moneycontrol.com/news/business/markets/crizac-shares-jump-5-newly-listed-stock-rallies-32-from-ipo-price-in-two-days-13256951.html",
+    confidence_score: 0.92,
+    analyzed_by: "gpt",
+    period: "1d",
+    tag: "bullish",
+    sector: "technology",
   };
+
   const comments = [
     {
       comment: "Impressive news",
@@ -209,6 +226,7 @@ const HeadlineDetailsScreen = () => {
     }
   };
   const handleToggleLike = () => {
+    console.log("inside handleToggleLike");
     setLiked((prev) => !prev);
     if (newsId) {
       toggleLikeAPI(newsId);
@@ -240,6 +258,7 @@ const HeadlineDetailsScreen = () => {
     }
   };
   const handleToggleBookmark = () => {
+    console.log("Inside handleToggleBookmark");
     setBookmarked((prev) => {
       const newStatus = !prev;
       if (newsId) {
@@ -252,11 +271,11 @@ const HeadlineDetailsScreen = () => {
       return newStatus;
     });
   };
-
   const handlePinNews = async (newsId: string) => {
+    console.log("Inside handlePinNews");
     try {
       const response = await pinNews(newsId);
-      console.log("PinNews=>", response.data);
+      console.log("PinNews=>", response.data.success);
       showToast(response.data.message, "success");
     } catch (err) {
       // Narrow / cast to AxiosError
@@ -270,9 +289,10 @@ const HeadlineDetailsScreen = () => {
     }
   };
   const handleUnPinNews = async (newsId: string) => {
+    console.log("Inside handleUnPinNews");
     try {
       const response = await unpinNews(newsId);
-      console.log("UninNews=>", response.data);
+      console.log("UninNews=>", response.data.success);
       showToast(response.data.message, "success");
     } catch (err) {
       // Narrow / cast to AxiosError
@@ -380,7 +400,11 @@ const HeadlineDetailsScreen = () => {
   };
   // if (loading) return <Loader />;
   // if (addCommentsLoader) return <LoaderOverlay visible={true} />;
-
+  // Split by \n
+  const summaryArray = newsData2.summary
+    .split("\n")
+    .map((p) => p.replace(/^•\s*/, "")) // Remove leading • and space if present
+    .filter((p) => p.trim() !== ""); // Remove empty lines
   return (
     <>
       <KeyboardAvoidingView
@@ -458,12 +482,6 @@ const HeadlineDetailsScreen = () => {
                 </View>
 
                 <View style={styles.profileNameContainer}>
-                  {/* <IncrementArrow width={16} height={16} /> */}
-                  {/* <View style={styles.impactLabel}>
-                    <Text style={styles.impactLabelText}>
-                      {newsData.impact_label} : {newsData.impact_score}
-                    </Text>
-                  </View> */}
                   <ImpactLabel
                     variant={"contained"}
                     label={newsData.impact_label}
@@ -476,27 +494,13 @@ const HeadlineDetailsScreen = () => {
             </View>
 
             <View style={styles.headingDetails}>
-              {/* {points?.map((point, index) => (
-                <View key={index} style={styles.listItem}>
-                  <Text style={styles.listIndex}>{index + 1}.</Text>
-                  <Text style={styles.listPoints}>{point}</Text>
-                </View>
-              ))} */}
-              <View style={styles.listItem}>
-                <Text style={styles.listIndex}>{1}.</Text>
-                <Text
-                  style={[
-                    styles.listPoints,
-                    {
-                      color:
-                        theme === "dark"
-                          ? colors.darkPrimaryText
-                          : colors.primaryText,
-                    },
-                  ]}
-                >
-                  {newsData.summary}
-                </Text>
+              <View>
+                {summaryArray.map((point, index) => (
+                  <View key={index} style={styles.listItem}>
+                    <Text style={styles.listIndex}>{index + 1}.</Text>
+                    <Text style={styles.listPoints}>{point}</Text>
+                  </View>
+                ))}
               </View>
             </View>
           </View>

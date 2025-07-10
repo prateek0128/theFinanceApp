@@ -33,6 +33,7 @@ import TabLabel from "../../../components/tabLabel/tabLabel";
 const { width, height } = Dimensions.get("window");
 type NewsItem = {
   id: string;
+  authors: string;
   title: string;
   summary: string;
   url: string;
@@ -162,7 +163,7 @@ const HomeScreen = () => {
             <DiscoverDetailsCard
               key={news.id}
               index={index}
-              authorName={""}
+              authorName={news.authors[0]}
               timeAgo={""}
               impactLabel={news.impact_label}
               impactScore={news.impact_score}

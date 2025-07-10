@@ -30,7 +30,7 @@ import {
 import { sendOTP } from "../../../apiServices/auth";
 import { AuthContext } from "../../../context/authContext";
 import { ThemeContext } from "../../../context/themeContext";
-import showToast from "../../../Utilis/showToast";
+import showToast from "../../../utilis/showToast";
 import { AxiosError } from "axios";
 const SignUpScreen = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);

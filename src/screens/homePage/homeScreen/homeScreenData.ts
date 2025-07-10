@@ -276,6 +276,7 @@ export const allNewsDiscover2 = [
 ];
 export const allNewsDiscover = [
   {
+    authors: ["BusinessStandard"],
     categories: null,
     engagement: { comments: 0, likes: 0 },
     id: "68670bd5753499b7e5d9c486",
@@ -293,6 +294,7 @@ export const allNewsDiscover = [
     url: "https://www.business-standard.com/markets/news/csb-bank-share-pops-3-on-healthy-q1-business-show-key-info-inside-125070300192_1.html",
   },
   {
+    authors: ["BusinessStandard"],
     categories: null,
     engagement: { comments: 0, likes: 0 },
     id: "68670bd5753499b7e5d9c475",
@@ -310,6 +312,7 @@ export const allNewsDiscover = [
     url: "https://www.business-standard.com/markets/news/stock-market-live-updates-july-3-nse-bse-sensex-today-nifty-s-125070300080_1.html",
   },
   {
+    authors: ["BusinessStandard"],
     categories: null,
     engagement: { comments: 0, likes: 0 },
     id: "68670bd5753499b7e5d9c487",
@@ -326,5 +329,23 @@ export const allNewsDiscover = [
     title:
       "HDFC (Housing Development Finance Corporation) Stocks Set for 14% Rally",
     url: "https://www.business-standard.com/markets/news/how-to-trade-hdfc-group-stocks-buy-sell-or-hold-here-s-what-charts-say-125070300189_1.html",
+  },
+  {
+    authors: ["BusinessStandard"],
+    categories: null,
+    engagement: { comments: 0, likes: 0 },
+    id: "68670bd5753499b7e5d9c47b",
+    impact_label: "Medium Impact",
+    impact_score: 5.5,
+    published_at: "2025-07-04T19:05:49.534Z",
+    reaction_stats: { bearish: 0, bullish: 0, important: 0, neutral: 0 },
+    related_stocks: null,
+    sentiment_score: -0.3136363636363636,
+    source: "BusinessStandard",
+    summary:
+      "Nykaa shares fell nearly 5 percent on Thursday after about 65.3 million shares changed hands in multiple block deals.This decline indicates that there may be significant selling pressure, which can negatively impact investor confidence in the company.It's like a popular store having a big sale; while some people might think it's a good deal, others worry about why so many items are being sold off at once.",
+    tags: null,
+    title: "Nykaa Shares Drop 5% After Trades",
+    url: "https://www.business-standard.com/markets/news/nykaa-shares-slide-5-per-cent-after-multiple-large-trades-check-likely-seller-here-125070300178_1.html",
   },
 ];

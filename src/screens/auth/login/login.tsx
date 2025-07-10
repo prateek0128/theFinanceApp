@@ -22,7 +22,7 @@ import { showMessage } from "react-native-flash-message";
 import InputTextField from "../../../components/inputTextField/inputTextField";
 import Button from "../../../components/button/button";
 import { verifyOTP, sendOTP } from "../../../apiServices/auth";
-import showToast from "../../../Utilis/showToast";
+import showToast from "../../../utilis/showToast";
 import { AuthContext } from "../../../context/authContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeContext } from "../../../context/themeContext";
