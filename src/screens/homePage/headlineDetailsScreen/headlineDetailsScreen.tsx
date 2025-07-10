@@ -471,13 +471,13 @@ const HeadlineDetailsScreen = () => {
                 <View style={styles.tagContainer}>
                   <Tag
                     label={"Market"}
-                    backgroundColor={"#D1FAE5"}
-                    textColor={"#047852"}
+                    backgroundColor={"#10B98126"}
+                    textColor={"#10B981"}
                   />
                   <Tag
                     label={"Bearish"}
-                    backgroundColor={"#FEE2E2"}
-                    textColor={"#DC2626"}
+                    backgroundColor={"#EF444426"}
+                    textColor={"#EF4444"}
                   />
                 </View>
 

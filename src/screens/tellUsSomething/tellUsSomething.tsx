@@ -6,6 +6,7 @@ import {
   Alert,
   Platform,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
@@ -14,39 +15,34 @@ import { colors } from "../../assets/styles/colors";
 import fontFamily from "../../assets/styles/fontFamily";
 import Button from "../../components/button/button";
 import { ThemeContext } from "../../context/themeContext";
-const TellUsSomething = () => {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const { theme, toggleTheme } = useContext(ThemeContext);
-  const [openRole, setOpenRole] = useState(false);
-  const [openGoal, setOpenGoal] = useState(false);
-  const [selectedWhoAreYou, setSelectedWhoAreYou] = useState("");
-  const [selectedGoal, setSelectedGoal] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
-
-  const handleSubmit = () => {
-    // navigation.navigate("NextScreen", { role: selectedOption1, goal: selectedOption2, category: selectedOption3 });
-    navigation.navigate("ChooseYourInterests");
-  };
-
-  const isFormValid = selectedWhoAreYou !== "" && selectedGoal !== "";
-  const roles = [
-    { label: "Select your role", value: "" },
-    { label: "Student", value: "student" },
-    { label: "Professional", value: "professional" },
-    { label: "Business Owner", value: "business_owner" },
-    { label: "Retired", value: "retired" },
-  ];
-  const goals = [
-    { label: "Select your goal", value: "" },
-    { label: "Long-term Investing", value: "long_term" },
-    { label: "Day Trading", value: "day_trading" },
-    { label: "Portfolio Tracking", value: "tracking" },
-    { label: "Market Research", value: "research" },
-  ];
-  return (
+const QuestionBlock = ({
+  title,
+  options,
+  selectedValue,
+  onSelect,
+  theme,
+}: {
+  title: string;
+  options: string[];
+  selectedValue: string;
+  onSelect: (value: string) => void;
+  theme: string;
+}) => (
+  <View style={styles.titleoptioncontainer}>
+    <Text
+      style={[
+        styles.title,
+        {
+          color:
+            theme === "dark" ? colors.darkPrimaryText : colors.quindenaryText,
+        },
+      ]}
+    >
+      {title}
+    </Text>
     <View
       style={[
-        styles.container,
+        styles.optionsWrapper,
         {
           backgroundColor:
             theme === "dark"
@@ -55,117 +51,190 @@ const TellUsSomething = () => {
         },
       ]}
     >
-      <Text
+      {options.map((option, index) => {
+        const value = option;
+        const isSelected = selectedValue === value;
+
+        return (
+          <TouchableOpacity
+            key={value}
+            onPress={() => onSelect(value)}
+            style={[
+              styles.optionBox,
+              {
+                backgroundColor:
+                  theme === "light"
+                    ? isSelected
+                      ? "#BFDBFE"
+                      : colors.primaryBackground
+                    : isSelected
+                    ? colors.darkSenaryBackground
+                    : colors.undenaryBackground,
+                borderColor: isSelected ? "#1D4ED8" : colors.quinaryBorderColor,
+              },
+            ]}
+          >
+            <Text
+              style={{
+                color:
+                  theme === "light"
+                    ? isSelected
+                      ? "#1D4ED8"
+                      : colors.undenaryBackground
+                    : isSelected
+                    ? "#1D4ED8"
+                    : colors.white,
+                fontFamily: fontFamily.Satoshi500,
+                fontSize: 16,
+              }}
+            >
+              {option}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  </View>
+);
+
+const TellUsSomething = () => {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const { theme, toggleTheme } = useContext(ThemeContext);
+  const [openRole, setOpenRole] = useState(false);
+  const [openGoal, setOpenGoal] = useState(false);
+  const [selectedWhoAreYou, setSelectedWhoAreYou] = useState("");
+  const [selectedGoal, setSelectedGoal] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [showSecondQuestion, setShowSecondQuestion] = useState(false);
+
+  const handleSubmit = () => {
+    // navigation.navigate("NextScreen", { role: selectedOption1, goal: selectedOption2, category: selectedOption3 });
+    navigation.navigate("ChooseYourInterests");
+  };
+
+  const roles = [
+    "Select your role",
+    "Student",
+    "Professional",
+    "Business Owner",
+    "Retired",
+  ];
+  const goals = [
+    "Select your goal",
+    "Long-term Investing",
+    "Day Trading",
+    "Portfolio Tracking",
+    "Market Research",
+  ];
+  const isFormValid = showSecondQuestion
+    ? selectedGoal !== ""
+    : selectedWhoAreYou !== "";
+
+  const handleNextOrSubmit = () => {
+    if (!showSecondQuestion) {
+      setShowSecondQuestion(true);
+    } else {
+      handleSubmit();
+    }
+  };
+  return (
+    <ScrollView
+      contentContainerStyle={{ flex: 1 }}
+      showsVerticalScrollIndicator={false}
+      keyboardShouldPersistTaps="handled"
+    >
+      <View
         style={[
-          styles.title,
+          styles.container,
           {
-            color:
-              theme === "dark" ? colors.darkPrimaryText : colors.quindenaryText,
+            backgroundColor:
+              theme === "dark"
+                ? colors.darkPrimaryBackground
+                : colors.primaryBackground,
           },
         ]}
       >
-        Tell Us Something About Yourself
-      </Text>
-      <View style={styles.dropdownContainer}>
-        <Text
-          style={[
-            styles.label,
-            {
-              color:
-                theme === "dark"
-                  ? colors.darkPrimaryText
-                  : colors.undenaryBackground,
-            },
-          ]}
-        >
-          What is your Role ?
-        </Text>
-        <View style={styles.pickerWrapper}>
-          <Picker
-            selectedValue={selectedWhoAreYou}
-            onValueChange={(itemValue) => {
-              setSelectedWhoAreYou(itemValue);
-              setSelectedGoal(""); // Reset dependent fields
-              setSelectedCategory("");
-            }}
-            style={[
-              styles.picker,
-              {
-                color:
-                  theme === "dark"
-                    ? colors.darkPrimaryText
-                    : colors.undenaryBackground,
-              },
-            ]}
-            dropdownIconColor={
-              theme === "dark"
-                ? colors.darkPrimaryText
-                : colors.undenaryBackground
-            }
-          >
-            {roles.map((role) => (
-              <Picker.Item
-                key={role.value}
-                label={role.label}
-                value={role.value}
-              />
-            ))}
-          </Picker>
-        </View>
-      </View>
-
-      <View style={styles.dropdownContainer}>
-        <Text
-          style={[
-            styles.label,
-            {
-              color:
-                theme === "dark"
-                  ? colors.darkPrimaryText
-                  : colors.undenaryBackground,
-            },
-          ]}
-        >
-          What is your goal for using this app
-        </Text>
         <View
           style={[
-            styles.pickerWrapper,
-            !selectedWhoAreYou && styles.disabledPicker,
+            styles.questioncontainer,
+            {
+              backgroundColor:
+                theme === "dark"
+                  ? colors.darkPrimaryBackground
+                  : colors.primaryBackground,
+            },
           ]}
         >
-          <Picker
-            selectedValue={selectedGoal}
-            onValueChange={(itemValue) => {
-              setSelectedGoal(itemValue);
-              setSelectedCategory(""); // Reset dependent field
-            }}
-            enabled={!!selectedWhoAreYou}
-            style={[
-              styles.picker,
-              {
-                color:
-                  theme === "dark"
-                    ? colors.darkPrimaryText
-                    : colors.undenaryBackground,
-              },
-            ]}
-            dropdownIconColor={
-              theme === "dark"
-                ? colors.darkPrimaryText
-                : colors.undenaryBackground
-            }
-          >
-            <Picker.Item label="Select your goal" value="" />
-            <Picker.Item label="Long-term Investing" value="long_term" />
-            <Picker.Item label="Day Trading" value="day_trading" />
-            <Picker.Item label="Portfolio Tracking" value="tracking" />
-            <Picker.Item label="Market Research" value="research" />
-          </Picker>
+          <View style={styles.questionText}>
+            {showSecondQuestion && (
+              <TouchableOpacity
+                onPress={() => {
+                  // Go back to Question 1
+                  setShowSecondQuestion(false);
+                  setSelectedGoal(""); // Optional: reset second selection
+                }}
+                style={styles.backButton}
+              >
+                {/* Replace this with your icon or SVG */}
+                <Text
+                  style={[
+                    styles.backButtonText,
+                    {
+                      color:
+                        theme === "dark"
+                          ? colors.darkPrimaryText
+                          : colors.primaryText,
+                    },
+                  ]}
+                >
+                  ←
+                </Text>
+              </TouchableOpacity>
+            )}
+            <Text
+              style={[
+                styles.questionText,
+                {
+                  color:
+                    theme === "dark"
+                      ? colors.darkPrimaryText
+                      : colors.primaryText,
+                },
+              ]}
+            >
+              {showSecondQuestion ? "Question 2 of 2" : "Question 1 of 2"}
+            </Text>
+          </View>
         </View>
+
+        {!showSecondQuestion && (
+          <QuestionBlock
+            title="What is your Role"
+            options={roles}
+            selectedValue={selectedWhoAreYou}
+            onSelect={setSelectedWhoAreYou}
+            theme={theme}
+          />
+        )}
+
+        {showSecondQuestion && (
+          <QuestionBlock
+            title="What is your Goal for Using this App"
+            options={goals}
+            selectedValue={selectedGoal}
+            onSelect={setSelectedGoal}
+            theme={theme}
+          />
+        )}
+
+        <Button
+          title={showSecondQuestion ? "Submit" : "Next"}
+          onPress={handleNextOrSubmit}
+          disabled={!isFormValid}
+          buttonStyle={styles.submitButton}
+        />
       </View>
-      <Button title={"Submit"} onPress={handleSubmit} disabled={!isFormValid} />
-    </View>
+    </ScrollView>
   );
 };
 
@@ -176,66 +245,46 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: colors.primaryBackground,
-    justifyContent: "center",
+    //justifyContent: "center",
   },
   title: {
     fontSize: 32,
-    marginBottom: 32,
     textAlign: "center",
     fontFamily: fontFamily.Cabinet700,
     color: colors.quindenaryText,
   },
-  dropdownContainer: {
-    borderRadius: 100,
-    padding: 6,
-    marginBottom: 40,
-    gap: 10,
-  },
-  label: {
-    fontSize: 20,
-    fontFamily: fontFamily.Cabinet700,
-    color: colors.undenaryBackground,
-  },
-  pickerWrapper: {
-    borderWidth: 0,
-    borderColor: colors.quinaryBorderColor,
-    borderRadius: 100,
-    gap: 10,
-    backgroundColor: colors.darkSenaryBackground,
-  },
-  picker: {
-    height: 50,
-    width: "100%",
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    fontSize: 14,
-    fontFamily: fontFamily.Satoshi500,
-    color: colors.undenaryBackground,
-  },
-  disabledPicker: {
-    opacity: 0.5,
-  },
-  buttonContainer: {
-    marginTop: 100,
+  titleoptioncontainer: {
+    gap: 27,
   },
   submitButton: {
-    backgroundColor: colors.quindenaryBackground,
+    position: "absolute",
+    bottom: 60,
+    left: 20,
+    width: "100%",
+  },
+  optionsWrapper: {
+    flexDirection: "column", // use "row" if you want them side by side
+    gap: 12,
+    marginBottom: 200,
+  },
+  optionBox: {
     paddingVertical: 14,
-    borderRadius: 100,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 3,
+    paddingHorizontal: 16,
+    borderRadius: 12,
+    borderWidth: 1,
   },
-  submitButtonDisabled: {
-    backgroundColor: "#ccc",
+  questioncontainer: {
+    flexDirection: "column", // use "row" if you want them side by side
+    gap: 12,
+    marginTop: 50,
+    marginBottom: 60,
   },
-  submitButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "600",
+  questionText: {
+    flexDirection: "row",
+    gap: 6,
   },
+  backButton: {
+    gap: 6,
+  },
+  backButtonText: {},
 });

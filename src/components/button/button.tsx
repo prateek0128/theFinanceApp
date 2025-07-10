@@ -11,13 +11,13 @@ import { colors } from "../../assets/styles/colors";
 import fontFamily from "../../assets/styles/fontFamily";
 import { ThemeContext } from "../../context/themeContext";
 
-interface ButtonProps {
+type ButtonProps = {
   title: string;
   onPress: () => void;
   disabled?: boolean;
-  buttonStyle?: StyleProp<ViewStyle>;
-  textStyle?: StyleProp<TextStyle>;
-}
+  buttonStyle?: ViewStyle | ViewStyle[]; // for TouchableOpacity
+  textStyle?: TextStyle | TextStyle[]; // for Text
+};
 
 const Button: React.FC<ButtonProps> = ({
   title,
@@ -32,16 +32,20 @@ const Button: React.FC<ButtonProps> = ({
     <TouchableOpacity
       onPress={onPress}
       disabled={disabled}
-      style={[styles.button, disabled && styles.disabledButton, buttonStyle]}
+      style={[
+        styles.button,
+        disabled && styles.disabledButton,
+        buttonStyle, // allows caller to override/add styles
+      ]}
     >
       <Text
         style={[
           styles.buttonText,
-          textStyle,
           {
             color:
               theme === "dark" ? colors.darkPrimaryText : colors.nonaryText,
           },
+          textStyle, // allows caller to override/add styles
         ]}
       >
         {title}
