@@ -11,7 +11,7 @@ const TabLabel = ({ label, selected, onPress }: any) => {
           {
             backgroundColor: selected
               ? colors.quindenaryBackground // active color
-              : colors.quattuordenaryBackground, // default color
+              : colors.darkSenaryBackground, // default color
           },
         ]}
       >
@@ -21,7 +21,7 @@ const TabLabel = ({ label, selected, onPress }: any) => {
             {
               color: selected
                 ? colors.darkSecondaryText // active text color
-                : colors.quattuordenaryText, // default text color
+                : colors.darkSecondaryText, // default text color
             },
           ]}
         >

@@ -3,12 +3,13 @@ import { apiClient } from "./apiUtility";
 // Send OTP
 export const sendOTP = async (sendOTPData: any) => {
   const client = await apiClient();
-  try {
+  // try {
     const response = await client.post("/auth/send-otp", sendOTPData);
     return response;
-  } catch (error) {
-    throw error;
-  }
+  // } catch (error) {
+  //   console.log("otp error axios",error)
+  //   throw error;
+  // }
 };
 
 // Verify OTP

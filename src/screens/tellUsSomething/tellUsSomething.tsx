@@ -186,6 +186,8 @@ const styles = StyleSheet.create({
     color: colors.quindenaryText,
   },
   dropdownContainer: {
+    borderRadius: 100,
+    padding: 6,
     marginBottom: 40,
     gap: 10,
   },
@@ -195,10 +197,11 @@ const styles = StyleSheet.create({
     color: colors.undenaryBackground,
   },
   pickerWrapper: {
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: colors.quinaryBorderColor,
-    borderRadius: 8,
+    borderRadius: 100,
     gap: 10,
+    backgroundColor: colors.darkSenaryBackground,
   },
   picker: {
     height: 50,
@@ -216,7 +219,7 @@ const styles = StyleSheet.create({
     marginTop: 100,
   },
   submitButton: {
-    backgroundColor: colors.primaryButtonColor,
+    backgroundColor: colors.quindenaryBackground,
     paddingVertical: 14,
     borderRadius: 100,
     alignItems: "center",
