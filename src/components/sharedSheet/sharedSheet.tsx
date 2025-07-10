@@ -11,7 +11,7 @@ import {
   Linking,
   Alert,
 } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 interface Props {
   visible: boolean;

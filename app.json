@@ -2,6 +2,7 @@
   "expo": {
     "name": "FinSimply",
     "slug": "finsimply",
+    "owner": "prateek2812",
     "scheme": "finsimply",
     "platforms": ["ios", "android", "web"],
     "runtimeVersion": {

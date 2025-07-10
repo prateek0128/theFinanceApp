@@ -17,7 +17,7 @@ import globalStyles from "../../../assets/styles/globalStyles";
 import fontFamily from "../../../assets/styles/fontFamily";
 import SocialLoginButton from "../../../components/socialLoginButton/socialLoginButton";
 import { TextInput as RNTextInput } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { showMessage } from "react-native-flash-message";
 import InputTextField from "../../../components/inputTextField/inputTextField";
 import Button from "../../../components/button/button";
