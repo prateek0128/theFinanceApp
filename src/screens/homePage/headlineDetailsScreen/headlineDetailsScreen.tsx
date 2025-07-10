@@ -378,17 +378,18 @@ const HeadlineDetailsScreen = () => {
       return `${diffInDays}d`;
     }
   };
-  if (loading) return <Loader />;
-  if (addCommentsLoader) return <LoaderOverlay visible={true} />;
+  // if (loading) return <Loader />;
+  // if (addCommentsLoader) return <LoaderOverlay visible={true} />;
 
   return (
     <>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
-        //keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0} // tweak this if needed
+        keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0} // tweak this if needed
       >
         <ScrollView
+          keyboardShouldPersistTaps="handled"
           contentContainerStyle={[
             styles.container,
             {
@@ -613,6 +614,10 @@ const HeadlineDetailsScreen = () => {
             <TouchableOpacity
               onPress={() => {
                 addCommentsAPI(newsId);
+              }}
+              disabled={comment.trim() === ""}
+              style={{
+                opacity: comment.trim() === "" ? 0.4 : 1,
               }}
             >
               <View
