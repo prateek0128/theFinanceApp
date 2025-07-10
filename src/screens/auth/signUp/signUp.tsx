@@ -30,6 +30,8 @@ import {
 import { sendOTP } from "../../../apiServices/auth";
 import { AuthContext } from "../../../context/authContext";
 import { ThemeContext } from "../../../context/themeContext";
+import showToast from "../../../Utilis/showToast";
+import { AxiosError } from "axios";
 const SignUpScreen = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -44,21 +46,11 @@ const SignUpScreen = () => {
 
   const handleSendOTP = async () => {
     if (input.trim() === "") {
-      showMessage({
-        message: "Please enter your phone or email.",
-        type: "success", // can be "danger", "info", "warning"
-        backgroundColor: colors.primary, // optional: customize color
-        color: "#fff", // text color
-      });
+      showToast("Please enter your phone or email.", "warning");
       return;
     }
     if (!isValid) {
-      showMessage({
-        message: "Please enter a valid phone number or email.",
-        type: "danger", // can be "danger", "info", "warning"
-        backgroundColor: colors.primary, // optional: customize color
-        color: "#fff", // text color
-      });
+      showToast("Please enter a valid phone number or email.", "warning");
       return;
     }
     setShowOTPInputs(true); // Show OTP inputs
@@ -72,26 +64,23 @@ const SignUpScreen = () => {
     };
     try {
       const response = await sendOTP(otpData);
-      console.log("OTPResponse", response);
-      showMessage({
-        message: "OTP sent",
-        description: `We’ve sent it to your phone number`,
-        type: "success",
-        backgroundColor: colors.primary,
-        color: "#fff",
-      });
-    } catch (e) {
-      console.log(e);
+      console.log("OTPResponse", response.data.message);
+      showToast(response.data.message, "success");
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      console.log("OTP Error:", errorMessage);
+      showToast(errorMessage, "danger");
     }
   };
   const handleSignUp = async () => {
     if (otp.some((digit) => digit === "")) {
-      showMessage({
-        message: "Please enter all OTP digits.",
-        type: "danger", // can be "danger", "info", "warning"
-        backgroundColor: colors.primary, // optional: customize color
-        color: "#fff", // text color
-      });
+      showToast("Please enter all OTP digits.", "warning");
       return;
     }
     const loginData = {
@@ -101,21 +90,18 @@ const SignUpScreen = () => {
     };
     try {
       await login(loginData); // if OTP is invalid, this will throw
-      navigation.navigate("TellUsSomething");
-      showMessage({
-        message: "OTP verified successfully!",
-        type: "success",
-        backgroundColor: colors.primary,
-        color: "#fff",
-      });
-    } catch (e) {
-      console.log(e);
-      showMessage({
-        message: "Failed to verify OTP. Please try again.",
-        type: "danger",
-        backgroundColor: colors.primary,
-        color: "#fff",
-      });
+      navigation.navigate("TellUsSomething", {});
+      showToast("OTP verified successfully!", "warning");
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      console.log("OTP Error:", errorMessage);
+      showToast(errorMessage, "danger");
     }
   };
   const handleOTPChange = (index: number, value: string) => {

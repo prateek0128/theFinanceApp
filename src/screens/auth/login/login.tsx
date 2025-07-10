@@ -22,10 +22,11 @@ import { showMessage } from "react-native-flash-message";
 import InputTextField from "../../../components/inputTextField/inputTextField";
 import Button from "../../../components/button/button";
 import { verifyOTP, sendOTP } from "../../../apiServices/auth";
+import showToast from "../../../Utilis/showToast";
 import { AuthContext } from "../../../context/authContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeContext } from "../../../context/themeContext";
-
+import axios, { AxiosError } from "axios";
 const LoginScreen = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const { user, isLoggedIn, login, logout, isLoading } =
@@ -40,21 +41,11 @@ const LoginScreen = () => {
 
   const handleSendOTP = async () => {
     if (input.trim() === "") {
-      showMessage({
-        message: "Please enter your phone or email.",
-        type: "success",
-        backgroundColor: colors.primary,
-        color: "#fff",
-      });
+      showToast("Please enter your phone or email.", "warning");
       return;
     }
     if (!isValid) {
-      showMessage({
-        message: "Please enter a valid phone number or email.",
-        type: "danger",
-        backgroundColor: colors.primary,
-        color: "#fff",
-      });
+      showToast("Please enter a valid phone number or email.", "warning");
       return;
     }
     setShowOTPInputs(true); // Show OTP inputs
@@ -65,51 +56,25 @@ const LoginScreen = () => {
     console.log("otpData", otpData);
     try {
       const response = await sendOTP(otpData);
-      console.log("OTPResponse", response);
-
-      if (Platform.OS === "android") {
-        // Small, bottom‑area toast
-        ToastAndroid.showWithGravity(
-          "OTP sent successfully",
-          ToastAndroid.SHORT, // or ToastAndroid.LONG
-          ToastAndroid.BOTTOM // BOTTOM / CENTER / TOP
-        );
-      } else {
-        // iOS (or web) fallback – your existing flash‑message
-        showMessage({
-          message: "OTP sent",
-          description: "OTP sent successfully",
-          type: "success",
-          backgroundColor: colors.primary,
-          color: "#fff",
-        });
-      }
-    } catch (e) {
-      console.log(e);
-
-      if (Platform.OS === "android") {
-        ToastAndroid.showWithGravity(
-          "OTP sent succesfully",
-          ToastAndroid.SHORT,
-          ToastAndroid.BOTTOM
-        );
-      } else {
-        showMessage({
-          message: "Error",
-          description: "Failed to send OTP",
-          type: "danger",
-        });
-      }
+      console.log("OTPResponse", response.data);
+      console.log("OTPResponseMessage", response.data.message);
+      showToast(response.data.message, "success");
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      console.log("OTP Error:", errorMessage);
+      showToast(errorMessage, "danger");
     }
   };
+
   const handleVerifyOTP = async () => {
     if (otp.some((digit) => digit === "")) {
-      showMessage({
-        message: "Please enter all OTP digits.",
-        type: "danger",
-        backgroundColor: colors.primary,
-        color: "#fff",
-      });
+      showToast("Please enter all OTP digits.", "warning");
       return;
     }
     const loginData = {
@@ -119,42 +84,18 @@ const LoginScreen = () => {
     };
     try {
       await login(loginData); // throws if OTP invalid
-
       navigation.navigate("ChooseYourInterests");
-
-      if (Platform.OS === "android") {
-        // ✅ Android toast
-        ToastAndroid.showWithGravity(
-          "OTP verified successfully!",
-          ToastAndroid.SHORT,
-          ToastAndroid.BOTTOM
-        );
-      } else {
-        // ✅ iOS / web (keeps your flash‑message)
-        showMessage({
-          message: "OTP verified successfully!",
-          type: "success",
-          backgroundColor: colors.primary,
-          color: "#fff",
-        });
-      }
-    } catch (e) {
-      console.log(e);
-
-      if (Platform.OS === "android") {
-        ToastAndroid.showWithGravity(
-          "Failed to verify OTP. Please try again.",
-          ToastAndroid.SHORT,
-          ToastAndroid.BOTTOM
-        );
-      } else {
-        showMessage({
-          message: "Failed to verify OTP. Please try again.",
-          type: "danger",
-          backgroundColor: colors.primary,
-          color: "#fff",
-        });
-      }
+      showToast("OTP verified successfully!", "success");
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      console.log("OTP Error:", errorMessage);
+      showToast(errorMessage, "danger");
     }
   };
   const handleOTPChange = (index: number, value: string) => {
@@ -173,7 +114,6 @@ const LoginScreen = () => {
       otpInputs.current[index - 1]?.focus();
     }
   };
-  // 👇🏼 1) keep your existing validateInput
   const validateInput = (text: string) => {
     const isNumeric = /^\d+$/.test(text);
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
