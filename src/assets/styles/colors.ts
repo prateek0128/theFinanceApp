@@ -77,6 +77,7 @@ export const colors = {
   septnaryBorderColor: "#1D4ED8",
   //Button Colors
   primaryButtonColor: "#007AFF",
+  secondaryButtonColor: "#2B22E2",
 
   //startScreen
   blueCard: "#CDE3F3",
