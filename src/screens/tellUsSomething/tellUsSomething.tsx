@@ -21,11 +21,13 @@ const QuestionBlock = ({
   selectedValue,
   onSelect,
   theme,
+  message,
 }: {
   title: string;
   options: string[];
   selectedValue: string;
   onSelect: (value: string) => void;
+  message: string;
   theme: string;
 }) => (
   <View style={styles.titleoptioncontainer}>
@@ -39,6 +41,16 @@ const QuestionBlock = ({
       ]}
     >
       {title}
+    </Text>
+    <Text
+      style={[
+        "",
+        {
+          color: theme === "dark" ? colors.darkPrimaryText : colors.primaryText,
+        },
+      ]}
+    >
+      {message}
     </Text>
     <View
       style={[
@@ -112,15 +124,8 @@ const TellUsSomething = () => {
     navigation.navigate("ChooseYourInterests");
   };
 
-  const roles = [
-    "Select your role",
-    "Student",
-    "Professional",
-    "Business Owner",
-    "Retired",
-  ];
+  const roles = ["Student", "Professional", "Business Owner", "Retired"];
   const goals = [
-    "Select your goal",
     "Long-term Investing",
     "Day Trading",
     "Portfolio Tracking",
@@ -210,6 +215,7 @@ const TellUsSomething = () => {
         {!showSecondQuestion && (
           <QuestionBlock
             title="What is your Role"
+            message="Choose Your Role"
             options={roles}
             selectedValue={selectedWhoAreYou}
             onSelect={setSelectedWhoAreYou}
@@ -220,6 +226,7 @@ const TellUsSomething = () => {
         {showSecondQuestion && (
           <QuestionBlock
             title="What is your Goal for Using this App"
+            message="Choose your goal"
             options={goals}
             selectedValue={selectedGoal}
             onSelect={setSelectedGoal}
