@@ -407,107 +407,51 @@ const HeadlineDetailsScreen = () => {
     .filter((p) => p.trim() !== ""); // Remove empty lines
   return (
     <>
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0} // tweak this if needed
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={[
+          styles.container,
+          {
+            backgroundColor:
+              theme === "dark"
+                ? colors.darkPrimaryBackground
+                : colors.primaryBackground,
+          },
+        ]}
       >
-        <ScrollView
-          keyboardShouldPersistTaps="handled"
-          contentContainerStyle={[
-            styles.container,
-            {
-              backgroundColor:
-                theme === "dark"
-                  ? colors.darkPrimaryBackground
-                  : colors.primaryBackground,
-            },
-          ]}
-        >
-          <View style={styles.headerContainer}>
-            <Header
-              onBackClick={() => navigation.navigate("Home")}
-              liked={liked}
-              setLiked={setLiked}
-              bookmarked={bookmarked}
-              setBookmarked={setBookmarked}
-              onToggleLikeClick={handleToggleLike}
-              shareUrl={newsData.url}
-              onToggleBookmarkClick={handleToggleBookmark}
+        <View style={styles.headerContainer}>
+          <Header
+            onBackClick={() => navigation.navigate("Home")}
+            liked={liked}
+            setLiked={setLiked}
+            bookmarked={bookmarked}
+            setBookmarked={setBookmarked}
+            onToggleLikeClick={handleToggleLike}
+            shareUrl={newsData.url}
+            onToggleBookmarkClick={handleToggleBookmark}
+          />
+        </View>
+        <View style={styles.headingDetailsContainer}>
+          <View
+            style={{
+              width: "100%",
+              marginTop: 16,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {/* {renderImage()} */}
+            <ClippedSVG
+              width={width * 0.89}
+              height={200}
+              radius={16}
+              ImageComponent={CurrencyImage2}
             />
           </View>
-          <View style={styles.headingDetailsContainer}>
-            <View
-              style={{
-                width: "100%",
-                marginTop: 16,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              {/* {renderImage()} */}
-              <ClippedSVG
-                width={width * 0.89}
-                height={200}
-                radius={16}
-                ImageComponent={CurrencyImage2}
-              />
-            </View>
-            <View style={styles.headingContainer}>
-              <Text
-                style={[
-                  styles.articleDetailsHeading,
-                  {
-                    color:
-                      theme === "dark"
-                        ? colors.darkPrimaryText
-                        : colors.primaryText,
-                  },
-                ]}
-              >
-                {newsData.title}
-              </Text>
-              <View style={styles.detailsHeader}>
-                <View style={styles.tagContainer}>
-                  <Tag
-                    label={"Market"}
-                    backgroundColor={"#10B98126"}
-                    textColor={"#10B981"}
-                  />
-                  <Tag
-                    label={"Bearish"}
-                    backgroundColor={"#EF444426"}
-                    textColor={"#EF4444"}
-                  />
-                </View>
-
-                <View style={styles.profileNameContainer}>
-                  <ImpactLabel
-                    variant={"contained"}
-                    label={newsData.impact_label}
-                    value={newsData.impact_score}
-                    backgroundColor={colors.quindenaryBackground}
-                    textColor={colors.quattuordenaryBackground}
-                  />
-                </View>
-              </View>
-            </View>
-
-            <View style={styles.headingDetails}>
-              <View>
-                {summaryArray.map((point, index) => (
-                  <View key={index} style={styles.listItem}>
-                    <Text style={styles.listIndex}>{index + 1}.</Text>
-                    <Text style={styles.listPoints}>{point}</Text>
-                  </View>
-                ))}
-              </View>
-            </View>
-          </View>
-          <View style={styles.relatedDiscussionsContainer}>
+          <View style={styles.headingContainer}>
             <Text
               style={[
-                styles.relatedDiscussionsHeading,
+                styles.articleDetailsHeading,
                 {
                   color:
                     theme === "dark"
@@ -516,62 +460,113 @@ const HeadlineDetailsScreen = () => {
                 },
               ]}
             >
-              Related Discussions
+              {newsData.title}
             </Text>
-            <View style={styles.relatedDiscussionsDetails}>
-              {Array.isArray(comments) &&
-                comments.map((comment) => (
-                  <View
-                    key={comment.id}
-                    style={styles.relatedDiscussionsArticle}
-                  >
-                    {
-                      //@ts-ignore
-                      getProfileIcon("male")
-                    }
-                    <View style={{ flex: 1 }}>
-                      <View style={styles.relatedDiscussionsArticle}>
-                        <Text
-                          style={[
-                            styles.authorName,
-                            {
-                              color:
-                                theme === "dark"
-                                  ? colors.darkPrimaryText
-                                  : colors.senaryText,
-                            },
-                          ]}
-                        >
-                          {"--"}
-                        </Text>
-                        <Text style={styles.articleTime}>
-                          {getShortTimeAgo(comment.commented_at)}
-                        </Text>
-                      </View>
-                      <Text style={styles.relatedArticleText}>
-                        {comment.comment}
+            <View style={styles.detailsHeader}>
+              <View style={styles.tagContainer}>
+                <Tag
+                  label={"Market"}
+                  backgroundColor={"#10B98126"}
+                  textColor={"#10B981"}
+                />
+                <Tag
+                  label={"Bearish"}
+                  backgroundColor={"#EF444426"}
+                  textColor={"#EF4444"}
+                />
+              </View>
+
+              <View style={styles.profileNameContainer}>
+                <ImpactLabel
+                  variant={"contained"}
+                  label={newsData.impact_label}
+                  value={newsData.impact_score}
+                  backgroundColor={colors.quindenaryBackground}
+                  textColor={colors.quattuordenaryBackground}
+                />
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.headingDetails}>
+            <View>
+              {summaryArray.map((point, index) => (
+                <View key={index} style={styles.listItem}>
+                  <Text style={styles.listIndex}>{index + 1}.</Text>
+                  <Text style={styles.listPoints}>{point}</Text>
+                </View>
+              ))}
+            </View>
+          </View>
+        </View>
+        <View style={styles.relatedDiscussionsContainer}>
+          <Text
+            style={[
+              styles.relatedDiscussionsHeading,
+              {
+                color:
+                  theme === "dark"
+                    ? colors.darkPrimaryText
+                    : colors.primaryText,
+              },
+            ]}
+          >
+            Related Discussions
+          </Text>
+          <View style={styles.relatedDiscussionsDetails}>
+            {Array.isArray(comments) &&
+              comments.map((comment) => (
+                <View key={comment.id} style={styles.relatedDiscussionsArticle}>
+                  {
+                    //@ts-ignore
+                    getProfileIcon("male")
+                  }
+                  <View style={{ flex: 1 }}>
+                    <View style={styles.relatedDiscussionsArticle}>
+                      <Text
+                        style={[
+                          styles.authorName,
+                          {
+                            color:
+                              theme === "dark"
+                                ? colors.darkPrimaryText
+                                : colors.senaryText,
+                          },
+                        ]}
+                      >
+                        {"--"}
                       </Text>
-                      <View style={styles.likeUnlikeContainer}>
-                        <View style={styles.iconCountContainer}>
-                          <TouchableOpacity>
-                            <LikeCommentIcon width={20} height={20} />
-                          </TouchableOpacity>
-                          <Text style={styles.articleTime}>
-                            {comment.likes}
-                          </Text>
-                        </View>
-                        <View style={styles.iconCountContainer}>
-                          <TouchableOpacity>
-                            <UnlikeCommentIcon width={20} height={20} />
-                          </TouchableOpacity>
-                          <Text style={styles.articleTime}>{0}</Text>
-                        </View>
+                      <Text style={styles.articleTime}>
+                        {getShortTimeAgo(comment.commented_at)}
+                      </Text>
+                    </View>
+                    <Text style={styles.relatedArticleText}>
+                      {comment.comment}
+                    </Text>
+                    <View style={styles.likeUnlikeContainer}>
+                      <View style={styles.iconCountContainer}>
+                        <TouchableOpacity>
+                          <LikeCommentIcon width={20} height={20} />
+                        </TouchableOpacity>
+                        <Text style={styles.articleTime}>{comment.likes}</Text>
+                      </View>
+                      <View style={styles.iconCountContainer}>
+                        <TouchableOpacity>
+                          <UnlikeCommentIcon width={20} height={20} />
+                        </TouchableOpacity>
+                        <Text style={styles.articleTime}>{0}</Text>
                       </View>
                     </View>
                   </View>
-                ))}
-            </View>
+                </View>
+              ))}
           </View>
+        </View>
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0} // tweak this if needed
+        >
           <View
             style={[
               styles.commentContainer,
@@ -639,8 +634,8 @@ const HeadlineDetailsScreen = () => {
               </View>
             </TouchableOpacity>
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </ScrollView>
     </>
   );
 };

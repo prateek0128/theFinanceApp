@@ -1,26 +1,25 @@
 {
   "expo": {
-    "name": "FinSimply",
-    "slug": "finsimply",
+    "name": "MarketBriefs",
+    "slug": "marketBriefs",
     "owner": "prateek2812",
-    "scheme": "finsimply",
+    "scheme": "marketBriefs",
     "platforms": ["ios", "android", "web"],
     "runtimeVersion": {
       "policy": "appVersion"
     },
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "src/assets/FinSimplyLogo.png",
+    "icon": "src/assets/MarketBriefsLogo.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "src/assets/FinSimplyLogo.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "src/assets/MarketBriefsLogo.png",
+      "resizeMode": "contain"
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.prateek2812.finsimply",
+      "bundleIdentifier": "com.prateek2812.marketBriefs",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
         "LSApplicationQueriesSchemes": ["whatsapp", "instagram", "twitter"]
@@ -28,11 +27,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "src/assets/FinSimplyLogo.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "src/assets/MarketBriefsLogo.png"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.prateek2812.finsimply",
+      "package": "com.prateek2812.marketBriefs",
       "intentFilters": [],
       "manifest": {
         "queries": [
@@ -51,16 +49,6 @@
     "web": {
       "favicon": "src/assets/favicon.png"
     },
-    "plugins": ["expo-font", "expo-web-browser"],
-    "extra": {
-      "eas": {
-        "projectId": "5e5173ff-2eb6-4e34-8a24-40eef2afe9cb"
-      }
-    },
-    "updates": {
-      "enabled": true,
-      "fallbackToCacheTimeout": 0,
-      "url": "https://u.expo.dev/5e5173ff-2eb6-4e34-8a24-40eef2afe9cb"
-    }
+    "plugins": ["expo-font", "expo-web-browser"]
   }
 }
