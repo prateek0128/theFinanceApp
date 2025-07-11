@@ -65,7 +65,7 @@ const SignUpScreen = () => {
     try {
       const response = await sendOTP(otpData);
       console.log("OTPResponse", response.data.message);
-      showToast(response.data.message, "success");
+      showToast("OTP sent successfully to your email.", "success");
     } catch (err) {
       // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
@@ -187,7 +187,7 @@ const SignUpScreen = () => {
               },
             ]}
           >
-            Phone Number or Email
+            Email Address
           </Text>
           {showOTPInputs && (
             <TouchableOpacity onPress={handleEditPress}>
@@ -201,7 +201,7 @@ const SignUpScreen = () => {
           )}
         </View>
         <InputTextField
-          placeholder="TFA@application"
+          placeholder="Enter your email address"
           keyboardType="email-address"
           autoCapitalize="none"
           value={input}

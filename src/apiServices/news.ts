@@ -56,12 +56,10 @@ export const getHighImpactNews = async () => {
 };
 
 //Get High-Impact News with Source Filter
-export const getHighImpactNewsWithSourceFilter = async () => {
+export const getHighImpactNewsById = async (newsId: any) => {
   const client = await apiClient();
   try {
-    const response = await client.get(
-      `/news/high-impact?threshold=7.0&limit=10&source=BusinessStandard`
-    );
+    const response = await client.get(`/news/high-impact/${newsId}`);
     return response;
   } catch (error) {
     throw error;

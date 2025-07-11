@@ -14,9 +14,8 @@ import { RootStackParamList } from "../../../types/navigation";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import fontFamily from "../../../assets/styles/fontFamily";
 import axios from "axios";
-import { getNewsFeed } from "../../../apiServices/news";
+import { getHighImpactNews, getNewsFeed } from "../../../apiServices/news";
 import Loader from "../../../components/Loader/loader";
-import { cards, allNews, allNewsDiscover } from "./homeScreenData";
 import {
   GraphImage,
   IncrementArrow,
@@ -34,6 +33,7 @@ const { width, height } = Dimensions.get("window");
 type NewsItem = {
   id: string;
   authors: string;
+  time_ago: string;
   title: string;
   summary: string;
   url: string;
@@ -80,7 +80,7 @@ const HomeScreen = () => {
 
   const getAllNewsAPI = async () => {
     try {
-      const response = await getNewsFeed();
+      const response = await getHighImpactNews();
       console.log("newsResponse:", response.data);
       setAllNewsData(response.data);
     } catch (error) {
@@ -164,9 +164,11 @@ const HomeScreen = () => {
               key={news.id}
               index={index}
               authorName={news.authors[0]}
-              timeAgo={""}
+              timeAgo={news.time_ago}
               impactLabel={news.impact_label}
               impactScore={news.impact_score}
+              likes={news.engagement.likes}
+              comments={news.engagement.comments}
               heading={news.title}
               summary={news.summary}
               HeadlineImageComponent={GraphImage2}

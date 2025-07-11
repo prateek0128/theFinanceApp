@@ -28,6 +28,7 @@ import InterestsScreen from "../../screens/InterestsScreen/InterestsScreen";
 import { IntrestIcon } from "../../assets/icons/components/bottomNavigation";
 import { ThemeContext } from "../../context/themeContext";
 import { colors } from "../../assets/styles/colors";
+import ChooseYourInterests from "../../screens/chooseYourInterests/chooseYourInterests";
 const Tab = createBottomTabNavigator();
 const { width, height } = Dimensions.get("window");
 
@@ -48,7 +49,7 @@ export default function BottomTabNavigator() {
     },
     {
       name: "Interests",
-      component: InterestsScreen,
+      component: ChooseYourInterests,
       Icon: theme === "dark" ? IntrestIconWhite : IntrestIcon,
       FocusedIcon: theme === "dark" ? IntrestIconWhite : IntrestIcon,
     }, // No focused version provided

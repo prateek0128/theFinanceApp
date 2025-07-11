@@ -16,6 +16,7 @@ import { colors } from "../../assets/styles/colors";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "../../types/navigation";
 import fontFamily from "../../assets/styles/fontFamily";
+import { ScrollView } from "react-native-gesture-handler";
 const interests = [
   "Stock Market News",
   "Indian Companies",
@@ -95,51 +96,52 @@ export default function ChooseYourInterests() {
           Choose at least 5 fields
         </Text>
       </View>
-
-      <View style={styles.cardsContainer}>
-        {groupedInterests.map((group: any, rowIndex: any) => (
-          <View key={rowIndex} style={styles.cardRow}>
-            {group.map((item: any) => (
-              <TouchableOpacity
-                key={item}
-                onPress={() => toggleInterest(item)}
-                style={[
-                  styles.cardDimension,
-                  selected.includes(item) && styles.cardSelected,
-                  {
-                    backgroundColor: selected.includes(item)
-                      ? theme === "dark"
-                        ? colors.darkSeptenaryBackground
-                        : colors.splashBackground
-                      : theme === "dark"
-                      ? colors.darkSenaryBackground
-                      : colors.quaternaryBackground,
-                    borderColor:
-                      selected.includes(item) && theme === "dark"
-                        ? colors.quindenaryBackground
-                        : "transparent",
-                  },
-                ]}
-              >
-                <Text
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.cardsContainer}>
+          {groupedInterests.map((group: any, rowIndex: any) => (
+            <View key={rowIndex} style={styles.cardRow}>
+              {group.map((item: any) => (
+                <TouchableOpacity
+                  key={item}
+                  onPress={() => toggleInterest(item)}
                   style={[
-                    styles.cardText,
+                    styles.cardDimension,
+                    selected.includes(item) && styles.cardSelected,
                     {
-                      color:
-                        theme === "dark"
-                          ? colors.darkPrimaryText
-                          : colors.primaryText,
+                      backgroundColor: selected.includes(item)
+                        ? theme === "dark"
+                          ? colors.darkSeptenaryBackground
+                          : colors.splashBackground
+                        : theme === "dark"
+                        ? colors.darkSenaryBackground
+                        : colors.quaternaryBackground,
+                      borderColor:
+                        selected.includes(item) && theme === "dark"
+                          ? colors.quindenaryBackground
+                          : "transparent",
                     },
-                    selected.includes(item) && styles.cardNameSelected,
                   ]}
                 >
-                  {item}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        ))}
-      </View>
+                  <Text
+                    style={[
+                      styles.cardText,
+                      {
+                        color:
+                          theme === "dark"
+                            ? colors.darkPrimaryText
+                            : colors.primaryText,
+                      },
+                      selected.includes(item) && styles.cardNameSelected,
+                    ]}
+                  >
+                    {item}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          ))}
+        </View>
+      </ScrollView>
       <TouchableOpacity
         activeOpacity={0.8}
         style={[
@@ -207,6 +209,7 @@ const styles = StyleSheet.create({
   },
   headingContainer: {
     marginTop: 30,
+    paddingBottom: 10,
     alignItems: "flex-start",
     width: "100%",
   },
@@ -222,7 +225,7 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.Satoshi400,
   },
   cardsContainer: {
-    marginTop: 40,
+    marginTop: 20,
     // flexDirection: "row",
     rowGap: 12,
   },
@@ -254,8 +257,8 @@ const styles = StyleSheet.create({
     color: colors.primaryBackground, // darker/contrast text color
   },
   continueButton: {
-    marginTop: 30,
-    marginBottom: 40,
+    marginTop: 20,
+    marginBottom: 20,
     backgroundColor: colors.primaryText,
     paddingVertical: 10,
     paddingHorizontal: 24,
@@ -263,7 +266,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
   },
-
   continueText: {
     color: colors.tertiaryBackground,
     fontSize: 20,

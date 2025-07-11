@@ -15,6 +15,10 @@ import { colors } from "../../assets/styles/colors";
 import fontFamily from "../../assets/styles/fontFamily";
 import Button from "../../components/button/button";
 import { ThemeContext } from "../../context/themeContext";
+import {
+  BackArrowIcon,
+  BackArrowIconWhite,
+} from "../../assets/icons/components/header";
 const QuestionBlock = ({
   title,
   options,
@@ -107,11 +111,6 @@ const TellUsSomething = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [showSecondQuestion, setShowSecondQuestion] = useState(false);
 
-  const handleSubmit = () => {
-    // navigation.navigate("NextScreen", { role: selectedOption1, goal: selectedOption2, category: selectedOption3 });
-    navigation.navigate("ChooseYourInterests");
-  };
-
   const roles = [
     "Select your role",
     "Student",
@@ -134,7 +133,7 @@ const TellUsSomething = () => {
     if (!showSecondQuestion) {
       setShowSecondQuestion(true);
     } else {
-      handleSubmit();
+      navigation.navigate("ChooseYourInterests");
     }
   };
   return (
@@ -173,22 +172,14 @@ const TellUsSomething = () => {
                   setShowSecondQuestion(false);
                   setSelectedGoal(""); // Optional: reset second selection
                 }}
-                style={styles.backButton}
               >
-                {/* Replace this with your icon or SVG */}
-                <Text
-                  style={[
-                    styles.backButtonText,
-                    {
-                      color:
-                        theme === "dark"
-                          ? colors.darkPrimaryText
-                          : colors.primaryText,
-                    },
-                  ]}
-                >
-                  ←
-                </Text>
+                <View>
+                  {theme === "light" ? (
+                    <BackArrowIcon />
+                  ) : (
+                    <BackArrowIconWhite />
+                  )}
+                </View>
               </TouchableOpacity>
             )}
             <Text
@@ -281,10 +272,7 @@ const styles = StyleSheet.create({
   },
   questionText: {
     flexDirection: "row",
+    alignItems: "center",
     gap: 6,
   },
-  backButton: {
-    gap: 6,
-  },
-  backButtonText: {},
 });

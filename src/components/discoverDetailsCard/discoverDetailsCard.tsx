@@ -28,8 +28,8 @@ type DiscoverDetailsCardProps = {
   impactScore?: number | string;
   heading?: string;
   summary?: string;
-  viewValues?: number | any;
-  likeValues?: number | any;
+  likes?: number | any;
+  comments?: number | any;
   HeadlineImageComponent?: React.ComponentType<{
     width?: number;
     height?: any;
@@ -52,8 +52,8 @@ const DiscoverDetailsCard = ({
   impactScore,
   heading,
   summary,
-  viewValues,
-  likeValues,
+  likes,
+  comments,
   HeadlineImageComponent,
   ProfileIconComponent,
   ImpactIconComponent,
@@ -80,12 +80,12 @@ const DiscoverDetailsCard = ({
         <View style={styles.tagsContainer}>
           <View style={styles.marketTagsContainer}>
             <Tag
-              label={"Market"}
+              label={"Bearish"}
               backgroundColor={"#10B98126"}
               textColor={"#10B981"}
             />
             <Tag
-              label={"Bearish"}
+              label={"Bullish"}
               backgroundColor={"#EF444426"}
               textColor={"#EF4444"}
             />
@@ -163,11 +163,11 @@ const DiscoverDetailsCard = ({
           <View style={styles.viewLikesContainer}>
             <View style={styles.iconValueContainer}>
               <ViewIcon />
-              <Text style={styles.likeValues}>{viewValues || 0}</Text>
+              <Text style={styles.likeValues}>{comments || 0}</Text>
             </View>
             <View style={styles.iconValueContainer}>
               <DiscoverLikeIcon />
-              <Text style={styles.likeValues}>{likeValues || 0}</Text>
+              <Text style={styles.likeValues}>{likes || 0}</Text>
             </View>
           </View>
         </View>

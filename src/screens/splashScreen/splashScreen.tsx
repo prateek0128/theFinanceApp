@@ -22,8 +22,9 @@ const SplashScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>FinSimply</Text>
-      <Text style={styles.subtitle}>The Finance App</Text>
+      <Text style={styles.title}>Market</Text>
+      <Text style={styles.title}>Briefs</Text>
+      {/* <Text style={styles.subtitle}>The Finance App</Text> */}
     </View>
   );
 };
@@ -36,14 +37,14 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     gap: 10,
-    backgroundColor: colors.splashBackground,
+    backgroundColor: colors.white,
     paddingTop: 112,
   },
   title: {
     fontSize: 64,
     fontWeight: 700,
     textAlign: "center",
-    color: colors.white,
+    color: colors.black,
   },
   subtitle: {
     fontSize: 20,

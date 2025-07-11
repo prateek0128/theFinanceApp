@@ -13,7 +13,7 @@ import {
 import { colors } from "../../../assets/styles/colors";
 import Loader from "../../../components/Loader/loader";
 import { ThemeContext } from "../../../context/themeContext";
-import { getNewsFeed } from "../../../apiServices/news";
+import { getHighImpactNewsById, getNewsFeed } from "../../../apiServices/news";
 import LoaderOverlay from "../../../components/LoadOverlay/loadOverlayTransparent";
 import MarketTag from "../../../assets/icons/components/Market/marketTag";
 import {
@@ -88,6 +88,7 @@ interface NewsData {
   impact_score?: number;
   summary?: string;
   url?: string;
+  tag?: string;
 }
 const HeadlineDetailsScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -179,7 +180,29 @@ const HeadlineDetailsScreen = () => {
     tag: "bullish",
     sector: "technology",
   };
-
+  const newsData3 = {
+    authors: ["BusinessStandard"],
+    content: "",
+    date_extracted: false,
+    engagement: { comments: 0, likes: 0 },
+    id: "68670bd5753499b7e5d9c486",
+    impact_label: "High Impact",
+    impact_score: 7,
+    processed_by: "gpt",
+    published_at: "2025-07-04T19:05:49.534Z",
+    related_stocks: null,
+    sector: "banking",
+    sentiment_label: "neutral",
+    sentiment_score: 0.2575757575757576,
+    source: "BusinessStandard",
+    summary:
+      "CSB Bank shares increased by 3% following a strong business update for the first quarter of financial year 2026.This positive performance indicates that the bank is doing well, which can attract more investors and boost its stock price.It's like a restaurant getting great reviews; more customers are likely to visit and enjoy the food.",
+    tag: "bullish",
+    tags: null,
+    time_ago: "6 days ago",
+    title: "CSB Bank Shares Surge 3% After Q1 (First Quarter) Results",
+    url: "https://www.business-standard.com/markets/news/csb-bank-share-pops-3-on-healthy-q1-business-show-key-info-inside-125070300192_1.html",
+  };
   const comments = [
     {
       comment: "Impressive news",
@@ -263,9 +286,9 @@ const HeadlineDetailsScreen = () => {
       const newStatus = !prev;
       if (newsId) {
         if (newStatus) {
-          handlePinNews(newsId);
+          //handlePinNews(newsId);
         } else {
-          handleUnPinNews(newsId);
+          //handleUnPinNews(newsId);
         }
       }
       return newStatus;
@@ -357,7 +380,7 @@ const HeadlineDetailsScreen = () => {
   };
   const getNewsByIDAPI = async (newsId: string) => {
     try {
-      const response = await getNewsByID(newsId);
+      const response = await getHighImpactNewsById(newsId);
       console.log("newsResponseByID:", response.data);
       setNewsData(response.data);
     } catch (e) {
@@ -401,7 +424,7 @@ const HeadlineDetailsScreen = () => {
   // if (loading) return <Loader />;
   // if (addCommentsLoader) return <LoaderOverlay visible={true} />;
   // Split by \n
-  const summaryArray = newsData2.summary
+  const summaryArray = (newsData?.summary ?? "")
     .split("\n")
     .map((p) => p.replace(/^•\s*/, "")) // Remove leading • and space if present
     .filter((p) => p.trim() !== ""); // Remove empty lines
@@ -464,16 +487,21 @@ const HeadlineDetailsScreen = () => {
             </Text>
             <View style={styles.detailsHeader}>
               <View style={styles.tagContainer}>
-                <Tag
-                  label={"Market"}
-                  backgroundColor={"#10B98126"}
-                  textColor={"#10B981"}
-                />
-                <Tag
-                  label={"Bearish"}
-                  backgroundColor={"#EF444426"}
-                  textColor={"#EF4444"}
-                />
+                {newsData.tag == "bearish" ? (
+                  <Tag
+                    label={"Bearish"}
+                    backgroundColor={"#10B98126"}
+                    textColor={"#10B981"}
+                  />
+                ) : newsData.tag == "bullish" ? (
+                  <Tag
+                    label={"Bullish"}
+                    backgroundColor={"#EF444426"}
+                    textColor={"#EF4444"}
+                  />
+                ) : (
+                  ""
+                )}
               </View>
 
               <View style={styles.profileNameContainer}>
