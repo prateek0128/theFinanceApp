@@ -30,6 +30,7 @@ import { ThemeContext } from "../../../context/themeContext";
 import * as WebBrowser from "expo-web-browser";
 import * as AuthSession from "expo-auth-session";
 import * as Google from "expo-auth-session/providers/google";
+import { useFacebookLogin } from "../facebookLogIn/facebookLogIn";
 
 // Fix redirect on iOS
 WebBrowser.maybeCompleteAuthSession();
@@ -42,6 +43,7 @@ const BASE_URL = "http://localhost:8081";
 
 const WelcomeScreen = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
+  const { promptAsyncFacebook, responseFacebook } = useFacebookLogin();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   // generate correct redirect URI
   const redirectUri = AuthSession.makeRedirectUri({
@@ -86,6 +88,7 @@ const WelcomeScreen = () => {
         });
     }
   }, [response]);
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -153,7 +156,7 @@ const WelcomeScreen = () => {
           <SocialLoginButton
             IconComponent={FacebookIcon}
             text="Continue with Facebook"
-            onPress={() => console.log("Facebook pressed")}
+            onPress={() => promptAsyncFacebook()}
           />
         </View>
         {/* <View style={styles.orDivider}>

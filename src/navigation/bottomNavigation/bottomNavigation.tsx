@@ -5,18 +5,20 @@ import HomeScreen from "../../screens/homePage/homeScreen/homeScreen";
 import { useContext } from "react";
 import {
   HomeIcon,
-  HomeBlack,
-  HomeIconFilledWhite,
-  HomeIconIconWhite,
+  HomeIconBlue,
+  HomeIconPurple,
+  HomeIconWhite,
   NewsIcon,
-  NewsBlack,
-  MarketIcon,
-  CommunityIcon,
-  CommunityBlack,
-  ProfileIcon,
-  IntrestIconWhite,
-  NewsWhiteFilled,
+  NewsIconPurple,
+  NewsIconBlue,
   NewsIconWhite,
+  IntrestIcon,
+  IntrestIconWhite,
+  IntrestIconPurple,
+  IntrestIconBlue,
+  ProfileIcon,
+  ProfileIconPurple,
+  ProfileIconBlue,
   ProfileIconWhite,
 } from "../../assets/icons/components/bottomNavigation";
 import NewsScreen from "../../screens/newsScreen/newsScreen";
@@ -25,7 +27,6 @@ import fontFamily from "../../assets/styles/fontFamily";
 import HomeScreenStack from "../homeScreenStack/homeScreenStack";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import InterestsScreen from "../../screens/InterestsScreen/InterestsScreen";
-import { IntrestIcon } from "../../assets/icons/components/bottomNavigation";
 import { ThemeContext } from "../../context/themeContext";
 import { colors } from "../../assets/styles/colors";
 import ChooseYourInterests from "../../screens/chooseYourInterests/chooseYourInterests";
@@ -38,26 +39,26 @@ export default function BottomTabNavigator() {
     {
       name: "HomeStack",
       component: HomeScreenStack,
-      Icon: theme === "dark" ? HomeIconIconWhite : HomeIcon,
-      FocusedIcon: theme === "dark" ? HomeIconFilledWhite : HomeBlack,
+      Icon: theme === "dark" ? HomeIconWhite : HomeIcon,
+      FocusedIcon: theme === "dark" ? HomeIconPurple : HomeIconBlue,
     },
     {
       name: "News",
       component: NewsScreen,
       Icon: theme === "dark" ? NewsIconWhite : NewsIcon,
-      FocusedIcon: theme === "dark" ? NewsWhiteFilled : NewsBlack,
+      FocusedIcon: theme === "dark" ? NewsIconPurple : NewsIconBlue,
     },
     {
       name: "Interests",
       component: ChooseYourInterests,
       Icon: theme === "dark" ? IntrestIconWhite : IntrestIcon,
-      FocusedIcon: theme === "dark" ? IntrestIconWhite : IntrestIcon,
+      FocusedIcon: theme === "dark" ? IntrestIconPurple : IntrestIconBlue,
     }, // No focused version provided
     {
       name: "Profile",
       component: ProfileScreen,
       Icon: theme === "dark" ? ProfileIconWhite : ProfileIcon,
-      FocusedIcon: theme === "dark" ? ProfileIconWhite : ProfileIcon,
+      FocusedIcon: theme === "dark" ? ProfileIconPurple : ProfileIconBlue,
     }, // No focused version provided
   ];
   return (
@@ -102,22 +103,10 @@ export default function BottomTabNavigator() {
               fontFamily: fontFamily.bottomNavigationText,
             },
             tabBarIcon: ({ focused }) =>
-              focused && (name == "HomeStack" || name == "News") ? (
+              focused ? (
                 <FocusedIcon width={24} height={24} />
               ) : (
-                <Icon
-                  width={24}
-                  height={24}
-                  fill={
-                    theme === "dark"
-                      ? focused
-                        ? "#FFFFFF"
-                        : "transparent"
-                      : focused
-                      ? "#000000"
-                      : "transparent"
-                  }
-                />
+                <Icon width={24} height={24} />
               ),
           }}
         />

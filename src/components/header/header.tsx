@@ -94,6 +94,12 @@ const Header = ({
         <TouchableOpacity onPress={() => setOpen(true)}>
           {theme === "light" ? <ShareIcon /> : <ShareIconWhite />}
         </TouchableOpacity>
+        {/* <ShareSheet
+          visible={open}
+          onClose={() => setOpen(false)}
+          url={shareUrl}
+          message={`Have a look at  "URL"`}
+        /> */}
         <ShareSheet
           visible={open}
           onClose={() => setOpen(false)}
