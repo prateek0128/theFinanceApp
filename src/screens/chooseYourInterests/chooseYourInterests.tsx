@@ -17,7 +17,6 @@ import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "../../types/navigation";
 import fontFamily from "../../assets/styles/fontFamily";
 import { ScrollView } from "react-native-gesture-handler";
-import { AxiosError } from "axios";
 import showToast from "../../utilis/showToast";
 const interests = [
   "Stock Market News",
@@ -39,7 +38,6 @@ const interests = [
 const { width, height } = Dimensions.get("window");
 export default function ChooseYourInterests() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const { theme, toggleTheme } = useContext(ThemeContext);
   const [selected, setSelected] = useState<string[]>([]);
   const groupedInterests = Array.from(
     { length: Math.ceil(interests.length / 3) },
@@ -53,19 +51,9 @@ export default function ChooseYourInterests() {
     );
   };
 
-  const canContinue = selected.length >= 5;
-  const handleContinue = async () => {
-    // try {
-    // } catch (err) {
-    //   // Narrow / cast to AxiosError
-    //   const axiosErr = err as AxiosError<{
-    //     status: string;
-    //     message: string;
-    //   }>;
-    //   const errorMessage =
-    //     axiosErr.response?.data?.message ?? "Something went wrong";
-    //   showToast(errorMessage, "danger");
-    // }
+  const canContinue = selected.length >= 3;
+  const { theme, toggleTheme } = useContext(ThemeContext);
+  const handleContinue = () => {
     navigation.navigate("BottomTabNavigator");
   };
 
@@ -106,7 +94,7 @@ export default function ChooseYourInterests() {
             },
           ]}
         >
-          Choose at least 5 fields
+          Choose at least 3 fields
         </Text>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -166,7 +154,7 @@ export default function ChooseYourInterests() {
             handleContinue(); // navigate next
             showToast("Your interests saved successfully", "success");
           } else {
-            showToast("Please choose at least 5 fields", "warning");
+            showToast("Please choose at least 3 fields", "warning");
           }
         }}
       >

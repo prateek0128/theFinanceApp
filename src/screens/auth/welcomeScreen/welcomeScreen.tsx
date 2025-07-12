@@ -16,6 +16,7 @@ import {
   DarkTheme,
 } from "@react-navigation/native";
 import { RootStackParamList } from "../../../types/navigation";
+import * as AppleAuthentication from "expo-apple-authentication";
 import { colors } from "../../../assets/styles/colors";
 import globalStyles from "../../../assets/styles/globalStyles";
 import fontFamily from "../../../assets/styles/fontFamily";
@@ -88,6 +89,30 @@ const WelcomeScreen = () => {
         });
     }
   }, [response]);
+  const handleAppleLogin = async () => {
+    try {
+      const credential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+      });
+
+      console.log("Apple Auth Response:", credential);
+
+      // Optionally save user info or navigate
+      navigation.navigate("TellUsSomething", {
+        name: credential.fullName?.givenName ?? "User",
+        email: credential.email ?? "No email provided",
+      });
+    } catch (error: any) {
+      if (error.code === "ERR_CANCELED") {
+        console.log("User canceled Apple Sign In.");
+      } else {
+        console.error("Apple Sign In Error:", error);
+      }
+    }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -145,7 +170,7 @@ const WelcomeScreen = () => {
           <SocialLoginButton
             IconComponent={theme === "dark" ? AppleIconWhite : AppleIcon}
             text="Continue with Apple"
-            onPress={() => console.log("Apple pressed")}
+            onPress={handleAppleLogin}
           />
           <SocialLoginButton
             IconComponent={GoogleIcon}

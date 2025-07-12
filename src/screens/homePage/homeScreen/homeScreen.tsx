@@ -13,7 +13,7 @@ import HeadlineDetailCard from "../../../components/headlineDetailedCard/headlin
 import { RootStackParamList } from "../../../types/navigation";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import fontFamily from "../../../assets/styles/fontFamily";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { getHighImpactNews, getNewsFeed } from "../../../apiServices/news";
 import Loader from "../../../components/Loader/loader";
 import {
@@ -29,6 +29,7 @@ import {
 import { ThemeContext } from "../../../context/themeContext";
 import DiscoverDetailsCard from "../../../components/discoverDetailsCard/discoverDetailsCard";
 import TabLabel from "../../../components/tabLabel/tabLabel";
+import showToast from "../../../utilis/showToast";
 const { width, height } = Dimensions.get("window");
 type NewsItem = {
   id: string;
@@ -83,8 +84,15 @@ const HomeScreen = () => {
       const response = await getHighImpactNews();
       console.log("newsResponse:", response.data);
       setAllNewsData(response.data);
-    } catch (error) {
-      console.log("API Error:", error);
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      showToast(errorMessage, "danger");
     } finally {
       setLoading(false);
     }

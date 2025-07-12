@@ -218,7 +218,7 @@ const TellUsSomething = () => {
 
         {showSecondQuestion && (
           <QuestionBlock
-            title="What is your Goal for Using this App"
+            title="What is your Goal"
             message="Choose your goal"
             options={goals}
             selectedValue={selectedGoal}
