@@ -152,21 +152,9 @@ export default function ChooseYourInterests() {
         onPress={() => {
           if (canContinue) {
             handleContinue(); // navigate next
-
             showToast("Your interests saved successfully", "success");
           } else {
-            // 🚫 not enough selections
-            if (Platform.OS === "android") {
-              ToastAndroid.show(
-                "Please choose at least 3 fields",
-                ToastAndroid.SHORT
-              );
-            } else {
-              showMessage?.({
-                message: "Please choose at least 5 fields",
-                type: "warning",
-              });
-            }
+            showToast("Please choose at least 3 fields", "warning");
           }
         }}
       >
