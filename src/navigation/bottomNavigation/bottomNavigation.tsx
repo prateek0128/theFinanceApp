@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Dimensions } from "react-native";
 import HomeScreen from "../../screens/homePage/homeScreen/homeScreen";
 import { useContext } from "react";
+import { Text } from "react-native";
 import {
   HomeIcon,
   HomeIconBlue,
@@ -77,7 +78,7 @@ export default function BottomTabNavigator() {
               theme === "dark" ? colors.darkPrimaryBackground : "#FBFBFE",
             borderTopWidth: 0,
             elevation: 10,
-            height: height * 0.09,
+            height: height * 0.1,
             paddingTop: 16,
             paddingHorizontal: 20,
           },
@@ -97,11 +98,22 @@ export default function BottomTabNavigator() {
           name={name}
           component={component}
           options={{
-            tabBarLabel: name,
-            tabBarLabelStyle: {
-              color: "#000000",
-              fontFamily: fontFamily.bottomNavigationText,
-            },
+            tabBarLabel: ({ focused }) => (
+              <Text
+                style={{
+                  fontFamily: fontFamily.bottomNavigationText,
+                  fontSize: 12,
+                  textAlign: "center",
+                  color: focused
+                    ? "#4139E5"
+                    : theme === "dark"
+                    ? colors.darkPrimaryText
+                    : colors.primaryText,
+                }}
+              >
+                {name}
+              </Text>
+            ),
             tabBarIcon: ({ focused }) =>
               focused ? (
                 <FocusedIcon width={24} height={24} />

@@ -50,7 +50,7 @@ export default function ChooseYourInterests() {
     );
   };
 
-  const canContinue = selected.length >= 5;
+  const canContinue = selected.length >= 3;
   const { theme, toggleTheme } = useContext(ThemeContext);
   const handleContinue = () => {
     navigation.navigate("BottomTabNavigator");
@@ -93,7 +93,7 @@ export default function ChooseYourInterests() {
             },
           ]}
         >
-          Choose at least 5 fields
+          Choose at least 3 fields
         </Text>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -169,7 +169,7 @@ export default function ChooseYourInterests() {
             // 🚫 not enough selections
             if (Platform.OS === "android") {
               ToastAndroid.show(
-                "Please choose at least 5 fields",
+                "Please choose at least 3 fields",
                 ToastAndroid.SHORT
               );
             } else {

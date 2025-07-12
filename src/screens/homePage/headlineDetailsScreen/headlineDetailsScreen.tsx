@@ -244,7 +244,6 @@ const HeadlineDetailsScreen = () => {
       }>;
       const errorMessage =
         axiosErr.response?.data?.message ?? "Something went wrong";
-      console.log("OTP Error:", errorMessage);
       showToast(errorMessage, "danger");
     }
   };
@@ -276,8 +275,15 @@ const HeadlineDetailsScreen = () => {
       const response = await getPinnedNews();
       console.log("getBookmarkResponse", response.data);
       setBookmarked(response.data);
-    } catch (error) {
-      console.log("API Error:", error);
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      showToast(errorMessage, "danger");
     }
   };
   const handleToggleBookmark = () => {
@@ -332,8 +338,15 @@ const HeadlineDetailsScreen = () => {
     try {
       const response = await checkLikeStatus(newsId);
       console.log("CheckLikeStatusAPI", response.data);
-    } catch (error) {
-      console.log("API Error:", error);
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      showToast(errorMessage, "danger");
     }
   };
   const addCommentsAPI = async (newsId: any) => {
@@ -374,8 +387,15 @@ const HeadlineDetailsScreen = () => {
       const response = await checkUserLikeStatus(newsId);
       console.log("CheckUserLikeStatus=>", response.data.liked);
       setLiked(response.data.liked);
-    } catch (error) {
-      console.log("API Error:", error);
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      showToast(errorMessage, "danger");
     }
   };
   const getNewsByIDAPI = async (newsId: string) => {
@@ -383,8 +403,15 @@ const HeadlineDetailsScreen = () => {
       const response = await getHighImpactNewsById(newsId);
       console.log("newsResponseByID:", response.data);
       setNewsData(response.data);
-    } catch (e) {
-      console.log("API Error:", e);
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      showToast(errorMessage, "danger");
     } finally {
       setLoading(false);
     }
@@ -395,8 +422,15 @@ const HeadlineDetailsScreen = () => {
       const response = await getComments(newsId);
       console.log("Comments", response.data);
       setCommentsData(response.data);
-    } catch (error) {
-      console.log("API Error:", error);
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      showToast(errorMessage, "danger");
     }
   };
   const getProfileIcon = (type: "male" | "female") => {

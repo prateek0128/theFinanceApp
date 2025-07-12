@@ -19,6 +19,7 @@
     },
     "ios": {
       "supportsTablet": true,
+      "usesAppleSignIn": true,
       "bundleIdentifier": "com.prateek2812.marketBriefs",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
