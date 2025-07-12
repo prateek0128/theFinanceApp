@@ -17,6 +17,7 @@ import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "../../types/navigation";
 import fontFamily from "../../assets/styles/fontFamily";
 import { ScrollView } from "react-native-gesture-handler";
+import showToast from "../../utilis/showToast";
 const interests = [
   "Stock Market News",
   "Indian Companies",
@@ -152,19 +153,7 @@ export default function ChooseYourInterests() {
           if (canContinue) {
             handleContinue(); // navigate next
 
-            // ✅ confirmation toast
-            if (Platform.OS === "android") {
-              ToastAndroid.show(
-                "Your interests saved successfully",
-                ToastAndroid.SHORT
-              );
-            } else {
-              // iOS / web – use your existing flash‑message util or snackbar
-              showMessage?.({
-                message: "Your interests saved successfully",
-                type: "success",
-              });
-            }
+            showToast("Your interests saved successfully", "success");
           } else {
             // 🚫 not enough selections
             if (Platform.OS === "android") {
