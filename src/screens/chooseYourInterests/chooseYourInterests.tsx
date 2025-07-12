@@ -17,6 +17,8 @@ import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "../../types/navigation";
 import fontFamily from "../../assets/styles/fontFamily";
 import { ScrollView } from "react-native-gesture-handler";
+import { AxiosError } from "axios";
+import showToast from "../../utilis/showToast";
 const interests = [
   "Stock Market News",
   "Indian Companies",
@@ -37,6 +39,7 @@ const interests = [
 const { width, height } = Dimensions.get("window");
 export default function ChooseYourInterests() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const [selected, setSelected] = useState<string[]>([]);
   const groupedInterests = Array.from(
     { length: Math.ceil(interests.length / 3) },
@@ -51,8 +54,18 @@ export default function ChooseYourInterests() {
   };
 
   const canContinue = selected.length >= 5;
-  const { theme, toggleTheme } = useContext(ThemeContext);
-  const handleContinue = () => {
+  const handleContinue = async () => {
+    // try {
+    // } catch (err) {
+    //   // Narrow / cast to AxiosError
+    //   const axiosErr = err as AxiosError<{
+    //     status: string;
+    //     message: string;
+    //   }>;
+    //   const errorMessage =
+    //     axiosErr.response?.data?.message ?? "Something went wrong";
+    //   showToast(errorMessage, "danger");
+    // }
     navigation.navigate("BottomTabNavigator");
   };
 
@@ -151,33 +164,9 @@ export default function ChooseYourInterests() {
         onPress={() => {
           if (canContinue) {
             handleContinue(); // navigate next
-
-            // ✅ confirmation toast
-            if (Platform.OS === "android") {
-              ToastAndroid.show(
-                "Your interests saved successfully",
-                ToastAndroid.SHORT
-              );
-            } else {
-              // iOS / web – use your existing flash‑message util or snackbar
-              showMessage?.({
-                message: "Your interests saved successfully",
-                type: "success",
-              });
-            }
+            showToast("Your interests saved successfully", "success");
           } else {
-            // 🚫 not enough selections
-            if (Platform.OS === "android") {
-              ToastAndroid.show(
-                "Please choose at least 5 fields",
-                ToastAndroid.SHORT
-              );
-            } else {
-              showMessage?.({
-                message: "Please choose at least 5 fields",
-                type: "warning",
-              });
-            }
+            showToast("Please choose at least 5 fields", "warning");
           }
         }}
       >

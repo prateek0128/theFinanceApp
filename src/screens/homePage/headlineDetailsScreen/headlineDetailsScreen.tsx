@@ -50,7 +50,7 @@ import {
   addComments,
   addReaction,
   checkLikeStatus,
-  checkUserLikeStatus,
+  checkUserLikeNewsStatus,
   getComments,
   toggleLike,
 } from "../../../apiServices/newsEngagement";
@@ -116,7 +116,7 @@ const HeadlineDetailsScreen = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [addCommentsLoader, setAddCommentsLoader] = useState<boolean>(false);
   const token = AsyncStorage.getItem("authToken");
-  console.log("AccessToken", token);
+  // console.log("AccessToken", token);
   const renderImage = () => {
     if (typeof imageKey === "string" && imageKey in imageMap) {
       const ImageComponent = imageMap[imageKey];
@@ -132,53 +132,6 @@ const HeadlineDetailsScreen = () => {
       );
     }
     return null;
-  };
-  const newsData2 = {
-    _id: {
-      $oid: "686f9060e06428525bb24df3",
-    },
-    title:
-      "Crizac Shares Surge After Strong IPO (Initial Public Offering) Performance",
-    url: "https://www.moneycontrol.com/news/business/markets/crizac-shares-jump-5-newly-listed-stock-rallies-32-from-ipo-price-in-two-days-13256951.html",
-    summary:
-      "• Crizac shares jumped 5% and have rallied 32% from their initial public offering (IPO (Initial Public Offering)) price in just two days.\n• This strong performance indicates high investor interest and confidence in the company, which can lead to increased market activity.\n• It's like a new restaurant opening and quickly becoming the talk of the town, attracting more customers every day.",
-    published_at: {
-      $date: "2025-07-10T11:08:37.226Z",
-    },
-    created_at: {
-      $date: "2025-07-10T10:05:20.256Z",
-    },
-    updated_at: {
-      $date: "2025-07-10T11:08:37.252Z",
-    },
-    source: "MoneyControl",
-    categories: ["Stocks"],
-    authors: ["MoneyControl"],
-    sentiment_score: 0.36363636363636365,
-    impact_score: 7,
-    impact_label: "High Impact",
-    reaction_stats: {
-      bullish: 0,
-      bearish: 0,
-      important: 0,
-      neutral: 0,
-    },
-    metadata: {
-      sentiment_label: "neutral",
-    },
-    scraped_at: {
-      $date: "2025-07-10T11:08:37.226Z",
-    },
-    ingestion_timestamp: {
-      $date: "2025-07-10T11:08:37.226Z",
-    },
-    source_url_fingerprint:
-      "www.moneycontrol.com/news/business/markets/crizac-shares-jump-5-newly-listed-stock-rallies-32-from-ipo-price-in-two-days-13256951.html",
-    confidence_score: 0.92,
-    analyzed_by: "gpt",
-    period: "1d",
-    tag: "bullish",
-    sector: "technology",
   };
   const newsData3 = {
     authors: ["BusinessStandard"],
@@ -223,12 +176,12 @@ const HeadlineDetailsScreen = () => {
   ];
   useEffect(() => {
     if (newsId) {
-      getCommentsAPI(newsId);
+      //getCommentsAPI(newsId);
       getNewsByIDAPI(newsId);
-      checkUserLikeStatusAPI(newsId);
-      checkLikeStatusAPI(newsId);
+      //checkUserLikeNewsStatusAPI(newsId);
+      // checkLikeStatusAPI(newsId);
     }
-    getBookmarkAPI();
+    //getBookmarkAPI();
   }, [newsId]);
 
   const addReactionAPI = async (newsId: any) => {
@@ -286,9 +239,9 @@ const HeadlineDetailsScreen = () => {
       const newStatus = !prev;
       if (newsId) {
         if (newStatus) {
-          //handlePinNews(newsId);
+          handlePinNews(newsId);
         } else {
-          //handleUnPinNews(newsId);
+          handleUnPinNews(newsId);
         }
       }
       return newStatus;
@@ -299,7 +252,7 @@ const HeadlineDetailsScreen = () => {
     try {
       const response = await pinNews(newsId);
       console.log("PinNews=>", response.data.success);
-      showToast(response.data.message, "success");
+      showToast("News bookmarked successfully", "success");
     } catch (err) {
       // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
@@ -308,6 +261,7 @@ const HeadlineDetailsScreen = () => {
       }>;
       const errorMessage =
         axiosErr.response?.data?.message ?? "Something went wrong";
+      console.log("ErrorMessagePinNews", axiosErr.response);
       showToast(errorMessage, "danger");
     }
   };
@@ -316,7 +270,7 @@ const HeadlineDetailsScreen = () => {
     try {
       const response = await unpinNews(newsId);
       console.log("UninNews=>", response.data.success);
-      showToast(response.data.message, "success");
+      showToast("News bookmarked unsuccessfully", "success");
     } catch (err) {
       // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
@@ -325,6 +279,7 @@ const HeadlineDetailsScreen = () => {
       }>;
       const errorMessage =
         axiosErr.response?.data?.message ?? "Something went wrong";
+      console.log("ErrorMessageUninNews", axiosErr.response);
       showToast(errorMessage, "danger");
     }
   };
@@ -342,9 +297,9 @@ const HeadlineDetailsScreen = () => {
       comment: comment,
     };
     try {
+      console.log("AddCommentPaylaod=>", commentData);
       const response = await addComments(newsId, commentData);
-      console.log(response.data);
-      await addComments(commentData, newsId);
+      console.log("AddCommentResponse=>", response);
       showToast(response.data.message, "success");
       setComment("");
       getCommentsAPI(newsId);
@@ -356,6 +311,7 @@ const HeadlineDetailsScreen = () => {
       }>;
       const errorMessage =
         axiosErr.response?.data?.message ?? "Something went wrong";
+      console.log("ErrorMessage", axiosErr.response);
       showToast(errorMessage, "danger");
     } finally {
       setAddCommentsLoader(false);
@@ -369,9 +325,9 @@ const HeadlineDetailsScreen = () => {
   //     console.log("API Error:", error);
   //   }
   // }
-  const checkUserLikeStatusAPI = async (newsId: string) => {
+  const checkUserLikeNewsStatusAPI = async (newsId: string) => {
     try {
-      const response = await checkUserLikeStatus(newsId);
+      const response = await checkUserLikeNewsStatus(newsId);
       console.log("CheckUserLikeStatus=>", response.data.liked);
       setLiked(response.data.liked);
     } catch (error) {
@@ -389,7 +345,6 @@ const HeadlineDetailsScreen = () => {
       setLoading(false);
     }
   };
-
   const getCommentsAPI = async (newsId: string) => {
     try {
       const response = await getComments(newsId);
@@ -595,17 +550,7 @@ const HeadlineDetailsScreen = () => {
           behavior={Platform.OS === "ios" ? "padding" : undefined}
           keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0} // tweak this if needed
         >
-          <View
-            style={[
-              styles.commentContainer,
-              // {
-              //   backgroundColor:
-              //     theme === "dark"
-              //       ? colors.darkPrimaryBackground
-              //       : colors.primaryBackground,
-              // },
-            ]}
-          >
+          <View style={[styles.commentContainer]}>
             <TextInput
               style={[
                 styles.commentInput,
