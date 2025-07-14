@@ -4,6 +4,8 @@ import Navigation from "./src/navigation/navigationStack/navigation";
 import { colors } from "./src/assets/styles/colors";
 import FlashMessage from "react-native-flash-message";
 import { Inter_400Regular } from "@expo-google-fonts/inter/400Regular";
+import { Inter_500Medium } from "@expo-google-fonts/inter/500Medium";
+import { Inter_700Bold } from "@expo-google-fonts/inter/700Bold";
 import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -15,6 +17,8 @@ export default function App() {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const [fontsLoaded] = useFonts({
     Inter_400Regular,
+    Inter_500Medium,
+    Inter_700Bold,
     "Satoshi-Regular": require("./src/assets/fonts/SatoshiVariable/Satoshi-Regular.otf"),
     "Satoshi-Medium": require("./src/assets/fonts/SatoshiVariable/Satoshi-Medium.otf"),
     "Satoshi-Bold": require("./src/assets/fonts/SatoshiVariable/Satoshi-Bold.otf"),

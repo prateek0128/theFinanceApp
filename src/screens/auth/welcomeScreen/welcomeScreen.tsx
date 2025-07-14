@@ -146,12 +146,12 @@ const WelcomeScreen = () => {
               {
                 color:
                   theme === "dark"
-                    ? colors.darkPrimaryText
-                    : colors.secondaryText,
+                    ? colors.darkSecondaryText
+                    : colors.septendenaryText,
               },
             ]}
           >
-            Welcome to FinSimply
+            Welcome to MarketBrief's
           </Text>
           <Text
             style={[
@@ -159,8 +159,8 @@ const WelcomeScreen = () => {
               {
                 color:
                   theme === "dark"
-                    ? colors.darkPrimaryText
-                    : colors.primaryText,
+                    ? colors.darkSecondaryText
+                    : colors.septendenaryText,
               },
             ]}
           >
@@ -213,7 +213,7 @@ const WelcomeScreen = () => {
                 {
                   color:
                     theme === "dark"
-                      ? colors.darkPrimaryText
+                      ? colors.darkSecondaryText
                       : colors.secondaryText,
                 },
               ]}
@@ -228,12 +228,12 @@ const WelcomeScreen = () => {
                 {
                   color:
                     theme === "dark"
-                      ? colors.darkPrimaryText
-                      : colors.primaryText,
+                      ? colors.sexdenaryText
+                      : colors.sexdenaryText,
                 },
               ]}
             >
-              LOG IN
+              Log in
             </Text>
           </TouchableOpacity>
         </View>
@@ -261,14 +261,14 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: colors.secondaryText,
-    fontFamily: fontFamily.Cabinet700,
-    fontSize: 36,
+    fontFamily: fontFamily.Inter700,
+    fontSize: 24,
     textAlign: "center",
   },
   headerText: {
     color: colors.primaryText,
-    fontFamily: fontFamily.Satoshi400,
-    fontSize: 16,
+    fontFamily: fontFamily.Inter400,
+    fontSize: 14,
     textAlign: "center",
   },
   buttonContainers: {
@@ -295,20 +295,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 64,
+    marginTop: 300,
     marginBottom: 10,
   },
   alreadyLinkText: {
     textAlign: "center",
-    fontSize: 14,
+    fontSize: 16,
     color: colors.secondaryText,
-    fontFamily: fontFamily.Satoshi400,
+    fontFamily: fontFamily.Inter400,
   },
   loginLinkText: {
     textAlign: "center",
     marginLeft: 4,
-    fontSize: 14,
-    color: colors.secondaryText,
-    fontFamily: fontFamily.Cabinet700,
+    fontSize: 16,
+    color: colors.sexdenaryText,
+    fontFamily: fontFamily.Inter500,
   },
 });

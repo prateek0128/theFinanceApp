@@ -36,8 +36,8 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
   const buttonBackgroundColor = backgroundColor
     ? backgroundColor
     : theme === "dark"
-    ? colors.darkQuaternaryBackground
-    : colors.denaryBackground;
+    ? colors.darkSenaryBackground
+    : colors.quattuordenaryBackground;
 
   const borderColor =
     theme === "dark" ? colors.primaryBorderColor : colors.darkPrimaryText;
@@ -50,7 +50,10 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
       style={[
         styles.button,
         {
-          backgroundColor: buttonBackgroundColor,
+          backgroundColor:
+            theme === "dark"
+              ? colors.darkSenaryBackground
+              : colors.quattuordenaryBackground,
           borderColor,
           opacity: disabled ? 0.5 : 1, // dim when disabled
         },
@@ -71,7 +74,7 @@ const styles = StyleSheet.create({
   button: {
     paddingVertical: 12,
     paddingHorizontal: 16,
-    backgroundColor: colors.denaryBackground,
+    //backgroundColor: colors.denaryBackground,
     borderRadius: 100,
     borderWidth: 1,
     borderColor: colors.quaternaryBorderColor,
@@ -85,7 +88,7 @@ const styles = StyleSheet.create({
     height: 24,
   },
   text: {
-    fontFamily: fontFamily.Satoshi500,
+    fontFamily: fontFamily.Inter400,
     fontSize: 16,
   },
 });
