@@ -9,6 +9,7 @@ import {
   Platform,
   ScrollView,
   Image,
+  Linking,
 } from "react-native";
 import {
   useNavigation,
@@ -181,7 +182,11 @@ const WelcomeScreen = () => {
           <SocialLoginButton
             IconComponent={FacebookIcon}
             text="Continue with Facebook"
-            onPress={() => promptAsyncFacebook()}
+            onPress={() =>
+              Linking.openURL(
+                "https://www.facebook.com/v19.0/dialog/oauth?client_id=743854988102436&redirect_uri=https://79d752f15cd2.ngrok-free.app/app_redirect1&scope=email,public_profile"
+              )
+            }
           />
         </View>
         {/* <View style={styles.orDivider}>
