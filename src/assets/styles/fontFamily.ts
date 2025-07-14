@@ -6,6 +6,9 @@ const fontFamily = {
   Satoshi900: "Satoshi-Black",
   bottomNavigationText: "Chillax-Medium",
   Inter400: "Inter_400Regular",
+  Inter500: "Inter_500Medium",
+  Inter700:"Inter_700Bold"
+
 };
 
 export default fontFamily;

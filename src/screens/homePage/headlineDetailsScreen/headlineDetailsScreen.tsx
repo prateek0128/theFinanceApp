@@ -223,6 +223,30 @@ const HeadlineDetailsScreen = () => {
       showToast(errorMessage, "danger");
     }
   };
+  const handleToggleLikeComment = () => {
+    console.log("inside handleToggleLike");
+    setLiked((prev) => !prev);
+    if (newsId) {
+      toggleLikeAPIComment(newsId);
+    }
+  };
+  const toggleLikeAPIComment = async (newsId: any) => {
+    try {
+      const response = await toggleLike(newsId);
+      console.log("Toggle Like=>", response.data);
+      showToast(response.data.message, "success");
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      showToast(errorMessage, "danger");
+    }
+  };
+
   const getBookmarkAPI = async () => {
     try {
       const response = await getPinnedNews();
@@ -562,13 +586,29 @@ const HeadlineDetailsScreen = () => {
                     </Text>
                     <View style={styles.likeUnlikeContainer}>
                       <View style={styles.iconCountContainer}>
-                        <TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => {
+                            console.log(
+                              "👍 Like icon pressed for comment:",
+                              comment.id
+                            );
+                            handleToggleLikeComment();
+                          }}
+                        >
                           <LikeCommentIcon width={20} height={20} />
                         </TouchableOpacity>
                         <Text style={styles.articleTime}>{comment.likes}</Text>
                       </View>
                       <View style={styles.iconCountContainer}>
-                        <TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => {
+                            console.log(
+                              "👎 Dislike icon pressed for comment:",
+                              comment.id
+                            );
+                            handleToggleLikeComment();
+                          }}
+                        >
                           <UnlikeCommentIcon width={20} height={20} />
                         </TouchableOpacity>
                         <Text style={styles.articleTime}>{0}</Text>
