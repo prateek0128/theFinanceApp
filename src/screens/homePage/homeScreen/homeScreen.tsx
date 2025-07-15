@@ -30,6 +30,7 @@ import { ThemeContext } from "../../../context/themeContext";
 import DiscoverDetailsCard from "../../../components/discoverDetailsCard/discoverDetailsCard";
 import TabLabel from "../../../components/tabLabel/tabLabel";
 import showToast from "../../../utilis/showToast";
+import globalStyles from "../../../assets/styles/globalStyles";
 const { width, height } = Dimensions.get("window");
 type NewsItem = {
   id: string;
@@ -104,13 +105,13 @@ const HomeScreen = () => {
   return (
     <ScrollView
       contentContainerStyle={[
-        styles.container,
-        {
-          backgroundColor:
-            theme === "dark"
-              ? colors.darkPrimaryBackground
-              : colors.primaryBackground,
-        },
+        globalStyles.pageContainerWithBackground(theme),
+        // {
+        //   backgroundColor:
+        //     theme === "dark"
+        //       ? colors.darkPrimaryBackground
+        //       : colors.primaryBackground,
+        // },
       ]}
     >
       <View style={styles.headingContainer}>
@@ -127,38 +128,39 @@ const HomeScreen = () => {
         >
           Discover
         </Text>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.tabLabelContainer}
+        >
+          <TabLabel
+            label="All"
+            selected={selectedTab === "All"}
+            onPress={() => setSelectedTab("All")}
+          />
+          <TabLabel
+            label="Stock Market"
+            selected={selectedTab === "Stock Market"}
+            onPress={() => setSelectedTab("Stock Market")}
+          />
+          <TabLabel
+            label="IPO’s"
+            selected={selectedTab === "IPO’s"}
+            onPress={() => setSelectedTab("IPO’s")}
+          />
+          <TabLabel
+            label="Crypto"
+            selected={selectedTab === "Crypto"}
+            onPress={() => setSelectedTab("Crypto")}
+          />
+          <TabLabel
+            label="Mutual Funds"
+            selected={selectedTab === "Mutual Funds"}
+            onPress={() => setSelectedTab("Mutual Funds")}
+          />
+        </ScrollView>
       </View>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.tabLabelContainer}
-      >
-        <TabLabel
-          label="All"
-          selected={selectedTab === "All"}
-          onPress={() => setSelectedTab("All")}
-        />
-        <TabLabel
-          label="Stock Market"
-          selected={selectedTab === "Stock Market"}
-          onPress={() => setSelectedTab("Stock Market")}
-        />
-        <TabLabel
-          label="IPO’s"
-          selected={selectedTab === "IPO’s"}
-          onPress={() => setSelectedTab("IPO’s")}
-        />
-        <TabLabel
-          label="Crypto"
-          selected={selectedTab === "Crypto"}
-          onPress={() => setSelectedTab("Crypto")}
-        />
-        <TabLabel
-          label="Mutual Funds"
-          selected={selectedTab === "Mutual Funds"}
-          onPress={() => setSelectedTab("Mutual Funds")}
-        />
-      </ScrollView>
+
       <View style={styles.swiperWrapper}>
         {!loading && allNewsData.length === 0 && (
           <EmptyState message="No data found. Pull to refresh." />
@@ -208,7 +210,8 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    padding: 24,
+    flex: 1,
     //flexGrow: 1,
     backgroundColor: colors.nonaryBackground,
   },

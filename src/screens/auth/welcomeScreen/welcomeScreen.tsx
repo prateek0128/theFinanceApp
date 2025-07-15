@@ -118,27 +118,9 @@ const WelcomeScreen = () => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
-      style={[
-        styles.container,
-        {
-          backgroundColor:
-            theme === "dark"
-              ? colors.darkPrimaryBackground
-              : colors.nonaryBackground,
-        },
-      ]}
+      style={[globalStyles.pageContainerWithBackground(theme)]}
     >
-      <ScrollView
-        contentContainerStyle={[
-          styles.innerContainer,
-          {
-            backgroundColor:
-              theme === "dark"
-                ? colors.darkPrimaryBackground
-                : colors.nonaryBackground,
-          },
-        ]}
-      >
+      <ScrollView contentContainerStyle={[styles.innerContainer]}>
         <View style={styles.headerContainer}>
           <Text
             style={[
@@ -189,22 +171,6 @@ const WelcomeScreen = () => {
             }
           />
         </View>
-        {/* <View style={styles.orDivider}>
-          <View style={styles.line} />
-          <Text style={styles.orText}>OR</Text>
-          <View style={styles.line} />
-        </View> */}
-        {/* <View style={styles.buttonContainers}>
-          <SocialLoginButton
-            text="Continue as a Guest !"
-            onPress={() => navigation.navigate("ChooseYourInterests")}
-            backgroundColor={
-              theme === "dark"
-                ? colors.darkTertiaryBackground
-                : colors.tertiaryBackground
-            }
-          />
-        </View> */}
         <View style={styles.inlineLinkContainer}>
           <TouchableOpacity>
             <Text
@@ -245,19 +211,13 @@ const WelcomeScreen = () => {
 export default WelcomeScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    //backgroundColor: colors.nonaryBackground,
-  },
   headerContainer: {
     gap: 6,
     marginBottom: 80,
   },
   innerContainer: {
-    padding: 20,
-    //justifyContent: "center", []
-    paddingTop: 150,
-    flexGrow: 1,
+    paddingTop: 110,
+    flex: 1,
   },
   headerTitle: {
     color: colors.secondaryText,
@@ -295,8 +255,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 300,
-    marginBottom: 10,
+    position: "absolute",
+    bottom: 20,
+    width: "100%",
   },
   alreadyLinkText: {
     textAlign: "center",

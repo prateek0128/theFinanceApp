@@ -57,8 +57,8 @@ const Button: React.FC<ButtonProps> = ({
 const styles = StyleSheet.create({
   button: {
     backgroundColor: colors.sexdenaryText,
-    paddingVertical: 20,
-    paddingHorizontal: 16,
+    paddingVertical: 16,
+    paddingHorizontal: 32,
     borderRadius: 100,
     alignItems: "center",
     justifyContent: "center",
@@ -68,9 +68,9 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   buttonText: {
-    color: colors.nonaryText,
+    fontFamily: fontFamily.Inter500,
     fontSize: 16,
-    fontFamily: fontFamily.Satoshi900,
+    color: colors.white,
   },
 });
 

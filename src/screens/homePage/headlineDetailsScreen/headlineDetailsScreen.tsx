@@ -66,6 +66,7 @@ import ImpactLabel from "../../../components/impactLabel/impactLabel";
 import showToast from "../../../utilis/showToast";
 import { AxiosError } from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import globalStyles from "../../../assets/styles/globalStyles";
 
 dayjs.extend(relativeTime);
 const { width, height } = Dimensions.get("window");
@@ -441,13 +442,7 @@ const HeadlineDetailsScreen = () => {
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={[
-          styles.container,
-          {
-            backgroundColor:
-              theme === "dark"
-                ? colors.darkPrimaryBackground
-                : colors.primaryBackground,
-          },
+          globalStyles.pageContainerWithBackground(theme),
         ]}
       >
         <View style={styles.headerContainer}>
@@ -709,11 +704,6 @@ const HeadlineDetailsScreen = () => {
 export default HeadlineDetailsScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    flexGrow: 1,
-    backgroundColor: colors.nonaryBackground,
-  },
   headerContainer: {
     marginTop: 24,
   },

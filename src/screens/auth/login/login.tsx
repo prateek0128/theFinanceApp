@@ -139,33 +139,13 @@ const LoginScreen = () => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
-      style={[
-        styles.mainContainer,
-        {
-          backgroundColor:
-            theme === "dark"
-              ? colors.darkPrimaryBackground
-              : colors.nonaryBackground,
-        },
-      ]}
+      style={[globalStyles.pageContainerWithBackground(theme)]}
     >
       {showOTPInputs == false ? (
         <View style={styles.innerLogInContainer}>
           <View style={styles.containerLogIn}>
             <View style={styles.headingContainer}>
-              <Text
-                style={[
-                  styles.subtitle,
-                  {
-                    color:
-                      theme === "dark"
-                        ? colors.darkSecondaryText
-                        : colors.primaryText,
-                  },
-                ]}
-              >
-                Log In
-              </Text>
+              <Text style={[globalStyles.title(theme)]}>Log In</Text>
             </View>
             {/* <Text style={styles.infoText}>
             Use only your WhatsApp number to login
@@ -179,8 +159,8 @@ const LoginScreen = () => {
                       {
                         color:
                           theme === "dark"
-                            ? colors.darkSecondaryText
-                            : colors.primaryText,
+                            ? colors.white
+                            : colors.octodenaryText,
                       },
                     ]}
                   >
@@ -214,8 +194,8 @@ const LoginScreen = () => {
                     {
                       color:
                         theme === "dark"
-                          ? colors.darkPrimaryText
-                          : colors.secondaryText,
+                          ? colors.white
+                          : colors.darkUndenaryBackground,
                     },
                   ]}
                 >
@@ -229,8 +209,8 @@ const LoginScreen = () => {
                     {
                       color:
                         theme === "dark"
-                          ? colors.darkPrimaryText
-                          : colors.secondaryText,
+                          ? colors.vigenaryText
+                          : colors.sexdenaryText,
                     },
                   ]}
                 >
@@ -260,12 +240,7 @@ const LoginScreen = () => {
 export default LoginScreen;
 
 const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    //backgroundColor: colors.nonaryBackground,
-  },
-  innerLogInContainer: {
-    padding: 20,
+  innerContainer: {
     justifyContent: "center",
     flexGrow: 1,
     gap: 64,

@@ -18,6 +18,8 @@ import { RootStackParamList } from "../../types/navigation";
 import fontFamily from "../../assets/styles/fontFamily";
 import { ScrollView } from "react-native-gesture-handler";
 import showToast from "../../utilis/showToast";
+import Button from "../../components/button/button";
+import globalStyles from "../../assets/styles/globalStyles";
 const interests = [
   "Stock Market News",
   "Indian Companies",
@@ -60,29 +62,12 @@ export default function ChooseYourInterests() {
   return (
     <View
       style={[
+        globalStyles.pageContainerWithBackground(theme),
         styles.interestsContainer,
-        {
-          backgroundColor:
-            theme === "dark"
-              ? colors.darkPrimaryBackground
-              : colors.primaryBackground,
-        },
       ]}
     >
       <View style={styles.headingContainer}>
-        <Text
-          style={[
-            styles.heading,
-            {
-              color:
-                theme === "dark"
-                  ? colors.darkPrimaryText
-                  : colors.quaternaryText,
-            },
-          ]}
-        >
-          Choose Your Interests
-        </Text>
+        <Text style={[globalStyles.title(theme)]}>Choose Your Interests</Text>
         <Text
           style={[
             styles.paragraph,
@@ -109,17 +94,18 @@ export default function ChooseYourInterests() {
                     styles.cardDimension,
                     selected.includes(item) && styles.cardSelected,
                     {
-                      backgroundColor: selected.includes(item)
-                        ? theme === "dark"
-                          ? colors.darkSeptenaryBackground
-                          : colors.septendenaryBackground
-                        : theme === "dark"
-                        ? colors.darkSenaryBackground
-                        : colors.octodenaryBackground,
-                      borderColor:
-                        selected.includes(item) && theme === "dark"
-                          ? colors.sexdenaryText
-                          : colors.sexdenaryText,
+                      backgroundColor:
+                        theme == "light"
+                          ? selected.includes(item)
+                            ? colors.septendenaryBackground
+                            : colors.octodenaryBackground
+                          : selected.includes(item)
+                          ? colors.darkDuodenaryBackground
+                          : colors.darkUndenaryBackground,
+                      borderColor: selected.includes(item)
+                        ? colors.vigenaryText
+                        : colors.octonaryBorderColor,
+                      borderWidth: selected.includes(item) ? 1 : 0,
                     },
                   ]}
                 >
@@ -127,9 +113,14 @@ export default function ChooseYourInterests() {
                     style={[
                       styles.cardText,
                       {
-                        color: selected
-                          ? colors.sexdenaryText
-                          : colors.primaryText,
+                        color:
+                          theme == "light"
+                            ? selected.includes(item)
+                              ? colors.sexdenaryText
+                              : colors.octodenaryText
+                            : selected.includes(item)
+                            ? colors.vigenaryText
+                            : colors.white,
                       },
                     ]}
                   >
@@ -141,12 +132,8 @@ export default function ChooseYourInterests() {
           ))}
         </View>
       </ScrollView>
-      <TouchableOpacity
-        activeOpacity={0.8}
-        style={[
-          styles.continueButton,
-          !canContinue && styles.continueButtonDisabled,
-        ]}
+      <Button
+        title="Get Started"
         onPress={() => {
           if (canContinue) {
             handleContinue(); // navigate next
@@ -155,30 +142,14 @@ export default function ChooseYourInterests() {
             showToast("Please choose at least 3 fields", "warning");
           }
         }}
-      >
-        <Text
-          style={[
-            styles.continueText,
-            {
-              color:
-                theme === "dark"
-                  ? colors.darkPrimaryText
-                  : colors.tertiaryBackground,
-              opacity: !canContinue ? 0.4 : 1,
-            },
-          ]}
-        >
-          Get Started
-        </Text>
-      </TouchableOpacity>
+        disabled={!canContinue}
+        buttonStyle={{ marginBottom: 20 }}
+      />
     </View>
   );
 }
 const styles = StyleSheet.create({
   interestsContainer: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: colors.nonaryBackground,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -190,9 +161,8 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 32,
-    fontFamily: fontFamily.Cabinet700,
+    fontFamily: fontFamily.Inter700,
     textAlign: "left",
-    color: colors.quaternaryText,
   },
   paragraph: {
     fontSize: 16,
@@ -209,18 +179,19 @@ const styles = StyleSheet.create({
     columnGap: 12,
   },
   cardDimension: {
-    width: width * 0.28,
-    height: 110,
+    width: width * 0.27,
+    height: 108,
     // backgroundColor: colors.quaternaryBackground,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 12,
+    //borderWidth: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
     gap: 10,
   },
   cardText: {
-    fontFamily: fontFamily.Satoshi500,
+    fontFamily: fontFamily.Inter400,
     textAlign: "center",
     fontSize: 14,
     //color: colors.primaryBorderColor,

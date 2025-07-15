@@ -139,41 +139,16 @@ const SignUpScreen = () => {
   const handleEditPress = () => {
     setShowOTPInputs(false);
     setOtp(["", "", "", "", "", ""]);
-
-    //setIsValid(false);
-  };
-  const AppleColored = () => {
-    return theme === "dark" ? <AppleIconWhite /> : <AppleIcon />;
   };
   const isOtpComplete = otp.every((digit) => digit !== "");
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
-      style={[
-        styles.container,
-        {
-          backgroundColor:
-            theme === "dark"
-              ? colors.darkPrimaryBackground
-              : colors.nonaryBackground,
-        },
-      ]}
+      style={[globalStyles.pageContainerWithBackground(theme)]}
     >
       <ScrollView contentContainerStyle={styles.innerContainer}>
         <View style={styles.headingContainer}>
-          <Text
-            style={[
-              styles.subtitle,
-              {
-                color:
-                  theme === "dark"
-                    ? colors.darkSecondaryText
-                    : colors.secondaryText,
-              },
-            ]}
-          >
-            Sign up
-          </Text>
+          <Text style={[globalStyles.title(theme)]}>Sign up</Text>
         </View>
         <View style={styles.labelRow}>
           <Text
@@ -235,19 +210,6 @@ const SignUpScreen = () => {
           onPress={showOTPInputs ? handleSignUp : handleSendOTP}
           disabled={!isValid || (showOTPInputs && !isOtpComplete)}
         />
-        {/* <TouchableOpacity
-          style={[
-            styles.button,
-            (!isValid || (showOTPInputs && !isOtpComplete)) && { opacity: 0.5 },
-          ]}
-          onPress={showOTPInputs ? handleSignUp : handleSendOTP}
-          disabled={!isValid || (showOTPInputs && !isOtpComplete)}
-        >
-          <Text style={styles.buttonText}>
-            {showOTPInputs ? "Sign Up" : "Send OTP"}
-          </Text>
-        </TouchableOpacity> */}
-        {/* Icons row */}
         <View style={styles.orDivider}>
           <View style={styles.line} />
           <Text style={styles.orText}>OR</Text>
@@ -278,29 +240,9 @@ const SignUpScreen = () => {
 export default SignUpScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.nonaryBackground,
-  },
   innerContainer: {
-    padding: 20,
     justifyContent: "center",
     flexGrow: 1,
-  },
-  title: {
-    color: colors.primaryText,
-    // fontFamily: fontFamily.secondary,
-    fontSize: 32,
-    fontWeight: 600,
-    marginBottom: 80,
-    textAlign: "left",
-  },
-  subtitle: {
-    color: colors.secondaryText,
-    fontFamily: fontFamily.Cabinet700,
-    fontSize: 40,
-    marginBottom: 10,
-    textAlign: "center",
   },
   input: {
     height: 36,
