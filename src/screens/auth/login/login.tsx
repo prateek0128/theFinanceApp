@@ -142,7 +142,7 @@ const LoginScreen = () => {
       style={[globalStyles.pageContainerWithBackground(theme)]}
     >
       {showOTPInputs == false ? (
-        <View style={styles.innerLogInContainer}>
+        <View style={styles.innerContainer}>
           <View style={styles.containerLogIn}>
             <View style={styles.headingContainer}>
               <Text style={[globalStyles.title(theme)]}>Log In</Text>
