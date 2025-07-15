@@ -160,8 +160,8 @@ const StartScreen = () => {
         <Button
           title="Continue"
           onPress={() => {
-            // navigation.navigate("Login");
-            navigation.navigate("ChooseYourInterests");
+            navigation.navigate("Welcome");
+            // navigation.navigate("ChooseYourInterests");
           }}
           buttonStyle={{
             backgroundColor: colors.sexdenaryText,
