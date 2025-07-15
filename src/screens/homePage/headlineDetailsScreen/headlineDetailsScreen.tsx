@@ -523,8 +523,32 @@ const HeadlineDetailsScreen = () => {
             <View>
               {summaryArray.map((point, index) => (
                 <View key={index} style={styles.listItem}>
-                  <Text style={styles.listIndex}>{index + 1}.</Text>
-                  <Text style={styles.listPoints}>{point}</Text>
+                  <Text
+                    style={[
+                      styles.listIndex,
+                      {
+                        color:
+                          theme === "dark"
+                            ? colors.darkPrimaryText
+                            : colors.primaryText,
+                      },
+                    ]}
+                  >
+                    {index + 1}.
+                  </Text>
+                  <Text
+                    style={[
+                      styles.listPoints,
+                      {
+                        color:
+                          theme === "dark"
+                            ? colors.darkPrimaryText
+                            : colors.primaryText,
+                      },
+                    ]}
+                  >
+                    {point}
+                  </Text>
                 </View>
               ))}
             </View>

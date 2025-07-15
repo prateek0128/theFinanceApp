@@ -49,12 +49,12 @@ const InputTextField = forwardRef<TextInput, InputTextFieldProps>(
 
 const styles = StyleSheet.create({
   defaultInput: {
-    height: 42,
+    height: 52,
     borderWidth: 1,
     borderColor: colors.quaternaryBorderColor,
     borderRadius: 8,
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 16,
     fontSize: 16,
     color: colors.black,
     gap: 10,

@@ -74,6 +74,8 @@ export const colors = {
   darkTertiaryText: "#A0ABBB", //3
   darkQuaternaryText: "#B8C0CC", //4
   darkQuinaryText: "#CDCFD0", //5
+    darkSenaryText: "#979C9E",//6
+  darkSeptanaryText: "#9990FF",//7
   //Border Colors
   primaryBorderColor: "#3C3744", //1
   secondaryBorderColor: "#6B7280", //2
@@ -83,7 +85,9 @@ export const colors = {
   senaryBorderColor: "#383838", //6
   septnaryBorderColor: "#1D4ED8", //7
   octonaryBorderColor: "#5538EE", //8
+    nonaryBorder: "#E3E5E5", //9
   //Button Colors
   primaryButtonColor: "#007AFF", //1
   secondaryButtonColor: "#2B22E2", //2
+  tertiaryButtonColor: "#303437",//3
 };
