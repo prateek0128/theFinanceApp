@@ -1,47 +1,21 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, TextStyle } from "react-native";
 import { colors } from "./colors";
-import spacing from "./spacing";
-import typography from "./fontFamily";
+import fontFamily from "./fontFamily";
 
-const globalStyles = StyleSheet.create({
-  container: {
+const globalStyles = {
+  pageContainerWithBackground: (theme: string) => ({
     flex: 1,
-    backgroundColor: colors.background,
-    padding: spacing.md,
-  },
-  title: {
-    //@ts-ignore
-    fontWeight: typography.fontWeight.bold,
-    color: colors.text,
+    backgroundColor:
+      theme === "dark" ? colors.octodenaryText : colors.primaryBackground,
+    padding: 22,
+  }),
+  title: (theme: string): TextStyle => ({
+    fontFamily: fontFamily.Inter700,
+    fontSize: 32,
+    marginBottom: 10,
     textAlign: "center",
-    marginBottom: spacing.lg,
-  },
-  input: {
-    height: 48,
-    borderColor: colors.border,
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: spacing.md,
-    marginBottom: spacing.md,
-    backgroundColor: colors.white,
-  },
-  button: {
-    backgroundColor: colors.primary,
-    padding: spacing.md,
-    borderRadius: 8,
-    alignItems: "center",
-    marginVertical: spacing.sm,
-  },
-  buttonText: {
-    color: colors.white,
-    //@ts-ignore
-    fontWeight: typography.fontWeight.bold,
-  },
-  linkText: {
-    color: colors.primary,
-    textAlign: "center",
-    marginTop: spacing.md,
-  },
-});
+    color: theme === "dark" ? colors.white : colors.septendenaryText,
+  }),
+};
 
 export default globalStyles;

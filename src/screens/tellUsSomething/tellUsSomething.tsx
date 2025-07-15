@@ -19,6 +19,7 @@ import {
   BackArrowIcon,
   BackArrowIconWhite,
 } from "../../assets/icons/components/header";
+import globalStyles from "../../assets/styles/globalStyles";
 const QuestionBlock = ({
   title,
   options,
@@ -147,17 +148,7 @@ const TellUsSomething = () => {
       showsVerticalScrollIndicator={false}
       keyboardShouldPersistTaps="handled"
     >
-      <View
-        style={[
-          styles.container,
-          {
-            backgroundColor:
-              theme === "dark"
-                ? colors.darkPrimaryBackground
-                : colors.primaryBackground,
-          },
-        ]}
-      >
+      <View style={[globalStyles.pageContainerWithBackground(theme)]}>
         <View
           style={[
             styles.questioncontainer,
@@ -241,12 +232,6 @@ const TellUsSomething = () => {
 export default TellUsSomething;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: colors.primaryBackground,
-    //justifyContent: "center",
-  },
   title: {
     fontSize: 32,
     textAlign: "center",

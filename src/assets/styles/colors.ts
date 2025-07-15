@@ -12,17 +12,18 @@ export const colors = {
   //////////////////////
   //Background Colors
   splashBackground: "#3D52D5",
-  // primaryBackground: "#F9F5FF",
-  primaryBackground: "#F7F8F9",
-  secondaryBackground: "#B4C5E4",
-  tertiaryBackground: "#FBFFF1",
-  quaternaryBackground: "#D9DBF1",
-  quinaryBackground: "#EBEDF0",
-  senaryBackground: "#26EF6E4D",
-  septenaryBackground: "#FAFAFA",
-  octonaryBackground: "#443DFF",
-  nonaryBackground: "#FBFBFE",
-  denaryBackground: "#DDDBFF",
+  // primaryBackground: "#F9F5FF",//1
+  //primaryBackground: "#F7F8F9", //1
+  primaryBackground: "#FFFFFF", //1
+  secondaryBackground: "#B4C5E4", //2
+  tertiaryBackground: "#FBFFF1", //3
+  quaternaryBackground: "#D9DBF1", //4
+  quinaryBackground: "#EBEDF0", //5
+  senaryBackground: "#26EF6E4D", //6
+  septenaryBackground: "#FAFAFA", //7
+  octonaryBackground: "#443DFF", //8
+  nonaryBackground: "#FBFBFE", //9
+  denaryBackground: "#DDDBFF", //10
   undenaryBackground: "#191D23", // 11
   duodenaryBackground: "#E7EAEE", // 12
   tridenaryBackground: "#3460DC", // 13
@@ -34,56 +35,55 @@ export const colors = {
   // novemdenaryBackground: "#9999FF", // 19
   // vigenaryBackground: "#9090FF",    // 20
   //Dark Background Colors
-  darkPrimaryBackground: "#0F0F0F",
-  darkSecondaryBackground: "#110F24",
-  darkTertiaryBackground: "#141414",
-  darkQuaternaryBackground: "#191919",
-  darkQuinaryBackground: "#010104",
-  darkSenaryBackground: "#272727",
-  darkSeptenaryBackground: "#3460DC80",
-  darkOctonary: "#1E1E1E",
-  darkNonaryBackground: "#10B98126",
-  darkDenaryBackground: "#E8EDFB0D",
+  darkPrimaryBackground: "#0F0F0F", //1
+  darkSecondaryBackground: "#110F24", //2
+  darkTertiaryBackground: "#141414", //3
+  darkQuaternaryBackground: "#191919", //4
+  darkQuinaryBackground: "#010104", //5
+  darkSenaryBackground: "#272727", //6
+  darkSeptenaryBackground: "#3460DC80", //7
+  darkOctonaryBackground: "#1E1E1E", //8
+  darkNonaryBackground: "#10B98126", //9
+  darkDenaryBackground: "#E8EDFB0D", //10
+  darkUndenaryBackground: "#202325", //11
+  darkDuodenaryBackground: "#5538EE1A", //12
   //Text Colors
-  primaryText: "#28262C",
-  secondaryText: "#111111",
-  tertiaryText: "#5B5C60",
-  quaternaryText: "#000000",
-  quinaryText: "#121417",
-  senaryText: "#0D141C",
-  septenaryText: "#4A709C",
-  octonaryText: "#40444C",
-  nonaryText: "#FAF7F2",
-  denaryText: "#4B5768",
-  undenaryText: "#5B5C60",
-  duodenaryText: "#64748B",
-  tridenaryText: "#047852",
-  quattuordenaryText: "#323A46",
-  quindenaryText: "#0D0F11",
+  primaryText: "#28262C", //1
+  secondaryText: "#111111", //2
+  tertiaryText: "#5B5C60", //3
+  quaternaryText: "#000000", //4
+  quinaryText: "#121417", //5
+  senaryText: "#0D141C", //6
+  septenaryText: "#4A709C", //7
+  octonaryText: "#40444C", //8
+  nonaryText: "#FAF7F2", //9
+  denaryText: "#4B5768", //10
+  undenaryText: "#5B5C60", //11
+  duodenaryText: "#64748B", //12
+  tridenaryText: "#047852", //13
+  quattuordenaryText: "#323A46", //14
+  quindenaryText: "#0D0F11", //15
   sexdenaryText: "#6B4EFF", //16
-  septendenaryText: "#121212",
-  octodenaryText: "#090A0A",
+  septendenaryText: "#121212", //17
+  octodenaryText: "#090A0A", //18
   novemdenaryText: "#6C7072", // 19
+  vigenaryText: "#9990FF", //20
   //Dark Text Colors
-  darkPrimaryText: "#EDEDED",
-  darkSecondaryText: "#F7F8F9",
-  darkTertiaryText: "#A0ABBB",
-  darkQuaternaryText: "#B8C0CC",
-  darkQuinaryText: "#CDCFD0",
+  darkPrimaryText: "#EDEDED", //1
+  darkSecondaryText: "#F7F8F9", //2
+  darkTertiaryText: "#A0ABBB", //3
+  darkQuaternaryText: "#B8C0CC", //4
+  darkQuinaryText: "#CDCFD0", //5
   //Border Colors
-  primaryBorderColor: "#3C3744",
-  secondaryBorderColor: "#6B7280",
-  tertiaryBorderColor: "#3C374433",
-  quaternaryBorderColor: "#B6BAC3",
-  quinaryBorderColor: "#D0D5DD",
-  senaryBorderColor: "#383838",
-  septnaryBorderColor: "#1D4ED8",
+  primaryBorderColor: "#3C3744", //1
+  secondaryBorderColor: "#6B7280", //2
+  tertiaryBorderColor: "#3C374433", //3
+  quaternaryBorderColor: "#B6BAC3", //4
+  quinaryBorderColor: "#D0D5DD", //5
+  senaryBorderColor: "#383838", //6
+  septnaryBorderColor: "#1D4ED8", //7
+  octonaryBorderColor: "#5538EE", //8
   //Button Colors
-  primaryButtonColor: "#007AFF",
-  secondaryButtonColor: "#2B22E2",
-
-  //startScreen
-  blueCard: "#CDE3F3",
-  greenCard: "#D4ECCD",
-  yellowCard: "#F8EED5",
+  primaryButtonColor: "#007AFF", //1
+  secondaryButtonColor: "#2B22E2", //2
 };

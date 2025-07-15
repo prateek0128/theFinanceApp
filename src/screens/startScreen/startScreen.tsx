@@ -61,26 +61,17 @@ const StartScreen = () => {
           index: nextIndex,
           animated: true,
         });
-
-        // ❌ Don't call setActiveIndex here!
-        // It causes dot update before scroll is done
         activeIndexRef.current = nextIndex;
       }
-    }, 3000);
-
+    }, 1500);
     return () => clearInterval(interval);
   }, []);
 
   return (
     <View
       style={[
-        styles.container,
-        {
-          backgroundColor:
-            theme === "dark"
-              ? colors.darkPrimaryBackground
-              : colors.nonaryBackground,
-        },
+        globalStyles.pageContainerWithBackground(theme),
+        styles.mainContainer,
       ]}
     >
       <Text style={styles.headingText}>
@@ -93,7 +84,6 @@ const StartScreen = () => {
         </Text>
         <Text style={{ color: colors.sexdenaryText }}>Brief's</Text>
       </Text>
-      {/* <View style={styles.caraouselContainer}> */}
       <FlatList
         ref={flatListRef}
         data={cardData}
@@ -155,26 +145,16 @@ const StartScreen = () => {
           />
         ))}
       </View>
-      {/* </View> */}
       {activeIndex === cardData.length - 1 ? (
         <Button
           title="Continue"
           onPress={() => {
-            navigation.navigate("TellUsSomething", {});
-          }}
-          buttonStyle={{
-            backgroundColor: colors.sexdenaryText,
-            paddingVertical: 16,
-            paddingHorizontal: 32,
-          }}
-          textStyle={{
-            fontFamily: fontFamily.Inter500,
-            fontSize: 16,
-            color: colors.white,
+            // navigation.navigate("Welcome");
+            navigation.navigate("ChooseYourInterests");
           }}
         />
       ) : (
-        <View style={{ height: 72 }} /> // Keeps layout height consistent
+        <View style={{ height: 72 }} />
       )}
     </View>
   );
@@ -182,15 +162,11 @@ const StartScreen = () => {
 export default StartScreen;
 
 const styles = StyleSheet.create({
-  container: {
+  mainContainer: {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    flex: 1,
-    // backgroundColor: colors.primaryBackground,
-    paddingVertical: 20,
-    //paddingLeft: 52,
-    gap: 20,
+    paddingHorizontal: 0,
   },
   headingText: {
     fontSize: 32,
@@ -198,12 +174,6 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     textAlign: "center",
     marginTop: 20,
-  },
-  card: {
-    height: height * 0.8,
-    backgroundColor: colors.blueCard,
-    borderRadius: 32,
-    justifyContent: "space-between",
   },
   textContainer: {
     gap: 12,
@@ -216,8 +186,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   carouselSlide: {
-    width: width, // Full screen width
-    // justifyContent: "center",
+    width: width,
     paddingHorizontal: 0, // no padding
     marginHorizontal: 0,
     alignItems: "center",

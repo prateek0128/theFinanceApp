@@ -138,32 +138,12 @@ const LoginScreen = () => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
-      style={[
-        styles.container,
-        {
-          backgroundColor:
-            theme === "dark"
-              ? colors.darkPrimaryBackground
-              : colors.nonaryBackground,
-        },
-      ]}
+      style={[globalStyles.pageContainerWithBackground(theme)]}
     >
       <View style={styles.innerContainer}>
         <View style={styles.containerLogIn}>
           <View style={styles.headingContainer}>
-            <Text
-              style={[
-                styles.subtitle,
-                {
-                  color:
-                    theme === "dark"
-                      ? colors.darkSecondaryText
-                      : colors.primaryText,
-                },
-              ]}
-            >
-              Log In
-            </Text>
+            <Text style={[globalStyles.title(theme)]}>Log In</Text>
           </View>
           {/* <Text style={styles.infoText}>
             Use only your WhatsApp number to login
@@ -176,9 +156,7 @@ const LoginScreen = () => {
                     styles.label,
                     {
                       color:
-                        theme === "dark"
-                          ? colors.darkSecondaryText
-                          : colors.primaryText,
+                        theme === "dark" ? colors.white : colors.octodenaryText,
                     },
                   ]}
                 >
@@ -205,28 +183,28 @@ const LoginScreen = () => {
                 autoComplete="email"
               />
             </View>
-            {/* {showOTPInputs && (
-            <View style={styles.otpContainer}>
-              {otp.map((digit, index) => (
-                <InputTextField
-                  key={index}
-                  ref={(ref: any) => {
-                    otpInputs.current[index] = ref;
-                  }}
-                  style={styles.otpInput}
-                  keyboardType="numeric"
-                  maxLength={1}
-                  value={digit}
-                  onChangeText={(value) => handleOTPChange(index, value)}
-                  onKeyPress={({ nativeEvent }) =>
-                    handleOTPKeyPress(index, nativeEvent.key)
-                  }
-                  returnKeyType="next"
-                  blurOnSubmit={false}
-                />
-              ))}
-            </View>
-          )} */}
+            {showOTPInputs && (
+              <View style={styles.otpContainer}>
+                {otp.map((digit, index) => (
+                  <InputTextField
+                    key={index}
+                    ref={(ref: any) => {
+                      otpInputs.current[index] = ref;
+                    }}
+                    style={styles.otpInput}
+                    keyboardType="numeric"
+                    maxLength={1}
+                    value={digit}
+                    onChangeText={(value) => handleOTPChange(index, value)}
+                    onKeyPress={({ nativeEvent }) =>
+                      handleOTPKeyPress(index, nativeEvent.key)
+                    }
+                    returnKeyType="next"
+                    blurOnSubmit={false}
+                  />
+                ))}
+              </View>
+            )}
           </View>
         </View>
         <View style={styles.containerLogInButton}>
@@ -243,8 +221,8 @@ const LoginScreen = () => {
                   {
                     color:
                       theme === "dark"
-                        ? colors.darkPrimaryText
-                        : colors.secondaryText,
+                        ? colors.white
+                        : colors.darkUndenaryBackground,
                   },
                 ]}
               >
@@ -258,8 +236,8 @@ const LoginScreen = () => {
                   {
                     color:
                       theme === "dark"
-                        ? colors.darkPrimaryText
-                        : colors.secondaryText,
+                        ? colors.vigenaryText
+                        : colors.sexdenaryText,
                   },
                 ]}
               >
@@ -276,35 +254,16 @@ const LoginScreen = () => {
 export default LoginScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    //backgroundColor: colors.nonaryBackground,
-  },
   innerContainer: {
-    padding: 20,
     justifyContent: "center",
     flexGrow: 1,
     gap: 64,
-  },
-  title: {
-    color: colors.primaryText,
-    // fontFamily: fontFamily.secondary,
-    fontSize: 32,
-    fontWeight: "600",
-    marginBottom: 80,
-    textAlign: "left",
   },
   headingContainer: {
     alignItems: "center",
     justifyContent: "center",
   },
-  subtitle: {
-    color: colors.primaryText,
-    fontFamily: fontFamily.Inter500,
-    fontSize: 40,
-    marginBottom: 10,
-    textAlign: "center",
-  },
+
   formContainer: {
     gap: 20,
   },
@@ -325,8 +284,8 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   label: {
-    fontSize: 20,
-    color: colors.octonaryText,
+    fontSize: 16,
+    color: colors.octodenaryText,
     fontFamily: fontFamily.Inter500,
   },
   input: {
@@ -364,9 +323,9 @@ const styles = StyleSheet.create({
   },
   alreadyLinkText: {
     textAlign: "center",
-    fontSize: 14,
+    fontSize: 16,
     color: colors.secondaryText,
-    fontFamily: fontFamily.Inter400,
+    fontFamily: fontFamily.Inter500,
   },
   loginLinkText: {
     textAlign: "center",
@@ -408,7 +367,6 @@ const styles = StyleSheet.create({
     gap: 40,
     position: "absolute",
     bottom: 80,
-    left: 20,
     width: "100%",
   },
   containerLogIn: {
