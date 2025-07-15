@@ -199,7 +199,6 @@ export default OTPSection;
 
 const styles = StyleSheet.create({
   otpContainer: {
-    padding: 24,
     flex: 1,
   },
   topContainer: {
@@ -267,7 +266,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     position: "absolute",
     bottom: 80,
-    left: 20,
     width: "100%",
   },
 });

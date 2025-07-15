@@ -367,7 +367,6 @@ const styles = StyleSheet.create({
     gap: 40,
     position: "absolute",
     bottom: 80,
-    left: 20,
     width: "100%",
   },
   containerLogIn: {
