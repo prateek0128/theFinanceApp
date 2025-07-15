@@ -112,14 +112,14 @@ export default function ChooseYourInterests() {
                       backgroundColor: selected.includes(item)
                         ? theme === "dark"
                           ? colors.darkSeptenaryBackground
-                          : colors.splashBackground
+                          : colors.septendenaryBackground
                         : theme === "dark"
                         ? colors.darkSenaryBackground
-                        : colors.quaternaryBackground,
+                        : colors.octodenaryBackground,
                       borderColor:
                         selected.includes(item) && theme === "dark"
-                          ? colors.quindenaryBackground
-                          : "transparent",
+                          ? colors.sexdenaryText
+                          : colors.sexdenaryText,
                     },
                   ]}
                 >
@@ -127,12 +127,10 @@ export default function ChooseYourInterests() {
                     style={[
                       styles.cardText,
                       {
-                        color:
-                          theme === "dark"
-                            ? colors.darkPrimaryText
-                            : colors.primaryText,
+                        color: selected
+                          ? colors.sexdenaryText
+                          : colors.primaryText,
                       },
-                      selected.includes(item) && styles.cardNameSelected,
                     ]}
                   >
                     {item}
@@ -213,7 +211,7 @@ const styles = StyleSheet.create({
   cardDimension: {
     width: width * 0.28,
     height: 110,
-    backgroundColor: colors.quaternaryBackground,
+    // backgroundColor: colors.quaternaryBackground,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 12,
@@ -225,13 +223,13 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.Satoshi500,
     textAlign: "center",
     fontSize: 14,
-    color: colors.primaryBorderColor,
+    //color: colors.primaryBorderColor,
   },
   cardSelected: {
-    backgroundColor: colors.splashBackground, // pick a strong active color
+    // backgroundColor: colors.splashBackground, // pick a strong active color
   },
   cardNameSelected: {
-    color: colors.primaryBackground, // darker/contrast text color
+    // color: colors.primaryBackground, // darker/contrast text color
   },
   continueButton: {
     marginTop: 20,

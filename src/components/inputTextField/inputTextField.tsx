@@ -1,4 +1,4 @@
-import React, { forwardRef, useContext } from "react";
+import React, { forwardRef, useContext, useState } from "react";
 import {
   TextInput,
   TextInputProps,
@@ -14,8 +14,10 @@ interface InputTextFieldProps extends TextInputProps {
 }
 
 // 👇 Wrap component in forwardRef
+
 const InputTextField = forwardRef<TextInput, InputTextFieldProps>(
   ({ style, ...props }, ref) => {
+    const [isFocused, setIsFocused] = useState(false);
     const { theme, toggleTheme } = useContext(ThemeContext);
     return (
       <TextInput
@@ -25,10 +27,11 @@ const InputTextField = forwardRef<TextInput, InputTextFieldProps>(
           style,
           {
             color: theme === "dark" ? colors.darkPrimaryText : colors.black,
-            borderColor:
-              theme === "dark"
-                ? colors.quaternaryBorderColor
-                : colors.quaternaryBorderColor,
+            borderColor: isFocused
+              ? colors.sexdenaryText
+              : theme === "dark"
+              ? colors.quaternaryBorderColor
+              : colors.quaternaryBorderColor,
           },
         ]}
         placeholderTextColor={
@@ -36,6 +39,8 @@ const InputTextField = forwardRef<TextInput, InputTextFieldProps>(
             ? colors.darkTertiaryText
             : colors.secondaryBorderColor
         }
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
         {...props}
       />
     );
@@ -47,13 +52,13 @@ const styles = StyleSheet.create({
     height: 42,
     borderWidth: 1,
     borderColor: colors.quaternaryBorderColor,
-    borderRadius: 100,
+    borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 16,
     color: colors.black,
     gap: 10,
-    fontFamily: fontFamily.Satoshi500,
+    fontFamily: fontFamily.Inter400,
   },
 });
 

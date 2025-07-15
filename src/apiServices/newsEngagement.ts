@@ -3,7 +3,6 @@ import { apiClient } from "./apiUtility";
 // Add Reaction
 export const addReaction = async (newsId: any) => {
   const client = await apiClient();
-
   const response = await client.post(`/news/${newsId}/reaction`);
   return response;
 };
@@ -11,7 +10,6 @@ export const addReaction = async (newsId: any) => {
 // Toggle Like
 export const toggleLike = async (newsId: any) => {
   const client = await apiClient();
-
   const response = await client.post(`/news/${newsId}/like`);
   return response;
 };
@@ -19,7 +17,6 @@ export const toggleLike = async (newsId: any) => {
 // Check Like Status
 export const checkLikeStatus = async (newsId: any) => {
   const client = await apiClient();
-
   const response = await client.get(`/news/${newsId}/like`);
   return response;
 };
@@ -34,7 +31,6 @@ export const addComments = async (newsId: any, comments: any) => {
 // Get Comments
 export const getComments = async (newsId: any) => {
   const client = await apiClient();
-
   const response = await client.get(`/news/${newsId}/comments`);
   return response;
 };
@@ -42,7 +38,6 @@ export const getComments = async (newsId: any) => {
 // Delete Comments
 export const deleteComments = async (commentId: any) => {
   const client = await apiClient();
-
   const response = await client.delete(`/news/comments/${commentId}`);
   return response;
 };
@@ -50,7 +45,6 @@ export const deleteComments = async (commentId: any) => {
 // Check User Like
 export const checkUserLikeNewsStatus = async (newsId: any) => {
   const client = await apiClient();
-
   const response = await client.get(`/news/${newsId}/user-like`);
   return response;
 };

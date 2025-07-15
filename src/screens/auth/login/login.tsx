@@ -27,6 +27,7 @@ import { AuthContext } from "../../../context/authContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeContext } from "../../../context/themeContext";
 import axios, { AxiosError } from "axios";
+import { ContinousBaseGesture } from "react-native-gesture-handler/lib/typescript/handlers/gestures/gesture";
 const LoginScreen = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const { user, isLoggedIn, login, logout, isLoading } =
@@ -147,43 +148,43 @@ const LoginScreen = () => {
         },
       ]}
     >
-      <ScrollView contentContainerStyle={styles.innerContainer}>
-        <View style={styles.headingContainer}>
-          <Text
-            style={[
-              styles.subtitle,
-              {
-                color:
-                  theme === "dark"
-                    ? colors.darkSecondaryText
-                    : colors.primaryText,
-              },
-            ]}
-          >
-            Log In
-          </Text>
-        </View>
-
-        {/* <Text style={styles.infoText}>
+      <View style={styles.innerContainer}>
+        <View style={styles.containerLogIn}>
+          <View style={styles.headingContainer}>
+            <Text
+              style={[
+                styles.subtitle,
+                {
+                  color:
+                    theme === "dark"
+                      ? colors.darkSecondaryText
+                      : colors.primaryText,
+                },
+              ]}
+            >
+              Log In
+            </Text>
+          </View>
+          {/* <Text style={styles.infoText}>
             Use only your WhatsApp number to login
           </Text> */}
-        <View style={styles.formContainer}>
-          <View style={styles.formFieldContainer}>
-            <View style={styles.labelRow}>
-              <Text
-                style={[
-                  styles.label,
-                  {
-                    color:
-                      theme === "dark"
-                        ? colors.darkSecondaryText
-                        : colors.primaryText,
-                  },
-                ]}
-              >
-                Email Address
-              </Text>
-              {showOTPInputs && (
+          <View style={styles.formContainer}>
+            <View style={styles.formFieldContainer}>
+              <View style={styles.labelRow}>
+                <Text
+                  style={[
+                    styles.label,
+                    {
+                      color:
+                        theme === "dark"
+                          ? colors.darkSecondaryText
+                          : colors.primaryText,
+                    },
+                  ]}
+                >
+                  Email
+                </Text>
+                {/* {showOTPInputs && (
                 <TouchableOpacity onPress={handleEditPress}>
                   <MaterialIcons
                     name="edit"
@@ -192,19 +193,19 @@ const LoginScreen = () => {
                     style={{ marginLeft: 8 }}
                   />
                 </TouchableOpacity>
-              )}
+              )} */}
+              </View>
+              <InputTextField
+                placeholder="Enter your email address"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                value={input}
+                onChangeText={validateInput}
+                editable={!showOTPInputs}
+                autoComplete="email"
+              />
             </View>
-            <InputTextField
-              placeholder="Enter your email address"
-              keyboardType="email-address"
-              autoCapitalize="none"
-              value={input}
-              onChangeText={validateInput}
-              editable={!showOTPInputs}
-              autoComplete="email"
-            />
-          </View>
-          {showOTPInputs && (
+            {/* {showOTPInputs && (
             <View style={styles.otpContainer}>
               {otp.map((digit, index) => (
                 <InputTextField
@@ -225,46 +226,49 @@ const LoginScreen = () => {
                 />
               ))}
             </View>
-          )}
+          )} */}
+          </View>
+        </View>
+        <View style={styles.containerLogInButton}>
           <Button
-            title={showOTPInputs ? "Verify OTP" : "Send OTP"}
+            title={showOTPInputs ? "Verify OTP" : "Log in"}
             onPress={showOTPInputs ? handleVerifyOTP : handleSendOTP}
             disabled={!isValid || (showOTPInputs && !isOtpComplete)}
           />
+          <View style={styles.inlineLinkContainer}>
+            <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+              <Text
+                style={[
+                  styles.alreadyLinkText,
+                  {
+                    color:
+                      theme === "dark"
+                        ? colors.darkPrimaryText
+                        : colors.secondaryText,
+                  },
+                ]}
+              >
+                Don't have an account?
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+              <Text
+                style={[
+                  styles.loginLinkText,
+                  {
+                    color:
+                      theme === "dark"
+                        ? colors.darkPrimaryText
+                        : colors.secondaryText,
+                  },
+                ]}
+              >
+                SIGN UP
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.inlineLinkContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-            <Text
-              style={[
-                styles.alreadyLinkText,
-                {
-                  color:
-                    theme === "dark"
-                      ? colors.darkPrimaryText
-                      : colors.secondaryText,
-                },
-              ]}
-            >
-              Don't have an account?
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-            <Text
-              style={[
-                styles.loginLinkText,
-                {
-                  color:
-                    theme === "dark"
-                      ? colors.darkPrimaryText
-                      : colors.secondaryText,
-                },
-              ]}
-            >
-              SIGN UP
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+      </View>
     </KeyboardAvoidingView>
   );
 };
@@ -296,7 +300,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     color: colors.primaryText,
-    fontFamily: fontFamily.Cabinet700,
+    fontFamily: fontFamily.Inter500,
     fontSize: 40,
     marginBottom: 10,
     textAlign: "center",
@@ -323,7 +327,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 20,
     color: colors.octonaryText,
-    fontFamily: fontFamily.Cabinet700,
+    fontFamily: fontFamily.Inter500,
   },
   input: {
     height: 36,
@@ -362,7 +366,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 14,
     color: colors.secondaryText,
-    fontFamily: fontFamily.Satoshi400,
+    fontFamily: fontFamily.Inter400,
   },
   loginLinkText: {
     textAlign: "center",
@@ -399,5 +403,16 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginHorizontal: 10,
+  },
+  containerLogInButton: {
+    gap: 40,
+    position: "absolute",
+    bottom: 80,
+    left: 20,
+    width: "100%",
+  },
+  containerLogIn: {
+    gap: 10,
+    marginBottom: 300,
   },
 });

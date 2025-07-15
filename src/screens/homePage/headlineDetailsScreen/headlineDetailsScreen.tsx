@@ -176,19 +176,86 @@ const HeadlineDetailsScreen = () => {
   ];
   useEffect(() => {
     if (newsId) {
-      //getCommentsAPI(newsId);
       getNewsByIDAPI(newsId);
-      //checkUserLikeNewsStatusAPI(newsId);
-      // checkLikeStatusAPI(newsId);
+      getCommentsAPI(newsId);
+      checkUserLikeNewsStatusAPI(newsId);
+      checkLikeStatusAPI(newsId);
     }
-    //getBookmarkAPI();
+    getBookmarkAPI();
   }, [newsId]);
-
-  const addReactionAPI = async (newsId: any) => {
+  const getNewsByIDAPI = async (newsId: string) => {
     try {
-      const response = await addReaction(newsId);
-      console.log(response.data);
-      showToast(response.data.message, "success");
+      const response = await getHighImpactNewsById(newsId);
+      console.log("newsResponseByID:", response.data);
+      setNewsData(response.data);
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      showToast(errorMessage, "danger");
+    } finally {
+      setLoading(false);
+    }
+  };
+  const getCommentsAPI = async (newsId: string) => {
+    console.log("Inside Get Comments=>");
+    try {
+      const response = await getComments(newsId);
+      console.log("Comments=>", response.data);
+      setCommentsData(response.data);
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      console.log("Comments Error=>", errorMessage);
+      showToast(errorMessage, "danger");
+    }
+  };
+  const getBookmarkAPI = async () => {
+    try {
+      const response = await getPinnedNews();
+      console.log("getBookmarkResponse", response.data);
+      setBookmarked(response.data);
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      showToast(errorMessage, "danger");
+    }
+  };
+  const checkLikeStatusAPI = async (newsId: string) => {
+    try {
+      const response = await checkLikeStatus(newsId);
+      console.log("CheckLikeStatusAPI", response.data);
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      showToast(errorMessage, "danger");
+    }
+  };
+  const checkUserLikeNewsStatusAPI = async (newsId: string) => {
+    console.log("Inside checkUserLikeNewsStatusAPI=>");
+    try {
+      const response = await checkUserLikeNewsStatus(newsId);
+      console.log("checkUserLikeNewsStatusAPI=>", response.data.liked);
+      setLiked(response.data.liked);
     } catch (err) {
       // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
@@ -220,11 +287,12 @@ const HeadlineDetailsScreen = () => {
       }>;
       const errorMessage =
         axiosErr.response?.data?.message ?? "Something went wrong";
+      console.log("Toggle Like ErrorMessage", axiosErr.response);
       showToast(errorMessage, "danger");
     }
   };
   const handleToggleLikeComment = () => {
-    console.log("inside handleToggleLike");
+    console.log("inside handleToggleLikeComment");
     setLiked((prev) => !prev);
     if (newsId) {
       toggleLikeAPIComment(newsId);
@@ -233,7 +301,7 @@ const HeadlineDetailsScreen = () => {
   const toggleLikeAPIComment = async (newsId: any) => {
     try {
       const response = await toggleLike(newsId);
-      console.log("Toggle Like=>", response.data);
+      console.log("Toggle Like Comment=>", response.data);
       showToast(response.data.message, "success");
     } catch (err) {
       // Narrow / cast to AxiosError
@@ -243,23 +311,7 @@ const HeadlineDetailsScreen = () => {
       }>;
       const errorMessage =
         axiosErr.response?.data?.message ?? "Something went wrong";
-      showToast(errorMessage, "danger");
-    }
-  };
-
-  const getBookmarkAPI = async () => {
-    try {
-      const response = await getPinnedNews();
-      console.log("getBookmarkResponse", response.data);
-      setBookmarked(response.data);
-    } catch (err) {
-      // Narrow / cast to AxiosError
-      const axiosErr = err as AxiosError<{
-        status: string;
-        message: string;
-      }>;
-      const errorMessage =
-        axiosErr.response?.data?.message ?? "Something went wrong";
+      console.log("Toggle Like Comment ErrorMessage", axiosErr.response);
       showToast(errorMessage, "danger");
     }
   };
@@ -313,21 +365,6 @@ const HeadlineDetailsScreen = () => {
       showToast(errorMessage, "danger");
     }
   };
-  const checkLikeStatusAPI = async (newsId: string) => {
-    try {
-      const response = await checkLikeStatus(newsId);
-      console.log("CheckLikeStatusAPI", response.data);
-    } catch (err) {
-      // Narrow / cast to AxiosError
-      const axiosErr = err as AxiosError<{
-        status: string;
-        message: string;
-      }>;
-      const errorMessage =
-        axiosErr.response?.data?.message ?? "Something went wrong";
-      showToast(errorMessage, "danger");
-    }
-  };
   const addCommentsAPI = async (newsId: any) => {
     setAddCommentsLoader(true);
     const commentData = {
@@ -348,59 +385,17 @@ const HeadlineDetailsScreen = () => {
       }>;
       const errorMessage =
         axiosErr.response?.data?.message ?? "Something went wrong";
-      console.log("ErrorMessage", axiosErr.response);
+      console.log("AddCommentErrorMessage", axiosErr.response);
       showToast(errorMessage, "danger");
     } finally {
       setAddCommentsLoader(false);
     }
   };
-  // const deleteCommentsAPI = async () => {
-  //   try {
-  //     const response = await deleteComments();
-  //     console.log(response.data);
-  //   } catch (error) {
-  //     console.log("API Error:", error);
-  //   }
-  // }
-  const checkUserLikeNewsStatusAPI = async (newsId: string) => {
+  const addReactionAPI = async (newsId: any) => {
     try {
-      const response = await checkUserLikeNewsStatus(newsId);
-      console.log("CheckUserLikeStatus=>", response.data.liked);
-      setLiked(response.data.liked);
-    } catch (err) {
-      // Narrow / cast to AxiosError
-      const axiosErr = err as AxiosError<{
-        status: string;
-        message: string;
-      }>;
-      const errorMessage =
-        axiosErr.response?.data?.message ?? "Something went wrong";
-      showToast(errorMessage, "danger");
-    }
-  };
-  const getNewsByIDAPI = async (newsId: string) => {
-    try {
-      const response = await getHighImpactNewsById(newsId);
-      console.log("newsResponseByID:", response.data);
-      setNewsData(response.data);
-    } catch (err) {
-      // Narrow / cast to AxiosError
-      const axiosErr = err as AxiosError<{
-        status: string;
-        message: string;
-      }>;
-      const errorMessage =
-        axiosErr.response?.data?.message ?? "Something went wrong";
-      showToast(errorMessage, "danger");
-    } finally {
-      setLoading(false);
-    }
-  };
-  const getCommentsAPI = async (newsId: string) => {
-    try {
-      const response = await getComments(newsId);
-      console.log("Comments", response.data);
-      setCommentsData(response.data);
+      const response = await addReaction(newsId);
+      console.log(response.data);
+      showToast(response.data.message, "success");
     } catch (err) {
       // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
