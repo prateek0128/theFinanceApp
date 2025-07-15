@@ -70,6 +70,8 @@ export const colors = {
   darkTertiaryText: "#A0ABBB",
   darkQuaternaryText: "#B8C0CC",
   darkQuinaryText: "#CDCFD0",
+  darkSenaryText: "#979C9E",
+  darkSeptanaryText: "#9990FF",
   //Border Colors
   primaryBorderColor: "#3C3744",
   secondaryBorderColor: "#6B7280",
@@ -78,9 +80,11 @@ export const colors = {
   quinaryBorderColor: "#D0D5DD",
   senaryBorderColor: "#383838",
   septnaryBorderColor: "#1D4ED8",
+  nonaryBorder: "#E3E5E5", //9
   //Button Colors
   primaryButtonColor: "#007AFF",
   secondaryButtonColor: "#2B22E2",
+  tertiaryButtonColor: "#303437",
 
   //startScreen
   blueCard: "#CDE3F3",

@@ -28,6 +28,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeContext } from "../../../context/themeContext";
 import axios, { AxiosError } from "axios";
 import { ContinousBaseGesture } from "react-native-gesture-handler/lib/typescript/handlers/gestures/gesture";
+import OTPSection from "./otpSection";
 const LoginScreen = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const { user, isLoggedIn, login, logout, isLoading } =
@@ -39,7 +40,7 @@ const LoginScreen = () => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const otpInputs = useRef<Array<RNTextInput | null>>([]);
   const [isValid, setIsValid] = useState(false);
-
+  const [isFocusOTP, setIsFocusOTP] = useState(false);
   const handleSendOTP = async () => {
     if (input.trim() === "") {
       showToast("Please enter your phone or email.", "warning");
@@ -139,7 +140,7 @@ const LoginScreen = () => {
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
       style={[
-        styles.container,
+        styles.mainContainer,
         {
           backgroundColor:
             theme === "dark"
@@ -148,127 +149,110 @@ const LoginScreen = () => {
         },
       ]}
     >
-      <View style={styles.innerContainer}>
-        <View style={styles.containerLogIn}>
-          <View style={styles.headingContainer}>
-            <Text
-              style={[
-                styles.subtitle,
-                {
-                  color:
-                    theme === "dark"
-                      ? colors.darkSecondaryText
-                      : colors.primaryText,
-                },
-              ]}
-            >
-              Log In
-            </Text>
-          </View>
-          {/* <Text style={styles.infoText}>
+      {showOTPInputs == false ? (
+        <View style={styles.innerLogInContainer}>
+          <View style={styles.containerLogIn}>
+            <View style={styles.headingContainer}>
+              <Text
+                style={[
+                  styles.subtitle,
+                  {
+                    color:
+                      theme === "dark"
+                        ? colors.darkSecondaryText
+                        : colors.primaryText,
+                  },
+                ]}
+              >
+                Log In
+              </Text>
+            </View>
+            {/* <Text style={styles.infoText}>
             Use only your WhatsApp number to login
           </Text> */}
-          <View style={styles.formContainer}>
-            <View style={styles.formFieldContainer}>
-              <View style={styles.labelRow}>
+            <View style={styles.formContainer}>
+              <View style={styles.formFieldContainer}>
+                <View style={styles.labelRow}>
+                  <Text
+                    style={[
+                      styles.label,
+                      {
+                        color:
+                          theme === "dark"
+                            ? colors.darkSecondaryText
+                            : colors.primaryText,
+                      },
+                    ]}
+                  >
+                    Email
+                  </Text>
+                </View>
+                <InputTextField
+                  placeholder="Enter your email address"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  value={input}
+                  onChangeText={validateInput}
+                  editable={!showOTPInputs}
+                  autoComplete="email"
+                />
+              </View>
+            </View>
+          </View>
+          <View style={styles.containerLogInButton}>
+            <Button
+              title={"Log in"}
+              onPress={handleSendOTP}
+              // disabled={!isValid || (showOTPInputs && !isOtpComplete)}
+              disabled={!isValid}
+            />
+            <View style={styles.inlineLinkContainer}>
+              <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
                 <Text
                   style={[
-                    styles.label,
+                    styles.alreadyLinkText,
                     {
                       color:
                         theme === "dark"
-                          ? colors.darkSecondaryText
-                          : colors.primaryText,
+                          ? colors.darkPrimaryText
+                          : colors.secondaryText,
                     },
                   ]}
                 >
-                  Email
+                  Don't have an account?
                 </Text>
-                {/* {showOTPInputs && (
-                <TouchableOpacity onPress={handleEditPress}>
-                  <MaterialIcons
-                    name="edit"
-                    size={18}
-                    color={colors.primaryText}
-                    style={{ marginLeft: 8 }}
-                  />
-                </TouchableOpacity>
-              )} */}
-              </View>
-              <InputTextField
-                placeholder="Enter your email address"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                value={input}
-                onChangeText={validateInput}
-                editable={!showOTPInputs}
-                autoComplete="email"
-              />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+                <Text
+                  style={[
+                    styles.loginLinkText,
+                    {
+                      color:
+                        theme === "dark"
+                          ? colors.darkPrimaryText
+                          : colors.secondaryText,
+                    },
+                  ]}
+                >
+                  SIGN UP
+                </Text>
+              </TouchableOpacity>
             </View>
-            {/* {showOTPInputs && (
-            <View style={styles.otpContainer}>
-              {otp.map((digit, index) => (
-                <InputTextField
-                  key={index}
-                  ref={(ref: any) => {
-                    otpInputs.current[index] = ref;
-                  }}
-                  style={styles.otpInput}
-                  keyboardType="numeric"
-                  maxLength={1}
-                  value={digit}
-                  onChangeText={(value) => handleOTPChange(index, value)}
-                  onKeyPress={({ nativeEvent }) =>
-                    handleOTPKeyPress(index, nativeEvent.key)
-                  }
-                  returnKeyType="next"
-                  blurOnSubmit={false}
-                />
-              ))}
-            </View>
-          )} */}
           </View>
         </View>
-        <View style={styles.containerLogInButton}>
-          <Button
-            title={showOTPInputs ? "Verify OTP" : "Log in"}
-            onPress={showOTPInputs ? handleVerifyOTP : handleSendOTP}
-            disabled={!isValid || (showOTPInputs && !isOtpComplete)}
-          />
-          <View style={styles.inlineLinkContainer}>
-            <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-              <Text
-                style={[
-                  styles.alreadyLinkText,
-                  {
-                    color:
-                      theme === "dark"
-                        ? colors.darkPrimaryText
-                        : colors.secondaryText,
-                  },
-                ]}
-              >
-                Don't have an account?
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-              <Text
-                style={[
-                  styles.loginLinkText,
-                  {
-                    color:
-                      theme === "dark"
-                        ? colors.darkPrimaryText
-                        : colors.secondaryText,
-                  },
-                ]}
-              >
-                SIGN UP
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
+      ) : (
+        <OTPSection
+          isFocusOTP={isFocusOTP}
+          setIsFocusOTP={setIsFocusOTP}
+          showOTPInputs={showOTPInputs}
+          setShowOTPInputs={setShowOTPInputs}
+          input={input}
+          setInput={setInput}
+          otp={otp}
+          setOtp={setOtp}
+          handleVerifyOTP={handleVerifyOTP}
+        />
+      )}
     </KeyboardAvoidingView>
   );
 };
@@ -276,11 +260,11 @@ const LoginScreen = () => {
 export default LoginScreen;
 
 const styles = StyleSheet.create({
-  container: {
+  mainContainer: {
     flex: 1,
     //backgroundColor: colors.nonaryBackground,
   },
-  innerContainer: {
+  innerLogInContainer: {
     padding: 20,
     justifyContent: "center",
     flexGrow: 1,
