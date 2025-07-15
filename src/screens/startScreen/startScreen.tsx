@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import {
   Animated,
   View,
@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Dimensions,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "../../types/navigation";
@@ -23,64 +24,52 @@ import {
   StartScreen2,
   StartScreen3,
 } from "../../assets/icons/components/startScreen";
+import Button from "../../components/button/button";
+//import Carousel from "react-native-snap-carousel";
 const { width, height } = Dimensions.get("window");
 const StartScreen = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const translateAnim = useState(new Animated.ValueXY({ x: 100, y: 100 }))[0]; // start off-screen bottom right
   const opacityAnim = useState(new Animated.Value(0))[0];
+  const [activeIndex, setActiveIndex] = useState(0);
   const [cardIndex, setCardIndex] = useState(0);
+  const flatListRef = useRef<FlatList>(null);
+  const activeIndexRef = useRef(0);
   const cardData = [
     {
-      title: "Your Everyday Financial News App",
-      text: "Now your finances are in one place and always under control",
+      title: "Your All-in-One Financial News Hub",
+      text: "Track trends, read updates, and stay in control of your money - every single day.",
       image: StartScreen1,
-      backgroundColor: colors.blueCard,
     },
     {
-      title: "Read News on the GO !",
-      text: "All expenses by cards are reflected automatically in the application, and the analytics system helps to control them",
+      title: "Stay Informed, Anytime, Anywhere",
+      text: "Stay updated with real-time financial stories on the go.",
       image: StartScreen2,
-      backgroundColor: colors.greenCard,
     },
     {
-      title: "Learn what & could happen to the Market",
-      text: "The system notices where you're slipping on the budget and tells you how to optimize costs",
+      title: "Understand the Market before it Moves",
+      text: "Get expert-backed insights and analysis to make smarter financial decisions.",
       image: StartScreen3,
-      backgroundColor: colors.yellowCard,
     },
   ];
-
-  const currentCard = cardData[cardIndex];
-
   useEffect(() => {
-    // Initial entry animation (optional)
-    translateAnim.setValue({ x: 100, y: 100 });
-    opacityAnim.setValue(0);
+    const interval = setInterval(() => {
+      if (activeIndexRef.current < cardData.length - 1) {
+        const nextIndex = activeIndexRef.current + 1;
+        flatListRef.current?.scrollToIndex({
+          index: nextIndex,
+          animated: true,
+        });
 
-    Animated.parallel([
-      Animated.timing(translateAnim, {
-        toValue: { x: 0, y: 0 },
-        duration: 800,
-        useNativeDriver: true,
-      }),
-      Animated.timing(opacityAnim, {
-        toValue: 1,
-        duration: 800,
-        useNativeDriver: true,
-      }),
-    ]).start();
+        // ❌ Don't call setActiveIndex here!
+        // It causes dot update before scroll is done
+        activeIndexRef.current = nextIndex;
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
   }, []);
-  const handleNext = () => {
-    if (cardIndex === cardData.length - 1) {
-      navigation.navigate("Welcome");
-      // navigation.navigate("TellUsSomething", {});
-      setCardIndex(0);
-    } else {
-      const nextIndex = cardIndex + 1;
-      setCardIndex(nextIndex);
-    }
-  };
 
   return (
     <View
@@ -94,50 +83,99 @@ const StartScreen = () => {
         },
       ]}
     >
-      <View style={styles.textContainer}>
+      <Text style={styles.headingText}>
         <Text
-          style={[
-            styles.cardTitle,
-            {
-              color:
-                theme === "dark" ? colors.white : colors.undenaryBackground,
-            },
-          ]}
+          style={{
+            color: theme == "dark" ? colors.white : colors.octodenaryText,
+          }}
         >
-          {currentCard.title}
+          Market
         </Text>
-        <Text
-          style={[
-            styles.cardText,
-            {
-              color: theme === "dark" ? colors.undenaryText : colors.denaryText,
-            },
-          ]}
-        >
-          {currentCard.text}
-        </Text>
+        <Text style={{ color: colors.sexdenaryText }}>Brief's</Text>
+      </Text>
+      {/* <View style={styles.caraouselContainer}> */}
+      <FlatList
+        ref={flatListRef}
+        data={cardData}
+        keyExtractor={(_, index) => index.toString()}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        // snapToInterval={width}
+        // decelerationRate="fast"
+        onMomentumScrollEnd={(event) => {
+          const offsetX = event.nativeEvent.contentOffset.x;
+          const newIndex = Math.round(offsetX / width);
+          setActiveIndex(newIndex);
+          activeIndexRef.current = newIndex;
+        }}
+        contentContainerStyle={{ paddingHorizontal: 0 }}
+        renderItem={({ item }) => (
+          <View style={styles.carouselSlide}>
+            <View style={styles.imageContainer}>
+              <item.image />
+            </View>
+            <View style={[styles.textContainer]}>
+              <Text
+                style={[
+                  styles.cardTitle,
+                  {
+                    color:
+                      theme === "dark" ? colors.white : colors.octodenaryText,
+                    textAlign: "center",
+                  },
+                ]}
+              >
+                {item.title}
+              </Text>
+              <Text
+                style={[
+                  styles.cardText,
+                  {
+                    color:
+                      theme === "dark" ? colors.white : colors.novemdenaryText,
+                    textAlign: "center",
+                  },
+                ]}
+              >
+                {item.text}
+              </Text>
+            </View>
+          </View>
+        )}
+      />
+      <View style={styles.paginationContainer}>
+        {cardData.map((_, index) => (
+          <View
+            key={index}
+            style={[
+              styles.dot,
+              activeIndex === index ? styles.activeDot : styles.inactiveDot,
+            ]}
+          />
+        ))}
       </View>
-      <View style={styles.imageContainer}>
-        <currentCard.image />
-      </View>
-      <TouchableOpacity
-        style={[
-          styles.floatingButtonContainer,
-          {
-            borderColor:
-              theme === "dark"
-                ? colors.nonaryBackground
-                : colors.darkPrimaryBackground,
-            backgroundColor:
-              theme === "dark"
-                ? colors.duodenaryBackground
-                : colors.undenaryBackground,
-          },
-        ]}
-        onPress={handleNext}
-      >
-        {theme === "dark" ? <NextCardArrowBlack /> : <NextCardArrowWhite />}
-      </TouchableOpacity>
+      {/* </View> */}
+      {activeIndex === cardData.length - 1 ? (
+        <Button
+          title="Continue"
+          onPress={() => {
+            navigation.navigate("TellUsSomething", {});
+          }}
+          buttonStyle={{
+            backgroundColor: colors.sexdenaryText,
+            paddingVertical: 16,
+            paddingHorizontal: 32,
+          }}
+          textStyle={{
+            fontFamily: fontFamily.Inter500,
+            fontSize: 16,
+            color: colors.white,
+          }}
+        />
+      ) : (
+        <View style={{ height: 72 }} /> // Keeps layout height consistent
+      )}
     </View>
   );
 };
@@ -150,9 +188,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
     // backgroundColor: colors.primaryBackground,
-    padding: 20,
-    // paddingLeft: 52,
+    paddingVertical: 20,
+    //paddingLeft: 52,
     gap: 20,
+  },
+  headingText: {
+    fontSize: 32,
+    fontFamily: fontFamily.Cabinet700,
+    marginBottom: 6,
+    textAlign: "center",
+    marginTop: 20,
   },
   card: {
     height: height * 0.8,
@@ -165,38 +210,48 @@ const styles = StyleSheet.create({
     marginLeft: 32,
     marginRight: 32,
   },
+  caraouselContainer: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  carouselSlide: {
+    width: width, // Full screen width
+    // justifyContent: "center",
+    paddingHorizontal: 0, // no padding
+    marginHorizontal: 0,
+    alignItems: "center",
+    gap: 20,
+  },
   cardTitle: {
-    fontFamily: fontFamily.Cabinet700,
-    fontSize: 40,
+    fontFamily: fontFamily.Inter700,
+    fontSize: 32,
     //color: colors.secondaryText,
   },
   cardText: {
-    fontFamily: fontFamily.Satoshi400,
-    fontSize: 16,
-    color: colors.tertiaryText,
+    fontFamily: fontFamily.Inter400,
+    fontSize: 14,
   },
   imageContainer: {
-    // flex: 1,
-    //flexDirection: "row",
-    // justifyContent: "flex-end",
-    // alignItems: "flex-end",
+    // marginBottom: 80,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  floatingButtonContainer: {
-    position: "absolute",
-    bottom: 30,
-    right: 20,
-    // alignSelf: "flex-end",
-    padding: 16,
+  paginationContainer: {
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    width: 52,
-    height: 52,
-    borderRadius: 28,
-    borderWidth: 1,
   },
-  floatingButton: {
-    color: "#000",
-    fontSize: 16,
-    fontWeight: "bold",
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginHorizontal: 6,
+  },
+  activeDot: {
+    backgroundColor: colors.sexdenaryText, // or any color
+  },
+  inactiveDot: {
+    backgroundColor: colors.septendenaryBackground, // lighter color
   },
 });
