@@ -30,7 +30,7 @@ export const colors = {
   quindenaryBackground: "#1D4ED8", // 15
   sexdenaryBackground: "#D1FAE5", // 16
   septendenaryBackground: "#E3E5E5", // 17
-  // octodenaryBackground: "#A2A2FF",  // 18
+   octodenaryBackground: "#F2F4F5",  // 18
   // novemdenaryBackground: "#9999FF", // 19
   // vigenaryBackground: "#9090FF",    // 20
   //Dark Background Colors
