@@ -62,11 +62,14 @@ export const colors = {
   quindenaryText: "#0D0F11",
   sexdenaryText: "#6B4EFF", //16
   septendenaryText: "#121212",
+  octodenaryText: "#090A0A",
+  novemdenaryText: "#6C7072", // 19
   //Dark Text Colors
   darkPrimaryText: "#EDEDED",
   darkSecondaryText: "#F7F8F9",
   darkTertiaryText: "#A0ABBB",
   darkQuaternaryText: "#B8C0CC",
+  darkQuinaryText: "#CDCFD0",
   //Border Colors
   primaryBorderColor: "#3C3744",
   secondaryBorderColor: "#6B7280",
