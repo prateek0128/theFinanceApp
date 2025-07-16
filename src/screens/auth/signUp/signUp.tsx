@@ -333,15 +333,19 @@ const styles = StyleSheet.create({
   },
   otpInput: {
     width: 50,
-    height: 50,
+    height: 60, // increased for better vertical spacing
     borderWidth: 1,
     borderColor: "#ccc",
-    borderRadius: 8,
+    borderRadius: 12, // rounded edges
     textAlign: "center",
     fontSize: 20,
+    lineHeight: 24, // added to avoid text cut off
+    paddingVertical: Platform.OS === "ios" ? 12 : 8, // vertical padding to center text
     color: colors.primaryText,
-    // fontFamily: fontFamily.Satoshi500,
+    backgroundColor: colors.secondaryBackground,
+    fontFamily: fontFamily.Satoshi500, // or whatever you're using
   },
+
   buttonContainers: {
     gap: 16,
   },
