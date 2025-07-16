@@ -149,8 +149,8 @@ const StartScreen = () => {
         <Button
           title="Continue"
           onPress={() => {
-            navigation.navigate("Welcome");
-            //navigation.navigate("ChooseYourInterests");
+            // navigation.navigate("Welcome");
+            navigation.navigate("TellUsSomething", {});
           }}
         />
       ) : (

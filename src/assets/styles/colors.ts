@@ -86,6 +86,7 @@ export const colors = {
   septnaryBorderColor: "#1D4ED8", //7
   octonaryBorderColor: "#5538EE", //8
     nonaryBorder: "#E3E5E5", //9
+    denaryBorder: "#C6C4FF",
   //Button Colors
   primaryButtonColor: "#007AFF", //1
   secondaryButtonColor: "#2B22E2", //2
