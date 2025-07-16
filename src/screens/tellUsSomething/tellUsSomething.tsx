@@ -15,11 +15,9 @@ import { colors } from "../../assets/styles/colors";
 import fontFamily from "../../assets/styles/fontFamily";
 import Button from "../../components/button/button";
 import { ThemeContext } from "../../context/themeContext";
-import {
-  BackArrowIcon,
-  BackArrowIconWhite,
-} from "../../assets/icons/components/header";
+import { BackArrow, BackArrowWhite } from "../../assets/icons/components/logIn";
 import globalStyles from "../../assets/styles/globalStyles";
+import { ProgressBar, MD3Colors } from "react-native-paper";
 const QuestionBlock = ({
   title,
   options,
@@ -36,22 +34,12 @@ const QuestionBlock = ({
   theme: string;
 }) => (
   <View style={styles.titleoptioncontainer}>
+    <Text style={[globalStyles.title(theme)]}>{title}</Text>
     <Text
       style={[
-        styles.title,
         {
           color:
-            theme === "dark" ? colors.darkPrimaryText : colors.quindenaryText,
-        },
-      ]}
-    >
-      {title}
-    </Text>
-    <Text
-      style={[
-        "",
-        {
-          color: theme === "dark" ? colors.darkPrimaryText : colors.primaryText,
+            theme === "dark" ? colors.darkSenaryText : colors.novemdenaryText,
         },
       ]}
     >
@@ -82,12 +70,19 @@ const QuestionBlock = ({
                 backgroundColor:
                   theme === "light"
                     ? isSelected
-                      ? "#BFDBFE"
+                      ? colors.septendenaryBackground
                       : colors.primaryBackground
                     : isSelected
-                    ? colors.darkSenaryBackground
-                    : colors.undenaryBackground,
-                borderColor: isSelected ? "#1D4ED8" : colors.quinaryBorderColor,
+                    ? colors.darkUndenaryBackground
+                    : "transparent",
+                borderColor:
+                  theme === "light"
+                    ? isSelected
+                      ? colors.denaryBorder
+                      : colors.nonaryBorder
+                    : isSelected
+                    ? "transparent"
+                    : colors.tertiaryButtonColor,
               },
             ]}
           >
@@ -96,13 +91,14 @@ const QuestionBlock = ({
                 color:
                   theme === "light"
                     ? isSelected
-                      ? "#1D4ED8"
-                      : colors.undenaryBackground
+                      ? colors.sexdenaryText
+                      : colors.octodenaryText
                     : isSelected
-                    ? "#1D4ED8"
+                    ? colors.darkSeptanaryText
                     : colors.white,
-                fontFamily: fontFamily.Satoshi500,
-                fontSize: 16,
+                fontFamily: isSelected
+                  ? fontFamily.Inter700
+                  : fontFamily.Inter400,
               }}
             >
               {option}
@@ -123,19 +119,20 @@ const TellUsSomething = () => {
   const [selectedGoal, setSelectedGoal] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [showSecondQuestion, setShowSecondQuestion] = useState(false);
+  const progress = !showSecondQuestion ? 0.5 : 1;
 
   const roles = ["Student", "Professional", "Business Owner", "Retired"];
   const goals = [
-    "Long-term Investing",
-    "Day Trading",
-    "Portfolio Tracking",
-    "Market Research",
+    "Stay updated",
+    "Learn about market",
+    "Track market trends",
+    "Get expert opinions",
   ];
   const isFormValid = showSecondQuestion
     ? selectedGoal !== ""
     : selectedWhoAreYou !== "";
 
-  const handleNextOrSubmit = () => {
+  const handleNextOrContinue = () => {
     if (!showSecondQuestion) {
       setShowSecondQuestion(true);
     } else {
@@ -149,57 +146,47 @@ const TellUsSomething = () => {
       keyboardShouldPersistTaps="handled"
     >
       <View style={[globalStyles.pageContainerWithBackground(theme)]}>
-        <View
-          style={[
-            styles.questioncontainer,
-            {
-              backgroundColor:
-                theme === "dark"
-                  ? colors.darkPrimaryBackground
-                  : colors.primaryBackground,
-            },
-          ]}
-        >
-          <View style={styles.questionText}>
+        <View style={[styles.topContainer]}>
+          <View>
             {showSecondQuestion && (
               <TouchableOpacity
                 onPress={() => {
-                  // Go back to Question 1
                   setShowSecondQuestion(false);
-                  setSelectedGoal(""); // Optional: reset second selection
                 }}
-                style={styles.backButton}
               >
-                {/* Replace this with your icon or SVG */}
-                <View>
-                  {theme === "light" ? (
-                    <BackArrowIcon />
-                  ) : (
-                    <BackArrowIconWhite />
-                  )}
-                </View>
+                {theme === "dark" ? <BackArrowWhite /> : <BackArrow />}
               </TouchableOpacity>
             )}
-            <Text
-              style={[
-                styles.questionText,
-                {
-                  color:
-                    theme === "dark"
-                      ? colors.darkPrimaryText
-                      : colors.primaryText,
-                },
-              ]}
-            >
-              {showSecondQuestion ? "Question 2 of 2" : "Question 1 of 2"}
-            </Text>
+          </View>
+          <View>
+            {/* <TouchableOpacity>
+              <Text
+                style={[
+                  styles.emailText,
+                  {
+                    color:
+                      theme === "dark"
+                        ? colors.darkSeptanaryText
+                        : colors.sexdenaryText,
+                  },
+                ]}
+              >
+                Skip
+              </Text>
+            </TouchableOpacity> */}
           </View>
         </View>
-
+        <View style={styles.progressContainer}>
+          <ProgressBar
+            progress={progress}
+            color={colors.sexdenaryText}
+            style={styles.progressBar}
+          />
+        </View>
         {!showSecondQuestion && (
           <QuestionBlock
-            title="What is your Role"
-            message="Choose Your Role"
+            title="Tell us a bit about you?"
+            message="Helps us know you better and make your experience more relevant."
             options={roles}
             selectedValue={selectedWhoAreYou}
             onSelect={setSelectedWhoAreYou}
@@ -209,8 +196,8 @@ const TellUsSomething = () => {
 
         {showSecondQuestion && (
           <QuestionBlock
-            title="What is your Goal"
-            message="Choose your goal"
+            title="What bring you here ?"
+            message="We’ll customize your news and insights based on your interests"
             options={goals}
             selectedValue={selectedGoal}
             onSelect={setSelectedGoal}
@@ -219,10 +206,16 @@ const TellUsSomething = () => {
         )}
 
         <Button
-          title={showSecondQuestion ? "Submit" : "Next"}
-          onPress={handleNextOrSubmit}
+          title={showSecondQuestion ? "Continue" : "Next"}
+          onPress={handleNextOrContinue}
           disabled={!isFormValid}
-          buttonStyle={styles.submitButton}
+          buttonStyle={[
+            styles.submitButton,
+            {
+              backgroundColor:
+                theme === "light" ? colors.sexdenaryText : colors.sexdenaryText,
+            },
+          ]}
         />
       </View>
     </ScrollView>
@@ -235,7 +228,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     textAlign: "center",
-    fontFamily: fontFamily.Cabinet700,
+    fontFamily: fontFamily.Inter700,
     color: colors.quindenaryText,
   },
   titleoptioncontainer: {
@@ -255,21 +248,33 @@ const styles = StyleSheet.create({
   optionBox: {
     paddingVertical: 14,
     paddingHorizontal: 16,
-    borderRadius: 12,
+    borderRadius: 48,
     borderWidth: 1,
-  },
-  questioncontainer: {
-    flexDirection: "column", // use "row" if you want them side by side
-    gap: 12,
-    marginTop: 50,
-    marginBottom: 60,
-  },
-  questionText: {
-    flexDirection: "row",
-    gap: 6,
   },
   backButton: {
     gap: 6,
   },
-  backButtonText: {},
+  topContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    justifyContent: "space-between",
+    marginTop: 60,
+    marginBottom: 60,
+    width: "100%",
+  },
+  emailText: {
+    fontSize: 16,
+    color: colors.sexdenaryText,
+    fontFamily: fontFamily.Inter400,
+    textAlign: "right",
+  },
+  progressBar: {
+    height: 4,
+  },
+  progressContainer: {
+    backgroundColor: "#eee", // unfilled color
+    borderRadius: 4,
+    overflow: "hidden",
+  },
 });
