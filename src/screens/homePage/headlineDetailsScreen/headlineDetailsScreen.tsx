@@ -175,6 +175,28 @@ const HeadlineDetailsScreen = () => {
       user_id: "6864f3be13b9bfbabd948fb6",
     },
   ];
+  const bookmarks = [
+    {
+      authors: ["EconomicTimes"],
+      categories: ["Stocks"],
+      date_extracted: false,
+      engagement: { comments: 0, likes: 0 },
+      id: "68763b40cf5ed850865d166e",
+      impact_label: "High Impact",
+      impact_score: 7,
+      published_at: "2025-07-15T13:29:12.391Z",
+      reaction_stats: { bearish: 0, bullish: 0, important: 0, neutral: 0 },
+      related_stocks: null,
+      sentiment_score: -0.052272727272727214,
+      source: "EconomicTimes",
+      summary:
+        "• Ola Electric shares surged over 9% despite reporting a loss of Rs 428 crore in the first quarter.• This rally indicates that investors are optimistic about the company's operational gains and potential path to profitability.• It's like a sports team that loses a game but shows signs of improvement, making fans hopeful for future victories.",
+      tags: null,
+      time_ago: "17 hours ago",
+      title: "Ola Electric Shares Surge Despite Loss",
+      url: "https://m.economictimes.com/markets/stocks/news/ola-electric-shares-surge-over-9-despite-posting-rs-428-crore-loss-in-q1-heres-why/articleshow/122431143.cms",
+    },
+  ];
   useEffect(() => {
     if (newsId) {
       getNewsByIDAPI(newsId);
@@ -223,7 +245,7 @@ const HeadlineDetailsScreen = () => {
   const getBookmarkAPI = async () => {
     try {
       const response = await getPinnedNews();
-      console.log("getBookmarkResponse", response.data);
+      console.log("BookmarkResponse=>", response.data);
       setBookmarked(response.data);
     } catch (err) {
       // Narrow / cast to AxiosError
@@ -240,6 +262,7 @@ const HeadlineDetailsScreen = () => {
     try {
       const response = await checkLikeStatus(newsId);
       console.log("CheckLikeStatusAPI", response.data);
+      setLiked(response.data.liked);
     } catch (err) {
       // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
@@ -255,8 +278,8 @@ const HeadlineDetailsScreen = () => {
     console.log("Inside checkUserLikeNewsStatusAPI=>");
     try {
       const response = await checkUserLikeNewsStatus(newsId);
-      console.log("checkUserLikeNewsStatusAPI=>", response.data.liked);
-      setLiked(response.data.liked);
+      console.log("checkUserLikeNewsStatusAPI=>", response.data);
+      // setLiked(response.data.liked);
     } catch (err) {
       // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
@@ -265,6 +288,7 @@ const HeadlineDetailsScreen = () => {
       }>;
       const errorMessage =
         axiosErr.response?.data?.message ?? "Something went wrong";
+      console.log("checkUserLikeNewsStatusAPIError=>", axiosErr.response?.data);
       showToast(errorMessage, "danger");
     }
   };
@@ -334,6 +358,7 @@ const HeadlineDetailsScreen = () => {
     console.log("Inside handlePinNews");
     try {
       const response = await pinNews(newsId);
+      console.log("PinNewsResponse=>", response.data);
       console.log("PinNews=>", response.data.success);
       showToast("News bookmarked successfully", "success");
     } catch (err) {
@@ -352,6 +377,7 @@ const HeadlineDetailsScreen = () => {
     console.log("Inside handleUnPinNews");
     try {
       const response = await unpinNews(newsId);
+      console.log("UninNewsResponse=>", response.data);
       console.log("UninNews=>", response.data.success);
       showToast("News bookmarked unsuccessfully", "success");
     } catch (err) {
@@ -443,6 +469,7 @@ const HeadlineDetailsScreen = () => {
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={[
           globalStyles.pageContainerWithBackground(theme),
+          { flex: 0 },
         ]}
       >
         <View style={styles.headerContainer}>
@@ -569,8 +596,8 @@ const HeadlineDetailsScreen = () => {
             Related Discussions
           </Text>
           <View style={styles.relatedDiscussionsDetails}>
-            {Array.isArray(comments) &&
-              comments.map((comment) => (
+            {Array.isArray(commentsData) &&
+              commentsData.map((comment) => (
                 <View key={comment.id} style={styles.relatedDiscussionsArticle}>
                   {
                     //@ts-ignore
