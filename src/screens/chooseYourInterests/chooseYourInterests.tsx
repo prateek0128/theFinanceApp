@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { ThemeContext } from "../../context/themeContext";
 import { showMessage } from "react-native-flash-message";
@@ -20,6 +20,8 @@ import { ScrollView } from "react-native-gesture-handler";
 import showToast from "../../utilis/showToast";
 import Button from "../../components/button/button";
 import globalStyles from "../../assets/styles/globalStyles";
+import { getAllInterests } from "../../apiServices/onboarding";
+import { AxiosError } from "axios";
 const interests = [
   "Stock Market News",
   "Indian Companies",
@@ -58,7 +60,24 @@ export default function ChooseYourInterests() {
   const handleContinue = () => {
     navigation.navigate("BottomTabNavigator");
   };
-
+  const getAllInterestsAPI = async () => {
+    try {
+      const response = await getAllInterests();
+      console.log("InterestsResponse=>", response.data);
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      showToast(errorMessage, "danger");
+    }
+  };
+  useEffect(() => {
+    getAllInterestsAPI();
+  }, []);
   return (
     <View
       style={[

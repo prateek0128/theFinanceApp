@@ -134,69 +134,6 @@ const HeadlineDetailsScreen = () => {
     }
     return null;
   };
-  const newsData3 = {
-    authors: ["BusinessStandard"],
-    content: "",
-    date_extracted: false,
-    engagement: { comments: 0, likes: 0 },
-    id: "68670bd5753499b7e5d9c486",
-    impact_label: "High Impact",
-    impact_score: 7,
-    processed_by: "gpt",
-    published_at: "2025-07-04T19:05:49.534Z",
-    related_stocks: null,
-    sector: "banking",
-    sentiment_label: "neutral",
-    sentiment_score: 0.2575757575757576,
-    source: "BusinessStandard",
-    summary:
-      "CSB Bank shares increased by 3% following a strong business update for the first quarter of financial year 2026.This positive performance indicates that the bank is doing well, which can attract more investors and boost its stock price.It's like a restaurant getting great reviews; more customers are likely to visit and enjoy the food.",
-    tag: "bullish",
-    tags: null,
-    time_ago: "6 days ago",
-    title: "CSB Bank Shares Surge 3% After Q1 (First Quarter) Results",
-    url: "https://www.business-standard.com/markets/news/csb-bank-share-pops-3-on-healthy-q1-business-show-key-info-inside-125070300192_1.html",
-  };
-  const comments = [
-    {
-      comment: "Impressive news",
-      commented_at: "2025-07-02T11:02:27Z",
-      id: "686511c313b9bfbabd948fc0",
-      likes: 0,
-      news_id: "6864f165e47cdd0e79348df6",
-      user_id: "6864f3be13b9bfbabd948fb6",
-    },
-    {
-      comment: "News is good.",
-      commented_at: "2025-07-02T11:01:52Z",
-      id: "686511a013b9bfbabd948fbf",
-      likes: 0,
-      news_id: "6864f165e47cdd0e79348df6",
-      user_id: "6864f3be13b9bfbabd948fb6",
-    },
-  ];
-  const bookmarks = [
-    {
-      authors: ["EconomicTimes"],
-      categories: ["Stocks"],
-      date_extracted: false,
-      engagement: { comments: 0, likes: 0 },
-      id: "68763b40cf5ed850865d166e",
-      impact_label: "High Impact",
-      impact_score: 7,
-      published_at: "2025-07-15T13:29:12.391Z",
-      reaction_stats: { bearish: 0, bullish: 0, important: 0, neutral: 0 },
-      related_stocks: null,
-      sentiment_score: -0.052272727272727214,
-      source: "EconomicTimes",
-      summary:
-        "• Ola Electric shares surged over 9% despite reporting a loss of Rs 428 crore in the first quarter.• This rally indicates that investors are optimistic about the company's operational gains and potential path to profitability.• It's like a sports team that loses a game but shows signs of improvement, making fans hopeful for future victories.",
-      tags: null,
-      time_ago: "17 hours ago",
-      title: "Ola Electric Shares Surge Despite Loss",
-      url: "https://m.economictimes.com/markets/stocks/news/ola-electric-shares-surge-over-9-despite-posting-rs-428-crore-loss-in-q1-heres-why/articleshow/122431143.cms",
-    },
-  ];
   useEffect(() => {
     if (newsId) {
       getNewsByIDAPI(newsId);

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -18,6 +18,13 @@ import { ThemeContext } from "../../context/themeContext";
 import { BackArrow, BackArrowWhite } from "../../assets/icons/components/logIn";
 import globalStyles from "../../assets/styles/globalStyles";
 import { ProgressBar, MD3Colors } from "react-native-paper";
+import { AxiosError } from "axios";
+import showToast from "../../utilis/showToast";
+import {
+  getAllGoals,
+  getAllInterests,
+  getAllRoles,
+} from "../../apiServices/onboarding";
 const QuestionBlock = ({
   title,
   options,
@@ -45,68 +52,69 @@ const QuestionBlock = ({
     >
       {message}
     </Text>
-    <View
-      style={[
-        styles.optionsWrapper,
-        {
-          backgroundColor:
-            theme === "dark"
-              ? colors.darkPrimaryBackground
-              : colors.primaryBackground,
-        },
-      ]}
-    >
-      {options.map((option, index) => {
-        const value = option;
-        const isSelected = selectedValue === value;
+    <ScrollView style={{ flexGrow: 1 }}>
+      <View
+        style={[
+          styles.optionsWrapper,
+          {
+            backgroundColor:
+              theme === "dark"
+                ? colors.darkPrimaryBackground
+                : colors.primaryBackground,
+          },
+        ]}
+      >
+        {options.map((option: any, index: any) => {
+          const isSelected = selectedValue === option.value;
 
-        return (
-          <TouchableOpacity
-            key={value}
-            onPress={() => onSelect(value)}
-            style={[
-              styles.optionBox,
-              {
-                backgroundColor:
-                  theme === "light"
-                    ? isSelected
-                      ? colors.septendenaryBackground
-                      : colors.primaryBackground
-                    : isSelected
-                    ? colors.darkUndenaryBackground
-                    : "transparent",
-                borderColor:
-                  theme === "light"
-                    ? isSelected
-                      ? colors.denaryBorder
-                      : colors.nonaryBorder
-                    : isSelected
-                    ? "transparent"
-                    : colors.tertiaryButtonColor,
-              },
-            ]}
-          >
-            <Text
-              style={{
-                color:
-                  theme === "light"
-                    ? isSelected
-                      ? colors.sexdenaryText
-                      : colors.octodenaryText
-                    : isSelected
-                    ? colors.darkSeptanaryText
-                    : colors.white,
-                fontFamily: isSelected
-                  ? fontFamily.Inter700
-                  : fontFamily.Inter400,
-              }}
+          return (
+            <TouchableOpacity
+              key={option.id}
+              onPress={() => onSelect(option.value)}
+              style={[
+                styles.optionBox,
+                {
+                  backgroundColor:
+                    theme === "light"
+                      ? isSelected
+                        ? colors.septendenaryBackground
+                        : colors.primaryBackground
+                      : isSelected
+                      ? colors.darkUndenaryBackground
+                      : "transparent",
+                  borderColor:
+                    theme === "light"
+                      ? isSelected
+                        ? colors.denaryBorder
+                        : colors.nonaryBorder
+                      : isSelected
+                      ? "transparent"
+                      : colors.tertiaryButtonColor,
+                },
+              ]}
             >
-              {option}
-            </Text>
-          </TouchableOpacity>
-        );
-      })}
-    </View>
+              <Text
+                style={{
+                  color:
+                    theme === "light"
+                      ? isSelected
+                        ? colors.sexdenaryText
+                        : colors.octodenaryText
+                      : isSelected
+                      ? colors.darkSeptanaryText
+                      : colors.white,
+                  fontFamily: isSelected
+                    ? fontFamily.Inter700
+                    : fontFamily.Inter400,
+                }}
+              >
+                {option.label}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    </ScrollView>
   </View>
 );
 
@@ -118,16 +126,10 @@ const TellUsSomething = () => {
   const [selectedWhoAreYou, setSelectedWhoAreYou] = useState("");
   const [selectedGoal, setSelectedGoal] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [roles, setRoles] = useState([]);
+  const [goals, setGoals] = useState([]);
   const [showSecondQuestion, setShowSecondQuestion] = useState(false);
   const progress = !showSecondQuestion ? 0.5 : 1;
-
-  const roles = ["Student", "Professional", "Business Owner", "Retired"];
-  const goals = [
-    "Stay updated",
-    "Learn about market",
-    "Track market trends",
-    "Get expert opinions",
-  ];
   const isFormValid = showSecondQuestion
     ? selectedGoal !== ""
     : selectedWhoAreYou !== "";
@@ -139,6 +141,42 @@ const TellUsSomething = () => {
       navigation.navigate("ChooseYourInterests");
     }
   };
+  const getAllRolesAPI = async () => {
+    try {
+      const response = await getAllRoles();
+      console.log("RolesResponse=>", response.data.data);
+      setRoles(response.data.data);
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      showToast(errorMessage, "danger");
+    }
+  };
+  const getAllGoalsAPI = async () => {
+    try {
+      const response = await getAllGoals();
+      console.log("GoalsResponse=>", response.data.data);
+      setGoals(response.data.data);
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      showToast(errorMessage, "danger");
+    }
+  };
+  useEffect(() => {
+    getAllRolesAPI();
+    getAllGoalsAPI();
+  }, []);
   return (
     <ScrollView
       contentContainerStyle={{ flex: 1 }}
@@ -193,7 +231,6 @@ const TellUsSomething = () => {
             theme={theme}
           />
         )}
-
         {showSecondQuestion && (
           <QuestionBlock
             title="What bring you here ?"
@@ -204,7 +241,6 @@ const TellUsSomething = () => {
             theme={theme}
           />
         )}
-
         <Button
           title={showSecondQuestion ? "Continue" : "Next"}
           onPress={handleNextOrContinue}
@@ -236,14 +272,14 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     position: "absolute",
-    bottom: 60,
+    bottom: 15,
     left: 20,
     width: "100%",
   },
   optionsWrapper: {
     flexDirection: "column", // use "row" if you want them side by side
     gap: 12,
-    marginBottom: 200,
+    // marginBottom: 200,
   },
   optionBox: {
     paddingVertical: 14,
@@ -259,8 +295,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 10,
     justifyContent: "space-between",
-    marginTop: 60,
-    marginBottom: 60,
+    marginTop: 20,
+    marginBottom: 30,
     width: "100%",
   },
   emailText: {
@@ -276,5 +312,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#eee", // unfilled color
     borderRadius: 4,
     overflow: "hidden",
+    marginBottom: 20,
   },
 });
