@@ -342,7 +342,7 @@ const styles = StyleSheet.create({
     lineHeight: 24, // added to avoid text cut off
     paddingVertical: Platform.OS === "ios" ? 12 : 8, // vertical padding to center text
     color: colors.primaryText,
-    backgroundColor: colors.secondaryBackground,
+
     fontFamily: fontFamily.Satoshi500, // or whatever you're using
   },
 
