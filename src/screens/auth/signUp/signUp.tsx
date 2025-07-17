@@ -93,7 +93,7 @@ const SignUpScreen = () => {
     };
     try {
       await login(loginData); // throws if OTP invalid
-      navigation.navigate("ChooseYourInterests");
+      navigation.navigate("ChooseYourInterests", { roleId: "", goalId: "" });
       showToast("OTP verified successfully!", "success");
     } catch (err) {
       // Narrow / cast to AxiosError

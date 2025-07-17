@@ -9,12 +9,14 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { colors } from "../../assets/styles/colors";
+import {
+  CommentsIcon,
+  LikeIcon,
+  NewsAuthorIcon,
+} from "../../assets/icons/components/homepage";
 import fontFamily from "../../assets/styles/fontFamily";
 import ClippedSVG from "../clippedSVG/clippedSVG";
-import {
-  ViewIcon,
-  DiscoverLikeIcon,
-} from "../../assets/icons/components/headlineDetailsView";
+
 import Tag from "../tag/tag";
 import ImpactLabel from "../impactLabel/impactLabel";
 import { ThemeContext } from "../../context/themeContext";
@@ -81,6 +83,35 @@ const DiscoverDetailsCard = ({
           },
         ]}
       >
+        <View style={styles.articleDetailsHeadingContainer}>
+          <Text
+            style={[
+              styles.articleDetailsHeading,
+              {
+                color:
+                  theme === "dark"
+                    ? colors.darkSecondaryText
+                    : colors.primaryText,
+              },
+            ]}
+          >
+            {heading}
+          </Text>
+          <Text
+            style={[
+              styles.articleDetailsSubHeading,
+              {
+                color:
+                  theme === "dark"
+                    ? colors.darkQuaternaryText
+                    : colors.primaryText,
+              },
+            ]}
+            numberOfLines={2}
+          >
+            {summary}
+          </Text>
+        </View>
         <View style={styles.tagsContainer}>
           <View style={styles.marketTagsContainer}>
             {tag == "bearish" ? (
@@ -124,35 +155,6 @@ const DiscoverDetailsCard = ({
             />
           </View>
         </View>
-        <View style={styles.articleDetailsHeadingContainer}>
-          <Text
-            style={[
-              styles.articleDetailsHeading,
-              {
-                color:
-                  theme === "dark"
-                    ? colors.darkSecondaryText
-                    : colors.primaryText,
-              },
-            ]}
-          >
-            {heading}
-          </Text>
-          <Text
-            style={[
-              styles.articleDetailsSubHeading,
-              {
-                color:
-                  theme === "dark"
-                    ? colors.darkQuaternaryText
-                    : colors.primaryText,
-              },
-            ]}
-            numberOfLines={2}
-          >
-            {summary}
-          </Text>
-        </View>
         <View style={styles.authorLikesContainer}>
           <View style={styles.authorTimeContainer}>
             <Text
@@ -171,11 +173,11 @@ const DiscoverDetailsCard = ({
           </View>
           <View style={styles.viewLikesContainer}>
             <View style={styles.iconValueContainer}>
-              <ViewIcon />
+              <CommentsIcon />
               <Text style={styles.likeValues}>{comments || 0}</Text>
             </View>
             <View style={styles.iconValueContainer}>
-              <DiscoverLikeIcon />
+              <LikeIcon />
               <Text style={styles.likeValues}>{likes || 0}</Text>
             </View>
           </View>
@@ -222,13 +224,13 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   articleDetailsHeading: {
-    fontFamily: fontFamily.Cabinet700,
-    fontSize: 16,
+    fontFamily: fontFamily.Inter700,
+    fontSize: 18,
     color: colors.primaryText,
   },
   articleDetailsSubHeading: {
-    fontFamily: fontFamily.Satoshi500,
-    fontSize: 12,
+    fontFamily: fontFamily.Inter400,
+    fontSize: 14,
     color: colors.tertiaryText,
   },
   authorLikesContainer: {
