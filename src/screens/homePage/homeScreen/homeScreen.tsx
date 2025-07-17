@@ -106,7 +106,10 @@ const HomeScreen = () => {
   return (
     <View style={[globalStyles.pageContainerWithBackground(theme)]}>
       <View style={styles.headingContainer}>
-        <Text
+        <Text style={[globalStyles.title(theme), { textAlign: "left" }]}>
+          Top Headlines
+        </Text>
+        {/* <Text
           style={[
             styles.heading,
             {
@@ -118,7 +121,7 @@ const HomeScreen = () => {
           ]}
         >
           Discover
-        </Text>
+        </Text> */}
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -209,7 +212,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.nonaryBackground,
   },
   headingContainer: {
-    marginTop: 30,
+    marginTop: 60,
   },
   heading: {
     fontSize: 32,

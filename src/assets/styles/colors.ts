@@ -47,6 +47,7 @@ export const colors = {
   darkDenaryBackground: "#E8EDFB0D", //10
   darkUndenaryBackground: "#202325", //11
   darkDuodenaryBackground: "#5538EE1A", //12
+  darkTridenaryBackground: "#181818",
   //Text Colors
   primaryText: "#28262C", //1
   secondaryText: "#111111", //2
