@@ -141,7 +141,7 @@ const OTPSection = ({
                 backgroundColor:
                   theme === "dark"
                     ? colors.octodenaryText
-                    : colors.nonaryBorder,
+                    : colors.primaryBackground,
                 color:
                   theme == "dark" ? colors.darkPrimaryText : colors.primaryText,
               },

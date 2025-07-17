@@ -192,11 +192,17 @@ export default function ChooseYourInterests() {
                             : colors.octodenaryBackground
                           : selected.includes(item)
                           ? colors.darkDuodenaryBackground
+                          : "transparent",
+                      borderColor:
+                        theme === "light"
+                          ? selected.includes(item)
+                            ? colors.sexdenaryText
+                            : "transparent"
+                          : selected.includes(item)
+                          ? "transparent"
                           : colors.darkUndenaryBackground,
-                      borderColor: selected.includes(item)
-                        ? colors.vigenaryText
-                        : colors.octonaryBorderColor,
-                      borderWidth: selected.includes(item) ? 1 : 0,
+                      borderWidth:
+                        theme === "dark" && selected.includes(item) ? 0 : 1,
                     },
                   ]}
                 >
@@ -212,6 +218,9 @@ export default function ChooseYourInterests() {
                             : selected.includes(item)
                             ? colors.vigenaryText
                             : colors.white,
+                        fontFamily: selected.includes(item)
+                          ? fontFamily.Inter700
+                          : fontFamily.Inter400,
                       },
                     ]}
                   >
@@ -226,14 +235,15 @@ export default function ChooseYourInterests() {
       <Button
         title="Get Started"
         onPress={() => {
-          if (canContinue) {
+          if (selected.length >= 3) {
             handleContinue(); // navigate next
             showToast("Your interests saved successfully", "success");
           } else {
+            console.log("Please choose at least 3 fields");
             showToast("Please choose at least 3 fields", "warning");
           }
         }}
-        disabled={!canContinue}
+        // disabled={!canContinue}
         buttonStyle={{ marginBottom: 20 }}
       />
     </View>
