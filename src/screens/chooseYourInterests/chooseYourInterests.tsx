@@ -112,7 +112,7 @@ export default function ChooseYourInterests() {
       showToast(errorMessage, "danger");
       return;
     }
-    //navigation.navigate("BottomTabNavigator");
+    navigation.navigate("BottomTabNavigator");
   };
   const getAllInterestsAPI = async () => {
     try {
@@ -149,7 +149,6 @@ export default function ChooseYourInterests() {
         interests.slice(i * 3, i * 3 + 3)
       )
     : [];
-  console.log("DeviceInfo:", deviceInfo);
   return (
     <View
       style={[

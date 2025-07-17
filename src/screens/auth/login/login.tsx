@@ -86,7 +86,7 @@ const LoginScreen = () => {
     };
     try {
       await login(loginData); // throws if OTP invalid
-      navigation.navigate("ChooseYourInterests");
+      navigation.navigate("BottomTabNavigator");
       showToast("OTP verified successfully!", "success");
     } catch (err) {
       // Narrow / cast to AxiosError

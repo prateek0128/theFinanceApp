@@ -20,7 +20,9 @@ import {
   FemaleProfileIcon,
   MaleProfileIcon,
   LikeCommentIcon,
+  LikeCommentIconFilled,
   UnlikeCommentIcon,
+  UnlikeCommentIconFilled,
   CommentIcon,
   CommentIconBlack,
   CurrencyImage2,
@@ -45,6 +47,7 @@ import {
   checkUserLikeNewsStatus,
   getComments,
   toggleLike,
+  toggleLikeComments,
 } from "../../../apiServices/newsEngagement";
 import { getNewsByID } from "../../../apiServices/news";
 import dayjs from "dayjs";
@@ -93,6 +96,8 @@ const HeadlineDetailsScreen = () => {
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
   const [newsData, setNewsData] = useState<NewsData>({});
+  const [likeComment, setLikeComment] = useState(false);
+  const [unlikeComment, setUnlikeComment] = useState(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [addCommentsLoader, setAddCommentsLoader] = useState<boolean>(false);
   const token = AsyncStorage.getItem("authToken");
@@ -213,6 +218,7 @@ const HeadlineDetailsScreen = () => {
   const handleToggleLike = () => {
     console.log("inside handleToggleLike");
     setLiked((prev) => !prev);
+
     if (newsId) {
       toggleLikeAPI(newsId);
     }
@@ -234,17 +240,24 @@ const HeadlineDetailsScreen = () => {
       showToast(errorMessage, "danger");
     }
   };
-  const handleToggleLikeComment = () => {
+  const handleToggleLikeComment = (commentId: any) => {
     console.log("inside handleToggleLikeComment");
-    setLiked((prev) => !prev);
-    if (newsId) {
-      toggleLikeAPIComment(newsId);
+    // setLiked((prev) => !prev);
+    // Calculate the next liked value
+    const nextLiked = !liked;
+    // Update state
+    setLiked(nextLiked);
+    if (commentId) {
+      toggleLikeCommentAPI(commentId);
     }
   };
-  const toggleLikeAPIComment = async (newsId: any) => {
+  const toggleLikeCommentAPI = async (commentId: any) => {
+    const likeCommentData = { is_liked: liked };
     try {
-      const response = await toggleLike(newsId);
+      const response = await toggleLikeComments(commentId, likeCommentData);
       console.log("Toggle Like Comment=>", response.data);
+      setLikeComment(response.data.data.user_has_liked);
+      setUnlikeComment(response.data.data.user_has_unliked);
       showToast(response.data.message, "success");
     } catch (err) {
       // Narrow / cast to AxiosError
@@ -550,10 +563,14 @@ const HeadlineDetailsScreen = () => {
                             "👍 Like icon pressed for comment:",
                             comment.id
                           );
-                          handleToggleLikeComment();
+                          handleToggleLikeComment(comment.id);
                         }}
                       >
-                        <LikeCommentIcon width={20} height={20} />
+                        {!likeComment ? (
+                          <LikeCommentIcon width={20} height={20} />
+                        ) : (
+                          <LikeCommentIconFilled width={20} height={20} />
+                        )}
                       </TouchableOpacity>
                       <Text style={styles.articleTime}>
                         {comment.likes || 0}
@@ -566,10 +583,14 @@ const HeadlineDetailsScreen = () => {
                             "👎 Dislike icon pressed for comment:",
                             comment.id
                           );
-                          handleToggleLikeComment();
+                          handleToggleLikeComment(comment.id);
                         }}
                       >
-                        <UnlikeCommentIcon width={20} height={20} />
+                        {!unlikeComment ? (
+                          <UnlikeCommentIcon width={20} height={20} />
+                        ) : (
+                          <UnlikeCommentIconFilled width={20} height={20} />
+                        )}
                       </TouchableOpacity>
                       <Text style={styles.articleTime}>
                         {comment.unlike_count || 0}
