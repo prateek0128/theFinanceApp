@@ -50,7 +50,7 @@ export const colors = {
   //Text Colors
   primaryText: "#28262C", //1
   secondaryText: "#111111", //2
-  tertiaryText: "#5B5C60", //3
+  tertiaryText: "#4148b4ff", //3
   quaternaryText: "#000000", //4
   quinaryText: "#121417", //5
   senaryText: "#0D141C", //6
