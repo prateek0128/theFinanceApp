@@ -43,6 +43,7 @@ type NewsItem = {
   published_at: string;
   categories: any;
   tags: any;
+  tag: string;
   related_stocks: any;
   impact_score: number;
   impact_label: string;
@@ -103,17 +104,7 @@ const HomeScreen = () => {
   }, []);
   if (loading) return <Loader />;
   return (
-    <ScrollView
-      contentContainerStyle={[
-        globalStyles.pageContainerWithBackground(theme),
-        // {
-        //   backgroundColor:
-        //     theme === "dark"
-        //       ? colors.darkPrimaryBackground
-        //       : colors.primaryBackground,
-        // },
-      ]}
-    >
+    <View style={[globalStyles.pageContainerWithBackground(theme)]}>
       <View style={styles.headingContainer}>
         <Text
           style={[
@@ -160,49 +151,51 @@ const HomeScreen = () => {
           />
         </ScrollView>
       </View>
-
-      <View style={styles.swiperWrapper}>
-        {!loading && allNewsData.length === 0 && (
-          <EmptyState message="No data found. Pull to refresh." />
-        )}
-        {allNewsData.map((news, index) => {
-          {
-            /* {allNewsDiscover.map((news, index) => { */
-          }
-          return (
-            <DiscoverDetailsCard
-              key={news.id}
-              index={index}
-              authorName={news.authors[0]}
-              timeAgo={news.time_ago}
-              impactLabel={news.impact_label}
-              impactScore={news.impact_score}
-              likes={news.engagement.likes}
-              comments={news.engagement.comments}
-              heading={news.title}
-              summary={news.summary}
-              HeadlineImageComponent={GraphImage2}
-              ProfileIconComponent={ProfileIcon}
-              ImpactIconComponent={IncrementArrow}
-              onPress={() =>
-                navigation.navigate("HeadlineDetailsScreen", {
-                  newsId: news.id,
-                  imageKey: "",
-                  title: news.title,
-                  author: "",
-                  time: "",
-                  impactLabel: news.impact_label,
-                  impactScore: news.impact_score,
-                  points: [],
-                  //@ts-ignore
-                  discussions: news.discussions,
-                })
-              }
-            />
-          );
-        })}
-      </View>
-    </ScrollView>
+      <ScrollView>
+        <View style={styles.swiperWrapper}>
+          {!loading && allNewsData.length === 0 && (
+            <EmptyState message="No data found. Pull to refresh." />
+          )}
+          {allNewsData.map((news, index) => {
+            {
+              /* {allNewsDiscover.map((news, index) => { */
+            }
+            return (
+              <DiscoverDetailsCard
+                key={news.id}
+                index={index}
+                authorName={news.authors[0]}
+                timeAgo={news.time_ago}
+                impactLabel={news.impact_label}
+                impactScore={news.impact_score}
+                likes={news.engagement.likes}
+                comments={news.engagement.comments}
+                tag={news.tag}
+                heading={news.title}
+                summary={news.summary}
+                HeadlineImageComponent={GraphImage2}
+                ProfileIconComponent={ProfileIcon}
+                ImpactIconComponent={IncrementArrow}
+                onPress={() =>
+                  navigation.navigate("HeadlineDetailsScreen", {
+                    newsId: news.id,
+                    imageKey: "",
+                    title: news.title,
+                    author: "",
+                    time: "",
+                    impactLabel: news.impact_label,
+                    impactScore: news.impact_score,
+                    points: [],
+                    //@ts-ignore
+                    discussions: news.discussions,
+                  })
+                }
+              />
+            );
+          })}
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 

@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     position: "absolute",
-    bottom: 15,
+    bottom: 40,
     left: 20,
     width: "100%",
   },

@@ -30,6 +30,7 @@ type DiscoverDetailsCardProps = {
   summary?: string;
   likes?: number | any;
   comments?: number | any;
+  tag?: string;
   HeadlineImageComponent?: React.ComponentType<{
     width?: number;
     height?: any;
@@ -54,6 +55,7 @@ const DiscoverDetailsCard = ({
   summary,
   likes,
   comments,
+  tag,
   HeadlineImageComponent,
   ProfileIconComponent,
   ImpactIconComponent,
@@ -69,7 +71,9 @@ const DiscoverDetailsCard = ({
           styles.detailsHeadlineContainer,
           {
             backgroundColor:
-              theme === "dark" ? colors.darkOctonary : colors.primaryBackground,
+              theme === "dark"
+                ? colors.darkOctonaryBackground
+                : colors.primaryBackground,
             borderColor:
               theme === "dark"
                 ? colors.senaryBorderColor
@@ -79,16 +83,21 @@ const DiscoverDetailsCard = ({
       >
         <View style={styles.tagsContainer}>
           <View style={styles.marketTagsContainer}>
-            <Tag
-              label={"Bearish"}
-              backgroundColor={"#10B98126"}
-              textColor={"#10B981"}
-            />
-            <Tag
-              label={"Bullish"}
-              backgroundColor={"#EF444426"}
-              textColor={"#EF4444"}
-            />
+            {tag == "bearish" ? (
+              <Tag
+                label={"Bearish"}
+                backgroundColor={"#10B98126"}
+                textColor={"#10B981"}
+              />
+            ) : tag == "bullish" ? (
+              <Tag
+                label={"Bullish"}
+                backgroundColor={"#EF444426"}
+                textColor={"#EF4444"}
+              />
+            ) : (
+              ""
+            )}
           </View>
           <View>
             {/* <View style={styles.impactLabel}>

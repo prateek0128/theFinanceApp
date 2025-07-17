@@ -134,11 +134,37 @@ const HeadlineDetailsScreen = () => {
     }
     return null;
   };
+  const bookmarkResponse = [
+    {
+      bookmark_status: "pin",
+      news: {
+        authors: [Array],
+        categories: [Array],
+        date_extracted: false,
+        engagement: [Object],
+        id: "68763b40cf5ed850865d166e",
+        impact_label: "High Impact",
+        impact_score: 7,
+        published_at: "2025-07-16T12:22:09.214Z",
+        reaction_stats: [Object],
+        related_stocks: null,
+        sentiment_score: -0.018181818181818146,
+        source: "EconomicTimes",
+        summary:
+          "• Ola Electric shares rose over 9% despite reporting a loss of ₹428 crore in the first quarter.• This indicates that investors are optimistic about the company's operational improvements and potential for future profitability.• It's like a sports team that loses a game but shows signs of better teamwork and strategy, making fans hopeful for the next match.",
+        tag: "bullish",
+        tags: null,
+        time_ago: "16 hours ago",
+        title: "Ola Electric Shares Surge Despite Loss",
+        url: "https://m.economictimes.com/markets/stocks/news/ola-electric-shares-surge-over-9-despite-posting-rs-428-crore-loss-in-q1-heres-why/articleshow/122431143.cms",
+      },
+    },
+  ];
   useEffect(() => {
     if (newsId) {
       getNewsByIDAPI(newsId);
       getCommentsAPI(newsId);
-      checkUserLikeNewsStatusAPI(newsId);
+      //checkUserLikeNewsStatusAPI(newsId);
       checkLikeStatusAPI(newsId);
     }
     getBookmarkAPI();
@@ -182,8 +208,8 @@ const HeadlineDetailsScreen = () => {
   const getBookmarkAPI = async () => {
     try {
       const response = await getPinnedNews();
-      console.log("BookmarkResponse=>", response.data);
-      setBookmarked(response.data);
+      console.log("BookmarkResponse=>", response.data[0].bookmark_status);
+      // setBookmarked(response.data[0].bookmark_status);
     } catch (err) {
       // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
@@ -200,6 +226,7 @@ const HeadlineDetailsScreen = () => {
       const response = await checkLikeStatus(newsId);
       console.log("CheckLikeStatusAPI", response.data);
       setLiked(response.data.liked);
+      setBookmarked(response.data.is_pinned);
     } catch (err) {
       // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
@@ -217,6 +244,7 @@ const HeadlineDetailsScreen = () => {
       const response = await checkUserLikeNewsStatus(newsId);
       console.log("checkUserLikeNewsStatusAPI=>", response.data);
       // setLiked(response.data.liked);
+      setBookmarked(response.data.is_pinned);
     } catch (err) {
       // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
