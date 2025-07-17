@@ -25,6 +25,7 @@ import {
   getAllInterests,
   getAllRoles,
 } from "../../apiServices/onboarding";
+import { getComments } from "../../apiServices/newsEngagement";
 const QuestionBlock = ({
   title,
   options,
@@ -70,7 +71,7 @@ const QuestionBlock = ({
           return (
             <TouchableOpacity
               key={option.id}
-              onPress={() => onSelect(option.value)}
+              onPress={() => onSelect(option)}
               style={[
                 styles.optionBox,
                 {
@@ -121,24 +122,28 @@ const QuestionBlock = ({
 const TellUsSomething = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { theme, toggleTheme } = useContext(ThemeContext);
-  const [openRole, setOpenRole] = useState(false);
-  const [openGoal, setOpenGoal] = useState(false);
-  const [selectedWhoAreYou, setSelectedWhoAreYou] = useState("");
-  const [selectedGoal, setSelectedGoal] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedRole, setSelectedRole] = useState<any>(null);
+  const [selectedGoal, setSelectedGoal] = useState<any>(null);
   const [roles, setRoles] = useState([]);
   const [goals, setGoals] = useState([]);
   const [showSecondQuestion, setShowSecondQuestion] = useState(false);
   const progress = !showSecondQuestion ? 0.5 : 1;
   const isFormValid = showSecondQuestion
     ? selectedGoal !== ""
-    : selectedWhoAreYou !== "";
+    : selectedRole !== "";
 
   const handleNextOrContinue = () => {
     if (!showSecondQuestion) {
       setShowSecondQuestion(true);
     } else {
-      navigation.navigate("ChooseYourInterests");
+      if (!selectedRole || !selectedGoal) {
+        showToast("Please select both a role and a goal.", "warning");
+        return;
+      }
+      navigation.navigate("ChooseYourInterests", {
+        roleId: selectedRole.id,
+        goalId: selectedGoal.id,
+      });
     }
   };
   const getAllRolesAPI = async () => {
@@ -177,6 +182,8 @@ const TellUsSomething = () => {
     getAllRolesAPI();
     getAllGoalsAPI();
   }, []);
+  console.log("SelectedRole=>", selectedRole);
+  console.log("SelectedGoal=>", selectedGoal);
   return (
     <ScrollView
       contentContainerStyle={{ flex: 1 }}
@@ -226,8 +233,8 @@ const TellUsSomething = () => {
             title="Tell us a bit about you?"
             message="Helps us know you better and make your experience more relevant."
             options={roles}
-            selectedValue={selectedWhoAreYou}
-            onSelect={setSelectedWhoAreYou}
+            selectedValue={selectedRole?.value || ""}
+            onSelect={(option) => setSelectedRole(option)}
             theme={theme}
           />
         )}
@@ -236,8 +243,8 @@ const TellUsSomething = () => {
             title="What bring you here ?"
             message="We’ll customize your news and insights based on your interests"
             options={goals}
-            selectedValue={selectedGoal}
-            onSelect={setSelectedGoal}
+            selectedValue={selectedGoal?.value || ""}
+            onSelect={(option) => setSelectedGoal(option)}
             theme={theme}
           />
         )}

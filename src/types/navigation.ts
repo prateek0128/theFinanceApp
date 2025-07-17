@@ -6,7 +6,7 @@ export type RootStackParamList = {
   SignUp: undefined;
   Login: undefined;
   TellUsSomething: { name?: string | null; email?: string };
-  ChooseYourInterests: undefined;
+  ChooseYourInterests: { roleId?: string | null; goalId: string | null };
   BottomTabNavigator: undefined;
   Home: undefined;
   HeadlineDetailsScreen: {

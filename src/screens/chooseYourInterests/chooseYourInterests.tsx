@@ -20,8 +20,13 @@ import { ScrollView } from "react-native-gesture-handler";
 import showToast from "../../utilis/showToast";
 import Button from "../../components/button/button";
 import globalStyles from "../../assets/styles/globalStyles";
-import { getAllInterests } from "../../apiServices/onboarding";
+import {
+  getAllInterests,
+  submitOnboarding,
+} from "../../apiServices/onboarding";
 import { AxiosError } from "axios";
+import { RouteProp, useRoute } from "@react-navigation/native";
+import * as Device from "expo-device";
 const interests = [
   "Stock Market News",
   "Indian Companies",
@@ -40,30 +45,80 @@ const interests = [
   "Quarterly Reports",
 ];
 const { width, height } = Dimensions.get("window");
+type ChooseYourInterestsRouteProp = RouteProp<
+  RootStackParamList,
+  "ChooseYourInterests"
+>;
 export default function ChooseYourInterests() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [selected, setSelected] = useState<string[]>([]);
-  const groupedInterests = Array.from(
-    { length: Math.ceil(interests.length / 3) },
-    (_, i) => interests.slice(i * 3, i * 3 + 3)
-  );
+  const [interests, setInterests] = useState<any[]>([]);
+  const [deviceInfo, setDeviceInfo] = useState<any>({});
+  const [selectedInterestIds, setSelectedInterestIds] = useState<string[]>([]);
+  const route = useRoute<ChooseYourInterestsRouteProp>();
+  const { roleId, goalId } = route.params;
+  console.log("roleId:", roleId, "goalId:", goalId);
+  // const toggleInterest = (item: any) => {
+  //   setSelected((prevSelected: any) =>
+  //     prevSelected.includes(item)
+  //       ? prevSelected.filter((i: any) => i !== item)
+  //       : [...prevSelected, item]
+  //   );
+  // };
   const toggleInterest = (item: any) => {
-    setSelected((prevSelected: any) =>
-      prevSelected.includes(item)
-        ? prevSelected.filter((i: any) => i !== item)
-        : [...prevSelected, item]
-    );
+    setSelected((prevSelected) => {
+      const isAlreadySelected = prevSelected.some(
+        (selectedItem: any) => selectedItem.id === item.id
+      );
+
+      const updatedSelected = isAlreadySelected
+        ? prevSelected.filter((i: any) => i.id !== item.id)
+        : [...prevSelected, item];
+
+      // Update interest IDs as well
+      const updatedIds = updatedSelected.map((i) => i.interestId);
+      setSelectedInterestIds(updatedIds);
+
+      return updatedSelected;
+    });
   };
 
   const canContinue = selected.length >= 3;
   const { theme, toggleTheme } = useContext(ThemeContext);
   const handleContinue = () => {
-    navigation.navigate("BottomTabNavigator");
+    const onboardingData = {
+      role: roleId,
+      goal: goalId,
+      interests: selectedInterestIds,
+      clientMeta: {
+        deviceId: "a1b2c3d4",
+        locale: "en-IN",
+        tz: "Asia/Kolkata",
+      },
+    };
+    console.log("OnboardingDataPayload=>", onboardingData);
+    try {
+      const response = submitOnboarding(onboardingData);
+      console.log("OnboardingResponse=>", response);
+      showToast("Your interests saved successfully", "success");
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      showToast(errorMessage, "danger");
+      return;
+    }
+    //navigation.navigate("BottomTabNavigator");
   };
   const getAllInterestsAPI = async () => {
     try {
       const response = await getAllInterests();
-      console.log("InterestsResponse=>", response.data);
+      console.log("InterestsResponse=>", response.data.data);
+      setInterests(response.data.data);
     } catch (err) {
       // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
@@ -78,6 +133,23 @@ export default function ChooseYourInterests() {
   useEffect(() => {
     getAllInterestsAPI();
   }, []);
+  useEffect(() => {
+    const info = {
+      brand: Device.brand,
+      model: Device.modelName,
+      osName: Device.osName,
+      osVersion: Device.osVersion,
+      deviceType: Device.deviceType,
+      totalMemory: Device.totalMemory,
+    };
+    setDeviceInfo(info);
+  }, []);
+  const groupedInterests = interests
+    ? Array.from({ length: Math.ceil(interests.length / 3) }, (_, i) =>
+        interests.slice(i * 3, i * 3 + 3)
+      )
+    : [];
+  console.log("DeviceInfo:", deviceInfo);
   return (
     <View
       style={[
@@ -105,9 +177,9 @@ export default function ChooseYourInterests() {
         <View style={styles.cardsContainer}>
           {groupedInterests.map((group: any, rowIndex: any) => (
             <View key={rowIndex} style={styles.cardRow}>
-              {group.map((item: any) => (
+              {group.map((item: any, index: any) => (
                 <TouchableOpacity
-                  key={item}
+                  key={item.id}
                   onPress={() => toggleInterest(item)}
                   style={[
                     styles.cardDimension,
@@ -143,7 +215,7 @@ export default function ChooseYourInterests() {
                       },
                     ]}
                   >
-                    {item}
+                    {item.name}
                   </Text>
                 </TouchableOpacity>
               ))}

@@ -15,13 +15,6 @@ import Loader from "../../../components/Loader/loader";
 import { ThemeContext } from "../../../context/themeContext";
 import { getHighImpactNewsById, getNewsFeed } from "../../../apiServices/news";
 import LoaderOverlay from "../../../components/LoadOverlay/loadOverlayTransparent";
-import MarketTag from "../../../assets/icons/components/Market/marketTag";
-import {
-  CurrencyImage,
-  GraphImage,
-  IncrementArrow,
-  ProfileIcon,
-} from "../../../assets/icons/components/homepage";
 import {
   GraphImage2,
   FemaleProfileIcon,
@@ -39,9 +32,8 @@ import {
   useNavigation,
   NavigationProp,
   RouteProp,
+  useRoute,
 } from "@react-navigation/native";
-import { useFocusEffect, useRoute } from "@react-navigation/native";
-import { useCallback } from "react";
 import fontFamily from "../../../assets/styles/fontFamily";
 import { TextInput } from "react-native-gesture-handler";
 import Header from "../../../components/header/header";
@@ -94,26 +86,13 @@ interface NewsData {
 const HeadlineDetailsScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const route = useRoute<HeadlineDetailsRouteProp>();
-  const {
-    newsId,
-    title,
-    author,
-    time,
-    impactLabel,
-    impactScore,
-    points,
-    discussions,
-    imageKey,
-  } = route.params || {};
-  const [market, setMarket] = useState("");
-  const [bearish, setBearish] = useState("");
+  const { newsId, imageKey } = route.params || {};
   const [comment, setComment] = useState("");
   const { theme, toggleTheme } = useContext(ThemeContext);
-  const [commentsData, setCommentsData] = useState("");
+  const [commentsData, setCommentsData] = useState([]);
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
   const [newsData, setNewsData] = useState<NewsData>({});
-  // const [allNewsData, setAllNewsData] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [addCommentsLoader, setAddCommentsLoader] = useState<boolean>(false);
   const token = AsyncStorage.getItem("authToken");
@@ -134,37 +113,11 @@ const HeadlineDetailsScreen = () => {
     }
     return null;
   };
-  const bookmarkResponse = [
-    {
-      bookmark_status: "pin",
-      news: {
-        authors: [Array],
-        categories: [Array],
-        date_extracted: false,
-        engagement: [Object],
-        id: "68763b40cf5ed850865d166e",
-        impact_label: "High Impact",
-        impact_score: 7,
-        published_at: "2025-07-16T12:22:09.214Z",
-        reaction_stats: [Object],
-        related_stocks: null,
-        sentiment_score: -0.018181818181818146,
-        source: "EconomicTimes",
-        summary:
-          "• Ola Electric shares rose over 9% despite reporting a loss of ₹428 crore in the first quarter.• This indicates that investors are optimistic about the company's operational improvements and potential for future profitability.• It's like a sports team that loses a game but shows signs of better teamwork and strategy, making fans hopeful for the next match.",
-        tag: "bullish",
-        tags: null,
-        time_ago: "16 hours ago",
-        title: "Ola Electric Shares Surge Despite Loss",
-        url: "https://m.economictimes.com/markets/stocks/news/ola-electric-shares-surge-over-9-despite-posting-rs-428-crore-loss-in-q1-heres-why/articleshow/122431143.cms",
-      },
-    },
-  ];
   useEffect(() => {
     if (newsId) {
       getNewsByIDAPI(newsId);
       getCommentsAPI(newsId);
-      //checkUserLikeNewsStatusAPI(newsId);
+      checkUserLikeNewsStatusAPI(newsId);
       checkLikeStatusAPI(newsId);
     }
     getBookmarkAPI();
@@ -191,8 +144,8 @@ const HeadlineDetailsScreen = () => {
     console.log("Inside Get Comments=>");
     try {
       const response = await getComments(newsId);
-      console.log("Comments=>", response.data);
-      setCommentsData(response.data);
+      console.log("CommentsResponse=>", response.data.data.comments);
+      setCommentsData(response.data.data.comments);
     } catch (err) {
       // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
@@ -561,68 +514,71 @@ const HeadlineDetailsScreen = () => {
             Related Discussions
           </Text>
           <View style={styles.relatedDiscussionsDetails}>
-            {Array.isArray(commentsData) &&
-              commentsData.map((comment) => (
-                <View key={comment.id} style={styles.relatedDiscussionsArticle}>
-                  {
-                    //@ts-ignore
-                    getProfileIcon("male")
-                  }
-                  <View style={{ flex: 1 }}>
-                    <View style={styles.relatedDiscussionsArticle}>
-                      <Text
-                        style={[
-                          styles.authorName,
-                          {
-                            color:
-                              theme === "dark"
-                                ? colors.darkPrimaryText
-                                : colors.senaryText,
-                          },
-                        ]}
+            {(commentsData || []).map((comment: any) => (
+              <View key={comment.id} style={styles.relatedDiscussionsArticle}>
+                {
+                  //@ts-ignore
+                  getProfileIcon("male")
+                }
+                <View style={{ flex: 1 }}>
+                  <View style={styles.relatedDiscussionsArticle}>
+                    <Text
+                      style={[
+                        styles.authorName,
+                        {
+                          color:
+                            theme === "dark"
+                              ? colors.darkPrimaryText
+                              : colors.senaryText,
+                        },
+                      ]}
+                    >
+                      {comment.name || "--"}
+                    </Text>
+                    <Text style={styles.articleTime}>
+                      {getShortTimeAgo(comment.commented_at)}
+                    </Text>
+                  </View>
+                  <Text style={styles.relatedArticleText}>
+                    {comment.comment}
+                  </Text>
+                  <View style={styles.likeUnlikeContainer}>
+                    <View style={styles.iconCountContainer}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          console.log(
+                            "👍 Like icon pressed for comment:",
+                            comment.id
+                          );
+                          handleToggleLikeComment();
+                        }}
                       >
-                        {"--"}
-                      </Text>
+                        <LikeCommentIcon width={20} height={20} />
+                      </TouchableOpacity>
                       <Text style={styles.articleTime}>
-                        {getShortTimeAgo(comment.commented_at)}
+                        {comment.likes || 0}
                       </Text>
                     </View>
-                    <Text style={styles.relatedArticleText}>
-                      {comment.comment}
-                    </Text>
-                    <View style={styles.likeUnlikeContainer}>
-                      <View style={styles.iconCountContainer}>
-                        <TouchableOpacity
-                          onPress={() => {
-                            console.log(
-                              "👍 Like icon pressed for comment:",
-                              comment.id
-                            );
-                            handleToggleLikeComment();
-                          }}
-                        >
-                          <LikeCommentIcon width={20} height={20} />
-                        </TouchableOpacity>
-                        <Text style={styles.articleTime}>{comment.likes}</Text>
-                      </View>
-                      <View style={styles.iconCountContainer}>
-                        <TouchableOpacity
-                          onPress={() => {
-                            console.log(
-                              "👎 Dislike icon pressed for comment:",
-                              comment.id
-                            );
-                            handleToggleLikeComment();
-                          }}
-                        >
-                          <UnlikeCommentIcon width={20} height={20} />
-                        </TouchableOpacity>
-                        <Text style={styles.articleTime}>{0}</Text>
-                      </View>
+                    <View style={styles.iconCountContainer}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          console.log(
+                            "👎 Dislike icon pressed for comment:",
+                            comment.id
+                          );
+                          handleToggleLikeComment();
+                        }}
+                      >
+                        <UnlikeCommentIcon width={20} height={20} />
+                      </TouchableOpacity>
+                      <Text style={styles.articleTime}>
+                        {comment.unlike_count || 0}
+                      </Text>
                     </View>
                   </View>
                 </View>
-              ))}
+              </View>
+            ))}
           </View>
         </View>
         <KeyboardAvoidingView

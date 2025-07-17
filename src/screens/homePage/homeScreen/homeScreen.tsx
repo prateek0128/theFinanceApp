@@ -151,7 +151,7 @@ const HomeScreen = () => {
           />
         </ScrollView>
       </View>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.swiperWrapper}>
           {!loading && allNewsData.length === 0 && (
             <EmptyState message="No data found. Pull to refresh." />
