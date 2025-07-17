@@ -112,7 +112,7 @@ export default function ChooseYourInterests() {
       showToast(errorMessage, "danger");
       return;
     }
-    //navigation.navigate("BottomTabNavigator");
+    navigation.navigate("BottomTabNavigator");
   };
   const getAllInterestsAPI = async () => {
     try {

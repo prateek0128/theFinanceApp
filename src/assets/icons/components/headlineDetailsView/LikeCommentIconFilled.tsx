@@ -1,26 +1,17 @@
 import * as React from "react";
-import Svg, { G, Path, Defs, ClipPath } from "react-native-svg";
+import Svg, { Path } from "react-native-svg";
 const SvgLikeCommentIconFilled = (props) => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
-    width={20}
-    height={21}
+    width={13}
+    height={17}
     fill="none"
     {...props}
   >
-    <G clipPath="url(#likeCommentIconFilled_svg__a)">
-      <Path
-        fill="#4A709C"
-        fillRule="evenodd"
-        d="M18.281 6.76a1.88 1.88 0 0 0-1.406-.635H12.5v-1.25c0-1.726-1.4-3.125-3.125-3.125a.63.63 0 0 0-.56.345L5.866 8H2.5c-.69 0-1.25.56-1.25 1.25v6.875c0 .69.56 1.25 1.25 1.25h13.438c.945 0 1.742-.703 1.86-1.64l.938-7.5a1.88 1.88 0 0 0-.455-1.476M2.5 9.25h3.125v6.875H2.5zm14.995-1.172-.937 7.5a.625.625 0 0 1-.62.547H6.874V8.773l2.868-5.737a1.875 1.875 0 0 1 1.507 1.839V6.75c0 .345.28.625.625.625h5a.625.625 0 0 1 .62.703"
-        clipRule="evenodd"
-      />
-    </G>
-    <Defs>
-      <ClipPath id="likeCommentIconFilled_svg__a">
-        <Path fill="#fff" d="M0 .5h20v20H0z" />
-      </ClipPath>
-    </Defs>
+    <Path
+      fill="#72777A"
+      d="m11.892 12.054.587-3.4a1.39 1.39 0 0 0-1.366-1.625H6.795a.694.694 0 0 1-.685-.807l.552-3.371a4 4 0 0 0-.074-1.644 1.37 1.37 0 0 0-.91-.948L5.557.22a1.13 1.13 0 0 0-.829.057c-.283.136-.49.386-.566.681l-.397 1.529c-.126.486-.31.956-.547 1.399-.345.647-.88 1.167-1.437 1.646L.58 6.565a1.4 1.4 0 0 0-.476 1.172l.677 7.827a1.39 1.39 0 0 0 1.382 1.27h3.873c2.902 0 5.378-2.022 5.855-4.78"
+    />
   </Svg>
 );
 export default SvgLikeCommentIconFilled;

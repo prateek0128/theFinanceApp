@@ -15,11 +15,11 @@ const TabLabel = ({ label, selected, onPress }: any) => {
             backgroundColor:
               theme === "light"
                 ? selected
-                  ? colors.quindenaryBackground // active color
-                  : colors.quattuordenaryBackground
+                  ? colors.septendenaryBackground // active color
+                  : colors.octodenaryBackground
                 : selected
-                ? colors.quindenaryBackground
-                : colors.darkSenaryBackground, // default color
+                ? colors.darkUndenaryBackground
+                : colors.darkTridenaryBackground, // default color
           },
         ]}
       >
@@ -30,11 +30,11 @@ const TabLabel = ({ label, selected, onPress }: any) => {
               color:
                 theme === "dark"
                   ? selected
-                    ? colors.darkPrimaryText
-                    : colors.darkSecondaryText
+                    ? colors.darkSeptanaryText
+                    : colors.white
                   : selected
-                  ? colors.darkSecondaryText // active text color
-                  : colors.quattuordenaryText, // default text color
+                  ? colors.sexdenaryText // active text color
+                  : colors.octodenaryText, // default text color
             },
           ]}
         >
@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
     //backgroundColor: colors.quattuordenaryBackground,
   },
   labelText: {
-    fontFamily: fontFamily.Satoshi500,
-    fontSize: 12,
+    fontFamily: fontFamily.Inter400,
+    fontSize: 16,
     //color: colors.quattuordenaryText,
   },
 });
