@@ -197,7 +197,7 @@ const TellUsSomething = () => {
             )}
           </View>
           <View>
-            {/* <TouchableOpacity>
+            <TouchableOpacity>
               <Text
                 style={[
                   styles.emailText,
@@ -211,7 +211,7 @@ const TellUsSomething = () => {
               >
                 Skip
               </Text>
-            </TouchableOpacity> */}
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.progressContainer}>

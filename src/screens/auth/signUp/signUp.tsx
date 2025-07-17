@@ -21,6 +21,7 @@ import { showMessage } from "react-native-flash-message";
 import Button from "../../../components/button/button";
 import InputTextField from "../../../components/inputTextField/inputTextField";
 import SocialLoginButton from "../../../components/socialLoginButton/socialLoginButton";
+import OTPSection from "../login/otpSection";
 import {
   AppleIcon,
   GoogleIcon,
@@ -40,6 +41,7 @@ const SignUpScreen = () => {
   const [input, setInput] = useState("");
   const [inputType, setInputType] = useState("");
   const [showOTPInputs, setShowOTPInputs] = useState(false);
+  const [isFocusOTP, setIsFocusOTP] = useState(false);
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const otpInputs = useRef<Array<RNTextInput | null>>([]);
   const [isValid, setIsValid] = useState(false);
@@ -78,6 +80,34 @@ const SignUpScreen = () => {
       showToast(errorMessage, "danger");
     }
   };
+
+  const handleVerifyOTP = async () => {
+    if (otp.some((digit) => digit === "")) {
+      showToast("Please enter all OTP digits.", "warning");
+      return;
+    }
+    const loginData = {
+      identifier: input,
+      identifier_type: inputType,
+      otp: otp.join(""),
+    };
+    try {
+      await login(loginData); // throws if OTP invalid
+      navigation.navigate("ChooseYourInterests");
+      showToast("OTP verified successfully!", "success");
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      console.log("OTP Error:", errorMessage);
+      showToast(errorMessage, "danger");
+    }
+  };
+
   const handleSignUp = async () => {
     if (otp.some((digit) => digit === "")) {
       showToast("Please enter all OTP digits.", "warning");
@@ -146,44 +176,35 @@ const SignUpScreen = () => {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
       style={[globalStyles.pageContainerWithBackground(theme)]}
     >
-      <ScrollView contentContainerStyle={styles.innerContainer}>
-        <View style={styles.headingContainer}>
-          <Text style={[globalStyles.title(theme)]}>Sign up</Text>
-        </View>
-        <View style={styles.labelRow}>
-          <Text
-            style={[
-              styles.label,
-              {
-                color:
-                  theme === "dark"
-                    ? colors.darkSecondaryText
-                    : colors.primaryText,
-              },
-            ]}
-          >
-            Email Address
-          </Text>
-          {showOTPInputs && (
-            <TouchableOpacity onPress={handleEditPress}>
-              <MaterialIcons
-                name="edit"
-                size={18}
-                color={colors.primaryText}
-                style={{ marginLeft: 8 }}
-              />
-            </TouchableOpacity>
-          )}
-        </View>
-        <InputTextField
-          placeholder="Enter your email address"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          value={input}
-          onChangeText={validateInput}
-          editable={!showOTPInputs} // <-- disable input when OTP inputs are shown
-        />
-        {showOTPInputs && (
+      {showOTPInputs == false ? (
+        <ScrollView contentContainerStyle={styles.innerContainer}>
+          <View style={styles.headingContainer}>
+            <Text style={[globalStyles.title(theme)]}>Sign up</Text>
+          </View>
+          <View style={styles.labelRow}>
+            <Text
+              style={[
+                styles.label,
+                {
+                  color:
+                    theme === "dark"
+                      ? colors.darkSecondaryText
+                      : colors.primaryText,
+                },
+              ]}
+            >
+              Email Address
+            </Text>
+          </View>
+          <InputTextField
+            placeholder="Enter your email address"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            value={input}
+            onChangeText={validateInput}
+            editable={!showOTPInputs} // <-- disable input when OTP inputs are shown
+          />
+          {/* {showOTPInputs && (
           <View style={styles.otpContainer}>
             {otp.map((digit, index) => (
               <InputTextField
@@ -204,35 +225,49 @@ const SignUpScreen = () => {
               />
             ))}
           </View>
-        )}
-        <Button
-          title={showOTPInputs ? "Sign Up" : "Send OTP"}
-          onPress={showOTPInputs ? handleSignUp : handleSendOTP}
-          disabled={!isValid || (showOTPInputs && !isOtpComplete)}
+        )} */}
+          <Button
+            title={showOTPInputs ? "Sign Up" : "Send OTP"}
+            onPress={handleSendOTP}
+            // disabled={!isValid || (showOTPInputs && !isOtpComplete)}
+            disabled={!isValid}
+          />
+          <View style={styles.orDivider}>
+            <View style={styles.line} />
+            <Text style={styles.orText}>OR</Text>
+            <View style={styles.line} />
+          </View>
+          <View style={styles.buttonContainers}>
+            <SocialLoginButton
+              IconComponent={theme === "dark" ? AppleIconWhite : AppleIcon}
+              text="Continue with Apple"
+              onPress={() => console.log("Apple pressed")}
+            />
+            <SocialLoginButton
+              IconComponent={GoogleIcon}
+              text="Continue with Google"
+              onPress={() => console.log("Google pressed")}
+            />
+            <SocialLoginButton
+              IconComponent={FacebookIcon}
+              text="Continue with Facebook"
+              onPress={() => console.log("Facebook pressed")}
+            />
+          </View>
+        </ScrollView>
+      ) : (
+        <OTPSection
+          isFocusOTP={isFocusOTP}
+          setIsFocusOTP={setIsFocusOTP}
+          showOTPInputs={showOTPInputs}
+          setShowOTPInputs={setShowOTPInputs}
+          input={input}
+          setInput={setInput}
+          otp={otp}
+          setOtp={setOtp}
+          handleVerifyOTP={handleVerifyOTP}
         />
-        <View style={styles.orDivider}>
-          <View style={styles.line} />
-          <Text style={styles.orText}>OR</Text>
-          <View style={styles.line} />
-        </View>
-        <View style={styles.buttonContainers}>
-          <SocialLoginButton
-            IconComponent={theme === "dark" ? AppleIconWhite : AppleIcon}
-            text="Continue with Apple"
-            onPress={() => console.log("Apple pressed")}
-          />
-          <SocialLoginButton
-            IconComponent={GoogleIcon}
-            text="Continue with Google"
-            onPress={() => console.log("Google pressed")}
-          />
-          <SocialLoginButton
-            IconComponent={FacebookIcon}
-            text="Continue with Facebook"
-            onPress={() => console.log("Facebook pressed")}
-          />
-        </View>
-      </ScrollView>
+      )}
     </KeyboardAvoidingView>
   );
 };
