@@ -96,8 +96,9 @@ const HeadlineDetailsScreen = () => {
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
   const [newsData, setNewsData] = useState<NewsData>({});
-  const [likeComment, setLikeComment] = useState(false);
-  const [unlikeComment, setUnlikeComment] = useState(false);
+  const [likedComments, setLikedComments] = useState<Record<number, boolean>>(
+    {}
+  );
   const [loading, setLoading] = useState<boolean>(true);
   const [addCommentsLoader, setAddCommentsLoader] = useState<boolean>(false);
   const token = AsyncStorage.getItem("authToken");
@@ -243,21 +244,23 @@ const HeadlineDetailsScreen = () => {
   const handleToggleLikeComment = (commentId: any) => {
     console.log("inside handleToggleLikeComment");
     // setLiked((prev) => !prev);
-    // Calculate the next liked value
-    const nextLiked = !liked;
     // Update state
-    setLiked(nextLiked);
     if (commentId) {
       toggleLikeCommentAPI(commentId);
     }
   };
-  const toggleLikeCommentAPI = async (commentId: any) => {
-    const likeCommentData = { is_liked: liked };
+  const toggleLikeCommentAPI = async (commentId: any, isLiked?: any) => {
+    const likeCommentData = { is_liked: isLiked };
     try {
-      const response = await toggleLikeComments(commentId, likeCommentData);
-      console.log("Toggle Like Comment=>", response.data);
-      setLikeComment(response.data.data.user_has_liked);
-      setUnlikeComment(response.data.data.user_has_unliked);
+      const response = await toggleLikeComments(commentId);
+      const commentData = response.data.data;
+      console.log("Toggle Like Comment=>", commentData);
+      setLikedComments((prev) => ({
+        ...prev,
+        [commentId]: commentData.user_has_liked,
+      }));
+      //setLikeComment(commentData.user_has_liked);
+      // setUnlikeComment(commentData.user_has_liked);
       showToast(response.data.message, "success");
     } catch (err) {
       // Narrow / cast to AxiosError
@@ -451,14 +454,20 @@ const HeadlineDetailsScreen = () => {
                 {newsData.tag == "bearish" ? (
                   <Tag
                     label={"Bearish"}
-                    backgroundColor={"#10B98126"}
-                    textColor={"#10B981"}
+                    backgroundColor={"#FFE5E5"}
+                    textColor={"#FF5247"}
                   />
                 ) : newsData.tag == "bullish" ? (
                   <Tag
                     label={"Bullish"}
-                    backgroundColor={"#EF444426"}
-                    textColor={"#EF4444"}
+                    backgroundColor={"#ECFCE5"}
+                    textColor={"#23C16B"}
+                  />
+                ) : newsData.tag == "market" ? (
+                  <Tag
+                    label={"Market"}
+                    backgroundColor={"#E7E7FF"}
+                    textColor={"#6B4EFF"}
                   />
                 ) : (
                   ""
@@ -559,14 +568,10 @@ const HeadlineDetailsScreen = () => {
                     <View style={styles.iconCountContainer}>
                       <TouchableOpacity
                         onPress={() => {
-                          console.log(
-                            "👍 Like icon pressed for comment:",
-                            comment.id
-                          );
                           handleToggleLikeComment(comment.id);
                         }}
                       >
-                        {!likeComment ? (
+                        {!likedComments[comment.id] ? (
                           <LikeCommentIcon width={20} height={20} />
                         ) : (
                           <LikeCommentIconFilled width={20} height={20} />
@@ -579,14 +584,10 @@ const HeadlineDetailsScreen = () => {
                     <View style={styles.iconCountContainer}>
                       <TouchableOpacity
                         onPress={() => {
-                          console.log(
-                            "👎 Dislike icon pressed for comment:",
-                            comment.id
-                          );
                           handleToggleLikeComment(comment.id);
                         }}
                       >
-                        {!unlikeComment ? (
+                        {likedComments[comment.id] ? (
                           <UnlikeCommentIcon width={20} height={20} />
                         ) : (
                           <UnlikeCommentIconFilled width={20} height={20} />

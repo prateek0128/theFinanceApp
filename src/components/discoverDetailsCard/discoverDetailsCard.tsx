@@ -13,10 +13,11 @@ import {
   CommentsIcon,
   LikeIcon,
   NewsAuthorIcon,
+  ImpactArrowGreen,
+  ImpactArrowRed,
 } from "../../assets/icons/components/homepage";
 import fontFamily from "../../assets/styles/fontFamily";
 import ClippedSVG from "../clippedSVG/clippedSVG";
-
 import Tag from "../tag/tag";
 import ImpactLabel from "../impactLabel/impactLabel";
 import { ThemeContext } from "../../context/themeContext";
@@ -83,6 +84,49 @@ const DiscoverDetailsCard = ({
           },
         ]}
       >
+        <View style={styles.authorLikesContainer}>
+          <View style={styles.authorIconContainer}>
+            <NewsAuthorIcon />
+            <View style={styles.authorTimeContainer}>
+              <Text
+                style={[
+                  styles.authorTimeText,
+                  {
+                    color:
+                      theme === "dark"
+                        ? colors.darkQuaternaryText
+                        : colors.octodenaryText,
+                  },
+                ]}
+              >
+                {`${authorName || "--"} ·`}
+              </Text>
+              <Text
+                style={[
+                  styles.authorTimeText,
+                  {
+                    color:
+                      theme === "dark"
+                        ? colors.darkQuaternaryText
+                        : colors.unvigintaryText,
+                  },
+                ]}
+              >
+                {`${timeAgo || "--"}`}
+              </Text>
+            </View>
+          </View>
+          <View style={styles.viewLikesContainer}>
+            <View style={styles.iconValueContainer}>
+              <CommentsIcon />
+              <Text style={styles.likeValues}>{comments || 0}</Text>
+            </View>
+            <View style={styles.iconValueContainer}>
+              <LikeIcon />
+              <Text style={styles.likeValues}>{likes || 0}</Text>
+            </View>
+          </View>
+        </View>
         <View style={styles.articleDetailsHeadingContainer}>
           <Text
             style={[
@@ -91,7 +135,7 @@ const DiscoverDetailsCard = ({
                 color:
                   theme === "dark"
                     ? colors.darkSecondaryText
-                    : colors.primaryText,
+                    : colors.octodenaryText,
               },
             ]}
           >
@@ -104,7 +148,7 @@ const DiscoverDetailsCard = ({
                 color:
                   theme === "dark"
                     ? colors.darkQuaternaryText
-                    : colors.primaryText,
+                    : colors.octodenaryText,
               },
             ]}
             numberOfLines={2}
@@ -117,14 +161,20 @@ const DiscoverDetailsCard = ({
             {tag == "bearish" ? (
               <Tag
                 label={"Bearish"}
-                backgroundColor={"#10B98126"}
-                textColor={"#10B981"}
+                backgroundColor={"#FFE5E5"}
+                textColor={"#FF5247"}
               />
             ) : tag == "bullish" ? (
               <Tag
                 label={"Bullish"}
-                backgroundColor={"#EF444426"}
-                textColor={"#EF4444"}
+                backgroundColor={"#ECFCE5"}
+                textColor={"#23C16B"}
+              />
+            ) : tag == "market" ? (
+              <Tag
+                label={"Market"}
+                backgroundColor={"#E7E7FF"}
+                textColor={"#6B4EFF"}
               />
             ) : (
               ""
@@ -138,48 +188,10 @@ const DiscoverDetailsCard = ({
             </View> */}
 
             <ImpactLabel
-              variant={"outlined"}
               label={impactLabel}
               value={impactScore}
-              backgroundColor={
-                theme == "dark"
-                  ? colors.darkDenaryBackground
-                  : colors.quattuordenaryBackground
-              }
-              textColor={
-                theme === "dark"
-                  ? colors.quindenaryBackground
-                  : colors.septnaryBorderColor
-              }
-              borderColor={colors.septnaryBorderColor}
+              ImpactArrow={ImpactArrowGreen}
             />
-          </View>
-        </View>
-        <View style={styles.authorLikesContainer}>
-          <View style={styles.authorTimeContainer}>
-            <Text
-              style={[
-                styles.authorTimeText,
-                {
-                  color:
-                    theme === "dark"
-                      ? colors.darkQuaternaryText
-                      : colors.primaryText,
-                },
-              ]}
-            >
-              {`via ${authorName || "--"} · ${timeAgo || "--"}`}
-            </Text>
-          </View>
-          <View style={styles.viewLikesContainer}>
-            <View style={styles.iconValueContainer}>
-              <CommentsIcon />
-              <Text style={styles.likeValues}>{comments || 0}</Text>
-            </View>
-            <View style={styles.iconValueContainer}>
-              <LikeIcon />
-              <Text style={styles.likeValues}>{likes || 0}</Text>
-            </View>
           </View>
         </View>
       </View>
@@ -192,11 +204,9 @@ export default DiscoverDetailsCard;
 const styles = StyleSheet.create({
   detailsHeadlineContainer: {
     flexDirection: "column",
-    gap: 16,
+    gap: 24,
     marginTop: 20,
-    padding: 12,
-    borderWidth: 1,
-    borderRadius: 20,
+    borderRadius: 16,
     width: "100%",
   },
   tagsContainer: {
@@ -221,33 +231,36 @@ const styles = StyleSheet.create({
     color: colors.quaternaryText,
   },
   articleDetailsHeadingContainer: {
-    gap: 16,
+    gap: 10,
   },
   articleDetailsHeading: {
     fontFamily: fontFamily.Inter700,
-    fontSize: 18,
-    color: colors.primaryText,
+    fontSize: 20,
   },
   articleDetailsSubHeading: {
     fontFamily: fontFamily.Inter400,
     fontSize: 14,
-    color: colors.tertiaryText,
   },
   authorLikesContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
+    justifyContent: "space-between",
+  },
+  authorIconContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
   },
   authorTimeContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
+    gap: 4,
   },
   authorTimeText: {
-    fontFamily: fontFamily.Satoshi500,
-    fontSize: 14,
-    color: colors.tertiaryText,
+    fontFamily: fontFamily.Inter400,
+    fontSize: 12,
   },
+
   viewLikesContainer: {
     flexDirection: "row",
     alignItems: "center",

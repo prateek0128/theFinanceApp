@@ -20,6 +20,13 @@ const TabLabel = ({ label, selected, onPress }: any) => {
                 : selected
                 ? colors.darkUndenaryBackground
                 : colors.darkTridenaryBackground, // default color
+            borderWidth: selected ? 1 : 0, // active border width
+            borderColor:
+              theme == "light"
+                ? selected
+                  ? colors.sexdenaryText
+                  : "transparent"
+                : "",
           },
         ]}
       >
@@ -50,7 +57,7 @@ const styles = StyleSheet.create({
   tabLabelContainer: {
     borderRadius: 24,
     paddingVertical: 8,
-    paddingHorizontal: 12,
+    paddingHorizontal: 16,
     gap: 10,
     //backgroundColor: colors.quattuordenaryBackground,
   },

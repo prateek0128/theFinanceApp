@@ -140,7 +140,7 @@ export const highNews = [
     },
   },
 ];
-const data = [
+export const data = [
   {
     authors: ["BusinessStandard"],
     categories: ["Stocks"],
@@ -169,7 +169,7 @@ const data = [
     engagement: { comments: 2, likes: 0 },
     id: "68763b40cf5ed850865d162d",
     impact_label: "High Impact",
-    impact_score: 7,
+    impact_score: 9,
     published_at: "2025-07-16T12:22:09.218Z",
     reaction_stats: { bearish: 0, bullish: 0, important: 0, neutral: 0 },
     related_stocks: null,

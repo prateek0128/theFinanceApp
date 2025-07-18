@@ -18,7 +18,6 @@ import { getHighImpactNews, getNewsFeed } from "../../../apiServices/news";
 import Loader from "../../../components/Loader/loader";
 import {
   GraphImage,
-  IncrementArrow,
   ProfileIcon,
   CurrencyImage,
 } from "../../../assets/icons/components/homepage";
@@ -31,6 +30,8 @@ import DiscoverDetailsCard from "../../../components/discoverDetailsCard/discove
 import TabLabel from "../../../components/tabLabel/tabLabel";
 import showToast from "../../../utilis/showToast";
 import globalStyles from "../../../assets/styles/globalStyles";
+import { Divider } from "react-native-paper";
+import { data } from "./homeScreenData"; // Importing the data from homeScreenData.ts
 const { width, height } = Dimensions.get("window");
 type NewsItem = {
   id: string;
@@ -161,39 +162,41 @@ const HomeScreen = () => {
           )}
           {allNewsData.map((news, index) => {
             {
-              /* {allNewsDiscover.map((news, index) => { */
+              /* {data.map((news, index) => { */
             }
             return (
-              <DiscoverDetailsCard
-                key={news.id}
-                index={index}
-                authorName={news.authors[0]}
-                timeAgo={news.time_ago}
-                impactLabel={news.impact_label}
-                impactScore={news.impact_score}
-                likes={news.engagement.likes}
-                comments={news.engagement.comments}
-                tag={news.tag}
-                heading={news.title}
-                summary={news.summary}
-                HeadlineImageComponent={GraphImage2}
-                ProfileIconComponent={ProfileIcon}
-                ImpactIconComponent={IncrementArrow}
-                onPress={() =>
-                  navigation.navigate("HeadlineDetailsScreen", {
-                    newsId: news.id,
-                    imageKey: "",
-                    title: news.title,
-                    author: "",
-                    time: "",
-                    impactLabel: news.impact_label,
-                    impactScore: news.impact_score,
-                    points: [],
-                    //@ts-ignore
-                    discussions: news.discussions,
-                  })
-                }
-              />
+              <>
+                <DiscoverDetailsCard
+                  key={news.id}
+                  index={index}
+                  authorName={news.authors[0]}
+                  timeAgo={news.time_ago}
+                  impactLabel={news.impact_label}
+                  impactScore={news.impact_score}
+                  likes={news.engagement.likes}
+                  comments={news.engagement.comments}
+                  tag={news.tag}
+                  heading={news.title}
+                  summary={news.summary}
+                  HeadlineImageComponent={GraphImage2}
+                  ProfileIconComponent={ProfileIcon}
+                  onPress={() =>
+                    navigation.navigate("HeadlineDetailsScreen", {
+                      newsId: news.id,
+                      imageKey: "",
+                      title: news.title,
+                      author: "",
+                      time: "",
+                      impactLabel: news.impact_label,
+                      impactScore: news.impact_score,
+                      points: [],
+                      //@ts-ignore
+                      discussions: news.discussions,
+                    })
+                  }
+                />
+                <Divider style={styles.dividerStyle} />
+              </>
             );
           })}
         </View>
@@ -212,7 +215,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.nonaryBackground,
   },
   headingContainer: {
-    marginTop: 60,
+    marginTop: 20,
   },
   heading: {
     fontSize: 32,
@@ -242,5 +245,10 @@ const styles = StyleSheet.create({
   swiperWrapper: {
     // marginTop: 8,
     marginBottom: 20,
+  },
+  dividerStyle: {
+    height: 1,
+    backgroundColor: colors.darkQuinaryText,
+    marginVertical: 24,
   },
 });

@@ -150,7 +150,7 @@ const StartScreen = () => {
           title="Continue"
           onPress={() => {
             navigation.navigate("Welcome");
-            //navigation.navigate("TellUsSomething", {});
+            // navigation.navigate("BottomTabNavigator");
           }}
         />
       ) : (

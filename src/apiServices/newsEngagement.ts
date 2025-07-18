@@ -52,10 +52,10 @@ export const checkUserLikeNewsStatus = async (newsId: any) => {
 // Toggle Like Comments
 export const toggleLikeComments = async (
   commentId: any,
-  likeCommentData: any
+  likeCommentData?: any
 ) => {
   const client = await apiClient();
-  const response = await client.get(
+  const response = await client.post(
     `/news/comments/${commentId}/like`,
     likeCommentData
   );
