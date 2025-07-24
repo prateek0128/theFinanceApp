@@ -16,15 +16,8 @@ import fontFamily from "../../../assets/styles/fontFamily";
 import axios, { AxiosError } from "axios";
 import { getHighImpactNews, getNewsFeed } from "../../../apiServices/news";
 import Loader from "../../../components/Loader/loader";
-import {
-  GraphImage,
-  ProfileIcon,
-  CurrencyImage,
-} from "../../../assets/icons/components/homepage";
-import {
-  CurrencyImage2,
-  GraphImage2,
-} from "../../../assets/icons/components/headlineDetailsView";
+import { ProfileIcon } from "../../../assets/icons/components/homepage";
+import { GraphImage2 } from "../../../assets/icons/components/headlineDetailsView";
 import { ThemeContext } from "../../../context/themeContext";
 import DiscoverDetailsCard from "../../../components/discoverDetailsCard/discoverDetailsCard";
 import TabLabel from "../../../components/tabLabel/tabLabel";
@@ -165,7 +158,7 @@ const HomeScreen = () => {
               /* {data.map((news, index) => { */
             }
             return (
-              <>
+              <React.Fragment key={news.id}>
                 <DiscoverDetailsCard
                   key={news.id}
                   index={index}
@@ -195,8 +188,18 @@ const HomeScreen = () => {
                     })
                   }
                 />
-                <Divider style={styles.dividerStyle} />
-              </>
+                <Divider
+                  style={[
+                    styles.dividerStyle,
+                    {
+                      backgroundColor:
+                        theme == "light"
+                          ? colors.nonaryBorder
+                          : colors.darkUndenaryBackground,
+                    },
+                  ]}
+                />
+              </React.Fragment>
             );
           })}
         </View>
@@ -248,7 +251,7 @@ const styles = StyleSheet.create({
   },
   dividerStyle: {
     height: 1,
-    backgroundColor: colors.darkQuinaryText,
+    // backgroundColor: colors.nonaryBorder,
     marginVertical: 24,
   },
 });

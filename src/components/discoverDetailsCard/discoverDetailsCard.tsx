@@ -69,21 +69,7 @@ const DiscoverDetailsCard = ({
   const { theme, toggleTheme } = useContext(ThemeContext);
   return (
     <TouchableOpacity onPress={onPress} key={index}>
-      <View
-        style={[
-          styles.detailsHeadlineContainer,
-          {
-            backgroundColor:
-              theme === "dark"
-                ? colors.darkOctonaryBackground
-                : colors.primaryBackground,
-            borderColor:
-              theme === "dark"
-                ? colors.senaryBorderColor
-                : colors.tertiaryBorderColor,
-          },
-        ]}
-      >
+      <View style={[styles.detailsHeadlineContainer]}>
         <View style={styles.authorLikesContainer}>
           <View style={styles.authorIconContainer}>
             <NewsAuthorIcon />
@@ -93,9 +79,7 @@ const DiscoverDetailsCard = ({
                   styles.authorTimeText,
                   {
                     color:
-                      theme === "dark"
-                        ? colors.darkQuaternaryText
-                        : colors.octodenaryText,
+                      theme === "light" ? colors.darkSenaryText : colors.white,
                   },
                 ]}
               >
@@ -119,11 +103,35 @@ const DiscoverDetailsCard = ({
           <View style={styles.viewLikesContainer}>
             <View style={styles.iconValueContainer}>
               <CommentsIcon />
-              <Text style={styles.likeValues}>{comments || 0}</Text>
+              <Text
+                style={[
+                  styles.likeValues,
+                  {
+                    color:
+                      theme == "dark"
+                        ? colors.darkSenaryText
+                        : colors.unvigintaryText,
+                  },
+                ]}
+              >
+                {comments || 0}
+              </Text>
             </View>
             <View style={styles.iconValueContainer}>
               <LikeIcon />
-              <Text style={styles.likeValues}>{likes || 0}</Text>
+              <Text
+                style={[
+                  styles.likeValues,
+                  {
+                    color:
+                      theme == "dark"
+                        ? colors.darkSenaryText
+                        : colors.unvigintaryText,
+                  },
+                ]}
+              >
+                {likes || 0}
+              </Text>
             </View>
           </View>
         </View>
@@ -132,10 +140,7 @@ const DiscoverDetailsCard = ({
             style={[
               styles.articleDetailsHeading,
               {
-                color:
-                  theme === "dark"
-                    ? colors.darkSecondaryText
-                    : colors.octodenaryText,
+                color: theme === "dark" ? colors.white : colors.octodenaryText,
               },
             ]}
           >
@@ -145,10 +150,7 @@ const DiscoverDetailsCard = ({
             style={[
               styles.articleDetailsSubHeading,
               {
-                color:
-                  theme === "dark"
-                    ? colors.darkQuaternaryText
-                    : colors.octodenaryText,
+                color: theme === "dark" ? colors.white : colors.octodenaryText,
               },
             ]}
             numberOfLines={2}
@@ -161,19 +163,25 @@ const DiscoverDetailsCard = ({
             {tag == "bearish" ? (
               <Tag
                 label={"Bearish"}
-                backgroundColor={"#FFE5E5"}
+                backgroundColor={
+                  theme == "light" ? "#FFE5E5" : colors.darkUndenaryBackground
+                }
                 textColor={"#FF5247"}
               />
             ) : tag == "bullish" ? (
               <Tag
                 label={"Bullish"}
-                backgroundColor={"#ECFCE5"}
+                backgroundColor={
+                  theme == "light" ? "#ECFCE5" : colors.darkUndenaryBackground
+                }
                 textColor={"#23C16B"}
               />
             ) : tag == "market" ? (
               <Tag
                 label={"Market"}
-                backgroundColor={"#E7E7FF"}
+                backgroundColor={
+                  theme == "light" ? "#E7E7FF" : colors.darkUndenaryBackground
+                }
                 textColor={"#6B4EFF"}
               />
             ) : (
@@ -274,6 +282,5 @@ const styles = StyleSheet.create({
   likeValues: {
     fontFamily: fontFamily.Satoshi500,
     fontSize: 12,
-    color: colors.duodenaryText,
   },
 });

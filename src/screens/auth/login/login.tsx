@@ -41,6 +41,7 @@ const LoginScreen = () => {
   const otpInputs = useRef<Array<RNTextInput | null>>([]);
   const [isValid, setIsValid] = useState(false);
   const [isFocusOTP, setIsFocusOTP] = useState(false);
+
   const handleSendOTP = async () => {
     if (input.trim() === "") {
       showToast("Please enter your phone or email.", "warning");
@@ -142,8 +143,13 @@ const LoginScreen = () => {
       style={[globalStyles.pageContainerWithBackground(theme)]}
     >
       {showOTPInputs == false ? (
-        <View style={styles.innerContainer}>
-          <View style={styles.containerLogIn}>
+        <View style={[styles.innerContainer]}>
+          <View
+            style={[
+              styles.containerLogIn,
+              { width: Platform.OS == "web" ? "60%" : "100%" },
+            ]}
+          >
             <View style={styles.headingContainer}>
               <Text style={[globalStyles.title(theme)]}>Log In</Text>
             </View>
@@ -179,7 +185,12 @@ const LoginScreen = () => {
               </View>
             </View>
           </View>
-          <View style={styles.containerLogInButton}>
+          <View
+            style={[
+              styles.containerLogInButton,
+              { width: Platform.OS == "web" ? "60%" : "100%" },
+            ]}
+          >
             <Button
               title={"Log in"}
               onPress={handleSendOTP}
@@ -242,16 +253,9 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   innerContainer: {
     justifyContent: "center",
+    alignItems: "center",
     flexGrow: 1,
     gap: 64,
-  },
-  title: {
-    color: colors.primaryText,
-    // fontFamily: fontFamily.secondary,
-    fontSize: 32,
-    fontWeight: "600",
-    marginBottom: 80,
-    textAlign: "left",
   },
   headingContainer: {
     alignItems: "center",
@@ -297,23 +301,6 @@ const styles = StyleSheet.create({
     color: colors.primaryText,
     // fontFamily: fontFamily.secondary,
   },
-  button: {
-    backgroundColor: colors.primaryButtonColor,
-    padding: 16,
-    borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "center",
-    marginVertical: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 3,
-  },
-  buttonText: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
   inlineLinkContainer: {
     flexDirection: "row",
     justifyContent: "center",
@@ -336,32 +323,6 @@ const styles = StyleSheet.create({
   },
   buttonContainers: {
     gap: 16,
-  },
-  otpContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 16,
-    marginBottom: 12,
-  },
-  otpInput: {
-    width: 50,
-    height: 50,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-    textAlign: "center",
-    fontSize: 20,
-    color: colors.primaryText,
-    // fontFamily: fontFamily.Satoshi500,
-  },
-  iconRow: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 24,
-    gap: 20, // if using React Native >= 0.71
-  },
-  icon: {
-    marginHorizontal: 10,
   },
   containerLogInButton: {
     gap: 40,

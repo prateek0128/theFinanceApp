@@ -16,7 +16,6 @@ import { ThemeContext } from "../../../context/themeContext";
 import { getHighImpactNewsById, getNewsFeed } from "../../../apiServices/news";
 import LoaderOverlay from "../../../components/LoadOverlay/loadOverlayTransparent";
 import {
-  GraphImage2,
   FemaleProfileIcon,
   MaleProfileIcon,
   LikeCommentIcon,
@@ -75,7 +74,6 @@ const imageMap: Record<
   string,
   React.ComponentType<{ width?: number; height?: number }>
 > = {
-  graph: GraphImage2,
   currency: CurrencyImage2,
 };
 interface NewsData {

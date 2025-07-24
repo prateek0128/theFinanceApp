@@ -4,7 +4,11 @@
     "slug": "marketBriefs",
     "owner": "prateek2812",
     "scheme": "marketBriefs",
-    "platforms": ["ios", "android", "web"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "runtimeVersion": {
       "policy": "appVersion"
     },
@@ -23,7 +27,11 @@
       "bundleIdentifier": "com.prateek2812.marketBriefs",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
-        "LSApplicationQueriesSchemes": ["whatsapp", "instagram", "twitter"]
+        "LSApplicationQueriesSchemes": [
+          "whatsapp",
+          "instagram",
+          "twitter"
+        ]
       }
     },
     "android": {
@@ -50,7 +58,11 @@
     "web": {
       "favicon": "src/assets/favicon.png"
     },
-    "plugins": ["expo-font", "expo-web-browser"],
+    "plugins": [
+      "expo-font",
+      "expo-web-browser",
+      "expo-localization"
+    ],
     "extra": {
       "facebookAppId": "743854988102436",
       "eas": {

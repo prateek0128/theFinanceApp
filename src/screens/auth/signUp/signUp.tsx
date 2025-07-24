@@ -93,10 +93,7 @@ const SignUpScreen = () => {
     };
     try {
       await login(loginData); // throws if OTP invalid
-      navigation.navigate("ChooseYourInterests", {
-        roleId: null,
-        goalId: null,
-      });
+      navigation.navigate("TellUsSomething", {});
       showToast("OTP verified successfully!", "success");
     } catch (err) {
       // Narrow / cast to AxiosError
@@ -207,33 +204,15 @@ const SignUpScreen = () => {
             onChangeText={validateInput}
             editable={!showOTPInputs} // <-- disable input when OTP inputs are shown
           />
-          {/* {showOTPInputs && (
-          <View style={styles.otpContainer}>
-            {otp.map((digit, index) => (
-              <InputTextField
-                key={index}
-                ref={(ref: any) => {
-                  otpInputs.current[index] = ref;
-                }}
-                style={styles.otpInput}
-                keyboardType="numeric"
-                maxLength={1}
-                value={digit}
-                onChangeText={(value) => handleOTPChange(index, value)}
-                onKeyPress={({ nativeEvent }) =>
-                  handleOTPKeyPress(index, nativeEvent.key)
-                }
-                returnKeyType="next"
-                blurOnSubmit={false}
-              />
-            ))}
-          </View>
-        )} */}
           <Button
             title={showOTPInputs ? "Sign Up" : "Send OTP"}
             onPress={handleSendOTP}
             // disabled={!isValid || (showOTPInputs && !isOtpComplete)}
             disabled={!isValid}
+            buttonStyle={{
+              width: Platform.OS == "web" ? "60%" : "100%",
+              alignSelf: "center",
+            }}
           />
           <View style={styles.orDivider}>
             <View style={styles.line} />
@@ -280,7 +259,9 @@ export default SignUpScreen;
 const styles = StyleSheet.create({
   innerContainer: {
     justifyContent: "center",
+    alignSelf: "center",
     flexGrow: 1,
+    width: Platform.OS == "web" ? "60%" : "100%",
   },
   input: {
     height: 36,
@@ -386,11 +367,16 @@ const styles = StyleSheet.create({
 
   buttonContainers: {
     gap: 16,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
   },
   orDivider: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    alignSelf: "center",
+    width: Platform.OS == "web" ? "60%" : "100%",
     marginVertical: 24,
   },
   line: {

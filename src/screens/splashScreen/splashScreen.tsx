@@ -1,24 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, Text, StyleSheet, Image, ActivityIndicator } from "react-native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "../../types/navigation";
 import { StackNavigationProp } from "@react-navigation/stack";
 import globalStyles from "../../assets/styles/globalStyles";
 import { colors } from "../../assets/styles/colors";
-import spacing from "../../assets/styles/spacing";
 import fontFamily from "../../assets/styles/fontFamily";
+import { AuthContext } from "../../context/authContext";
 const SplashScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-
+  const { isLoggedIn, isLoading } = useContext(AuthContext);
   useEffect(() => {
-    // Simulate loading or fetch initial data
     const timer = setTimeout(() => {
-      // navigation.replace("Login"); // You could check auth state h8ere
-      navigation.replace("Start");
-    }, 2000);
+      if (isLoggedIn) {
+        navigation.replace("BottomTabNavigator");
+      } else {
+        navigation.replace("Start"); // or "Login"
+      }
+    }, 1000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [isLoggedIn, isLoading]);
 
   return (
     <View style={styles.container}>

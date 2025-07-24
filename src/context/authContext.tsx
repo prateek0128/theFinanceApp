@@ -40,24 +40,43 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  let logoutTimeout: ReturnType<typeof setTimeout>;
   useEffect(() => {
     const loadUser = async () => {
       setIsLoading(true);
       try {
-        const storedUser = await AsyncStorage.getItem("user");
-        if (storedUser) {
-          const parsedUser: User = JSON.parse(storedUser);
-          setUser(parsedUser);
-          setIsLoggedIn(true);
+        const [storedUser, storedExpiry] = await AsyncStorage.multiGet([
+          "user",
+          "tokenExpiry",
+        ]);
+
+        const userJson = storedUser[1];
+        const expiry = storedExpiry[1];
+
+        if (userJson && expiry) {
+          const expiryTime = parseInt(expiry, 10);
+          const currentTime = Date.now();
+
+          if (currentTime < expiryTime) {
+            const remainingTime = expiryTime - currentTime;
+            const parsedUser: User = JSON.parse(userJson);
+
+            setUser(parsedUser);
+            setIsLoggedIn(true);
+            scheduleAutoLogout(remainingTime);
+          } else {
+            await logout(); // token expired
+          }
         }
       } catch (e) {
         console.error("Failed to load user:", e);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
     loadUser();
   }, []);
+
   const login = async (userData: any) => {
     setIsLoading(true);
     try {
@@ -65,17 +84,28 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       console.log(response);
       const responseData = response.data as AuthResponse;
       const status = responseData.status;
-
       if (status === "success") {
+        console.log("Loginsuccessful=>", responseData.data);
         const user = responseData.data.user;
         const accesstoken = responseData.data.access_token;
-        AsyncStorage.setItem("authToken", accesstoken);
-        AsyncStorage.setItem("status", status);
-        AsyncStorage.setItem("message", responseData.message);
-        AsyncStorage.setItem("user", JSON.stringify(user));
+        const expiresIn = responseData.data.expires_in;
+        const expirationTimestamp = Date.now() + expiresIn;
+        // AsyncStorage.setItem("authToken", accesstoken);
+        // AsyncStorage.setItem("status", status);
+        // AsyncStorage.setItem("message", responseData.message);
+        // AsyncStorage.setItem("user", JSON.stringify(user));
+        await AsyncStorage.multiSet([
+          ["authToken", accesstoken],
+          ["status", status],
+          ["message", responseData.message],
+          ["user", JSON.stringify(user)],
+          ["tokenExpiry", expirationTimestamp.toString()],
+        ]);
         setUser(user);
         setIsLoggedIn(true);
         // No return value needed
+        // Start logout timer
+        scheduleAutoLogout(expiresIn);
       } else {
         console.error("Login failed:", responseData.message);
         setIsLoggedIn(false);
@@ -93,14 +123,29 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = async () => {
     setIsLoading(true);
     try {
+      if (logoutTimeout) clearTimeout(logoutTimeout);
+
+      await AsyncStorage.multiRemove([
+        "authToken",
+        "status",
+        "message",
+        "user",
+        "tokenExpiry",
+      ]);
       setUser(null);
       setIsLoggedIn(false);
     } catch (e) {
       console.error("Logout failed:", e);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
-
+  const scheduleAutoLogout = (expiresIn: number) => {
+    if (logoutTimeout) clearTimeout(logoutTimeout);
+    logoutTimeout = setTimeout(() => {
+      logout();
+    }, expiresIn);
+  };
   return (
     <AuthContext.Provider
       value={{ user, isLoggedIn, isLoading, login, logout }}

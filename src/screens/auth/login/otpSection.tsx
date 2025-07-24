@@ -22,7 +22,6 @@ import { RootStackParamList } from "../../../types/navigation";
 import { ThemeContext } from "../../../context/themeContext";
 
 const { width } = Dimensions.get("window");
-const CIRCLE_SIZE = width * 0.14;
 
 const OTPSection = ({
   isFocusOTP,
@@ -38,7 +37,9 @@ const OTPSection = ({
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const inputs = useRef<Array<TextInput | null>>([]);
   const { theme } = useContext(ThemeContext);
-
+  const [windowWidth, setWindowWidth] = useState(
+    Dimensions.get("window").width
+  );
   const handleResendOTP = () => {
     // TODO: Replace this with your actual resend OTP API
     console.log("OTP resent!");
@@ -80,6 +81,18 @@ const OTPSection = ({
     console.log("Entered OTP:", enteredOtp);
     navigation.navigate("Login");
   };
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(Dimensions.get("window").width);
+    };
+    const subscription = Dimensions.addEventListener("change", handleResize);
+    return () => subscription.remove();
+  }, []);
+  // 🔧 Responsive circle size
+  const CIRCLE_SIZE =
+    Platform.OS === "web"
+      ? Math.min(windowWidth * 0.08, 60) // max width 60px on web
+      : windowWidth * 0.14;
   const isOtpComplete = otp.every((digit: any) => digit !== "");
   return (
     <View style={styles.otpContainer}>
@@ -114,11 +127,21 @@ const OTPSection = ({
           ]}
         >
           Enter the 6-digit code we have sent to the e-mail{" "}
-          <Text style={styles.emailHighlight}>{input}</Text>
+          <Text
+            style={[
+              styles.emailHighlight,
+              {
+                color:
+                  theme === "dark" ? colors.darkSenaryText : colors.primaryText,
+              },
+            ]}
+          >
+            {input}
+          </Text>
         </Text>
       </View>
 
-      <View style={styles.otpBoxesContainer}>
+      <View style={[styles.otpBoxesContainer]}>
         {otp.map((digit: any, index: any) => (
           <TextInput
             key={index}
@@ -135,6 +158,9 @@ const OTPSection = ({
             style={[
               styles.circleInput,
               {
+                width: CIRCLE_SIZE,
+                height: CIRCLE_SIZE,
+                borderRadius: CIRCLE_SIZE / 2,
                 borderColor: isFocusOTP
                   ? colors.sexdenaryText
                   : colors.nonaryBorder,
@@ -237,13 +263,10 @@ const styles = StyleSheet.create({
   otpBoxesContainer: {
     gap: 5,
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "center",
     marginTop: 40,
   },
   circleInput: {
-    width: CIRCLE_SIZE,
-    height: CIRCLE_SIZE,
-    borderRadius: CIRCLE_SIZE / 2,
     borderWidth: 2,
     borderColor: "#007AFF",
     textAlign: "center",
@@ -266,6 +289,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     position: "absolute",
     bottom: 80,
-    width: "100%",
+    width: Platform.OS == "web" ? "60%" : "100%",
+    alignSelf: "center",
   },
 });

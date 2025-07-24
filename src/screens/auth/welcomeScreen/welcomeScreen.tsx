@@ -233,6 +233,9 @@ const styles = StyleSheet.create({
   },
   buttonContainers: {
     gap: 16,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
   },
   orDivider: {
     flexDirection: "row",

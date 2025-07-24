@@ -27,6 +27,8 @@ import {
 import { AxiosError } from "axios";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import * as Device from "expo-device";
+import * as Localization from "expo-localization";
+import { getUserProfile } from "../../apiServices/user";
 const interests = [
   "Stock Market News",
   "Indian Companies",
@@ -49,22 +51,21 @@ type ChooseYourInterestsRouteProp = RouteProp<
   RootStackParamList,
   "ChooseYourInterests"
 >;
+type BottomTabNavigatorRouteProp = RouteProp<
+  RootStackParamList,
+  "BottomTabNavigator"
+>;
 export default function ChooseYourInterests() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [selected, setSelected] = useState<string[]>([]);
   const [interests, setInterests] = useState<any[]>([]);
   const [deviceInfo, setDeviceInfo] = useState<any>({});
   const [selectedInterestIds, setSelectedInterestIds] = useState<string[]>([]);
-  const route = useRoute<ChooseYourInterestsRouteProp>();
-  const { roleId, goalId } = route.params;
-  console.log("roleId:", roleId, "goalId:", goalId);
-  // const toggleInterest = (item: any) => {
-  //   setSelected((prevSelected: any) =>
-  //     prevSelected.includes(item)
-  //       ? prevSelected.filter((i: any) => i !== item)
-  //       : [...prevSelected, item]
-  //   );
-  // };
+  const route = useRoute<
+    ChooseYourInterestsRouteProp | BottomTabNavigatorRouteProp
+  >();
+  const { roleId, goalId } = route.params || {};
+  console.log("roleId:", roleId || "", "goalId:", goalId || "");
   const toggleInterest = (item: any) => {
     setSelected((prevSelected) => {
       const isAlreadySelected = prevSelected.some(
@@ -85,22 +86,23 @@ export default function ChooseYourInterests() {
 
   const canContinue = selected.length >= 3;
   const { theme, toggleTheme } = useContext(ThemeContext);
-  const handleContinue = () => {
+  const handleContinue = async () => {
     const onboardingData = {
-      role: roleId,
-      goal: goalId,
+      role: roleId || "",
+      goal: goalId || "",
       interests: selectedInterestIds,
       clientMeta: {
-        deviceId: "a1b2c3d4",
-        locale: "en-IN",
-        tz: "Asia/Kolkata",
+        deviceId: Device.osInternalBuildId ?? Device.modelId ?? "unknown",
+        locale: Localization.getLocales()[0].languageTag,
+        tz: Localization.getCalendars?.()[0]?.timeZone ?? "Asia/Kolkata",
       },
     };
     console.log("OnboardingDataPayload=>", onboardingData);
     try {
-      const response = submitOnboarding(onboardingData);
-      console.log("OnboardingResponse=>", response);
-      showToast("Your interests saved successfully", "success");
+      const response = await submitOnboarding(onboardingData);
+      console.log("OnboardingResponse=>", response.data.data);
+      showToast(response.data.message, "success");
+      navigation.navigate("BottomTabNavigator");
     } catch (err) {
       // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
@@ -112,7 +114,6 @@ export default function ChooseYourInterests() {
       showToast(errorMessage, "danger");
       return;
     }
-    navigation.navigate("BottomTabNavigator");
   };
   const getAllInterestsAPI = async () => {
     try {
@@ -130,25 +131,33 @@ export default function ChooseYourInterests() {
       showToast(errorMessage, "danger");
     }
   };
+  const getSelectedInterestsAPI = async () => {
+    try {
+      const response = await getUserProfile();
+      console.log("SelectedInterestsResponse=>", response.data);
+      setInterests(response.data);
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      showToast(errorMessage, "danger");
+    }
+  };
   useEffect(() => {
     getAllInterestsAPI();
-  }, []);
-  useEffect(() => {
-    const info = {
-      brand: Device.brand,
-      model: Device.modelName,
-      osName: Device.osName,
-      osVersion: Device.osVersion,
-      deviceType: Device.deviceType,
-      totalMemory: Device.totalMemory,
-    };
-    setDeviceInfo(info);
+    getSelectedInterestsAPI();
   }, []);
   const groupedInterests = interests
     ? Array.from({ length: Math.ceil(interests.length / 3) }, (_, i) =>
         interests.slice(i * 3, i * 3 + 3)
       )
     : [];
+  const buttonTitle =
+    route.name === "ChooseYourInterests" ? "Get Started" : "Update Interests";
   return (
     <View
       style={[
@@ -232,7 +241,7 @@ export default function ChooseYourInterests() {
         </View>
       </ScrollView>
       <Button
-        title="Get Started"
+        title={buttonTitle}
         onPress={() => {
           if (selected.length >= 3) {
             handleContinue(); // navigate next

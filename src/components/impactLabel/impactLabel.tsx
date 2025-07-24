@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import fontFamily from "../../assets/styles/fontFamily";
 import { colors } from "../../assets/styles/colors";
@@ -6,6 +6,7 @@ import {
   ImpactArrowGreen,
   ImpactArrowRed,
 } from "../../assets/icons/components/homepage";
+import { ThemeContext } from "../../context/themeContext";
 const ImpactLabel = ({
   label,
   value,
@@ -18,6 +19,7 @@ const ImpactLabel = ({
   variant = "contained", //contained or outlined
   ImpactArrow,
 }: any) => {
+  const { theme, toggleTheme } = useContext(ThemeContext);
   return (
     <View
       style={[
@@ -31,9 +33,30 @@ const ImpactLabel = ({
     >
       {value >= 9 ? <ImpactArrowGreen /> : <ImpactArrowRed />}
       <View style={styles.impactLabelTextContainer}>
-        <Text style={[styles.impactLabelText]}>{`${label}`}</Text>
-        <Text style={[styles.impactLabelValue]}>{`:`}</Text>
-        <Text style={[styles.impactLabelValue]}>{`${value}`}</Text>
+        <Text
+          style={[
+            styles.impactLabelText,
+            {
+              color: theme == "light" ? colors.octodenaryText : colors.white,
+            },
+          ]}
+        >{`${label}`}</Text>
+        <Text
+          style={[
+            styles.impactLabelValue,
+            {
+              color: theme == "light" ? colors.octodenaryText : colors.white,
+            },
+          ]}
+        >{`:`}</Text>
+        <Text
+          style={[
+            styles.impactLabelValue,
+            {
+              color: theme == "light" ? colors.octodenaryText : colors.white,
+            },
+          ]}
+        >{`${value}/10`}</Text>
       </View>
     </View>
   );
@@ -58,17 +81,14 @@ const styles = StyleSheet.create({
     //backgroundColor: colors.quattuordenaryBackground,
   },
   impactLabelText: {
-    color: colors.octodenaryText,
     fontSize: 14,
     fontFamily: fontFamily.Inter400,
   },
   impactColonText: {
-    color: colors.octodenaryText,
     fontSize: 14,
     fontFamily: fontFamily.Inter500,
   },
   impactLabelValue: {
-    color: colors.octodenaryText,
     fontSize: 14,
     fontFamily: fontFamily.Inter700,
   },

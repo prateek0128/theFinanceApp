@@ -38,7 +38,7 @@ export default function BottomTabNavigator() {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const tabsData = [
     {
-      name: "HomeStack",
+      name: "Home",
       component: HomeScreenStack,
       Icon: theme === "dark" ? HomeIconWhite : HomeIcon,
       FocusedIcon: theme === "dark" ? HomeIconPurple : HomeIconBlue,
