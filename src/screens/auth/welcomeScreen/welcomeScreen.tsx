@@ -10,6 +10,8 @@ import {
   ScrollView,
   Image,
   Linking,
+  Alert,
+  Button,
 } from "react-native";
 import {
   useNavigation,
@@ -33,40 +35,19 @@ import * as WebBrowser from "expo-web-browser";
 import * as AuthSession from "expo-auth-session";
 import * as Google from "expo-auth-session/providers/google";
 import { useFacebookLogin } from "../facebookLogIn/facebookLogIn";
-
-// Fix redirect on iOS
+import { useGoogleLogin } from "../googleLogin/googleLogin";
 WebBrowser.maybeCompleteAuthSession();
-// Your Google OAuth client ID
-// const CLIENT_ID =
-//   "828693204724-nsceevot9v42pfjml3eit3kjg9e1e1li.apps.googleusercontent.com";
-const CLIENT_ID =
-  "261759290639-eavcf9en1gjmi3c7b71g4g86ost2qth2.apps.googleusercontent.com";
-const BASE_URL = "http://localhost:8081";
-
 const WelcomeScreen = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
-  const { promptAsyncFacebook, responseFacebook } = useFacebookLogin();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  // generate correct redirect URI
-  const redirectUri = AuthSession.makeRedirectUri({
-    useProxy: true, // valid here
-  } as any);
-  console.log("Redirect URI:", redirectUri);
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    iosClientId:
-      "367090103963-h643bf3uqjoesfmlcmae3uqe5rs51jch.apps.googleusercontent.com",
-    androidClientId:
-      "367090103963-ef9c4a8oq4qmbmte4nkskisf773qnc2n.apps.googleusercontent.com",
-    webClientId:
-      "367090103963-1eek4b10kodood727g6t6hh1seap8h3v.apps.googleusercontent.com",
-    // optionally add:
-    // expoClientId: 'YOUR_EXPO_CLIENT_ID.apps.googleusercontent.com'
-    redirectUri,
-    scopes: ["profile", "email"],
-  });
+  const { requestGoogle, responseGoogle, promptAsyncGoogle } = useGoogleLogin();
+  const { promptAsyncFacebook, responseFacebook, requestFacebook } =
+    useFacebookLogin();
+  const [userInfoGoogle, setUserInfoGoogle] = useState<any>(null);
+  const [userInfoFacebook, setUserInfoFacebook] = useState<any>(null);
   useEffect(() => {
-    if (response?.type === "success") {
-      const { authentication } = response;
+    if (responseGoogle?.type === "success") {
+      const { authentication } = responseGoogle;
 
       // You get accessToken & idToken here:
       console.log("Access token:", authentication?.accessToken);
@@ -89,7 +70,7 @@ const WelcomeScreen = () => {
           console.error("Failed to fetch user info", err);
         });
     }
-  }, [response]);
+  }, [responseGoogle]);
   const handleAppleLogin = async () => {
     try {
       const credential = await AppleAuthentication.signInAsync({
@@ -114,7 +95,62 @@ const WelcomeScreen = () => {
       }
     }
   };
-
+  useEffect(() => {
+    if (
+      responseFacebook &&
+      responseFacebook?.type === "success" &&
+      responseFacebook.authentication
+    ) {
+      (async () => {
+        // Fetch user info from Facebook
+        if (!responseFacebook.authentication) {
+          console.error("Facebook authentication is null.");
+          Alert.alert("Error", "Facebook authentication failed.");
+          return;
+        }
+        const userInfoResponse = await fetch(
+          `https://graph.facebook.com/me?access_token=${responseFacebook.authentication.accessToken}&fields=id,name,email,picture.type(large)`
+        );
+        const userInfo = await userInfoResponse.json();
+        console.log("Facebook User Info:", userInfo);
+        setUserInfoFacebook(userInfo);
+        // Check if userInfo contains the expected fields
+        if (!userInfo.name || !userInfo.email || !userInfo.picture) {
+          console.error("Incomplete user info from Facebook:", userInfo);
+          Alert.alert(
+            "Error",
+            "Failed to fetch complete Facebook user information."
+          );
+          return;
+        }
+        // Log the user info
+        console.log("User Info:", userInfo);
+        // Optionally save user info or navigate
+        console.log("Navigating to TellUsSomething with user info:", {
+          name: userInfo.name,
+          email: userInfo.email,
+          picture: userInfo.picture.data.url,
+        });
+        navigation.navigate("TellUsSomething", {});
+      })().catch((error) => {
+        console.error("Error fetching Facebook user info:", error);
+        Alert.alert("Error", "Failed to fetch Facebook user information.");
+      });
+    }
+  }, [responseFacebook]);
+  const handleFacebookLogin = async () => {
+    try {
+      const result = await promptAsyncFacebook();
+      if (result.type === "success") {
+        console.log("Facebook login successful:", result);
+        // Handle successful login
+      } else {
+        console.log("Facebook login cancelled or failed:", result);
+      }
+    } catch (error) {
+      console.error("Error during Facebook login:", error);
+    }
+  };
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -158,17 +194,19 @@ const WelcomeScreen = () => {
           <SocialLoginButton
             IconComponent={GoogleIcon}
             text="Continue with Google"
-            //onPress={promptAsync}
-            // disabled={!request}
+            onPress={() => promptAsyncGoogle()}
+            disabled={!requestGoogle}
           />
           <SocialLoginButton
             IconComponent={FacebookIcon}
             text="Continue with Facebook"
-            onPress={() =>
-              Linking.openURL(
-                "https://www.facebook.com/v19.0/dialog/oauth?client_id=743854988102436&redirect_uri=https://79d752f15cd2.ngrok-free.app/app_redirect1&scope=email,public_profile"
-              )
-            }
+            disabled={!requestFacebook}
+            onPress={handleFacebookLogin}
+            // onPress={() => {
+            //   Linking.openURL(
+            //     "https://www.facebook.com/v19.0/dialog/oauth?client_id=743854988102436&redirect_uri=https://de6e612422bc.ngrok-free.app/app_redirect1&scope=email,public_profile"
+            //   );
+            // }}
           />
         </View>
         <View style={styles.inlineLinkContainer}>

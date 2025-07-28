@@ -406,7 +406,10 @@ const HeadlineDetailsScreen = () => {
       >
         <View style={styles.headerContainer}>
           <Header
-            onBackClick={() => navigation.navigate("Home")}
+            onBackClick={() => {
+              navigation.navigate("Home");
+              console.log("Back to Home");
+            }}
             liked={liked}
             setLiked={setLiked}
             bookmarked={bookmarked}

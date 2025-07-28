@@ -177,14 +177,6 @@ const HomeScreen = () => {
                     navigation.navigate("HeadlineDetailsScreen", {
                       newsId: news.id,
                       imageKey: "",
-                      title: news.title,
-                      author: "",
-                      time: "",
-                      impactLabel: news.impact_label,
-                      impactScore: news.impact_score,
-                      points: [],
-                      //@ts-ignore
-                      discussions: news.discussions,
                     })
                   }
                 />

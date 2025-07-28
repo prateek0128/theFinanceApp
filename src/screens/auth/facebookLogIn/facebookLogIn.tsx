@@ -1,5 +1,3 @@
-// src/auth/facebookLogin.ts
-
 import * as Facebook from "expo-auth-session/providers/facebook";
 import Constants from "expo-constants";
 

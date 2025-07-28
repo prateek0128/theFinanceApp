@@ -31,12 +31,18 @@ import InterestsScreen from "../../screens/InterestsScreen/InterestsScreen";
 import { ThemeContext } from "../../context/themeContext";
 import { colors } from "../../assets/styles/colors";
 import ChooseYourInterests from "../../screens/chooseYourInterests/chooseYourInterests";
-const Tab = createBottomTabNavigator();
+import { BottomTabParamList, HomeStackParamList } from "../../types/navigation";
+const Tab = createBottomTabNavigator<BottomTabParamList>();
 const { width, height } = Dimensions.get("window");
 
 export default function BottomTabNavigator() {
   const { theme, toggleTheme } = useContext(ThemeContext);
-  const tabsData = [
+  const tabsData: {
+    name: keyof BottomTabParamList;
+    component: React.ComponentType<any>;
+    Icon: React.ComponentType<{ width: number; height: number }>;
+    FocusedIcon: React.ComponentType<{ width: number; height: number }>;
+  }[] = [
     {
       name: "Home",
       component: HomeScreenStack,
@@ -70,7 +76,7 @@ export default function BottomTabNavigator() {
 
         // Dynamic background logic
         const isOnHeadlineDetails =
-          route.name === "HomeStack" && routeName === "HeadlineDetailsScreen";
+          route.name === "Home" && routeName === "HeadlineDetailsScreen";
         return {
           headerShown: false,
           tabBarStyle: {

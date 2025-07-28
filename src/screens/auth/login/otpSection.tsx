@@ -33,6 +33,7 @@ const OTPSection = ({
   otp,
   setOtp,
   handleVerifyOTP,
+  handleSendOTP,
 }: any) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const inputs = useRef<Array<TextInput | null>>([]);
@@ -41,11 +42,16 @@ const OTPSection = ({
     Dimensions.get("window").width
   );
   const handleResendOTP = () => {
-    // TODO: Replace this with your actual resend OTP API
-    console.log("OTP resent!");
-    if (Platform.OS === "android") {
-      ToastAndroid.show("OTP resent successfully!", ToastAndroid.SHORT);
-    }
+    handleSendOTP();
+    setOtp(Array(6).fill("")); // Reset OTP input
+    inputs.current.forEach((input) => {
+      if (input) {
+        input.clear(); // Clear each input field
+      }
+    });
+    // if (Platform.OS === "android") {
+    //   ToastAndroid.show("OTP resent successfully!", ToastAndroid.SHORT);
+    // }
   };
 
   const handleChange = (text: string, index: number) => {
@@ -123,16 +129,18 @@ const OTPSection = ({
             {
               color:
                 theme === "dark" ? colors.darkSenaryText : colors.primaryText,
+              fontFamily: fontFamily.Inter400,
             },
           ]}
         >
           Enter the 6-digit code we have sent to the e-mail{" "}
           <Text
             style={[
-              styles.emailHighlight,
+              styles.paragraph,
               {
                 color:
                   theme === "dark" ? colors.darkSenaryText : colors.primaryText,
+                fontFamily: fontFamily.Inter700,
               },
             ]}
           >

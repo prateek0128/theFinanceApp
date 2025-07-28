@@ -12,30 +12,15 @@ export type RootStackParamList = {
   HeadlineDetailsScreen: {
     newsId?: string;
     imageKey?: string;
-    title?: string;
-    author?: string;
-    time?: string;
-    impactLabel?: string;
-    impactScore?: number;
-    points?: string[];
-    discussions?: {
-      id?: string;
-      name?: string;
-      time?: string;
-      text?: string;
-      likes?: number;
-      unlikes?: number;
-      profileType?: "male" | "female";
-    }[];
   };
 };
 export type BottomTabParamList = {
   Home: undefined;
-  Portfolio: undefined;
+  Interests: undefined;
   News: undefined;
   Profile: undefined;
 };
 export type HomeStackParamList = {
-  HomeScreen: undefined;
+  Home: undefined;
   HeadlineDetailsScreen: undefined;
 };

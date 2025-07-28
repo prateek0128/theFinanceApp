@@ -74,7 +74,6 @@ const LoginScreen = () => {
       showToast(errorMessage, "danger");
     }
   };
-
   const handleVerifyOTP = async () => {
     if (otp.some((digit) => digit === "")) {
       showToast("Please enter all OTP digits.", "warning");
@@ -242,6 +241,7 @@ const LoginScreen = () => {
           otp={otp}
           setOtp={setOtp}
           handleVerifyOTP={handleVerifyOTP}
+          handleSendOTP={handleSendOTP}
         />
       )}
     </KeyboardAvoidingView>
