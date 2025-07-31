@@ -7,6 +7,7 @@ export { default as CommentIconBlack } from "./CommentIconBlack";
 export { default as CurrencyImage2 } from "./CurrencyImage2";
 export { default as FemaleProfileIcon } from "./FemaleProfileIcon";
 export { default as GraphImage2 } from "./GraphImage2";
+export { default as HeartCommentIcon } from "./HeartCommentIcon";
 export { default as LikeCommentIcon } from "./LikeCommentIcon";
 export { default as LikeCommentIconFilled } from "./LikeCommentIconFilled";
 export { default as LikePostIcon } from "./LikePostIcon";

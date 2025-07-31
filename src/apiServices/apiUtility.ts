@@ -2,8 +2,9 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+const baseURL = "https://rationally-joint-swift.ngrok-free.app";
 //const apiUrl = "http://localhost:8080/api/v1";
-const apiUrl = "https://3a4478a35dc7.ngrok-free.app/api/v1";
+const apiUrl = `${baseURL}/api/v1`;
 // Create a basic axios instance without interceptors
 export const apiClient = async () => {
   const token = await AsyncStorage.getItem("authToken");

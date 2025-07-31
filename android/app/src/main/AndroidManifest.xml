@@ -26,6 +26,7 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="marketBriefs"/>
+        <data android:scheme="fb743854988102436"/>
       </intent-filter>
     </activity>
   </application>

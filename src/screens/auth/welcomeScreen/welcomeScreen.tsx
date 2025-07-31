@@ -32,8 +32,6 @@ import {
 } from "../../../assets/icons/components/welcome";
 import { ThemeContext } from "../../../context/themeContext";
 import * as WebBrowser from "expo-web-browser";
-import * as AuthSession from "expo-auth-session";
-import * as Google from "expo-auth-session/providers/google";
 import { useFacebookLogin } from "../facebookLogIn/facebookLogIn";
 import { useGoogleLogin } from "../googleLogin/googleLogin";
 WebBrowser.maybeCompleteAuthSession();
@@ -61,10 +59,7 @@ const WelcomeScreen = () => {
         .then((userInfo) => {
           console.log("User Info:", userInfo);
           // userInfo contains name, email, picture etc.
-          navigation.navigate("TellUsSomething", {
-            name: userInfo.name,
-            email: userInfo.email,
-          });
+          navigation.navigate("TellUsSomething", {});
         })
         .catch((err) => {
           console.error("Failed to fetch user info", err);
@@ -195,12 +190,12 @@ const WelcomeScreen = () => {
             IconComponent={GoogleIcon}
             text="Continue with Google"
             onPress={() => promptAsyncGoogle()}
-            disabled={!requestGoogle}
+            // disabled={!requestGoogle}
           />
           <SocialLoginButton
             IconComponent={FacebookIcon}
             text="Continue with Facebook"
-            disabled={!requestFacebook}
+            //disabled={!requestFacebook}
             onPress={handleFacebookLogin}
             // onPress={() => {
             //   Linking.openURL(

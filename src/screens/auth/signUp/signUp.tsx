@@ -248,6 +248,7 @@ const SignUpScreen = () => {
           otp={otp}
           setOtp={setOtp}
           handleVerifyOTP={handleVerifyOTP}
+          handleSendOTP={handleSendOTP}
         />
       )}
     </KeyboardAvoidingView>

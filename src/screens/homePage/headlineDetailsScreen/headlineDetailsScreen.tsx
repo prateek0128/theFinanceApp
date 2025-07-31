@@ -25,6 +25,7 @@ import {
   CommentIcon,
   CommentIconBlack,
   CurrencyImage2,
+  HeartCommentIcon,
 } from "../../../assets/icons/components/headlineDetailsView";
 import HeadlineDetailCard from "../../../components/headlineDetailedCard/headlineDetailedCard";
 import Tag from "../../../components/tag/tag";
@@ -61,6 +62,8 @@ import showToast from "../../../utilis/showToast";
 import { AxiosError } from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import globalStyles from "../../../assets/styles/globalStyles";
+import { NewsAuthorIcon } from "../../../assets/icons/components/homepage";
+import { Divider } from "react-native-paper";
 
 dayjs.extend(relativeTime);
 const { width, height } = Dimensions.get("window");
@@ -83,6 +86,8 @@ interface NewsData {
   summary?: string;
   url?: string;
   tag?: string;
+  authors?: string;
+  time_ago?: string;
 }
 const HeadlineDetailsScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -100,6 +105,30 @@ const HeadlineDetailsScreen = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [addCommentsLoader, setAddCommentsLoader] = useState<boolean>(false);
   const token = AsyncStorage.getItem("authToken");
+  const news = {
+    authors: ["BusinessStandard"],
+    categories: ["Stocks"],
+    content: "",
+    date_extracted: false,
+    engagement: { comments: 0, likes: 0 },
+    id: "68877337a8ec271fcc4f961f",
+    impact_label: "Very High Impact",
+    impact_score: 8.5,
+    processed_by: "gpt",
+    published_at: "2025-07-28T13:20:22.978Z",
+    related_stocks: null,
+    sector: "technology",
+    sentiment_label: "neutral",
+    sentiment_score: -0.17727272727272728,
+    source: "BusinessStandard",
+    summary:
+      "• Tata Consultancy Services (TCS) share price is trading below a key support level• This situation indicates that TCS (Tata Consultancy Services) could drop by another 16%, which may negatively impact investor confidence.   • It's like a long-standing bridge showing cracks; if it collapses, many will be affected.",
+    tag: "bearish",
+    tags: null,
+    time_ago: "1 day ago",
+    title: "TCS (Tata Consultancy Services) Stock Risks Major Decline Ahead",
+    url: "https://www.business-standard.com/markets/news/tcs-stock-on-verge-to-break-this-16-year-old-trend-can-crash-another-16-125072800219_1.html",
+  };
   // console.log("AccessToken", token);
   const renderImage = () => {
     if (typeof imageKey === "string" && imageKey in imageMap) {
@@ -437,19 +466,6 @@ const HeadlineDetailsScreen = () => {
             />
           </View>
           <View style={styles.headingContainer}>
-            <Text
-              style={[
-                styles.articleDetailsHeading,
-                {
-                  color:
-                    theme === "dark"
-                      ? colors.darkPrimaryText
-                      : colors.primaryText,
-                },
-              ]}
-            >
-              {newsData.title}
-            </Text>
             <View style={styles.detailsHeader}>
               <View style={styles.tagContainer}>
                 {newsData.tag == "bearish" ? (
@@ -474,7 +490,6 @@ const HeadlineDetailsScreen = () => {
                   ""
                 )}
               </View>
-
               <View style={styles.profileNameContainer}>
                 <ImpactLabel
                   variant={"contained"}
@@ -485,8 +500,51 @@ const HeadlineDetailsScreen = () => {
                 />
               </View>
             </View>
+            <Text
+              style={[
+                styles.articleDetailsHeading,
+                {
+                  color:
+                    theme === "dark"
+                      ? colors.darkPrimaryText
+                      : colors.primaryText,
+                },
+              ]}
+            >
+              {newsData.title}
+            </Text>
           </View>
-
+          <View style={styles.authorIconContainer}>
+            <NewsAuthorIcon />
+            <View style={styles.authorTimeContainer}>
+              <Text
+                style={[
+                  styles.authorTimeText,
+                  {
+                    color:
+                      theme === "light" ? colors.octodenaryText : colors.white,
+                    fontSize: 16,
+                  },
+                ]}
+              >
+                {`${newsData?.authors?.[0] || "--"} ·`}
+              </Text>
+              <Text
+                style={[
+                  styles.authorTimeText,
+                  {
+                    fontSize: 16,
+                    color:
+                      theme === "dark"
+                        ? colors.darkQuaternaryText
+                        : colors.unvigintaryText,
+                  },
+                ]}
+              >
+                {`${newsData.time_ago || "--"}`}
+              </Text>
+            </View>
+          </View>
           <View style={styles.headingDetails}>
             <View>
               {summaryArray.map((point, index) => (
@@ -502,7 +560,7 @@ const HeadlineDetailsScreen = () => {
                       },
                     ]}
                   >
-                    {index + 1}.
+                    {/* {index + 1}. */}•
                   </Text>
                   <Text
                     style={[
@@ -521,21 +579,47 @@ const HeadlineDetailsScreen = () => {
               ))}
             </View>
           </View>
-        </View>
-        <View style={styles.relatedDiscussionsContainer}>
-          <Text
+          <Divider
             style={[
-              styles.relatedDiscussionsHeading,
+              styles.dividerStyle,
               {
-                color:
-                  theme === "dark"
-                    ? colors.darkPrimaryText
-                    : colors.primaryText,
+                backgroundColor:
+                  theme == "light"
+                    ? colors.nonaryBorder
+                    : colors.darkUndenaryBackground,
               },
             ]}
-          >
-            Related Discussions
-          </Text>
+          />
+        </View>
+        <View style={styles.relatedDiscussionsContainer}>
+          <View style={styles.relatedDiscussionsHeader}>
+            <Text
+              style={[
+                styles.relatedDiscussionsHeading,
+                {
+                  color:
+                    theme === "dark"
+                      ? colors.darkPrimaryText
+                      : colors.primaryText,
+                },
+              ]}
+            >
+              Related Discussions
+            </Text>
+            <Text
+              style={[
+                styles.commentCount,
+                {
+                  color:
+                    theme === "dark"
+                      ? colors.darkPrimaryText
+                      : colors.octodenaryText,
+                },
+              ]}
+            >
+              {`${7} Comments`}
+            </Text>
+          </View>
           <View style={styles.relatedDiscussionsDetails}>
             {(commentsData || []).map((comment: any) => (
               <View key={comment.id} style={styles.relatedDiscussionsArticle}>
@@ -552,7 +636,7 @@ const HeadlineDetailsScreen = () => {
                           color:
                             theme === "dark"
                               ? colors.darkPrimaryText
-                              : colors.senaryText,
+                              : colors.octodenaryText,
                         },
                       ]}
                     >
@@ -573,7 +657,7 @@ const HeadlineDetailsScreen = () => {
                         }}
                       >
                         {!likedComments[comment.id] ? (
-                          <LikeCommentIcon width={20} height={20} />
+                          <HeartCommentIcon width={20} height={20} />
                         ) : (
                           <LikeCommentIconFilled width={20} height={20} />
                         )}
@@ -581,22 +665,7 @@ const HeadlineDetailsScreen = () => {
                       <Text style={styles.articleTime}>
                         {comment.likes || 0}
                       </Text>
-                    </View>
-                    <View style={styles.iconCountContainer}>
-                      <TouchableOpacity
-                        onPress={() => {
-                          handleToggleLikeComment(comment.id);
-                        }}
-                      >
-                        {likedComments[comment.id] ? (
-                          <UnlikeCommentIcon width={20} height={20} />
-                        ) : (
-                          <UnlikeCommentIconFilled width={20} height={20} />
-                        )}
-                      </TouchableOpacity>
-                      <Text style={styles.articleTime}>
-                        {comment.unlike_count || 0}
-                      </Text>
+                      <Text style={styles.articleTime}>Reply</Text>
                     </View>
                   </View>
                 </View>
@@ -604,67 +673,76 @@ const HeadlineDetailsScreen = () => {
             ))}
           </View>
         </View>
+        <View style={styles.viewCommentsContainer}>
+          <Text style={styles.viewCommentsText}>View All Comments</Text>
+        </View>
         <KeyboardAvoidingView
           style={{ flex: 1 }}
           behavior={Platform.OS === "ios" ? "padding" : undefined}
           keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0} // tweak this if needed
         >
           <View style={[styles.commentContainer]}>
-            <TextInput
-              style={[
-                styles.commentInput,
-                {
-                  backgroundColor:
-                    theme === "dark"
-                      ? colors.darkPrimaryBackground
-                      : colors.primaryBackground,
-
-                  color:
-                    theme === "dark"
-                      ? colors.darkPrimaryText
-                      : colors.undenaryBackground,
-
-                  borderColor:
-                    theme === "dark"
-                      ? colors.quaternaryBorderColor
-                      : colors.tertiaryBorderColor,
-                },
-              ]}
-              placeholder="Write a comment..."
-              placeholderTextColor={
-                theme == "dark"
-                  ? colors.tertiaryText
-                  : colors.primaryBorderColor
-              }
-              keyboardType="email-address"
-              value={comment}
-              onChangeText={(text) => {
-                setComment(text);
-              }}
-            />
-            <TouchableOpacity
-              onPress={() => {
-                addCommentsAPI(newsId);
-              }}
-              disabled={comment.trim() === ""}
-              style={{
-                opacity: comment.trim() === "" ? 0.4 : 1,
-              }}
-            >
-              <View
+            {
+              //@ts-ignore
+              getProfileIcon("male")
+            }
+            <View style={styles.commentWrapper}>
+              <TextInput
                 style={[
-                  styles.commentButton,
+                  styles.commentInput,
                   {
                     backgroundColor:
                       theme === "dark"
-                        ? colors.duodenaryBackground
+                        ? colors.darkPrimaryBackground
+                        : colors.primaryBackground,
+
+                    color:
+                      theme === "dark"
+                        ? colors.darkPrimaryText
                         : colors.undenaryBackground,
+
+                    borderColor:
+                      theme === "dark"
+                        ? colors.quaternaryBorderColor
+                        : colors.tertiaryBorderColor,
                   },
                 ]}
+                placeholder="Write a comment..."
+                placeholderTextColor={
+                  theme == "dark"
+                    ? colors.tertiaryText
+                    : colors.primaryBorderColor
+                }
+                keyboardType="email-address"
+                value={comment}
+                onChangeText={(text) => {
+                  setComment(text);
+                }}
+              />
+              <TouchableOpacity
+                onPress={() => {
+                  addCommentsAPI(newsId);
+                }}
+                disabled={comment.trim() === ""}
+                style={{
+                  opacity: comment.trim() === "" ? 0.4 : 1,
+                }}
               >
-                {theme === "light" ? <CommentIcon /> : <CommentIconBlack />}
-              </View>
-            </TouchableOpacity>
+                <View
+                  style={[
+                    styles.commentButton,
+                    {
+                      backgroundColor:
+                        theme === "dark"
+                          ? colors.duodenaryBackground
+                          : colors.septendenaryBackground,
+                    },
+                  ]}
+                >
+                  {theme === "light" ? <CommentIcon /> : <CommentIconBlack />}
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
         </KeyboardAvoidingView>
       </ScrollView>
@@ -767,10 +845,20 @@ const styles = StyleSheet.create({
     marginTop: 32,
     gap: 28,
   },
+  relatedDiscussionsHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 12,
+  },
   relatedDiscussionsHeading: {
     fontFamily: fontFamily.Cabinet700,
     fontSize: 20,
     color: colors.senaryText,
+  },
+  commentCount: {
+    fontFamily: fontFamily.Inter400,
+    fontSize: 16,
   },
   relatedDiscussionsDetails: {
     gap: 20,
@@ -787,12 +875,12 @@ const styles = StyleSheet.create({
   articleTime: {
     fontSize: 14,
     fontFamily: fontFamily.Inter400,
-    color: colors.septenaryText,
+    color: colors.unvigintaryText,
   },
   relatedArticleText: {
     fontSize: 14,
     fontFamily: fontFamily.Satoshi400,
-    color: colors.tertiaryText,
+    color: colors.duovigintaryText,
   },
   likeUnlikeContainer: {
     flexDirection: "row",
@@ -804,24 +892,30 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   commentContainer: {
-    paddingHorizontal: 12,
+    //paddingHorizontal: 12,
     marginTop: 32,
     flexDirection: "row",
+    alignItems: "center",
     flex: 1,
     width: "100%",
     gap: 16,
   },
-  commentInput: {
+  commentWrapper: {
     width: "85%",
+    borderRadius: 12,
     borderWidth: 1,
-    borderRadius: 10,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    gap: 8,
-    borderColor: colors.tertiaryBorderColor,
-    fontFamily: fontFamily.Satoshi500,
+    borderColor: colors.darkQuinaryText,
+    padding: 12,
+    gap: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    height: 64,
+  },
+  commentInput: {
+    width: "80%",
+    fontFamily: fontFamily.Inter500,
     fontSize: 16,
-    height: 48,
+    //height: 48,
   },
   commentButton: {
     height: 40,
@@ -830,5 +924,33 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 999,
     backgroundColor: colors.primaryText,
+  },
+  authorIconContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  authorTimeContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  authorTimeText: {
+    fontFamily: fontFamily.Inter400,
+    fontSize: 12,
+  },
+  dividerStyle: {
+    height: 1,
+  },
+  viewCommentsContainer: {
+    marginTop: 20,
+    paddingVertical: 16,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  viewCommentsText: {
+    fontFamily: fontFamily.Inter700,
+    fontSize: 16,
+    color: colors.sexdenaryText,
   },
 });

@@ -9,7 +9,7 @@ const SvgCommentIcon = (props) => (
     {...props}
   >
     <Path
-      stroke="#fff"
+      stroke="#6B4EFF"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={2}

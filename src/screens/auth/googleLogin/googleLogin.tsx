@@ -1,9 +1,20 @@
 import * as Google from "expo-auth-session/providers/google";
+import * as AuthSession from "expo-auth-session";
 import Constants from "expo-constants";
-
 export function useGoogleLogin() {
-  const facebookAppId = Constants?.expoConfig?.extra?.facebookAppId ?? "";
+  // Determine if app is running in Expo Go
+  const isExpoGo = Constants.appOwnership === "expo";
 
+  // Use proxy URI in Expo Go, native URI otherwise
+  const redirectUri = AuthSession.makeRedirectUri({
+    native: "fb743854988102436://",
+    // Do NOT include useProxy anymore; handled implicitly by URL
+  });
+
+  const finalRedirectUri = isExpoGo
+    ? `https://auth.expo.io/@prateek2812/marketBriefs`
+    : redirectUri;
+  console.log("Redirect URI:", redirectUri);
   const [requestGoogle, responseGoogle, promptAsyncGoogle] =
     Google.useAuthRequest({
       iosClientId:
