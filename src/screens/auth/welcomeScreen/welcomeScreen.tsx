@@ -41,31 +41,38 @@ const WelcomeScreen = () => {
   const { requestGoogle, responseGoogle, promptAsyncGoogle } = useGoogleLogin();
   const { promptAsyncFacebook, responseFacebook, requestFacebook } =
     useFacebookLogin();
+  const [userInfoApple, setUserInfoApple] = useState<any>(null);
   const [userInfoGoogle, setUserInfoGoogle] = useState<any>(null);
   const [userInfoFacebook, setUserInfoFacebook] = useState<any>(null);
+ 
   useEffect(() => {
     if (responseGoogle?.type === "success") {
-      const { authentication } = responseGoogle;
-
-      // You get accessToken & idToken here:
-      console.log("Access token:", authentication?.accessToken);
-      console.log("ID token:", authentication?.idToken);
-
-      // Fetch user info (optional)
-      fetch("https://www.googleapis.com/userinfo/v2/me", {
-        headers: { Authorization: `Bearer ${authentication?.accessToken}` },
-      })
-        .then((res) => res.json())
-        .then((userInfo) => {
-          console.log("User Info:", userInfo);
-          // userInfo contains name, email, picture etc.
-          navigation.navigate("TellUsSomething", {});
-        })
-        .catch((err) => {
-          console.error("Failed to fetch user info", err);
-        });
+      handleGoogleLogin(responseGoogle);
     }
   }, [responseGoogle]);
+  
+  const handleGoogleLogin = (responseGoogle: any) => {
+    const { authentication } = responseGoogle;
+
+    // You get accessToken & idToken here:
+    console.log("Access token:", authentication?.accessToken);
+    console.log("ID token:", authentication?.idToken);
+
+    // Fetch user info (optional)
+    fetch("https://www.googleapis.com/userinfo/v2/me", {
+      headers: { Authorization: `Bearer ${authentication?.accessToken}` },
+    })
+      .then((res) => res.json())
+      .then((userInfo) => {
+        console.log("User Info:", userInfo);
+        // userInfo contains name, email, picture etc.
+        navigation.navigate("TellUsSomething", {});
+      })
+      .catch((err) => {
+        console.error("Failed to fetch user info", err);
+      });
+  };
+
   const handleAppleLogin = async () => {
     try {
       const credential = await AppleAuthentication.signInAsync({
@@ -90,50 +97,7 @@ const WelcomeScreen = () => {
       }
     }
   };
-  useEffect(() => {
-    if (
-      responseFacebook &&
-      responseFacebook?.type === "success" &&
-      responseFacebook.authentication
-    ) {
-      (async () => {
-        // Fetch user info from Facebook
-        if (!responseFacebook.authentication) {
-          console.error("Facebook authentication is null.");
-          Alert.alert("Error", "Facebook authentication failed.");
-          return;
-        }
-        const userInfoResponse = await fetch(
-          `https://graph.facebook.com/me?access_token=${responseFacebook.authentication.accessToken}&fields=id,name,email,picture.type(large)`
-        );
-        const userInfo = await userInfoResponse.json();
-        console.log("Facebook User Info:", userInfo);
-        setUserInfoFacebook(userInfo);
-        // Check if userInfo contains the expected fields
-        if (!userInfo.name || !userInfo.email || !userInfo.picture) {
-          console.error("Incomplete user info from Facebook:", userInfo);
-          Alert.alert(
-            "Error",
-            "Failed to fetch complete Facebook user information."
-          );
-          return;
-        }
-        // Log the user info
-        console.log("User Info:", userInfo);
-        // Optionally save user info or navigate
-        console.log("Navigating to TellUsSomething with user info:", {
-          name: userInfo.name,
-          email: userInfo.email,
-          picture: userInfo.picture.data.url,
-        });
-        navigation.navigate("TellUsSomething", {});
-      })().catch((error) => {
-        console.error("Error fetching Facebook user info:", error);
-        Alert.alert("Error", "Failed to fetch Facebook user information.");
-      });
-    }
-  }, [responseFacebook]);
-  const handleFacebookLogin = async () => {
+  const handleFacebookPrompt = async () => {
     try {
       const result = await promptAsyncFacebook();
       if (result.type === "success") {
@@ -144,6 +108,52 @@ const WelcomeScreen = () => {
       }
     } catch (error) {
       console.error("Error during Facebook login:", error);
+    }
+  };
+  useEffect(() => {
+    if (
+      responseFacebook &&
+      responseFacebook?.type === "success" &&
+      responseFacebook.authentication
+    ) {
+      handleFacebookLogin(responseFacebook);
+    }
+  }, [responseFacebook]);
+  const handleFacebookLogin = async (responseFacebook: any) => {
+    // Fetch user info from Facebook
+    try {
+      if (!responseFacebook.authentication) {
+        console.error("Facebook authentication is null.");
+        Alert.alert("Error", "Facebook authentication failed.");
+        return;
+      }
+      const userInfoResponse = await fetch(
+        `https://graph.facebook.com/me?access_token=${responseFacebook.authentication.accessToken}&fields=id,name,email,picture.type(large)`
+      );
+      const userInfo = await userInfoResponse.json();
+      console.log("Facebook User Info:", userInfo);
+      setUserInfoFacebook(userInfo);
+      // Check if userInfo contains the expected fields
+      if (!userInfo.name || !userInfo.email || !userInfo.picture) {
+        console.error("Incomplete user info from Facebook:", userInfo);
+        Alert.alert(
+          "Error",
+          "Failed to fetch complete Facebook user information."
+        );
+        return;
+      }
+      // Log the user info
+      console.log("User Info:", userInfo);
+      // Optionally save user info or navigate
+      console.log("Navigating to TellUsSomething with user info:", {
+        name: userInfo.name,
+        email: userInfo.email,
+        picture: userInfo.picture.data.url,
+      });
+      navigation.navigate("TellUsSomething", {});
+    } catch (error) {
+      console.error("Error fetching Facebook user info:", error);
+      Alert.alert("Error", "Failed to fetch Facebook user information.");
     }
   };
   return (
@@ -196,7 +206,7 @@ const WelcomeScreen = () => {
             IconComponent={FacebookIcon}
             text="Continue with Facebook"
             //disabled={!requestFacebook}
-            onPress={handleFacebookLogin}
+            onPress={handleFacebookPrompt}
             // onPress={() => {
             //   Linking.openURL(
             //     "https://www.facebook.com/v19.0/dialog/oauth?client_id=743854988102436&redirect_uri=https://de6e612422bc.ngrok-free.app/app_redirect1&scope=email,public_profile"
