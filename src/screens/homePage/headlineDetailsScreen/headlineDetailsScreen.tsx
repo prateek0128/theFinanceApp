@@ -9,6 +9,7 @@ import {
   StatusBar,
   KeyboardAvoidingView,
   Platform,
+  Keyboard,
 } from "react-native";
 import { colors } from "../../../assets/styles/colors";
 import Loader from "../../../components/Loader/loader";
@@ -26,6 +27,7 @@ import {
   CommentIconBlack,
   CurrencyImage2,
   HeartCommentIcon,
+  HeartCommentIconFilled,
 } from "../../../assets/icons/components/headlineDetailsView";
 import HeadlineDetailCard from "../../../components/headlineDetailedCard/headlineDetailedCard";
 import Tag from "../../../components/tag/tag";
@@ -104,6 +106,7 @@ const HeadlineDetailsScreen = () => {
   );
   const [loading, setLoading] = useState<boolean>(true);
   const [addCommentsLoader, setAddCommentsLoader] = useState<boolean>(false);
+  const [isFocused, setIsFocused] = useState(false);
   const token = AsyncStorage.getItem("authToken");
   const news = {
     authors: ["BusinessStandard"],
@@ -163,11 +166,18 @@ const HeadlineDetailsScreen = () => {
     } catch (err) {
       // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
-        status: string;
-        message: string;
+        status?: string;
+        message?: string;
       }>;
+      const errorData = axiosErr?.response?.data;
       const errorMessage =
-        axiosErr.response?.data?.message ?? "Something went wrong";
+        typeof errorData === "object" &&
+        errorData !== null &&
+        "message" in errorData
+          ? (errorData as { message?: string }).message ||
+            "Something went wrong"
+          : "Something went wrong";
+      console.log("NewsByIdErrorMessage", axiosErr.response?.data);
       showToast(errorMessage, "danger");
     } finally {
       setLoading(false);
@@ -426,141 +436,159 @@ const HeadlineDetailsScreen = () => {
     .filter((p) => p.trim() !== ""); // Remove empty lines
   return (
     <>
-      <ScrollView
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={[
-          globalStyles.pageContainerWithBackground(theme),
-          { flex: 0 },
-        ]}
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0} // tweak this if needed
       >
-        <View style={styles.headerContainer}>
-          <Header
-            onBackClick={() => {
-              navigation.navigate("Home");
-              console.log("Back to Home");
-            }}
-            liked={liked}
-            setLiked={setLiked}
-            bookmarked={bookmarked}
-            setBookmarked={setBookmarked}
-            onToggleLikeClick={handleToggleLike}
-            shareUrl={newsData.url}
-            onToggleBookmarkClick={handleToggleBookmark}
-          />
-        </View>
-        <View style={styles.headingDetailsContainer}>
-          <View
-            style={{
-              width: "100%",
-              marginTop: 16,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {/* {renderImage()} */}
-            <ClippedSVG
-              width={width * 0.89}
-              height={200}
-              radius={16}
-              ImageComponent={CurrencyImage2}
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={[
+            globalStyles.pageContainerWithBackground(theme),
+            { flex: 0 },
+          ]}
+        >
+          <View style={styles.headerContainer}>
+            <Header
+              onBackClick={() => {
+                navigation.navigate("Home");
+                console.log("Back to Home");
+              }}
+              liked={liked}
+              setLiked={setLiked}
+              bookmarked={bookmarked}
+              setBookmarked={setBookmarked}
+              onToggleLikeClick={handleToggleLike}
+              shareUrl={newsData.url}
+              onToggleBookmarkClick={handleToggleBookmark}
             />
           </View>
-          <View style={styles.headingContainer}>
-            <View style={styles.detailsHeader}>
-              <View style={styles.tagContainer}>
-                {newsData.tag == "bearish" ? (
-                  <Tag
-                    label={"Bearish"}
-                    backgroundColor={"#FFE5E5"}
-                    textColor={"#FF5247"}
-                  />
-                ) : newsData.tag == "bullish" ? (
-                  <Tag
-                    label={"Bullish"}
-                    backgroundColor={"#ECFCE5"}
-                    textColor={"#23C16B"}
-                  />
-                ) : newsData.tag == "market" ? (
-                  <Tag
-                    label={"Market"}
-                    backgroundColor={"#E7E7FF"}
-                    textColor={"#6B4EFF"}
-                  />
-                ) : (
-                  ""
-                )}
-              </View>
-              <View style={styles.profileNameContainer}>
-                <ImpactLabel
-                  variant={"contained"}
-                  label={newsData.impact_label}
-                  value={newsData.impact_score}
-                  backgroundColor={colors.quindenaryBackground}
-                  textColor={colors.quattuordenaryBackground}
-                />
-              </View>
-            </View>
-            <Text
-              style={[
-                styles.articleDetailsHeading,
-                {
-                  color:
-                    theme === "dark"
-                      ? colors.darkPrimaryText
-                      : colors.primaryText,
-                },
-              ]}
+          <View style={styles.headingDetailsContainer}>
+            <View
+              style={{
+                width: "100%",
+                marginTop: 16,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
-              {newsData.title}
-            </Text>
-          </View>
-          <View style={styles.authorIconContainer}>
-            <NewsAuthorIcon />
-            <View style={styles.authorTimeContainer}>
+              {/* {renderImage()} */}
+              <ClippedSVG
+                width={width * 0.89}
+                height={200}
+                radius={16}
+                ImageComponent={CurrencyImage2}
+              />
+            </View>
+            <View style={styles.headingContainer}>
+              <View style={styles.detailsHeader}>
+                <View style={styles.tagContainer}>
+                  {newsData.tag == "bearish" ? (
+                    <Tag
+                      label={"Bearish"}
+                      backgroundColor={"#FFE5E5"}
+                      textColor={"#FF5247"}
+                    />
+                  ) : newsData.tag == "bullish" ? (
+                    <Tag
+                      label={"Bullish"}
+                      backgroundColor={"#ECFCE5"}
+                      textColor={"#23C16B"}
+                    />
+                  ) : newsData.tag == "market" ? (
+                    <Tag
+                      label={"Market"}
+                      backgroundColor={"#E7E7FF"}
+                      textColor={"#6B4EFF"}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </View>
+                <View style={styles.profileNameContainer}>
+                  <ImpactLabel
+                    variant={"contained"}
+                    label={newsData.impact_label}
+                    value={newsData.impact_score}
+                    backgroundColor={colors.quindenaryBackground}
+                    textColor={colors.quattuordenaryBackground}
+                  />
+                </View>
+              </View>
               <Text
                 style={[
-                  styles.authorTimeText,
+                  styles.articleDetailsHeading,
                   {
-                    color:
-                      theme === "light" ? colors.octodenaryText : colors.white,
-                    fontSize: 16,
-                  },
-                ]}
-              >
-                {`${newsData?.authors?.[0] || "--"} ·`}
-              </Text>
-              <Text
-                style={[
-                  styles.authorTimeText,
-                  {
-                    fontSize: 16,
                     color:
                       theme === "dark"
-                        ? colors.darkQuaternaryText
-                        : colors.unvigintaryText,
+                        ? colors.darkPrimaryText
+                        : colors.octodenaryText,
                   },
                 ]}
               >
-                {`${newsData.time_ago || "--"}`}
+                {newsData.title}
               </Text>
             </View>
-          </View>
-          <View style={styles.headingDetails}>
-            <View>
+            <View style={styles.authorIconContainer}>
+              <NewsAuthorIcon />
+              <View style={styles.authorTimeContainer}>
+                <Text
+                  style={[
+                    styles.authorTimeText,
+                    {
+                      color:
+                        theme === "light"
+                          ? colors.octodenaryText
+                          : colors.white,
+                      fontSize: 16,
+                    },
+                  ]}
+                >
+                  {`${newsData?.authors?.[0] || "--"} ·`}
+                </Text>
+                <Text
+                  style={[
+                    styles.authorTimeText,
+                    {
+                      fontSize: 16,
+                      color:
+                        theme === "dark"
+                          ? colors.darkQuaternaryText
+                          : colors.unvigintaryText,
+                    },
+                  ]}
+                >
+                  {`${newsData.time_ago || "--"}`}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.summaryDetailsConatiner}>
+              <Text
+                style={[
+                  styles.keyTakeStyle,
+                  {
+                    color:
+                      theme == "light" ? colors.octodenaryText : colors.white,
+                  },
+                ]}
+              >
+                Key Takeaways :
+              </Text>
+
               {summaryArray.map((point, index) => (
                 <View key={index} style={styles.listItem}>
                   <Text
                     style={[
-                      styles.listIndex,
+                      styles.listPoints,
                       {
                         color:
                           theme === "dark"
                             ? colors.darkPrimaryText
-                            : colors.primaryText,
+                            : colors.duovigintaryText,
                       },
                     ]}
                   >
-                    {/* {index + 1}. */}•
+                    {index + 1}.{/* • */}
                   </Text>
                   <Text
                     style={[
@@ -569,7 +597,7 @@ const HeadlineDetailsScreen = () => {
                         color:
                           theme === "dark"
                             ? colors.darkPrimaryText
-                            : colors.primaryText,
+                            : colors.duovigintaryText,
                       },
                     ]}
                   >
@@ -578,115 +606,181 @@ const HeadlineDetailsScreen = () => {
                 </View>
               ))}
             </View>
-          </View>
-          <Divider
-            style={[
-              styles.dividerStyle,
-              {
-                backgroundColor:
-                  theme == "light"
-                    ? colors.nonaryBorder
-                    : colors.darkUndenaryBackground,
-              },
-            ]}
-          />
-        </View>
-        <View style={styles.relatedDiscussionsContainer}>
-          <View style={styles.relatedDiscussionsHeader}>
-            <Text
+            <Divider
               style={[
-                styles.relatedDiscussionsHeading,
+                styles.dividerStyle,
                 {
-                  color:
-                    theme === "dark"
-                      ? colors.darkPrimaryText
-                      : colors.primaryText,
+                  backgroundColor:
+                    theme == "light"
+                      ? colors.nonaryBorder
+                      : colors.darkUndenaryBackground,
                 },
               ]}
-            >
-              Related Discussions
-            </Text>
-            <Text
-              style={[
-                styles.commentCount,
-                {
-                  color:
-                    theme === "dark"
-                      ? colors.darkPrimaryText
-                      : colors.octodenaryText,
-                },
-              ]}
-            >
-              {`${7} Comments`}
-            </Text>
+            />
           </View>
-          <View style={styles.relatedDiscussionsDetails}>
-            {(commentsData || []).map((comment: any) => (
-              <View key={comment.id} style={styles.relatedDiscussionsArticle}>
-                {
-                  //@ts-ignore
-                  getProfileIcon("male")
-                }
-                <View style={{ flex: 1 }}>
-                  <View style={styles.relatedDiscussionsArticle}>
+          <View style={styles.relatedDiscussionsContainer}>
+            <View style={styles.relatedDiscussionsHeader}>
+              <Text
+                style={[
+                  styles.relatedDiscussionsHeading,
+                  {
+                    color:
+                      theme === "dark"
+                        ? colors.darkPrimaryText
+                        : colors.octodenaryText,
+                  },
+                ]}
+              >
+                Related Discussions
+              </Text>
+              {commentsData.length > 0 && (
+                <Text
+                  style={[
+                    styles.commentCount,
+                    {
+                      color:
+                        theme === "dark"
+                          ? colors.darkPrimaryText
+                          : colors.octodenaryText,
+                    },
+                  ]}
+                >
+                  {`${
+                    commentsData.length < 2
+                      ? `${commentsData.length} Comment`
+                      : `${commentsData.length} Comments`
+                  }`}
+                </Text>
+              )}
+            </View>
+            <View style={styles.relatedDiscussionsDetails}>
+              {(commentsData || []).map((comment: any) => (
+                <View key={comment.id} style={styles.relatedDiscussionsArticle}>
+                  {
+                    //@ts-ignore
+                    getProfileIcon("male")
+                  }
+                  <View style={{ flex: 1 }}>
+                    <View style={styles.relatedDiscussionsArticle}>
+                      <Text
+                        style={[
+                          styles.authorName,
+                          {
+                            color:
+                              theme === "dark"
+                                ? colors.darkPrimaryText
+                                : colors.octodenaryText,
+                          },
+                        ]}
+                      >
+                        {comment.name || "--"}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.articleTime,
+                          {
+                            color:
+                              theme === "dark"
+                                ? colors.darkSenaryText
+                                : colors.unvigintaryText,
+                          },
+                        ]}
+                      >
+                        {getShortTimeAgo(comment.commented_at)}
+                      </Text>
+                    </View>
                     <Text
                       style={[
-                        styles.authorName,
+                        styles.relatedArticleText,
                         {
                           color:
                             theme === "dark"
-                              ? colors.darkPrimaryText
+                              ? colors.white
                               : colors.octodenaryText,
                         },
                       ]}
                     >
-                      {comment.name || "--"}
+                      {comment.comment}
                     </Text>
-                    <Text style={styles.articleTime}>
-                      {getShortTimeAgo(comment.commented_at)}
-                    </Text>
-                  </View>
-                  <Text style={styles.relatedArticleText}>
-                    {comment.comment}
-                  </Text>
-                  <View style={styles.likeUnlikeContainer}>
-                    <View style={styles.iconCountContainer}>
-                      <TouchableOpacity
-                        onPress={() => {
-                          handleToggleLikeComment(comment.id);
-                        }}
-                      >
-                        {!likedComments[comment.id] ? (
-                          <HeartCommentIcon width={20} height={20} />
-                        ) : (
-                          <LikeCommentIconFilled width={20} height={20} />
-                        )}
-                      </TouchableOpacity>
-                      <Text style={styles.articleTime}>
-                        {comment.likes || 0}
-                      </Text>
-                      <Text style={styles.articleTime}>Reply</Text>
+                    <View style={styles.likeUnlikeContainer}>
+                      <View style={styles.iconCountContainer}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            handleToggleLikeComment(comment.id);
+                          }}
+                        >
+                          {!likedComments[comment.id] ? (
+                            <HeartCommentIcon width={20} height={20} />
+                          ) : (
+                            <HeartCommentIconFilled width={20} height={20} />
+                          )}
+                        </TouchableOpacity>
+                        <Text
+                          style={[
+                            styles.articleTime,
+                            {
+                              color:
+                                theme === "dark"
+                                  ? colors.darkSenaryText
+                                  : colors.unvigintaryText,
+                            },
+                          ]}
+                        >
+                          {comment.likes || 0}
+                        </Text>
+                        <Text
+                          style={[
+                            styles.articleTime,
+                            {
+                              color:
+                                theme === "dark"
+                                  ? colors.darkSenaryText
+                                  : colors.unvigintaryText,
+                            },
+                          ]}
+                        >
+                          Reply
+                        </Text>
+                      </View>
                     </View>
                   </View>
                 </View>
-              </View>
-            ))}
+              ))}
+            </View>
           </View>
-        </View>
-        <View style={styles.viewCommentsContainer}>
-          <Text style={styles.viewCommentsText}>View All Comments</Text>
-        </View>
-        <KeyboardAvoidingView
-          style={{ flex: 1 }}
-          behavior={Platform.OS === "ios" ? "padding" : undefined}
-          keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0} // tweak this if needed
-        >
-          <View style={[styles.commentContainer]}>
+          {commentsData.length > 3 && (
+            <View style={styles.viewCommentsContainer}>
+              <Text style={styles.viewCommentsText}>View All Comments</Text>
+            </View>
+          )}
+          <View
+            style={[
+              styles.commentContainer,
+              { alignItems: isFocused ? "flex-end" : "center" },
+            ]}
+          >
             {
               //@ts-ignore
               getProfileIcon("male")
             }
-            <View style={styles.commentWrapper}>
+            <View
+              style={[
+                styles.commentWrapper,
+                {
+                  borderEndColor:
+                    theme === "dark"
+                      ? colors.duovigintaryText
+                      : colors.darkQuinaryText,
+                },
+                isFocused && {
+                  flexDirection: "column",
+                  alignItems: "stretch",
+                  height: "auto",
+                  minHeight: 100,
+                  //paddingBottom: 8,
+                },
+              ]}
+            >
               <TextInput
                 style={[
                   styles.commentInput,
@@ -705,23 +799,35 @@ const HeadlineDetailsScreen = () => {
                       theme === "dark"
                         ? colors.quaternaryBorderColor
                         : colors.tertiaryBorderColor,
+                    height: isFocused ? 100 : 48, // Expand height when focused
+                    // width: isFocused ? "100%" : "80%", // Expand width when focused
+                    textAlignVertical: "top",
                   },
                 ]}
-                placeholder="Write a comment..."
+                placeholder="Add a comment..."
                 placeholderTextColor={
                   theme == "dark"
-                    ? colors.tertiaryText
-                    : colors.primaryBorderColor
+                    ? colors.darkSenaryText
+                    : colors.unvigintaryText
                 }
-                keyboardType="email-address"
+                multiline={isFocused}
+                keyboardType="default"
                 value={comment}
                 onChangeText={(text) => {
                   setComment(text);
+                }}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => {
+                  if (comment.trim() === "") {
+                    setIsFocused(false);
+                  }
                 }}
               />
               <TouchableOpacity
                 onPress={() => {
                   addCommentsAPI(newsId);
+                  Keyboard.dismiss(); // dismiss keyboard
+                  setIsFocused(false); // manually collapse the textarea
                 }}
                 disabled={comment.trim() === ""}
                 style={{
@@ -732,6 +838,7 @@ const HeadlineDetailsScreen = () => {
                   style={[
                     styles.commentButton,
                     {
+                      alignSelf: isFocused ? "flex-end" : "center",
                       backgroundColor:
                         theme === "dark"
                           ? colors.duodenaryBackground
@@ -744,8 +851,8 @@ const HeadlineDetailsScreen = () => {
               </TouchableOpacity>
             </View>
           </View>
-        </KeyboardAvoidingView>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </>
   );
 };
@@ -763,22 +870,12 @@ const styles = StyleSheet.create({
     gap: 16,
   },
 
-  bearishTagContainer: {
-    backgroundColor: "##FEE2E2",
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 100,
-    alignSelf: "flex-start",
-    gap: 8,
+  summaryDetailsConatiner: {
+    gap: 16,
   },
-  bearishTagText: {
-    color: "##DC2626",
-    fontWeight: "600",
-    fontSize: 14,
-    fontFamily: fontFamily.Satoshi500,
-  },
-  headingDetails: {
-    gap: 12,
+  keyTakeStyle: {
+    fontFamily: fontFamily.Inter700,
+    fontSize: 18,
   },
   listItem: {
     flexDirection: "row",
@@ -791,9 +888,8 @@ const styles = StyleSheet.create({
     color: colors.tertiaryText,
   },
   articleDetailsHeading: {
-    fontFamily: fontFamily.Cabinet700,
-    fontSize: 32,
-    color: colors.primaryText,
+    fontFamily: fontFamily.Inter700,
+    fontSize: 30,
   },
   detailsHeader: {
     flexDirection: "row",
@@ -824,22 +920,9 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.Satoshi500,
     color: colors.tertiaryText,
   },
-
-  impactLabel: {
-    borderRadius: 24,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    backgroundColor: colors.senaryBackground,
-  },
-  impactLabelText: {
-    fontSize: 12,
-    fontFamily: fontFamily.Satoshi500,
-    color: colors.quaternaryText,
-  },
   listPoints: {
     fontSize: 16,
-    fontFamily: fontFamily.Satoshi500,
-    color: colors.tertiaryText,
+    fontFamily: fontFamily.Inter400,
   },
   relatedDiscussionsContainer: {
     marginTop: 32,
@@ -852,9 +935,8 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   relatedDiscussionsHeading: {
-    fontFamily: fontFamily.Cabinet700,
-    fontSize: 20,
-    color: colors.senaryText,
+    fontFamily: fontFamily.Inter700,
+    fontSize: 18,
   },
   commentCount: {
     fontFamily: fontFamily.Inter400,
@@ -868,9 +950,8 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   authorName: {
-    fontFamily: fontFamily.Cabinet700,
+    fontFamily: fontFamily.Inter500,
     fontSize: 16,
-    color: colors.senaryText,
   },
   articleTime: {
     fontSize: 14,
@@ -878,8 +959,8 @@ const styles = StyleSheet.create({
     color: colors.unvigintaryText,
   },
   relatedArticleText: {
-    fontSize: 14,
-    fontFamily: fontFamily.Satoshi400,
+    fontSize: 16,
+    fontFamily: fontFamily.Inter400,
     color: colors.duovigintaryText,
   },
   likeUnlikeContainer: {
@@ -901,7 +982,7 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   commentWrapper: {
-    width: "85%",
+    width: "84%",
     borderRadius: 12,
     borderWidth: 1,
     borderColor: colors.darkQuinaryText,

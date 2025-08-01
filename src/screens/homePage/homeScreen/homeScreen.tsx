@@ -60,7 +60,7 @@ const HomeScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [allNewsData, setAllNewsData] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [selectedTab, setSelectedTab] = useState("All");
+  const [selectedTag, setSelectedTag] = useState("All");
 
   const articles = [
     {
@@ -75,11 +75,14 @@ const HomeScreen = () => {
     },
   ];
 
-  const getAllNewsAPI = async () => {
+  const getAllNewsAPI = async (selectedTag: string) => {
+    setLoading(true);
     try {
-      const response = await getHighImpactNews();
-      console.log("newsResponse:", response.data);
-      setAllNewsData(response.data);
+      const response = await getHighImpactNews(selectedTag);
+      //const newsData = response.data;
+      const newsData = response.data.data;
+      //console.log("newsResponse:", newsData);
+      setAllNewsData(newsData);
     } catch (err) {
       // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
@@ -94,28 +97,53 @@ const HomeScreen = () => {
     }
   };
   useEffect(() => {
-    getAllNewsAPI();
-  }, []);
+    if (selectedTag !== "") {
+      getAllNewsAPI(selectedTag);
+    }
+  }, [selectedTag]);
   if (loading) return <Loader />;
   return (
     <View style={[globalStyles.pageContainerWithBackground(theme)]}>
       <View style={styles.headingContainer}>
-        <Text style={[globalStyles.title(theme), { textAlign: "left" }]}>
-          Top Headlines
-        </Text>
-        {/* <Text
+        <View style={styles.headingThemeContainer}>
+          <View style={styles.userHeadingContainer}>
+            <Text
+              style={[
+                styles.userNameStyle,
+                {
+                  color:
+                    theme == "light"
+                      ? colors.novemdenaryText
+                      : colors.darkSenaryText,
+                },
+              ]}
+            >
+              Hello User,
+            </Text>
+            <Text
+              style={[
+                globalStyles.title(theme),
+                { textAlign: "left", marginBottom: 0 },
+              ]}
+            >
+              Top Headlines
+            </Text>
+          </View>
+          <TouchableOpacity onPress={toggleTheme}>
+            <Text style={styles.text}>{theme === "dark" ? "☀️" : "🌙"}</Text>
+          </TouchableOpacity>
+        </View>
+        <Divider
           style={[
-            styles.heading,
+            styles.dividerStyle,
             {
-              color:
-                theme === "dark"
-                  ? colors.darkPrimaryText
-                  : colors.quaternaryText,
+              backgroundColor:
+                theme == "light"
+                  ? colors.octodenaryBackground
+                  : colors.darkUndenaryBackground,
             },
           ]}
-        >
-          Discover
-        </Text> */}
+        />
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -123,28 +151,28 @@ const HomeScreen = () => {
         >
           <TabLabel
             label="All"
-            selected={selectedTab === "All"}
-            onPress={() => setSelectedTab("All")}
+            selected={selectedTag === "All"}
+            onPress={() => setSelectedTag("All")}
           />
           <TabLabel
             label="Stock Market"
-            selected={selectedTab === "Stock Market"}
-            onPress={() => setSelectedTab("Stock Market")}
+            selected={selectedTag === "Stock Market"}
+            onPress={() => setSelectedTag("Stock Market")}
           />
           <TabLabel
             label="IPO’s"
-            selected={selectedTab === "IPO’s"}
-            onPress={() => setSelectedTab("IPO’s")}
+            selected={selectedTag === "IPO’s"}
+            onPress={() => setSelectedTag("IPO’s")}
           />
           <TabLabel
             label="Crypto"
-            selected={selectedTab === "Crypto"}
-            onPress={() => setSelectedTab("Crypto")}
+            selected={selectedTag === "Crypto"}
+            onPress={() => setSelectedTag("Crypto")}
           />
           <TabLabel
             label="Mutual Funds"
-            selected={selectedTab === "Mutual Funds"}
-            onPress={() => setSelectedTab("Mutual Funds")}
+            selected={selectedTag === "Mutual Funds"}
+            onPress={() => setSelectedTag("Mutual Funds")}
           />
         </ScrollView>
       </View>
@@ -165,7 +193,7 @@ const HomeScreen = () => {
                   authorName={news.authors[0]}
                   timeAgo={news.time_ago}
                   impactLabel={news.impact_label}
-                  impactScore={news.impact_score}
+                  impactScore={news.impact_score.toFixed(2)}
                   likes={news.engagement.likes}
                   comments={news.engagement.comments}
                   tag={news.tag}
@@ -186,7 +214,7 @@ const HomeScreen = () => {
                     {
                       backgroundColor:
                         theme == "light"
-                          ? colors.nonaryBorder
+                          ? colors.octodenaryBackground
                           : colors.darkUndenaryBackground,
                     },
                   ]}
@@ -210,7 +238,20 @@ const styles = StyleSheet.create({
     backgroundColor: colors.nonaryBackground,
   },
   headingContainer: {
-    marginTop: 20,
+    marginTop: 40,
+    marginBottom: 20,
+  },
+  headingThemeContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  userHeadingContainer: {
+    gap: 0,
+  },
+  userNameStyle: {
+    fontSize: 16,
+    fontFamily: fontFamily.Inter500,
   },
   heading: {
     fontSize: 32,
@@ -222,8 +263,7 @@ const styles = StyleSheet.create({
     gap: 12,
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 12,
-    marginBottom: 20,
+    //marginTop: 12,
   },
   button: {
     backgroundColor: colors.quinaryBackground,
@@ -238,12 +278,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   swiperWrapper: {
-    // marginTop: 8,
+    //marginTop: 40,
     marginBottom: 20,
   },
   dividerStyle: {
     height: 1,
     // backgroundColor: colors.nonaryBorder,
     marginVertical: 24,
+  },
+  text: {
+    fontSize: 24,
+    color: "#fff",
   },
 });

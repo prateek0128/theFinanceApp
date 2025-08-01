@@ -15,11 +15,11 @@ const TabLabel = ({ label, selected, onPress }: any) => {
             backgroundColor:
               theme === "light"
                 ? selected
-                  ? colors.septendenaryBackground // active color
+                  ? colors.sexdenaryText // active color
                   : colors.octodenaryBackground
                 : selected
-                ? colors.darkUndenaryBackground
-                : colors.darkTridenaryBackground, // default color
+                ? colors.vigenaryText
+                : colors.darkUndenaryBackground, // default color
             borderWidth: selected ? 1 : 0, // active border width
             borderColor:
               theme == "light"
@@ -37,10 +37,10 @@ const TabLabel = ({ label, selected, onPress }: any) => {
               color:
                 theme === "dark"
                   ? selected
-                    ? colors.darkSeptanaryText
+                    ? colors.octodenaryText
                     : colors.white
                   : selected
-                  ? colors.sexdenaryText // active text color
+                  ? colors.white // active text color
                   : colors.octodenaryText, // default text color
             },
           ]}

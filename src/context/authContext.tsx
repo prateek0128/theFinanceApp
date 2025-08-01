@@ -76,7 +76,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
     loadUser();
   }, []);
-
+  const loginData = {
+    access_token:
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg2OGQwN2Q5YzdlMWM1ODlhOGQwM2NiIiwidHlwZSI6ImFjY2VzcyIsImlzcyI6InRmYS1iYWNrZW5kIiwic3ViIjoiNjg2OGQwN2Q5YzdlMWM1ODlhOGQwM2NiIiwiZXhwIjoxNzU0MDQ0MzA3LCJuYmYiOjE3NTM5NTc5MDcsImlhdCI6MTc1Mzk1NzkwN30.5E3KvRtsAHVb0FYE-Go-npR2UVnl-ghg5AV_lROx3AQ",
+    expires_in: 86400,
+    onboarding_required: false,
+    refresh_token:
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg2OGQwN2Q5YzdlMWM1ODlhOGQwM2NiIiwidHlwZSI6InJlZnJlc2giLCJpc3MiOiJ0ZmEtYmFja2VuZCIsInN1YiI6IjY4NjhkMDdkOWM3ZTFjNTg5YThkMDNjYiIsImV4cCI6MTc1NDU2MjcwNywibmJmIjoxNzUzOTU3OTA3LCJpYXQiOjE3NTM5NTc5MDd9.yPweXy2AeWtJiq225_aVCnYIbbZ6otEAPRtWzUnEWWQ",
+    user: {
+      created_at: 1751699581,
+      email: "rajput.prateek28@gmail.com",
+      id: "6868d07d9c7e1c589a8d03cb",
+      onboarding_completed: true,
+      phone: "",
+    },
+  };
   const login = async (userData: any) => {
     setIsLoading(true);
     try {
@@ -88,6 +102,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         console.log("Loginsuccessful=>", responseData.data);
         const user = responseData.data.user;
         const accesstoken = responseData.data.access_token;
+        const onboardingRequired = responseData.data.onboarding_required;
         const expiresIn = responseData.data.expires_in;
         const expirationTimestamp = Date.now() + expiresIn;
         // AsyncStorage.setItem("authToken", accesstoken);
@@ -99,6 +114,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           ["status", status],
           ["message", responseData.message],
           ["user", JSON.stringify(user)],
+          ["onboardingRequired", onboardingRequired.toString()],
           ["tokenExpiry", expirationTimestamp.toString()],
         ]);
         setUser(user);
@@ -130,6 +146,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         "status",
         "message",
         "user",
+        "onboardingRequired",
         "tokenExpiry",
       ]);
       setUser(null);

@@ -79,7 +79,7 @@ const DiscoverDetailsCard = ({
                   styles.authorTimeText,
                   {
                     color:
-                      theme === "light" ? colors.darkSenaryText : colors.white,
+                      theme === "light" ? colors.octodenaryText : colors.white,
                   },
                 ]}
               >
@@ -155,7 +155,7 @@ const DiscoverDetailsCard = ({
             ]}
             numberOfLines={2}
           >
-            {summary}
+            {summary?.replace(/•\s*/g, "")}
           </Text>
         </View>
         <View style={styles.tagsContainer}>
@@ -266,18 +266,18 @@ const styles = StyleSheet.create({
   },
   authorTimeText: {
     fontFamily: fontFamily.Inter400,
-    fontSize: 12,
+    fontSize: 14,
   },
 
   viewLikesContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
+    gap: 10,
   },
   iconValueContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
+    gap: 4,
   },
   likeValues: {
     fontFamily: fontFamily.Satoshi500,

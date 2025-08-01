@@ -33,6 +33,7 @@ import { AuthContext } from "../../../context/authContext";
 import { ThemeContext } from "../../../context/themeContext";
 import showToast from "../../../utilis/showToast";
 import { AxiosError } from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const SignUpScreen = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -93,7 +94,15 @@ const SignUpScreen = () => {
     };
     try {
       await login(loginData); // throws if OTP invalid
-      navigation.navigate("TellUsSomething", {});
+      const onboardingRequired = await AsyncStorage.getItem(
+        "onboardingRequired"
+      );
+      console.log("Onboarding Required:", onboardingRequired);
+      if (Boolean(onboardingRequired) == true) {
+        navigation.navigate("TellUsSomething", {});
+      } else {
+        navigation.navigate("BottomTabNavigator");
+      }
       showToast("OTP verified successfully!", "success");
     } catch (err) {
       // Narrow / cast to AxiosError

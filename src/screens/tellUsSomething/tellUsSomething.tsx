@@ -153,7 +153,7 @@ const TellUsSomething = () => {
     }
   };
 
-  const expertiseLevel = ["Beginner", "Novice", "Intermediate", "Expert"];
+  const expertiseLevel = ["Novice", "Beginner", "Intermediate", "Expert"];
   return (
     <ScrollView
       contentContainerStyle={{ flex: 1 }}

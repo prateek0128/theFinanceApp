@@ -30,6 +30,7 @@ import {
   LikePostIconWhite,
 } from "../../assets/icons/components/headlineDetailsView";
 import ShareSheet from "../sharedSheet/sharedSheet";
+import { BackArrow, BackArrowWhite } from "../../assets/icons/components/logIn";
 
 const { width } = Dimensions.get("window");
 type HeaderProps = {
@@ -61,7 +62,8 @@ const Header = ({
     <View style={styles.headerConatiner}>
       <TouchableOpacity onPress={onBackClick}>
         <View style={styles.leftHeaderPart}>
-          {theme === "light" ? <BackArrowIcon /> : <BackArrowIconWhite />}
+          {/* {theme === "light" ? <BackArrowIcon /> : <BackArrowIconWhite />} */}
+          {theme === "dark" ? <BackArrowWhite /> : <BackArrow />}
         </View>
       </TouchableOpacity>
       <View style={styles.rightHeaderPart}>

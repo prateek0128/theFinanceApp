@@ -43,11 +43,11 @@ export const getNewsByID = async (newsId: any) => {
 };
 
 //Get High-Impact News
-export const getHighImpactNews = async () => {
+export const getHighImpactNews = async (selectedTag: string) => {
   const client = await apiClient();
   try {
     const response = await client.get(
-      `/news/high-impact?threshold=7.0&limit=10`
+      `/news/high-impact?threshold=7.0&limit=10?category=${selectedTag}`
     );
     return response;
   } catch (error) {

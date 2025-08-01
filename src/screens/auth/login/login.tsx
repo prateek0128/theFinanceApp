@@ -86,7 +86,15 @@ const LoginScreen = () => {
     };
     try {
       await login(loginData); // throws if OTP invalid
-      navigation.navigate("BottomTabNavigator");
+      const onboardingRequired = await AsyncStorage.getItem(
+        "onboardingRequired"
+      );
+      console.log("Onboarding Required:", typeof onboardingRequired);
+      if (Boolean(onboardingRequired) == true) {
+        navigation.navigate("TellUsSomething", {});
+      } else {
+        navigation.navigate("BottomTabNavigator");
+      }
       showToast("OTP verified successfully!", "success");
     } catch (err) {
       // Narrow / cast to AxiosError

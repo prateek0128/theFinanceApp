@@ -103,7 +103,12 @@ const OTPSection = ({
   return (
     <View style={styles.otpContainer}>
       <View style={[styles.topContainer]}>
-        <TouchableOpacity onPress={() => setShowOTPInputs(false)}>
+        <TouchableOpacity
+          onPress={() => {
+            setShowOTPInputs(false);
+            setOtp(["", "", "", "", "", ""]);
+          }}
+        >
           {theme === "dark" ? <BackArrowWhite /> : <BackArrow />}
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setShowOTPInputs(false)}>
