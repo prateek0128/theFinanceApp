@@ -23,7 +23,7 @@ import InputTextField from "../../../components/inputTextField/inputTextField";
 import Button from "../../../components/button/button";
 import { verifyOTP, sendOTP } from "../../../apiServices/auth";
 import showToast from "../../../utilis/showToast";
-import { AuthContext } from "../../../context/authContext";
+import { AuthContext } from "../../../context/loginAuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeContext } from "../../../context/themeContext";
 import axios, { AxiosError } from "axios";

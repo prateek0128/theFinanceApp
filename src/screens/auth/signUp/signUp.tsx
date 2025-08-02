@@ -29,11 +29,14 @@ import {
   AppleIconWhite,
 } from "../../../assets/icons/components/welcome";
 import { sendOTP } from "../../../apiServices/auth";
-import { AuthContext } from "../../../context/authContext";
+import { AuthContext } from "../../../context/loginAuthContext";
 import { ThemeContext } from "../../../context/themeContext";
 import showToast from "../../../utilis/showToast";
 import { AxiosError } from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useGoogleAuth } from "../../../context/googleAuthContext";
+import { useFacebookAuth } from "../../../context/facebookAuthContext";
+import { useAppleAuth } from "../../../context/appleAuthContext";
 const SignUpScreen = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -180,6 +183,35 @@ const SignUpScreen = () => {
     setOtp(["", "", "", "", "", ""]);
   };
   const isOtpComplete = otp.every((digit) => digit !== "");
+  const { userInfoGoogle, promptGoogleLogin } = useGoogleAuth();
+  const { userInfoFacebook, promptFacebookLogin } = useFacebookAuth();
+  const { userInfoApple, promptAppleLogin } = useAppleAuth();
+  useEffect(() => {
+    if (userInfoGoogle) {
+      console.log("LoggedInUser:", userInfoGoogle);
+      navigation.navigate("TellUsSomething", {});
+    }
+  }, [userInfoGoogle]);
+
+  useEffect(() => {
+    if (userInfoFacebook) {
+      console.log("FacebookUserInfo:", userInfoFacebook);
+      navigation.navigate("TellUsSomething", {
+        name: userInfoFacebook.name,
+        email: userInfoFacebook.email,
+        // picture: userInfoFacebook.picture.data.url,
+      });
+    }
+  }, [userInfoFacebook]);
+  useEffect(() => {
+    if (userInfoApple) {
+      console.log("Apple User:", userInfoApple);
+      navigation.navigate("TellUsSomething", {
+        name: userInfoApple.name,
+        email: userInfoApple.email,
+      });
+    }
+  }, [userInfoApple]);
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -232,17 +264,19 @@ const SignUpScreen = () => {
             <SocialLoginButton
               IconComponent={theme === "dark" ? AppleIconWhite : AppleIcon}
               text="Continue with Apple"
-              onPress={() => console.log("Apple pressed")}
+              onPress={promptAppleLogin}
             />
             <SocialLoginButton
               IconComponent={GoogleIcon}
               text="Continue with Google"
-              onPress={() => console.log("Google pressed")}
+              onPress={promptGoogleLogin}
+              // disabled={!requestGoogle}
             />
             <SocialLoginButton
               IconComponent={FacebookIcon}
               text="Continue with Facebook"
-              onPress={() => console.log("Facebook pressed")}
+              //disabled={!requestFacebook}
+              onPress={promptFacebookLogin}
             />
           </View>
         </ScrollView>
