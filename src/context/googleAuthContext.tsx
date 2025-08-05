@@ -11,7 +11,6 @@ type GoogleAuthContextType = {
   } | null;
   promptGoogleLogin: () => void;
 };
-
 const GoogleAuthContext = createContext<GoogleAuthContextType | null>(null);
 
 export const GoogleAuthProvider = ({
@@ -27,25 +26,24 @@ export const GoogleAuthProvider = ({
 
   const isExpoGo = Constants.appOwnership === "expo";
   const redirectUri = AuthSession.makeRedirectUri({
-    // native: "fb743854988102436://",
     useProxy: true,
   } as any);
 
+  // const finalRedirectUri = isExpoGo
+  //   ? `https://auth.expo.io/@prateek2812/marketBriefs`
+  //   : redirectUri;
   const finalRedirectUri = isExpoGo
     ? `https://auth.expo.io/@prateek2812/marketBriefs`
     : redirectUri;
   console.log("Final Redirect URI:", finalRedirectUri);
   const [request, response, promptAsync] = Google.useAuthRequest({
-    iosClientId:
-      "367090103963-h643bf3uqjoesfmlcmae3uqe5rs51jch.apps.googleusercontent.com",
-    androidClientId:
-      "367090103963-ef9c4a8oq4qmbmte4nkskisf773qnc2n.apps.googleusercontent.com",
-    webClientId:
-      "367090103963-1eek4b10kodood727g6t6hh1seap8h3v.apps.googleusercontent.com",
+    clientId:
+      "1030825305394-i5rjh8ccaidfbbk4f71i28f13612pdv0.apps.googleusercontent.com",
     redirectUri: finalRedirectUri,
-    // responseType: "id_token",
-    scopes: ["profile", "email"], // crucial for ID token
-    // usePKCE: false,
+    scopes: ["openid", "profile", "email"],
+    responseType: "id_token", //Don't use 'code'
+    usePKCE: false,
+    extraParams: { prompt: "select_account" },
   });
 
   useEffect(() => {
@@ -54,11 +52,11 @@ export const GoogleAuthProvider = ({
       return;
     }
     if (response?.type === "success") {
-      const { authentication } = response;
+      const { authentication, params } = response;
       // Store tokens
       setGoogleToken({
         accessToken: authentication?.accessToken,
-        idToken: authentication?.idToken,
+        idToken: params?.id_token,
       });
       // Fetch user info
       fetch("https://www.googleapis.com/userinfo/v2/me", {
@@ -71,16 +69,17 @@ export const GoogleAuthProvider = ({
   }, [response]);
 
   const promptGoogleLogin = async () => {
+    console.log("Google Login Request:", request);
     try {
       const result = await promptAsync();
       if (result.type === "success") {
-        console.log("Facebook login successful:", result);
+        console.log("Google login successful:", result);
         // Handle successful login
       } else {
-        console.log("Facebook login cancelled or failed:", result);
+        console.log("Google login cancelled or failed:", result);
       }
     } catch (error) {
-      console.error("Error during Facebook login:", error);
+      console.error("Error during Google login:", error);
     }
   };
 

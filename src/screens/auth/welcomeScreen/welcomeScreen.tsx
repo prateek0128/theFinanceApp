@@ -84,7 +84,6 @@ const WelcomeScreen = () => {
       });
     }
   }, [userInfoApple]);
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
