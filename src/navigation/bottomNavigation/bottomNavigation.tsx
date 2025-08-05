@@ -1,4 +1,5 @@
 import React from "react";
+import ProfileScreen from "../../screens/ProfilePage/ProfileScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Dimensions } from "react-native";
 import HomeScreen from "../../screens/homePage/homeScreen/homeScreen";
@@ -23,7 +24,7 @@ import {
   ProfileIconWhite,
 } from "../../assets/icons/components/bottomNavigation";
 import NewsScreen from "../../screens/newsScreen/newsScreen";
-import ProfileScreen from "../../screens/profileScreen/profileScreen";
+
 import fontFamily from "../../assets/styles/fontFamily";
 import HomeScreenStack from "../homeScreenStack/homeScreenStack";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
@@ -32,6 +33,7 @@ import { ThemeContext } from "../../context/themeContext";
 import { colors } from "../../assets/styles/colors";
 import ChooseYourInterests from "../../screens/chooseYourInterests/chooseYourInterests";
 import { BottomTabParamList, HomeStackParamList } from "../../types/navigation";
+import ProfileScreenStack from "../profileScreenStack/profileScreenStack";
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 const { width, height } = Dimensions.get("window");
 
@@ -60,13 +62,13 @@ export default function BottomTabNavigator() {
       component: ChooseYourInterests,
       Icon: theme === "dark" ? IntrestIconWhite : IntrestIcon,
       FocusedIcon: theme === "dark" ? IntrestIconPurple : IntrestIconBlue,
-    }, // No focused version provided
+    },
     {
       name: "Profile",
-      component: ProfileScreen,
+      component: ProfileScreenStack,
       Icon: theme === "dark" ? ProfileIconWhite : ProfileIcon,
       FocusedIcon: theme === "dark" ? ProfileIconPurple : ProfileIconBlue,
-    }, // No focused version provided
+    },
   ];
   return (
     <Tab.Navigator

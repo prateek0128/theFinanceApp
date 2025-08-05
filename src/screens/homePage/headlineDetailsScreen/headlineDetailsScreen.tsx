@@ -67,6 +67,7 @@ import globalStyles from "../../../assets/styles/globalStyles";
 import { NewsAuthorIcon } from "../../../assets/icons/components/homepage";
 import { Divider } from "react-native-paper";
 
+
 dayjs.extend(relativeTime);
 const { width, height } = Dimensions.get("window");
 
