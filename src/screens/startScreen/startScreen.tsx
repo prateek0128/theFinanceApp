@@ -168,8 +168,8 @@ const StartScreen = () => {
         <Button
           title="Continue"
           onPress={() => {
-            // navigation.navigate("Welcome");
-            navigation.navigate("BottomTabNavigator");
+            navigation.navigate("Welcome");
+            //navigation.navigate("BottomTabNavigator");
           }}
         />
       ) : (
