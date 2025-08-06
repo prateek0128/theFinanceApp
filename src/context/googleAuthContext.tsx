@@ -2,7 +2,8 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import * as Google from "expo-auth-session/providers/google";
 import * as AuthSession from "expo-auth-session";
 import Constants from "expo-constants";
-
+import * as WebBrowser from "expo-web-browser";
+WebBrowser.maybeCompleteAuthSession();
 type GoogleAuthContextType = {
   userInfoGoogle: any;
   googleToken: {
@@ -36,12 +37,23 @@ export const GoogleAuthProvider = ({
     ? `https://auth.expo.io/@prateek2812/marketBriefs`
     : redirectUri;
   console.log("Final Redirect URI:", finalRedirectUri);
+  console.log("Redirect URI:", redirectUri);
+  //@ts-ignore
+  console.log(AuthSession.makeRedirectUri({ useProxy: true }));
   const [request, response, promptAsync] = Google.useAuthRequest({
+    // iosClientId:
+    //   "1030825305394-hc58lnam3pc57elggvs3d9hjkpeut4ql.apps.googleusercontent.com",
+    // androidClientId:
+    //   "1030825305394-ntfuoou9uu4mpvsuhsq01ma72kp0sl62.apps.googleusercontent.com",
+    // webClientId:
+    //   "1030825305394-i5rjh8ccaidfbbk4f71i28f13612pdv0.apps.googleusercontent.com",
     clientId:
       "1030825305394-i5rjh8ccaidfbbk4f71i28f13612pdv0.apps.googleusercontent.com",
     redirectUri: finalRedirectUri,
     scopes: ["openid", "profile", "email"],
     responseType: "id_token", //Don't use 'code'
+    //@ts-ignore
+    useProxy: true,
     usePKCE: false,
     extraParams: { prompt: "select_account" },
   });
@@ -71,7 +83,12 @@ export const GoogleAuthProvider = ({
   const promptGoogleLogin = async () => {
     console.log("Google Login Request:", request);
     try {
-      const result = await promptAsync();
+      //@ts-ignore
+      const result = await promptAsync({
+        //@ts-ignore
+        useProxy: false,
+        showInRecents: true,
+      });
       if (result.type === "success") {
         console.log("Google login successful:", result);
         // Handle successful login

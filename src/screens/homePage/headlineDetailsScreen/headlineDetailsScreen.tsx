@@ -67,7 +67,6 @@ import globalStyles from "../../../assets/styles/globalStyles";
 import { NewsAuthorIcon } from "../../../assets/icons/components/homepage";
 import { Divider } from "react-native-paper";
 
-
 dayjs.extend(relativeTime);
 const { width, height } = Dimensions.get("window");
 
@@ -96,6 +95,7 @@ const HeadlineDetailsScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const route = useRoute<HeadlineDetailsRouteProp>();
   const { newsId, imageKey } = route.params || {};
+  console.log("NewsId=>", newsId);
   const [comment, setComment] = useState("");
   const { theme, toggleTheme } = useContext(ThemeContext);
   const [commentsData, setCommentsData] = useState([]);
@@ -188,7 +188,7 @@ const HeadlineDetailsScreen = () => {
     console.log("Inside Get Comments=>");
     try {
       const response = await getComments(newsId);
-      console.log("CommentsResponse=>", response.data.data.comments);
+      console.log("CommentsResponse=>", response.data.data);
       setCommentsData(response.data.data.comments);
     } catch (err) {
       // Narrow / cast to AxiosError
@@ -275,7 +275,7 @@ const HeadlineDetailsScreen = () => {
       }>;
       const errorMessage =
         axiosErr.response?.data?.message ?? "Something went wrong";
-      console.log("Toggle Like ErrorMessage", axiosErr.response);
+      console.log("Toggle Like ErrorMessage", axiosErr.response?.data);
       showToast(errorMessage, "danger");
     }
   };
@@ -384,7 +384,7 @@ const HeadlineDetailsScreen = () => {
       }>;
       const errorMessage =
         axiosErr.response?.data?.message ?? "Something went wrong";
-      console.log("AddCommentErrorMessage", axiosErr.response);
+      console.log("AddCommentErrorMessage", axiosErr.response?.data);
       showToast(errorMessage, "danger");
     } finally {
       setAddCommentsLoader(false);
@@ -499,6 +499,18 @@ const HeadlineDetailsScreen = () => {
                   ) : newsData.tag == "market" ? (
                     <Tag
                       label={"Market"}
+                      backgroundColor={"#E7E7FF"}
+                      textColor={"#6B4EFF"}
+                    />
+                  ) : newsData.tag == "neutral" ? (
+                    <Tag
+                      label={"Neutral"}
+                      backgroundColor={"#ECFCE5"}
+                      textColor={"#23C16B"}
+                    />
+                  ) : newsData.tag == "important" ? (
+                    <Tag
+                      label={"Important"}
                       backgroundColor={"#E7E7FF"}
                       textColor={"#6B4EFF"}
                     />

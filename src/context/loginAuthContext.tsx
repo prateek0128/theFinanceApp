@@ -78,15 +78,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
   const loginData = {
     access_token:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg2OGQwN2Q5YzdlMWM1ODlhOGQwM2NiIiwidHlwZSI6ImFjY2VzcyIsImlzcyI6InRmYS1iYWNrZW5kIiwic3ViIjoiNjg2OGQwN2Q5YzdlMWM1ODlhOGQwM2NiIiwiZXhwIjoxNzU0MDQ0MzA3LCJuYmYiOjE3NTM5NTc5MDcsImlhdCI6MTc1Mzk1NzkwN30.5E3KvRtsAHVb0FYE-Go-npR2UVnl-ghg5AV_lROx3AQ",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4YjYwNjM3NDRmZTgyYzI4OWY1NTYxIiwidHlwZSI6ImFjY2VzcyIsImlzcyI6InRmYS1iYWNrZW5kIiwic3ViIjoiNjg4YjYwNjM3NDRmZTgyYzI4OWY1NTYxIiwiZXhwIjoxNzU0NTU5ODYwLCJuYmYiOjE3NTQ0NzM0NjAsImlhdCI6MTc1NDQ3MzQ2MH0.gc8m6r2H99nyF03Xrb-7Sr248O9PSGtuUJNN49Ive7w",
     expires_in: 86400,
     onboarding_required: false,
     refresh_token:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg2OGQwN2Q5YzdlMWM1ODlhOGQwM2NiIiwidHlwZSI6InJlZnJlc2giLCJpc3MiOiJ0ZmEtYmFja2VuZCIsInN1YiI6IjY4NjhkMDdkOWM3ZTFjNTg5YThkMDNjYiIsImV4cCI6MTc1NDU2MjcwNywibmJmIjoxNzUzOTU3OTA3LCJpYXQiOjE3NTM5NTc5MDd9.yPweXy2AeWtJiq225_aVCnYIbbZ6otEAPRtWzUnEWWQ",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4YjYwNjM3NDRmZTgyYzI4OWY1NTYxIiwidHlwZSI6InJlZnJlc2giLCJpc3MiOiJ0ZmEtYmFja2VuZCIsInN1YiI6IjY4OGI2MDYzNzQ0ZmU4MmMyODlmNTU2MSIsImV4cCI6MTc1NTA3ODI2MCwibmJmIjoxNzU0NDczNDYwLCJpYXQiOjE3NTQ0NzM0NjB9.YbTd2bBkil5HgOTNk14kdCHR0pXPhDS1KxTmj85VS3c",
     user: {
-      created_at: 1751699581,
+      created_at: 1753964643,
       email: "rajput.prateek28@gmail.com",
-      id: "6868d07d9c7e1c589a8d03cb",
+      id: "688b6063744fe82c289f5561",
+      interests: ["Startups", "Mutual Funds", "Crypto", "Economy"],
+      name: "New User",
       onboarding_completed: true,
       phone: "",
     },

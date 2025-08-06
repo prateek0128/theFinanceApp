@@ -101,10 +101,10 @@ const SignUpScreen = () => {
         "onboardingRequired"
       );
       console.log("Onboarding Required:", onboardingRequired);
-      if (Boolean(onboardingRequired) == true) {
-        navigation.navigate("TellUsSomething", {});
-      } else {
+      if (Boolean(onboardingRequired)) {
         navigation.navigate("BottomTabNavigator");
+      } else {
+        navigation.navigate("TellUsSomething", {});
       }
       showToast("OTP verified successfully!", "success");
     } catch (err) {

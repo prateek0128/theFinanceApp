@@ -1,5 +1,5 @@
 import React from "react";
-import ProfileScreen from "../../screens/ProfilePage/ProfileScreen";
+import ProfileScreen from "../../screens/profileScreen/profileScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Dimensions } from "react-native";
 import HomeScreen from "../../screens/homePage/homeScreen/homeScreen";

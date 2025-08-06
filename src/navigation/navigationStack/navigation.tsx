@@ -13,7 +13,7 @@ import BottomTabNavigator from "../bottomNavigation/bottomNavigation";
 import ChooseYourInterests from "../../screens/chooseYourInterests/chooseYourInterests";
 import HeadlineDetailsScreen from "../../screens/homePage/headlineDetailsScreen/headlineDetailsScreen";
 import SavedArticles from "../../screens/SavedArticle/savedArticle";
-import ProfileScreen from "../../screens/ProfilePage/ProfileScreen";
+import ProfileScreen from "../../screens/profileScreen/profileScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

@@ -6,14 +6,14 @@ export type RootStackParamList = {
   SignUp: undefined;
   Login: undefined;
   TellUsSomething: { name?: string | null; email?: string };
-  ChooseYourInterests: { roleId?: string | null; goalId: string | null };
+  ChooseYourInterests: { expertiseLevel?: string | null };
   BottomTabNavigator: undefined;
   Home: undefined;
   HeadlineDetailsScreen: {
     newsId?: string;
     imageKey?: string;
   };
-  Profile:undefined;
+  Profile: undefined;
   SavedArticles: undefined;
 };
 export type BottomTabParamList = {
@@ -30,4 +30,4 @@ export type HomeStackParamList = {
 export type ProfileStackParamList = {
   SavedArticles: undefined;
   Profile: undefined;
-}
+};

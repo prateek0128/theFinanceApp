@@ -35,7 +35,7 @@ const QuestionBlock = ({
   message,
 }: {
   title: string;
-  options: string[]; // array of strings like ["Beginner", "Novice", ...]
+  options: { key: string; value: string }[]; // array of objects like [{ key: "beginner", value: "Beginner" }, ...]
   selectedValue: string;
   onSelect: (value: string) => void;
   message: string;
@@ -64,11 +64,11 @@ const QuestionBlock = ({
         ]}
       >
         {options.map((option) => {
-          const isSelected = selectedValue === option;
+          const isSelected = selectedValue === option.key;
           return (
             <TouchableOpacity
-              key={option}
-              onPress={() => onSelect(option)}
+              key={option.key}
+              onPress={() => onSelect(option.key)}
               style={[
                 styles.optionBox,
                 {
@@ -106,7 +106,7 @@ const QuestionBlock = ({
                     : fontFamily.Inter400,
                 }}
               >
-                {option}
+                {option.value}
               </Text>
             </TouchableOpacity>
           );
@@ -119,41 +119,26 @@ const QuestionBlock = ({
 const TellUsSomething = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { theme, toggleTheme } = useContext(ThemeContext);
-  const [selectedRole, setSelectedRole] = useState<any>(null);
-  const [selectedGoal, setSelectedGoal] = useState<any>(null);
-  const [roles, setRoles] = useState([]);
-  const [goals, setGoals] = useState([]);
+  const [selectedExpertLevel, setSelectedExpertLevel] = useState<any>(null);
   const [showSecondQuestion, setShowSecondQuestion] = useState(false);
   const progress = !showSecondQuestion ? 0.5 : 1;
   const handleNextOrContinue = () => {
-    if (!selectedRole) {
-      showToast("Please select both a role.", "warning");
+    if (!setSelectedExpertLevel || selectedExpertLevel === "") {
+      showToast("Please select your experience level.", "warning");
       return;
     }
-    // navigation.navigate("ChooseYourInterests", {
-    //   roleId: "",
-    //   goalId: "",
-    // });
-    navigation.navigate("BottomTabNavigator");
+    navigation.navigate("ChooseYourInterests", {
+      expertiseLevel: selectedExpertLevel,
+    });
+    // navigation.navigate("BottomTabNavigator");
   };
-  const getAllRolesAPI = async () => {
-    try {
-      const response = await getAllRoles();
-      console.log("RolesResponse=>", response.data.data);
-      setRoles(response.data.data || []);
-    } catch (err) {
-      // Narrow / cast to AxiosError
-      const axiosErr = err as AxiosError<{
-        status: string;
-        message: string;
-      }>;
-      const errorMessage =
-        axiosErr.response?.data?.message ?? "Something went wrong";
-      showToast(errorMessage, "danger");
-    }
-  };
-
-  const expertiseLevel = ["Novice", "Beginner", "Intermediate", "Expert"];
+  const expertiseLevel = [
+    { key: "novice", value: "Novice" },
+    { key: "beginner", value: "Beginner" },
+    { key: "intermediate", value: "Intermediate" },
+    { key: "expert", value: "Expert" },
+  ];
+  console.log("expertiseLevel:", selectedExpertLevel);
   return (
     <ScrollView
       contentContainerStyle={{ flex: 1 }}
@@ -170,14 +155,14 @@ const TellUsSomething = () => {
           title="What's your experience level?"
           message="Select the one that best matches your skill."
           options={expertiseLevel || []}
-          selectedValue={selectedRole}
-          onSelect={(option) => setSelectedRole(option)}
+          selectedValue={selectedExpertLevel}
+          onSelect={(option) => setSelectedExpertLevel(option)}
           theme={theme}
         />
         <Button
           title={"Continue"}
           onPress={handleNextOrContinue}
-          disabled={selectedRole !== "" ? false : true}
+          disabled={selectedExpertLevel !== "" ? false : true}
           buttonStyle={[
             styles.submitButton,
             {

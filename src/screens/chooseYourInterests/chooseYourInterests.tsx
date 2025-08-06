@@ -64,8 +64,8 @@ export default function ChooseYourInterests() {
   const route = useRoute<
     ChooseYourInterestsRouteProp | BottomTabNavigatorRouteProp
   >();
-  const { roleId, goalId } = route.params || {};
-  console.log("roleId:", roleId || "", "goalId:", goalId || "");
+  const { expertiseLevel } = route.params || {};
+  console.log("expertiseLevel:", expertiseLevel || "");
   const toggleInterest = (item: any) => {
     setSelected((prevSelected) => {
       const isAlreadySelected = prevSelected.some(
@@ -88,8 +88,7 @@ export default function ChooseYourInterests() {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const handleContinue = async () => {
     const onboardingData = {
-      role: roleId || "",
-      goal: goalId || "",
+      experience_level: expertiseLevel,
       interests: selectedInterestIds,
       clientMeta: {
         deviceId: Device.osInternalBuildId ?? Device.modelId ?? "unknown",
@@ -100,7 +99,7 @@ export default function ChooseYourInterests() {
     console.log("OnboardingDataPayload=>", onboardingData);
     try {
       const response = await submitOnboarding(onboardingData);
-      console.log("OnboardingResponse=>", response.data.data);
+      console.log("OnboardingResponse=>", response.data);
       showToast(response.data.message, "success");
       navigation.navigate("BottomTabNavigator");
     } catch (err) {

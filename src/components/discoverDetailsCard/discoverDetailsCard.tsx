@@ -184,6 +184,22 @@ const DiscoverDetailsCard = ({
                 }
                 textColor={"#6B4EFF"}
               />
+            ) : tag == "neutral" ? (
+              <Tag
+                label={"Neutral"}
+                backgroundColor={
+                  theme == "light" ? "#E7E7FF" : colors.darkUndenaryBackground
+                }
+                textColor={"#6B4EFF"}
+              />
+            ) : tag == "important" ? (
+              <Tag
+                label={"Important"}
+                backgroundColor={
+                  theme == "light" ? "#E7E7FF" : colors.darkUndenaryBackground
+                }
+                textColor={"#6B4EFF"}
+              />
             ) : (
               ""
             )}
