@@ -1,7 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types/navigation";
 import { NavigationContainer } from "@react-navigation/native";
-
 import LoginScreen from "../../screens/auth/login/login";
 import SignUpScreen from "../../screens/auth/signUp/signUp";
 import HomeScreen from "../../screens/homePage/homeScreen/homeScreen";
@@ -12,8 +11,8 @@ import TellUsSomething from "../../screens/tellUsSomething/tellUsSomething";
 import BottomTabNavigator from "../bottomNavigation/bottomNavigation";
 import ChooseYourInterests from "../../screens/chooseYourInterests/chooseYourInterests";
 import HeadlineDetailsScreen from "../../screens/homePage/headlineDetailsScreen/headlineDetailsScreen";
-import SavedArticles from "../../screens/SavedArticle/savedArticle";
-import ProfileScreen from "../../screens/profileScreen/profileScreen";
+import SavedArticles from "../../screens/savedArticle/savedArticle";
+import ProfileScreen from "../../screens/ProfilePage/profileScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

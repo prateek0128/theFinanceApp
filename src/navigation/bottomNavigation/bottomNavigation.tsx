@@ -1,5 +1,5 @@
 import React from "react";
-import ProfileScreen from "../../screens/profileScreen/profileScreen";
+import ProfileScreen from "../../screens/ProfilePage/profileScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Dimensions } from "react-native";
 import HomeScreen from "../../screens/homePage/homeScreen/homeScreen";
@@ -7,21 +7,17 @@ import { useContext } from "react";
 import { Text } from "react-native";
 import {
   HomeIcon,
-  HomeIconBlue,
-  HomeIconPurple,
-  HomeIconWhite,
-  NewsIcon,
-  NewsIconPurple,
-  NewsIconBlue,
-  NewsIconWhite,
-  IntrestIcon,
-  IntrestIconWhite,
-  IntrestIconPurple,
-  IntrestIconBlue,
+  HomeIconFilledLight,
+  HomeIconFilledDark,
+  InteretsIcon,
+  InterestesIconFilledLight,
+  InterestesIconFilledDark,
+  SavedIcon,
+  SavedIconFilledLight,
+  SavedIconFilledDark,
   ProfileIcon,
-  ProfileIconPurple,
-  ProfileIconBlue,
-  ProfileIconWhite,
+  ProfileIconFilledLight,
+  ProfileIconFilledDark,
 } from "../../assets/icons/components/bottomNavigation";
 import NewsScreen from "../../screens/newsScreen/newsScreen";
 
@@ -34,6 +30,7 @@ import { colors } from "../../assets/styles/colors";
 import ChooseYourInterests from "../../screens/chooseYourInterests/chooseYourInterests";
 import { BottomTabParamList, HomeStackParamList } from "../../types/navigation";
 import ProfileScreenStack from "../profileScreenStack/profileScreenStack";
+import SavedArticles from "../../screens/savedArticle/savedArticle";
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 const { width, height } = Dimensions.get("window");
 
@@ -48,26 +45,29 @@ export default function BottomTabNavigator() {
     {
       name: "Home",
       component: HomeScreenStack,
-      Icon: theme === "dark" ? HomeIconWhite : HomeIcon,
-      FocusedIcon: theme === "dark" ? HomeIconPurple : HomeIconBlue,
+      Icon: HomeIcon,
+      FocusedIcon: theme === "dark" ? HomeIconFilledDark : HomeIconFilledLight,
     },
     {
-      name: "News",
-      component: NewsScreen,
-      Icon: theme === "dark" ? NewsIconWhite : NewsIcon,
-      FocusedIcon: theme === "dark" ? NewsIconPurple : NewsIconBlue,
+      name: "Saved",
+      component: SavedArticles,
+      Icon: SavedIcon,
+      FocusedIcon:
+        theme === "dark" ? SavedIconFilledDark : SavedIconFilledLight,
     },
     {
       name: "Interests",
       component: ChooseYourInterests,
-      Icon: theme === "dark" ? IntrestIconWhite : IntrestIcon,
-      FocusedIcon: theme === "dark" ? IntrestIconPurple : IntrestIconBlue,
+      Icon: InteretsIcon,
+      FocusedIcon:
+        theme === "dark" ? InterestesIconFilledDark : InterestesIconFilledLight,
     },
     {
       name: "Profile",
       component: ProfileScreenStack,
-      Icon: theme === "dark" ? ProfileIconWhite : ProfileIcon,
-      FocusedIcon: theme === "dark" ? ProfileIconPurple : ProfileIconBlue,
+      Icon: ProfileIcon,
+      FocusedIcon:
+        theme === "dark" ? ProfileIconFilledDark : ProfileIconFilledLight,
     },
   ];
   return (
@@ -113,10 +113,10 @@ export default function BottomTabNavigator() {
                   fontSize: 12,
                   textAlign: "center",
                   color: focused
-                    ? "#4139E5"
-                    : theme === "dark"
-                    ? colors.darkPrimaryText
-                    : colors.primaryText,
+                    ? theme === "dark"
+                      ? colors.vigenaryText
+                      : colors.sexdenaryText
+                    : colors.darkSenaryText,
                 }}
               >
                 {name}
