@@ -59,6 +59,7 @@ export default function ChooseYourInterests() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [selected, setSelected] = useState<string[]>([]);
   const [interests, setInterests] = useState<any[]>([]);
+  const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [deviceInfo, setDeviceInfo] = useState<any>({});
   const [selectedInterestIds, setSelectedInterestIds] = useState<string[]>([]);
   const route = useRoute<
@@ -83,7 +84,6 @@ export default function ChooseYourInterests() {
       return updatedSelected;
     });
   };
-
   const canContinue = selected.length >= 3;
   const { theme, toggleTheme } = useContext(ThemeContext);
   const handleContinue = async () => {
@@ -130,11 +130,11 @@ export default function ChooseYourInterests() {
       showToast(errorMessage, "danger");
     }
   };
-  const getSelectedInterestsAPI = async () => {
+  const getUserProfileAPI = async () => {
     try {
       const response = await getUserProfile();
       console.log("SelectedInterestsResponse=>", response.data);
-      setInterests(response.data);
+      setSelectedInterests(response.data.interests || []);
     } catch (err) {
       // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
@@ -148,7 +148,7 @@ export default function ChooseYourInterests() {
   };
   useEffect(() => {
     getAllInterestsAPI();
-    getSelectedInterestsAPI();
+    getUserProfileAPI();
   }, []);
   const groupedInterests = interests
     ? Array.from({ length: Math.ceil(interests.length / 3) }, (_, i) =>
@@ -156,7 +156,19 @@ export default function ChooseYourInterests() {
       )
     : [];
   const buttonTitle =
-    route.name === "ChooseYourInterests" ? "Get Started" : "Update Interests";
+    selectedInterestIds.length < 0 ? "Get Started" : "Update Interests";
+  console.log("GroupInterests=>", groupedInterests);
+  console.log("SelectedInterests=>", selectedInterests);
+  // Add this useEffect to map API-selected names to your full interest objects
+  useEffect(() => {
+    if (interests.length && selectedInterests.length) {
+      const matched = interests.filter((item) =>
+        selectedInterests.includes(item.name)
+      );
+      setSelected(matched); // This ensures toggleInterest highlighting works
+      setSelectedInterestIds(matched.map((i) => i.interestId));
+    }
+  }, [interests, selectedInterests]);
   return (
     <View
       style={[

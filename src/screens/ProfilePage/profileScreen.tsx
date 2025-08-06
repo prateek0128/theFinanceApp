@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { use, useContext } from "react";
 import {
   View,
   Text,
@@ -31,6 +31,8 @@ import { ThemeContext } from "../../context/themeContext";
 import { BackArrow, BackArrowWhite } from "../../assets/icons/components/logIn";
 import { colors } from "../../assets/styles/colors";
 import globalStyles from "../../assets/styles/globalStyles";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AuthContext } from "../../context/loginAuthContext";
 type OptionItem = {
   label: string;
   darkIcon: React.ReactNode;
@@ -41,9 +43,14 @@ type OptionItem = {
 const ProfileScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { theme } = useContext(ThemeContext);
-
+  const { user, isLoggedIn, login, logout, isLoading } =
+    useContext(AuthContext);
+  const userName = AsyncStorage.getItem("userName") || "--";
+  const userEmail = AsyncStorage.getItem("userEmail") || "--";
   const handleLogout = () => {
     console.log("Logged out");
+    logout();
+    navigation.navigate("Welcome");
   };
   const accountOptions: OptionItem[] = [
     {
@@ -56,7 +63,7 @@ const ProfileScreen = () => {
       label: "My Interests",
       darkIcon: <DarkMyintresetIcon />,
       lightIcon: <MyIntrestIcon />,
-      onPress: () => {},
+      onPress: () => navigation.navigate("ChooseYourInterests", {}),
     },
     {
       label: "Saved Articles",
@@ -162,7 +169,7 @@ const ProfileScreen = () => {
               },
             ]}
           >
-            User’s Name
+            {userName || "--"}
           </Text>
           <Text
             style={[
@@ -175,7 +182,7 @@ const ProfileScreen = () => {
               },
             ]}
           >
-            usersemailaddress@email.com
+            {userEmail || "--"}
           </Text>
         </View>
         <TouchableOpacity
@@ -206,7 +213,6 @@ const ProfileScreen = () => {
           {renderSection("Account", accountOptions)}
           {renderSection("More", moreOptions)}
         </View>
-
         <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
           <Text
             style={[

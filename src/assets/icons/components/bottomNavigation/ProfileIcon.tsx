@@ -9,7 +9,7 @@ const SvgProfileIcon = (props) => (
     {...props}
   >
     <Path
-      stroke="#000"
+      stroke="#979C9E"
       strokeWidth={1.5}
       d="M12.5 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM20.5 17.5c0 2.485 0 4.5-8 4.5s-8-2.015-8-4.5 3.582-4.5 8-4.5 8 2.015 8 4.5Z"
     />

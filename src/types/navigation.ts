@@ -5,11 +5,11 @@ export type RootStackParamList = {
   Welcome: undefined;
   SignUp: undefined;
   Login: undefined;
-  TellUsSomething: { name?: string | null; email?: string };
-  ChooseYourInterests: { expertiseLevel?: string | null };
+  TellUsSomething?: { name?: string | null; email?: string };
+  ChooseYourInterests?: { expertiseLevel?: string | null };
   BottomTabNavigator: undefined;
   Home: undefined;
-  HeadlineDetailsScreen: {
+  HeadlineDetailsScreen?: {
     newsId?: string;
     imageKey?: string;
   };
@@ -19,7 +19,7 @@ export type RootStackParamList = {
 export type BottomTabParamList = {
   Home: undefined;
   Interests: undefined;
-  News: undefined;
+  Saved: undefined;
   Profile: undefined;
 };
 export type HomeStackParamList = {

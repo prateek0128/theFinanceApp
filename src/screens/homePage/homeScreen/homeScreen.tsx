@@ -25,6 +25,8 @@ import showToast from "../../../utilis/showToast";
 import globalStyles from "../../../assets/styles/globalStyles";
 import { Divider } from "react-native-paper";
 import { data } from "./homeScreenData"; // Importing the data from homeScreenData.ts
+import { getUserProfile } from "../../../apiServices/user";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const { width, height } = Dimensions.get("window");
 type NewsItem = {
   id: string;
@@ -61,7 +63,7 @@ const HomeScreen = () => {
   const [allNewsData, setAllNewsData] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedTag, setSelectedTag] = useState("All");
-
+  const [userName, setUserName] = useState("");
   const articles = [
     {
       title: "RBI holds rates steady, signals caution on inflation",
@@ -74,7 +76,23 @@ const HomeScreen = () => {
       time: "4h ago",
     },
   ];
-
+  const profile = {
+    created_at: "2025-07-31T12:24:03.247Z",
+    device_token: "",
+    device_type: "",
+    email: "rajput.prateek28@gmail.com",
+    id: "688b6063744fe82c289f5561",
+    interests: ["Startups", "Mutual Funds", "Crypto", "Economy"],
+    name: "New User",
+    notification__settings: {
+      enable_market_summaries: false,
+      enable_news_alerts: false,
+      enable_price_alerts: false,
+    },
+    onboarding_completed: true,
+    phone: "",
+    preferred_index: "",
+  };
   const getAllNewsAPI = async (selectedTag: string) => {
     setLoading(true);
     try {
@@ -96,10 +114,35 @@ const HomeScreen = () => {
       setLoading(false);
     }
   };
+  const getUserProfileAPI = async () => {
+    try {
+      const response = await getUserProfile();
+      console.log("ProfileResponse=>", response.data);
+      const profileData = response.data;
+      AsyncStorage.multiSet([
+        ["userId", profileData.id || ""],
+        ["userName", profileData.name || ""],
+        ["userEmail", profileData.email || ""],
+        ["userPhone", profileData.phone || ""],
+        ["userInterests", JSON.stringify(profileData.interests || [])],
+      ]);
+      setUserName(profileData.name || "");
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      showToast(errorMessage, "danger");
+    }
+  };
   useEffect(() => {
     if (selectedTag !== "") {
       getAllNewsAPI(selectedTag);
     }
+    getUserProfileAPI();
   }, [selectedTag]);
   if (loading) return <Loader />;
   return (
@@ -118,7 +161,7 @@ const HomeScreen = () => {
                 },
               ]}
             >
-              Hello User,
+              Hello {userName || "--"},
             </Text>
             <Text
               style={[
