@@ -54,8 +54,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const expiry = storedExpiry[1];
 
         if (userJson && expiry) {
-          const expiryTime = parseInt(expiry, 10);
-          const currentTime = Date.now();
+          const expiryTime = parseInt(expiry, 10); // seconds
+          const currentTime = Math.floor(Date.now() / 1000); // seconds
 
           if (currentTime < expiryTime) {
             const remainingTime = expiryTime - currentTime;
@@ -78,16 +78,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
   const loginData = {
     access_token:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4YjYwNjM3NDRmZTgyYzI4OWY1NTYxIiwidHlwZSI6ImFjY2VzcyIsImlzcyI6InRmYS1iYWNrZW5kIiwic3ViIjoiNjg4YjYwNjM3NDRmZTgyYzI4OWY1NTYxIiwiZXhwIjoxNzU0NTU5ODYwLCJuYmYiOjE3NTQ0NzM0NjAsImlhdCI6MTc1NDQ3MzQ2MH0.gc8m6r2H99nyF03Xrb-7Sr248O9PSGtuUJNN49Ive7w",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4YjYwNjM3NDRmZTgyYzI4OWY1NTYxIiwidHlwZSI6ImFjY2VzcyIsImlzcyI6InRmYS1iYWNrZW5kIiwic3ViIjoiNjg4YjYwNjM3NDRmZTgyYzI4OWY1NTYxIiwiZXhwIjoxNzU0NjQwMzU4LCJuYmYiOjE3NTQ1NTM5NTgsImlhdCI6MTc1NDU1Mzk1OH0.GvIgsxHDaGsLqY-n5fjJk83OPFE1g6eIAQzP4hdcx8c",
     expires_in: 86400,
     onboarding_required: false,
     refresh_token:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4YjYwNjM3NDRmZTgyYzI4OWY1NTYxIiwidHlwZSI6InJlZnJlc2giLCJpc3MiOiJ0ZmEtYmFja2VuZCIsInN1YiI6IjY4OGI2MDYzNzQ0ZmU4MmMyODlmNTU2MSIsImV4cCI6MTc1NTA3ODI2MCwibmJmIjoxNzU0NDczNDYwLCJpYXQiOjE3NTQ0NzM0NjB9.YbTd2bBkil5HgOTNk14kdCHR0pXPhDS1KxTmj85VS3c",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjg4YjYwNjM3NDRmZTgyYzI4OWY1NTYxIiwidHlwZSI6InJlZnJlc2giLCJpc3MiOiJ0ZmEtYmFja2VuZCIsInN1YiI6IjY4OGI2MDYzNzQ0ZmU4MmMyODlmNTU2MSIsImV4cCI6MTc1OTczNzk1OCwibmJmIjoxNzU0NTUzOTU4LCJpYXQiOjE3NTQ1NTM5NTh9.GrX2Lha69ozaXe9Xw2MToS8BDmCRApsHADUZDDunbW8",
     user: {
       created_at: 1753964643,
       email: "rajput.prateek28@gmail.com",
       id: "688b6063744fe82c289f5561",
-      interests: ["Startups", "Mutual Funds", "Crypto", "Economy"],
+      interests: ["Startups", "Crypto", "Mutual Funds"],
       name: "New User",
       onboarding_completed: true,
       phone: "",
@@ -105,25 +105,25 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const user = responseData.data.user;
         const accesstoken = responseData.data.access_token;
         const onboardingRequired = responseData.data.onboarding_required;
-        const expiresIn = responseData.data.expires_in;
-        const expirationTimestamp = Date.now() + expiresIn;
-        // AsyncStorage.setItem("authToken", accesstoken);
-        // AsyncStorage.setItem("status", status);
-        // AsyncStorage.setItem("message", responseData.message);
-        // AsyncStorage.setItem("user", JSON.stringify(user));
+        const sessionExpiresIn = responseData.data.expires_in;
+        const accessTokenExpiry =
+          Math.floor(Date.now() / 1000) + sessionExpiresIn;
+        const refreshTokenExpiry =
+          Math.floor(Date.now() / 1000) + 60 * 24 * 60 * 60; // 60 days in seconds
         await AsyncStorage.multiSet([
           ["authToken", accesstoken],
           ["status", status],
           ["message", responseData.message],
           ["user", JSON.stringify(user)],
           ["onboardingRequired", onboardingRequired.toString()],
-          ["tokenExpiry", expirationTimestamp.toString()],
+          ["tokenExpiry", accessTokenExpiry.toString()],
+          ["refreshToken", responseData.data.refresh_token],
+          ["refreshTokenExpiry", refreshTokenExpiry.toString()],
         ]);
         setUser(user);
         setIsLoggedIn(true);
-        // No return value needed
         // Start logout timer
-        scheduleAutoLogout(expiresIn);
+        scheduleAutoLogout(refreshTokenExpiry);
       } else {
         console.error("Login failed:", responseData.message);
         setIsLoggedIn(false);
@@ -159,12 +159,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setIsLoading(false);
     }
   };
-  const scheduleAutoLogout = (expiresIn: number) => {
+  const scheduleAutoLogout = (expiresInSeconds: number) => {
     if (logoutTimeout) clearTimeout(logoutTimeout);
     logoutTimeout = setTimeout(() => {
       logout();
-    }, expiresIn);
+    }, expiresInSeconds * 1000); // convert seconds to milliseconds
   };
+
   return (
     <AuthContext.Provider
       value={{ user, isLoggedIn, isLoading, login, logout }}

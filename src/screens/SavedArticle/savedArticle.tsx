@@ -19,6 +19,12 @@ import { ThemeContext } from "../../context/themeContext";
 import { colors } from "../../assets/styles/colors";
 import { Divider } from "react-native-paper";
 import globalStyles from "../../assets/styles/globalStyles";
+import { NewsAuthorIcon } from "../../assets/icons/components/homepage";
+import {
+  ViewMoreIcon,
+  ViewMoreIconWhite,
+} from "../../assets/icons/components/savedArticles";
+import Header from "../../components/header/header";
 
 const savedArticles = [
   {
@@ -81,34 +87,46 @@ const SavedArticles = () => {
         },
       ]}
     >
-      <View style={[styles.textContent]}>
-        <View style={styles.sourceContainer}>
-          <Image
-            source={require("../../assets/Images/Ellipse.png")} // use a different icon if needed
-            style={styles.sourceIcon}
-          />
+      <View style={[styles.savedArticleDetails]}>
+        <View style={[styles.detailsContainer]}>
+          <View style={styles.authorIconContainer}>
+            <NewsAuthorIcon />
+            <View style={styles.authorTimeContainer}>
+              <Text
+                style={[
+                  styles.authorText,
+                  {
+                    color:
+                      theme === "light" ? colors.octodenaryText : colors.white,
+                  },
+                ]}
+              >
+                {item.source || "--"}
+              </Text>
+            </View>
+          </View>
           <Text
             style={[
-              styles.source,
+              styles.title,
               {
                 color: theme === "dark" ? colors.white : colors.octodenaryText,
               },
             ]}
+            numberOfLines={2}
           >
-            {item.source}
+            {item.title}
           </Text>
         </View>
-        <Text
-          style={[
-            styles.title,
-            {
-              color: theme === "dark" ? colors.white : colors.octodenaryText,
-            },
-          ]}
-          numberOfLines={2}
-        >
-          {item.title}
-        </Text>
+        <View style={[styles.imageContainer]}>
+          <Image
+            source={item.image}
+            style={styles.image}
+            width={100}
+            height={100}
+          />
+        </View>
+      </View>
+      <View style={[styles.cardBottomSection]}>
         <Text
           style={[
             styles.time,
@@ -122,8 +140,8 @@ const SavedArticles = () => {
         >
           {item.time}
         </Text>
+        {theme == "light" ? <ViewMoreIcon /> : <ViewMoreIconWhite />}
       </View>
-      <Image source={item.image} style={styles.image} />
     </TouchableOpacity>
   );
 
@@ -131,11 +149,12 @@ const SavedArticles = () => {
     <SafeAreaView style={[globalStyles.pageContainerWithBackground(theme)]}>
       <View style={styles.headerContainer}>
         <View style={styles.arrowSavedContainer}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Profile")}
-          >
-            {theme === "dark" ? <BackArrowWhite /> : <BackArrow />}
-          </TouchableOpacity>
+          <Header
+            onBackClick={() => {
+              navigation.navigate("Profile");
+            }}
+            showThemeIcon={true}
+          />
           <Text
             style={[
               styles.header,
@@ -191,18 +210,17 @@ export default SavedArticles;
 
 const styles = StyleSheet.create({
   headerContainer: {
-    flexDirection: "column", // stack vertically
-    alignItems: "flex-start", // align everything to the left
+    flexDirection: "column",
+    alignItems: "flex-start",
     marginTop: 30,
-    marginBottom: 20,
+    width: "100%",
   },
 
   header: {
     fontSize: 32,
     fontFamily: fontFamily.Inter700,
-    gap: 16,
   },
-  arrowSavedContainer: { gap: 16 },
+  arrowSavedContainer: { gap: 16, width: "100%" },
   backButton: {},
   sourceContainer: {
     flexDirection: "row",
@@ -221,34 +239,48 @@ const styles = StyleSheet.create({
   },
 
   card: {
+    gap: 16,
+  },
+  savedArticleDetails: {
     flexDirection: "row",
-    alignItems: "flex-start",
-    paddingVertical: 12,
-    gap: 24,
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 16,
   },
-
-  textContent: {
-    flex: 1,
-    marginRight: 10,
-  },
-  source: {
-    fontSize: 13,
-    color: "#888",
-    marginBottom: 2,
-  },
+  detailsContainer: { gap: 16, width: "65%" },
+  imageContainer: {},
   title: {
-    fontSize: 15,
-    fontWeight: "600",
-    color: "#111",
+    fontSize: 18,
+    fontFamily: fontFamily.Inter700,
+    flexShrink: 1,
   },
   time: {
     fontSize: 12,
-    color: "#aaa",
-    marginTop: 6,
+    fontFamily: fontFamily.Inter400,
   },
   image: {
     width: 70,
     height: 70,
     borderRadius: 6,
+  },
+  authorIconContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  authorTimeContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  authorText: {
+    fontFamily: fontFamily.Inter400,
+    fontSize: 14,
+  },
+  cardBottomSection: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 12,
   },
 });

@@ -110,55 +110,36 @@ const HeadlineDetailsScreen = () => {
   const [isFocused, setIsFocused] = useState(false);
   const token = AsyncStorage.getItem("authToken");
   const news = {
-    authors: ["BusinessStandard"],
-    categories: ["Stocks"],
+    authors: ["LiveMint"],
+    categories: ["Mutual Funds"],
     content: "",
     date_extracted: false,
     engagement: { comments: 0, likes: 0 },
-    id: "68877337a8ec271fcc4f961f",
-    impact_label: "Very High Impact",
-    impact_score: 8.5,
-    processed_by: "gpt",
-    published_at: "2025-07-28T13:20:22.978Z",
+    id: "68944d6c34238d9538791cd2",
+    impact_label: "Exceptional Impact",
+    impact_score: 9.225,
+    published_at: "2025-08-07T06:42:19Z",
     related_stocks: null,
-    sector: "technology",
     sentiment_label: "neutral",
-    sentiment_score: -0.17727272727272728,
-    source: "BusinessStandard",
+    sentiment_score: 0.75,
+    source: "LiveMint",
     summary:
-      "• Tata Consultancy Services (TCS) share price is trading below a key support level• This situation indicates that TCS (Tata Consultancy Services) could drop by another 16%, which may negatively impact investor confidence.   • It's like a long-standing bridge showing cracks; if it collapses, many will be affected.",
-    tag: "bearish",
+      "• SoftBank Group announced a net profit of $2.87 billion for the first quarter. • This positive result was driven by strong performance in its portfolio companies. • This means that investors might see potential growth in SoftBank's stock value.",
     tags: null,
-    time_ago: "1 day ago",
-    title: "TCS (Tata Consultancy Services) Stock Risks Major Decline Ahead",
-    url: "https://www.business-standard.com/markets/news/tcs-stock-on-verge-to-break-this-16-year-old-trend-can-crash-another-16-125072800219_1.html",
-  };
-  // console.log("AccessToken", token);
-  const renderImage = () => {
-    if (typeof imageKey === "string" && imageKey in imageMap) {
-      const ImageComponent = imageMap[imageKey];
-      return (
-        ImageComponent && (
-          <ClippedSVG
-            width={width * 0.89}
-            height={200}
-            radius={16}
-            ImageComponent={ImageComponent}
-          />
-        )
-      );
-    }
-    return null;
+    time_ago: "57 minutes ago",
+    title: "SoftBank Group reports $2.87 billion profit",
+    url: "https://www.livemint.com/companies/company-results/softbank-group-posts-2-87-billion-net-profit-in-first-quarter-11754548939913.html",
   };
   useEffect(() => {
     if (newsId) {
       getNewsByIDAPI(newsId);
       getCommentsAPI(newsId);
-      checkUserLikeNewsStatusAPI(newsId);
+      //checkUserLikeNewsStatusAPI(newsId);
       checkLikeStatusAPI(newsId);
     }
-    getBookmarkAPI();
+    //getBookmarkAPI();
   }, [newsId]);
+  // News By Id
   const getNewsByIDAPI = async (newsId: string) => {
     try {
       const response = await getHighImpactNewsById(newsId);
@@ -184,6 +165,7 @@ const HeadlineDetailsScreen = () => {
       setLoading(false);
     }
   };
+  // All comments
   const getCommentsAPI = async (newsId: string) => {
     console.log("Inside Get Comments=>");
     try {
@@ -202,22 +184,7 @@ const HeadlineDetailsScreen = () => {
       showToast(errorMessage, "danger");
     }
   };
-  const getBookmarkAPI = async () => {
-    try {
-      const response = await getPinnedNews();
-      console.log("BookmarkResponse=>", response.data[0].bookmark_status);
-      // setBookmarked(response.data[0].bookmark_status);
-    } catch (err) {
-      // Narrow / cast to AxiosError
-      const axiosErr = err as AxiosError<{
-        status: string;
-        message: string;
-      }>;
-      const errorMessage =
-        axiosErr.response?.data?.message ?? "Something went wrong";
-      showToast(errorMessage, "danger");
-    }
-  };
+  //News Like-Unlike and Saved Article Status
   const checkLikeStatusAPI = async (newsId: string) => {
     try {
       const response = await checkLikeStatus(newsId);
@@ -235,25 +202,7 @@ const HeadlineDetailsScreen = () => {
       showToast(errorMessage, "danger");
     }
   };
-  const checkUserLikeNewsStatusAPI = async (newsId: string) => {
-    console.log("Inside checkUserLikeNewsStatusAPI=>");
-    try {
-      const response = await checkUserLikeNewsStatus(newsId);
-      console.log("checkUserLikeNewsStatusAPI=>", response.data);
-      // setLiked(response.data.liked);
-      setBookmarked(response.data.is_pinned);
-    } catch (err) {
-      // Narrow / cast to AxiosError
-      const axiosErr = err as AxiosError<{
-        status: string;
-        message: string;
-      }>;
-      const errorMessage =
-        axiosErr.response?.data?.message ?? "Something went wrong";
-      console.log("checkUserLikeNewsStatusAPIError=>", axiosErr.response?.data);
-      showToast(errorMessage, "danger");
-    }
-  };
+  // News Like and Unlike  API
   const handleToggleLike = () => {
     console.log("inside handleToggleLike");
     setLiked((prev) => !prev);
@@ -279,6 +228,7 @@ const HeadlineDetailsScreen = () => {
       showToast(errorMessage, "danger");
     }
   };
+  // Comment Like and Unlike  API
   const handleToggleLikeComment = (commentId: any) => {
     console.log("inside handleToggleLikeComment");
     // setLiked((prev) => !prev);
@@ -312,6 +262,7 @@ const HeadlineDetailsScreen = () => {
       showToast(errorMessage, "danger");
     }
   };
+  // Bookmark or Save Article API
   const handleToggleBookmark = () => {
     console.log("Inside handleToggleBookmark");
     setBookmarked((prev) => {
@@ -364,6 +315,7 @@ const HeadlineDetailsScreen = () => {
       showToast(errorMessage, "danger");
     }
   };
+  // Add Comment API
   const addCommentsAPI = async (newsId: any) => {
     setAddCommentsLoader(true);
     const commentData = {
@@ -388,6 +340,41 @@ const HeadlineDetailsScreen = () => {
       showToast(errorMessage, "danger");
     } finally {
       setAddCommentsLoader(false);
+    }
+  };
+  const getBookmarkAPI = async () => {
+    try {
+      const response = await getPinnedNews();
+      console.log("BookmarkResponse=>", response.data[0].bookmark_status);
+      // setBookmarked(response.data[0].bookmark_status);
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      showToast(errorMessage, "danger");
+    }
+  };
+  const checkUserLikeNewsStatusAPI = async (newsId: string) => {
+    console.log("Inside checkUserLikeNewsStatusAPI=>");
+    try {
+      const response = await checkUserLikeNewsStatus(newsId);
+      console.log("checkUserLikeNewsStatusAPI=>", response.data);
+      // setLiked(response.data.liked);
+      setBookmarked(response.data.is_pinned);
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      console.log("checkUserLikeNewsStatusAPIError=>", axiosErr.response?.data);
+      showToast(errorMessage, "danger");
     }
   };
   const addReactionAPI = async (newsId: any) => {
@@ -428,13 +415,30 @@ const HeadlineDetailsScreen = () => {
       return `${diffInDays}d`;
     }
   };
+  const renderImage = () => {
+    if (typeof imageKey === "string" && imageKey in imageMap) {
+      const ImageComponent = imageMap[imageKey];
+      return (
+        ImageComponent && (
+          <ClippedSVG
+            width={width * 0.89}
+            height={200}
+            radius={16}
+            ImageComponent={ImageComponent}
+          />
+        )
+      );
+    }
+    return null;
+  };
   // if (loading) return <Loader />;
   // if (addCommentsLoader) return <LoaderOverlay visible={true} />;
   // Split by \n
-  const summaryArray = (newsData?.summary ?? "")
-    .split("\n")
-    .map((p) => p.replace(/^•\s*/, "")) // Remove leading • and space if present
-    .filter((p) => p.trim() !== ""); // Remove empty lines
+  // Remove leading/trailing whitespace and split by "•"
+  const summaryArray = (newsData.summary ?? "")
+    .split("•")
+    .map((point) => point.trim())
+    .filter((point) => point.length > 0);
   return (
     <>
       <KeyboardAvoidingView
@@ -449,421 +453,440 @@ const HeadlineDetailsScreen = () => {
             { flex: 0 },
           ]}
         >
-          <View style={styles.headerContainer}>
-            <Header
-              onBackClick={() => {
-                navigation.navigate("Home");
-                console.log("Back to Home");
-              }}
-              liked={liked}
-              setLiked={setLiked}
-              bookmarked={bookmarked}
-              setBookmarked={setBookmarked}
-              onToggleLikeClick={handleToggleLike}
-              shareUrl={newsData.url}
-              onToggleBookmarkClick={handleToggleBookmark}
-            />
-          </View>
-          <View style={styles.headingDetailsContainer}>
-            <View
-              style={{
-                width: "100%",
-                marginTop: 16,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              {/* {renderImage()} */}
-              <ClippedSVG
-                width={width * 0.89}
-                height={200}
-                radius={16}
-                ImageComponent={CurrencyImage2}
-              />
-            </View>
-            <View style={styles.headingContainer}>
-              <View style={styles.detailsHeader}>
-                <View style={styles.tagContainer}>
-                  {newsData.tag == "bearish" ? (
-                    <Tag
-                      label={"Bearish"}
-                      backgroundColor={"#FFE5E5"}
-                      textColor={"#FF5247"}
-                    />
-                  ) : newsData.tag == "bullish" ? (
-                    <Tag
-                      label={"Bullish"}
-                      backgroundColor={"#ECFCE5"}
-                      textColor={"#23C16B"}
-                    />
-                  ) : newsData.tag == "market" ? (
-                    <Tag
-                      label={"Market"}
-                      backgroundColor={"#E7E7FF"}
-                      textColor={"#6B4EFF"}
-                    />
-                  ) : newsData.tag == "neutral" ? (
-                    <Tag
-                      label={"Neutral"}
-                      backgroundColor={"#ECFCE5"}
-                      textColor={"#23C16B"}
-                    />
-                  ) : newsData.tag == "important" ? (
-                    <Tag
-                      label={"Important"}
-                      backgroundColor={"#E7E7FF"}
-                      textColor={"#6B4EFF"}
-                    />
-                  ) : (
-                    ""
-                  )}
-                </View>
-                <View style={styles.profileNameContainer}>
-                  <ImpactLabel
-                    variant={"contained"}
-                    label={newsData.impact_label}
-                    value={newsData.impact_score}
-                    backgroundColor={colors.quindenaryBackground}
-                    textColor={colors.quattuordenaryBackground}
+          {addCommentsLoader ? (
+            <LoaderOverlay visible={true} />
+          ) : (
+            <>
+              <View style={styles.headerContainer}>
+                <Header
+                  onBackClick={() => {
+                    navigation.navigate("Home");
+                    console.log("Back to Home");
+                  }}
+                  liked={liked}
+                  setLiked={setLiked}
+                  bookmarked={bookmarked}
+                  setBookmarked={setBookmarked}
+                  onToggleLikeClick={handleToggleLike}
+                  shareUrl={newsData.url}
+                  onToggleBookmarkClick={handleToggleBookmark}
+                  showActivityIcons={true}
+                />
+              </View>
+              <View style={styles.headingDetailsContainer}>
+                <View
+                  style={{
+                    width: "100%",
+                    marginTop: 16,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {/* {renderImage()} */}
+                  <ClippedSVG
+                    width={width * 0.89}
+                    height={200}
+                    radius={16}
+                    ImageComponent={CurrencyImage2}
                   />
                 </View>
-              </View>
-              <Text
-                style={[
-                  styles.articleDetailsHeading,
-                  {
-                    color:
-                      theme === "dark"
-                        ? colors.darkPrimaryText
-                        : colors.octodenaryText,
-                  },
-                ]}
-              >
-                {newsData.title}
-              </Text>
-            </View>
-            <View style={styles.authorIconContainer}>
-              <NewsAuthorIcon />
-              <View style={styles.authorTimeContainer}>
-                <Text
-                  style={[
-                    styles.authorTimeText,
-                    {
-                      color:
-                        theme === "light"
-                          ? colors.octodenaryText
-                          : colors.white,
-                      fontSize: 16,
-                    },
-                  ]}
-                >
-                  {`${newsData?.authors?.[0] || "--"} ·`}
-                </Text>
-                <Text
-                  style={[
-                    styles.authorTimeText,
-                    {
-                      fontSize: 16,
-                      color:
-                        theme === "dark"
-                          ? colors.darkQuaternaryText
-                          : colors.unvigintaryText,
-                    },
-                  ]}
-                >
-                  {`${newsData.time_ago || "--"}`}
-                </Text>
-              </View>
-            </View>
-            <View style={styles.summaryDetailsConatiner}>
-              <Text
-                style={[
-                  styles.keyTakeStyle,
-                  {
-                    color:
-                      theme == "light" ? colors.octodenaryText : colors.white,
-                  },
-                ]}
-              >
-                Key Takeaways :
-              </Text>
-
-              {summaryArray.map((point, index) => (
-                <View key={index} style={styles.listItem}>
+                <View style={styles.headingContainer}>
+                  <View style={styles.detailsHeader}>
+                    <View style={styles.tagContainer}>
+                      {newsData.tag == "bearish" ? (
+                        <Tag
+                          label={"Bearish"}
+                          backgroundColor={"#FFE5E5"}
+                          textColor={"#FF5247"}
+                        />
+                      ) : newsData.tag == "bullish" ? (
+                        <Tag
+                          label={"Bullish"}
+                          backgroundColor={"#ECFCE5"}
+                          textColor={"#23C16B"}
+                        />
+                      ) : newsData.tag == "market" ? (
+                        <Tag
+                          label={"Market"}
+                          backgroundColor={"#E7E7FF"}
+                          textColor={"#6B4EFF"}
+                        />
+                      ) : newsData.tag == "neutral" ? (
+                        <Tag
+                          label={"Neutral"}
+                          backgroundColor={"#ECFCE5"}
+                          textColor={"#23C16B"}
+                        />
+                      ) : newsData.tag == "important" ? (
+                        <Tag
+                          label={"Important"}
+                          backgroundColor={"#E7E7FF"}
+                          textColor={"#6B4EFF"}
+                        />
+                      ) : (
+                        ""
+                      )}
+                    </View>
+                    <View style={styles.profileNameContainer}>
+                      <ImpactLabel
+                        variant={"contained"}
+                        label={newsData.impact_label}
+                        value={newsData.impact_score}
+                        backgroundColor={colors.quindenaryBackground}
+                        textColor={colors.quattuordenaryBackground}
+                      />
+                    </View>
+                  </View>
                   <Text
                     style={[
-                      styles.listPoints,
+                      styles.articleDetailsHeading,
                       {
                         color:
                           theme === "dark"
                             ? colors.darkPrimaryText
-                            : colors.duovigintaryText,
+                            : colors.octodenaryText,
                       },
                     ]}
                   >
-                    {index + 1}.{/* • */}
-                  </Text>
-                  <Text
-                    style={[
-                      styles.listPoints,
-                      {
-                        color:
-                          theme === "dark"
-                            ? colors.darkPrimaryText
-                            : colors.duovigintaryText,
-                      },
-                    ]}
-                  >
-                    {point}
+                    {newsData.title}
                   </Text>
                 </View>
-              ))}
-            </View>
-            <Divider
-              style={[
-                styles.dividerStyle,
-                {
-                  backgroundColor:
-                    theme == "light"
-                      ? colors.nonaryBorder
-                      : colors.darkUndenaryBackground,
-                },
-              ]}
-            />
-          </View>
-          <View style={styles.relatedDiscussionsContainer}>
-            <View style={styles.relatedDiscussionsHeader}>
-              <Text
-                style={[
-                  styles.relatedDiscussionsHeading,
-                  {
-                    color:
-                      theme === "dark"
-                        ? colors.darkPrimaryText
-                        : colors.octodenaryText,
-                  },
-                ]}
-              >
-                Related Discussions
-              </Text>
-              {commentsData.length > 0 && (
-                <Text
-                  style={[
-                    styles.commentCount,
-                    {
-                      color:
-                        theme === "dark"
-                          ? colors.darkPrimaryText
-                          : colors.octodenaryText,
-                    },
-                  ]}
-                >
-                  {`${
-                    commentsData.length < 2
-                      ? `${commentsData.length} Comment`
-                      : `${commentsData.length} Comments`
-                  }`}
-                </Text>
-              )}
-            </View>
-            <View style={styles.relatedDiscussionsDetails}>
-              {(commentsData || []).map((comment: any) => (
-                <View key={comment.id} style={styles.relatedDiscussionsArticle}>
-                  {
-                    //@ts-ignore
-                    getProfileIcon("male")
-                  }
-                  <View style={{ flex: 1 }}>
-                    <View style={styles.relatedDiscussionsArticle}>
+                <View style={styles.authorIconContainer}>
+                  <NewsAuthorIcon />
+                  <View style={styles.authorTimeContainer}>
+                    <Text
+                      style={[
+                        styles.authorTimeText,
+                        {
+                          color:
+                            theme === "light"
+                              ? colors.octodenaryText
+                              : colors.white,
+                          fontSize: 16,
+                        },
+                      ]}
+                    >
+                      {`${newsData?.authors?.[0] || "--"} ·`}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.authorTimeText,
+                        {
+                          fontSize: 16,
+                          color:
+                            theme === "dark"
+                              ? colors.darkQuaternaryText
+                              : colors.unvigintaryText,
+                        },
+                      ]}
+                    >
+                      {`${newsData.time_ago || "--"}`}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.summaryDetailsConatiner}>
+                  <Text
+                    style={[
+                      styles.keyTakeStyle,
+                      {
+                        color:
+                          theme == "light"
+                            ? colors.octodenaryText
+                            : colors.white,
+                      },
+                    ]}
+                  >
+                    Key Takeaways :
+                  </Text>
+
+                  {summaryArray.map((point: any, index: number) => (
+                    <View key={index} style={styles.listItem}>
                       <Text
                         style={[
-                          styles.authorName,
+                          styles.listPoints,
                           {
                             color:
                               theme === "dark"
                                 ? colors.darkPrimaryText
-                                : colors.octodenaryText,
+                                : colors.duovigintaryText,
                           },
                         ]}
                       >
-                        {comment.name || "--"}
+                        {index + 1}.{/* • */}
                       </Text>
                       <Text
                         style={[
-                          styles.articleTime,
+                          styles.listPoints,
                           {
                             color:
                               theme === "dark"
-                                ? colors.darkSenaryText
-                                : colors.unvigintaryText,
+                                ? colors.darkPrimaryText
+                                : colors.duovigintaryText,
                           },
                         ]}
                       >
-                        {getShortTimeAgo(comment.commented_at)}
+                        {point}
                       </Text>
                     </View>
+                  ))}
+                </View>
+                <Divider
+                  style={[
+                    styles.dividerStyle,
+                    {
+                      backgroundColor:
+                        theme == "light"
+                          ? colors.nonaryBorder
+                          : colors.darkUndenaryBackground,
+                    },
+                  ]}
+                />
+              </View>
+              <View style={styles.relatedDiscussionsContainer}>
+                <View style={styles.relatedDiscussionsHeader}>
+                  <Text
+                    style={[
+                      styles.relatedDiscussionsHeading,
+                      {
+                        color:
+                          theme === "dark"
+                            ? colors.darkPrimaryText
+                            : colors.octodenaryText,
+                      },
+                    ]}
+                  >
+                    Related Discussions
+                  </Text>
+                  {commentsData.length > 0 && (
                     <Text
                       style={[
-                        styles.relatedArticleText,
+                        styles.commentCount,
                         {
                           color:
                             theme === "dark"
-                              ? colors.white
+                              ? colors.darkPrimaryText
                               : colors.octodenaryText,
                         },
                       ]}
                     >
-                      {comment.comment}
+                      {`${
+                        commentsData.length < 2
+                          ? `${commentsData.length} Comment`
+                          : `${commentsData.length} Comments`
+                      }`}
                     </Text>
-                    <View style={styles.likeUnlikeContainer}>
-                      <View style={styles.iconCountContainer}>
-                        <TouchableOpacity
-                          onPress={() => {
-                            handleToggleLikeComment(comment.id);
-                          }}
-                        >
-                          {!likedComments[comment.id] ? (
-                            <HeartCommentIcon width={20} height={20} />
-                          ) : (
-                            <HeartCommentIconFilled width={20} height={20} />
-                          )}
-                        </TouchableOpacity>
+                  )}
+                </View>
+                <View style={styles.relatedDiscussionsDetails}>
+                  {(commentsData || []).map((comment: any) => (
+                    <View
+                      key={comment.id}
+                      style={styles.relatedDiscussionsArticle}
+                    >
+                      {
+                        //@ts-ignore
+                        getProfileIcon("male")
+                      }
+                      <View style={{ flex: 1 }}>
+                        <View style={styles.relatedDiscussionsArticle}>
+                          <Text
+                            style={[
+                              styles.authorName,
+                              {
+                                color:
+                                  theme === "dark"
+                                    ? colors.darkPrimaryText
+                                    : colors.octodenaryText,
+                              },
+                            ]}
+                          >
+                            {comment.name || "--"}
+                          </Text>
+                          <Text
+                            style={[
+                              styles.articleTime,
+                              {
+                                color:
+                                  theme === "dark"
+                                    ? colors.darkSenaryText
+                                    : colors.unvigintaryText,
+                              },
+                            ]}
+                          >
+                            {getShortTimeAgo(comment.commented_at)}
+                          </Text>
+                        </View>
                         <Text
                           style={[
-                            styles.articleTime,
+                            styles.relatedArticleText,
                             {
                               color:
                                 theme === "dark"
-                                  ? colors.darkSenaryText
-                                  : colors.unvigintaryText,
+                                  ? colors.white
+                                  : colors.octodenaryText,
                             },
                           ]}
                         >
-                          {comment.likes || 0}
+                          {comment.comment}
                         </Text>
-                        <Text
-                          style={[
-                            styles.articleTime,
-                            {
-                              color:
-                                theme === "dark"
-                                  ? colors.darkSenaryText
-                                  : colors.unvigintaryText,
-                            },
-                          ]}
-                        >
-                          Reply
-                        </Text>
+                        <View style={styles.likeUnlikeContainer}>
+                          <View style={styles.iconCountContainer}>
+                            <TouchableOpacity
+                              onPress={() => {
+                                handleToggleLikeComment(comment.id);
+                              }}
+                            >
+                              {!likedComments[comment.id] ? (
+                                <HeartCommentIcon width={20} height={20} />
+                              ) : (
+                                <HeartCommentIconFilled
+                                  width={20}
+                                  height={20}
+                                />
+                              )}
+                            </TouchableOpacity>
+                            <Text
+                              style={[
+                                styles.articleTime,
+                                {
+                                  color:
+                                    theme === "dark"
+                                      ? colors.darkSenaryText
+                                      : colors.unvigintaryText,
+                                },
+                              ]}
+                            >
+                              {comment.likes || 0}
+                            </Text>
+                            <Text
+                              style={[
+                                styles.articleTime,
+                                {
+                                  color:
+                                    theme === "dark"
+                                      ? colors.darkSenaryText
+                                      : colors.unvigintaryText,
+                                },
+                              ]}
+                            >
+                              Reply
+                            </Text>
+                          </View>
+                        </View>
                       </View>
                     </View>
-                  </View>
+                  ))}
                 </View>
-              ))}
-            </View>
-          </View>
-          {commentsData.length > 3 && (
-            <View style={styles.viewCommentsContainer}>
-              <Text style={styles.viewCommentsText}>View All Comments</Text>
-            </View>
-          )}
-          <View
-            style={[
-              styles.commentContainer,
-              { alignItems: isFocused ? "flex-end" : "center" },
-            ]}
-          >
-            {
-              //@ts-ignore
-              getProfileIcon("male")
-            }
-            <View
-              style={[
-                styles.commentWrapper,
-                {
-                  borderEndColor:
-                    theme === "dark"
-                      ? colors.duovigintaryText
-                      : colors.darkQuinaryText,
-                },
-                isFocused && {
-                  flexDirection: "column",
-                  alignItems: "stretch",
-                  height: "auto",
-                  minHeight: 100,
-                  //paddingBottom: 8,
-                },
-              ]}
-            >
-              <TextInput
+              </View>
+              {commentsData.length > 3 && (
+                <View style={styles.viewCommentsContainer}>
+                  <Text style={styles.viewCommentsText}>View All Comments</Text>
+                </View>
+              )}
+              <View
                 style={[
-                  styles.commentInput,
-                  {
-                    backgroundColor:
-                      theme === "dark"
-                        ? colors.darkPrimaryBackground
-                        : colors.primaryBackground,
-
-                    color:
-                      theme === "dark"
-                        ? colors.darkPrimaryText
-                        : colors.undenaryBackground,
-
-                    borderColor:
-                      theme === "dark"
-                        ? colors.quaternaryBorderColor
-                        : colors.tertiaryBorderColor,
-                    height: isFocused ? 100 : 48, // Expand height when focused
-                    // width: isFocused ? "100%" : "80%", // Expand width when focused
-                    textAlignVertical: "top",
-                  },
+                  styles.commentContainer,
+                  { alignItems: isFocused ? "flex-end" : "center" },
                 ]}
-                placeholder="Add a comment..."
-                placeholderTextColor={
-                  theme == "dark"
-                    ? colors.darkSenaryText
-                    : colors.unvigintaryText
-                }
-                multiline={isFocused}
-                keyboardType="default"
-                value={comment}
-                onChangeText={(text) => {
-                  setComment(text);
-                }}
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => {
-                  if (comment.trim() === "") {
-                    setIsFocused(false);
-                  }
-                }}
-              />
-              <TouchableOpacity
-                onPress={() => {
-                  addCommentsAPI(newsId);
-                  Keyboard.dismiss(); // dismiss keyboard
-                  setIsFocused(false); // manually collapse the textarea
-                }}
-                disabled={comment.trim() === ""}
-                style={{
-                  opacity: comment.trim() === "" ? 0.4 : 1,
-                }}
               >
+                {
+                  //@ts-ignore
+                  getProfileIcon("male")
+                }
                 <View
                   style={[
-                    styles.commentButton,
+                    styles.commentWrapper,
                     {
-                      alignSelf: isFocused ? "flex-end" : "center",
-                      backgroundColor:
+                      borderEndColor:
                         theme === "dark"
-                          ? colors.duodenaryBackground
-                          : colors.septendenaryBackground,
+                          ? colors.duovigintaryText
+                          : colors.darkQuinaryText,
+                    },
+                    isFocused && {
+                      flexDirection: "column",
+                      alignItems: "stretch",
+                      height: "auto",
+                      minHeight: 100,
+                      //paddingBottom: 8,
                     },
                   ]}
                 >
-                  {theme === "light" ? <CommentIcon /> : <CommentIconBlack />}
+                  <TextInput
+                    style={[
+                      styles.commentInput,
+                      {
+                        backgroundColor:
+                          theme === "dark"
+                            ? colors.darkPrimaryBackground
+                            : colors.primaryBackground,
+
+                        color:
+                          theme === "dark"
+                            ? colors.darkPrimaryText
+                            : colors.undenaryBackground,
+
+                        borderColor:
+                          theme === "dark"
+                            ? colors.quaternaryBorderColor
+                            : colors.tertiaryBorderColor,
+                        height: isFocused ? 100 : 48, // Expand height when focused
+                        // width: isFocused ? "100%" : "80%", // Expand width when focused
+                        textAlignVertical: "top",
+                      },
+                    ]}
+                    placeholder="Add a comment..."
+                    placeholderTextColor={
+                      theme == "dark"
+                        ? colors.darkSenaryText
+                        : colors.unvigintaryText
+                    }
+                    multiline={isFocused}
+                    keyboardType="default"
+                    value={comment}
+                    onChangeText={(text) => {
+                      setComment(text);
+                    }}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => {
+                      if (comment.trim() === "") {
+                        setIsFocused(false);
+                      }
+                    }}
+                  />
+                  <TouchableOpacity
+                    onPress={() => {
+                      addCommentsAPI(newsId);
+                      Keyboard.dismiss(); // dismiss keyboard
+                      setIsFocused(false); // manually collapse the textarea
+                    }}
+                    disabled={comment.trim() === ""}
+                    style={{
+                      opacity: comment.trim() === "" ? 0.4 : 1,
+                    }}
+                  >
+                    <View
+                      style={[
+                        styles.commentButton,
+                        {
+                          alignSelf: isFocused ? "flex-end" : "center",
+                          backgroundColor:
+                            theme === "dark"
+                              ? colors.duodenaryBackground
+                              : colors.septendenaryBackground,
+                        },
+                      ]}
+                    >
+                      {theme === "light" ? (
+                        <CommentIcon />
+                      ) : (
+                        <CommentIconBlack />
+                      )}
+                    </View>
+                  </TouchableOpacity>
                 </View>
-              </TouchableOpacity>
-            </View>
-          </View>
+              </View>
+            </>
+          )}
         </ScrollView>
       </KeyboardAvoidingView>
     </>

@@ -2,7 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "../../screens/homePage/homeScreen/homeScreen";
 import HeadlineDetailsScreen from "../../screens/homePage/headlineDetailsScreen/headlineDetailsScreen";
 import { HomeStackParamList, RootStackParamList } from "../../types/navigation";
-import ProfileScreen from "../../screens/ProfilePage/profileScreen";
+import ProfileScreen from "../../screens/profileScreen/profileScreen";
 import SavedArticles from "../../screens/savedArticle/savedArticle";
 import { ProfileStackParamList } from "../../types/navigation";
 

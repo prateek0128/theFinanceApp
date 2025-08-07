@@ -33,6 +33,7 @@ import { colors } from "../../assets/styles/colors";
 import globalStyles from "../../assets/styles/globalStyles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../../context/loginAuthContext";
+import Header from "../../components/header/header";
 type OptionItem = {
   label: string;
   darkIcon: React.ReactNode;
@@ -43,8 +44,7 @@ type OptionItem = {
 const ProfileScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { theme } = useContext(ThemeContext);
-  const { user, isLoggedIn, login, logout, isLoading } =
-    useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
   const userName = AsyncStorage.getItem("userName") || "--";
   const userEmail = AsyncStorage.getItem("userEmail") || "--";
   const handleLogout = () => {
@@ -72,7 +72,6 @@ const ProfileScreen = () => {
       onPress: () => navigation.navigate("SavedArticles"),
     },
   ];
-
   const moreOptions: OptionItem[] = [
     {
       label: "Help",
@@ -87,7 +86,6 @@ const ProfileScreen = () => {
       onPress: () => {},
     },
   ];
-
   const renderOption = ({
     label,
     darkIcon,
@@ -136,13 +134,14 @@ const ProfileScreen = () => {
   return (
     <SafeAreaView style={[globalStyles.pageContainerWithBackground(theme)]}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.navigate("Home")}
-        >
-          {theme === "dark" ? <BackArrowWhite /> : <BackArrow />}
-        </TouchableOpacity>
-
+        <View style={styles.headerContainer}>
+          <Header
+            onBackClick={() => {
+              navigation.navigate("Home");
+            }}
+            showThemeIcon={false}
+          />
+        </View>
         <View
           style={[
             styles.profileContainer,
@@ -158,32 +157,34 @@ const ProfileScreen = () => {
             source={require("../../assets/Images/Prateek.jpg")}
             style={styles.profileImage}
           />
-          <Text
-            style={[
-              styles.userName,
-              {
-                color:
-                  theme === "dark"
-                    ? colors.darkPrimaryText
-                    : colors.octodenaryText,
-              },
-            ]}
-          >
-            {userName || "--"}
-          </Text>
-          <Text
-            style={[
-              styles.userEmail,
-              {
-                color:
-                  theme === "light"
-                    ? colors.novemdenaryText
-                    : colors.darkSenaryText,
-              },
-            ]}
-          >
-            {userEmail || "--"}
-          </Text>
+          <View style={[styles.userDetailsContainer]}>
+            <Text
+              style={[
+                styles.userName,
+                {
+                  color:
+                    theme === "dark"
+                      ? colors.darkPrimaryText
+                      : colors.octodenaryText,
+                },
+              ]}
+            >
+              {userName || "--"}
+            </Text>
+            <Text
+              style={[
+                styles.userEmail,
+                {
+                  color:
+                    theme === "light"
+                      ? colors.novemdenaryText
+                      : colors.darkSenaryText,
+                },
+              ]}
+            >
+              {userEmail || "--"}
+            </Text>
+          </View>
         </View>
         <TouchableOpacity
           style={[
@@ -194,7 +195,7 @@ const ProfileScreen = () => {
             },
           ]}
         >
-          <Text style={styles.premiumText}>Premium Membership</Text>
+          <Text style={[styles.premiumText]}>Premium Membership</Text>
           <Text
             style={[
               styles.premiumSubText,
@@ -236,22 +237,22 @@ const ProfileScreen = () => {
 export default ProfileScreen;
 
 const styles = StyleSheet.create({
-  backButton: {
+  headerContainer: {
     marginTop: 30,
   },
   profileContainer: {
     alignItems: "center",
     marginVertical: 20,
+    gap: 16,
   },
   profileImage: {
     width: 100,
     height: 100,
-    borderRadius: 45,
-    marginBottom: 5,
+    borderRadius: 9999,
   },
+  userDetailsContainer: { gap: 10, alignItems: "center" },
   userName: {
     fontSize: 18,
-    marginTop: 10,
     fontFamily: fontFamily.Cabinet700,
   },
   userEmail: {
@@ -259,19 +260,19 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.Inter400,
   },
   premiumButton: {
-    borderRadius: 10,
-    marginBottom: 20,
+    borderRadius: 12,
+    marginBottom: 24,
     paddingVertical: 16,
     paddingHorizontal: 20,
+    gap: 12,
   },
   premiumText: {
-    color: "#fff",
-    fontSize: 14,
+    color: colors.white,
+    fontSize: 18,
     fontFamily: fontFamily.Inter700,
   },
   premiumSubText: {
     fontSize: 14,
-    marginTop: 2,
     fontFamily: fontFamily.Inter400,
   },
   optionRow: {
@@ -302,8 +303,6 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     alignItems: "center",
-    marginTop: 10,
-    marginBottom: 10,
   },
   logoutText: {
     fontFamily: fontFamily.Inter400,
