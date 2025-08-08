@@ -9,28 +9,25 @@ import {
   StatusBar,
   KeyboardAvoidingView,
   Platform,
+  Keyboard,
 } from "react-native";
 import { colors } from "../../../assets/styles/colors";
 import Loader from "../../../components/Loader/loader";
 import { ThemeContext } from "../../../context/themeContext";
 import { getHighImpactNewsById, getNewsFeed } from "../../../apiServices/news";
 import LoaderOverlay from "../../../components/LoadOverlay/loadOverlayTransparent";
-import MarketTag from "../../../assets/icons/components/Market/marketTag";
 import {
-  CurrencyImage,
-  GraphImage,
-  IncrementArrow,
-  ProfileIcon,
-} from "../../../assets/icons/components/homepage";
-import {
-  GraphImage2,
   FemaleProfileIcon,
   MaleProfileIcon,
   LikeCommentIcon,
+  LikeCommentIconFilled,
   UnlikeCommentIcon,
+  UnlikeCommentIconFilled,
   CommentIcon,
   CommentIconBlack,
   CurrencyImage2,
+  HeartCommentIcon,
+  HeartCommentIconFilled,
 } from "../../../assets/icons/components/headlineDetailsView";
 import HeadlineDetailCard from "../../../components/headlineDetailedCard/headlineDetailedCard";
 import Tag from "../../../components/tag/tag";
@@ -39,9 +36,8 @@ import {
   useNavigation,
   NavigationProp,
   RouteProp,
+  useRoute,
 } from "@react-navigation/native";
-import { useFocusEffect, useRoute } from "@react-navigation/native";
-import { useCallback } from "react";
 import fontFamily from "../../../assets/styles/fontFamily";
 import { TextInput } from "react-native-gesture-handler";
 import Header from "../../../components/header/header";
@@ -53,6 +49,7 @@ import {
   checkUserLikeNewsStatus,
   getComments,
   toggleLike,
+  toggleLikeComments,
 } from "../../../apiServices/newsEngagement";
 import { getNewsByID } from "../../../apiServices/news";
 import dayjs from "dayjs";
@@ -67,6 +64,8 @@ import showToast from "../../../utilis/showToast";
 import { AxiosError } from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import globalStyles from "../../../assets/styles/globalStyles";
+import { NewsAuthorIcon } from "../../../assets/icons/components/homepage";
+import { Divider } from "react-native-paper";
 
 dayjs.extend(relativeTime);
 const { width, height } = Dimensions.get("window");
@@ -80,7 +79,6 @@ const imageMap: Record<
   string,
   React.ComponentType<{ width?: number; height?: number }>
 > = {
-  graph: GraphImage2,
   currency: CurrencyImage2,
 };
 interface NewsData {
@@ -90,76 +88,48 @@ interface NewsData {
   summary?: string;
   url?: string;
   tag?: string;
+  authors?: string;
+  time_ago?: string;
 }
 const HeadlineDetailsScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const route = useRoute<HeadlineDetailsRouteProp>();
-  const {
-    newsId,
-    title,
-    author,
-    time,
-    impactLabel,
-    impactScore,
-    points,
-    discussions,
-    imageKey,
-  } = route.params || {};
-  const [market, setMarket] = useState("");
-  const [bearish, setBearish] = useState("");
+  const { newsId, imageKey } = route.params || {};
+  console.log("NewsId=>", newsId);
   const [comment, setComment] = useState("");
   const { theme, toggleTheme } = useContext(ThemeContext);
-  const [commentsData, setCommentsData] = useState("");
+  const [commentsData, setCommentsData] = useState([]);
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
   const [newsData, setNewsData] = useState<NewsData>({});
-  // const [allNewsData, setAllNewsData] = useState<NewsItem[]>([]);
+  const [likedComments, setLikedComments] = useState<Record<number, boolean>>(
+    {}
+  );
   const [loading, setLoading] = useState<boolean>(true);
   const [addCommentsLoader, setAddCommentsLoader] = useState<boolean>(false);
+  const [isFocused, setIsFocused] = useState(false);
   const token = AsyncStorage.getItem("authToken");
-  // console.log("AccessToken", token);
-  const renderImage = () => {
-    if (typeof imageKey === "string" && imageKey in imageMap) {
-      const ImageComponent = imageMap[imageKey];
-      return (
-        ImageComponent && (
-          <ClippedSVG
-            width={width * 0.89}
-            height={200}
-            radius={16}
-            ImageComponent={ImageComponent}
-          />
-        )
-      );
-    }
-    return null;
+  const news = {
+    authors: ["LiveMint"],
+    categories: ["Mutual Funds"],
+    content: "",
+    date_extracted: false,
+    engagement: { comments: 0, likes: 0 },
+    id: "68944d6c34238d9538791cd2",
+    impact_label: "Exceptional Impact",
+    impact_score: 9.225,
+    published_at: "2025-08-07T06:42:19Z",
+    related_stocks: null,
+    sentiment_label: "neutral",
+    sentiment_score: 0.75,
+    source: "LiveMint",
+    summary:
+      "• SoftBank Group announced a net profit of $2.87 billion for the first quarter. • This positive result was driven by strong performance in its portfolio companies. • This means that investors might see potential growth in SoftBank's stock value.",
+    tags: null,
+    time_ago: "57 minutes ago",
+    title: "SoftBank Group reports $2.87 billion profit",
+    url: "https://www.livemint.com/companies/company-results/softbank-group-posts-2-87-billion-net-profit-in-first-quarter-11754548939913.html",
   };
-  const bookmarkResponse = [
-    {
-      bookmark_status: "pin",
-      news: {
-        authors: [Array],
-        categories: [Array],
-        date_extracted: false,
-        engagement: [Object],
-        id: "68763b40cf5ed850865d166e",
-        impact_label: "High Impact",
-        impact_score: 7,
-        published_at: "2025-07-16T12:22:09.214Z",
-        reaction_stats: [Object],
-        related_stocks: null,
-        sentiment_score: -0.018181818181818146,
-        source: "EconomicTimes",
-        summary:
-          "• Ola Electric shares rose over 9% despite reporting a loss of ₹428 crore in the first quarter.• This indicates that investors are optimistic about the company's operational improvements and potential for future profitability.• It's like a sports team that loses a game but shows signs of better teamwork and strategy, making fans hopeful for the next match.",
-        tag: "bullish",
-        tags: null,
-        time_ago: "16 hours ago",
-        title: "Ola Electric Shares Surge Despite Loss",
-        url: "https://m.economictimes.com/markets/stocks/news/ola-electric-shares-surge-over-9-despite-posting-rs-428-crore-loss-in-q1-heres-why/articleshow/122431143.cms",
-      },
-    },
-  ];
   useEffect(() => {
     if (newsId) {
       getNewsByIDAPI(newsId);
@@ -167,8 +137,9 @@ const HeadlineDetailsScreen = () => {
       //checkUserLikeNewsStatusAPI(newsId);
       checkLikeStatusAPI(newsId);
     }
-    getBookmarkAPI();
+    //getBookmarkAPI();
   }, [newsId]);
+  // News By Id
   const getNewsByIDAPI = async (newsId: string) => {
     try {
       const response = await getHighImpactNewsById(newsId);
@@ -177,22 +148,30 @@ const HeadlineDetailsScreen = () => {
     } catch (err) {
       // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
-        status: string;
-        message: string;
+        status?: string;
+        message?: string;
       }>;
+      const errorData = axiosErr?.response?.data;
       const errorMessage =
-        axiosErr.response?.data?.message ?? "Something went wrong";
+        typeof errorData === "object" &&
+        errorData !== null &&
+        "message" in errorData
+          ? (errorData as { message?: string }).message ||
+            "Something went wrong"
+          : "Something went wrong";
+      console.log("NewsByIdErrorMessage", axiosErr.response?.data);
       showToast(errorMessage, "danger");
     } finally {
       setLoading(false);
     }
   };
+  // All comments
   const getCommentsAPI = async (newsId: string) => {
     console.log("Inside Get Comments=>");
     try {
       const response = await getComments(newsId);
-      console.log("Comments=>", response.data);
-      setCommentsData(response.data);
+      console.log("CommentsResponse=>", response.data.data);
+      setCommentsData(response.data.data.comments);
     } catch (err) {
       // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
@@ -205,22 +184,7 @@ const HeadlineDetailsScreen = () => {
       showToast(errorMessage, "danger");
     }
   };
-  const getBookmarkAPI = async () => {
-    try {
-      const response = await getPinnedNews();
-      console.log("BookmarkResponse=>", response.data[0].bookmark_status);
-      // setBookmarked(response.data[0].bookmark_status);
-    } catch (err) {
-      // Narrow / cast to AxiosError
-      const axiosErr = err as AxiosError<{
-        status: string;
-        message: string;
-      }>;
-      const errorMessage =
-        axiosErr.response?.data?.message ?? "Something went wrong";
-      showToast(errorMessage, "danger");
-    }
-  };
+  //News Like-Unlike and Saved Article Status
   const checkLikeStatusAPI = async (newsId: string) => {
     try {
       const response = await checkLikeStatus(newsId);
@@ -238,28 +202,11 @@ const HeadlineDetailsScreen = () => {
       showToast(errorMessage, "danger");
     }
   };
-  const checkUserLikeNewsStatusAPI = async (newsId: string) => {
-    console.log("Inside checkUserLikeNewsStatusAPI=>");
-    try {
-      const response = await checkUserLikeNewsStatus(newsId);
-      console.log("checkUserLikeNewsStatusAPI=>", response.data);
-      // setLiked(response.data.liked);
-      setBookmarked(response.data.is_pinned);
-    } catch (err) {
-      // Narrow / cast to AxiosError
-      const axiosErr = err as AxiosError<{
-        status: string;
-        message: string;
-      }>;
-      const errorMessage =
-        axiosErr.response?.data?.message ?? "Something went wrong";
-      console.log("checkUserLikeNewsStatusAPIError=>", axiosErr.response?.data);
-      showToast(errorMessage, "danger");
-    }
-  };
+  // News Like and Unlike  API
   const handleToggleLike = () => {
     console.log("inside handleToggleLike");
     setLiked((prev) => !prev);
+
     if (newsId) {
       toggleLikeAPI(newsId);
     }
@@ -277,21 +224,31 @@ const HeadlineDetailsScreen = () => {
       }>;
       const errorMessage =
         axiosErr.response?.data?.message ?? "Something went wrong";
-      console.log("Toggle Like ErrorMessage", axiosErr.response);
+      console.log("Toggle Like ErrorMessage", axiosErr.response?.data);
       showToast(errorMessage, "danger");
     }
   };
-  const handleToggleLikeComment = () => {
+  // Comment Like and Unlike  API
+  const handleToggleLikeComment = (commentId: any) => {
     console.log("inside handleToggleLikeComment");
-    setLiked((prev) => !prev);
-    if (newsId) {
-      toggleLikeAPIComment(newsId);
+    // setLiked((prev) => !prev);
+    // Update state
+    if (commentId) {
+      toggleLikeCommentAPI(commentId);
     }
   };
-  const toggleLikeAPIComment = async (newsId: any) => {
+  const toggleLikeCommentAPI = async (commentId: any, isLiked?: any) => {
+    const likeCommentData = { is_liked: isLiked };
     try {
-      const response = await toggleLike(newsId);
-      console.log("Toggle Like Comment=>", response.data);
+      const response = await toggleLikeComments(commentId);
+      const commentData = response.data.data;
+      console.log("Toggle Like Comment=>", commentData);
+      setLikedComments((prev) => ({
+        ...prev,
+        [commentId]: commentData.user_has_liked,
+      }));
+      //setLikeComment(commentData.user_has_liked);
+      // setUnlikeComment(commentData.user_has_liked);
       showToast(response.data.message, "success");
     } catch (err) {
       // Narrow / cast to AxiosError
@@ -305,6 +262,7 @@ const HeadlineDetailsScreen = () => {
       showToast(errorMessage, "danger");
     }
   };
+  // Bookmark or Save Article API
   const handleToggleBookmark = () => {
     console.log("Inside handleToggleBookmark");
     setBookmarked((prev) => {
@@ -357,6 +315,7 @@ const HeadlineDetailsScreen = () => {
       showToast(errorMessage, "danger");
     }
   };
+  // Add Comment API
   const addCommentsAPI = async (newsId: any) => {
     setAddCommentsLoader(true);
     const commentData = {
@@ -377,10 +336,45 @@ const HeadlineDetailsScreen = () => {
       }>;
       const errorMessage =
         axiosErr.response?.data?.message ?? "Something went wrong";
-      console.log("AddCommentErrorMessage", axiosErr.response);
+      console.log("AddCommentErrorMessage", axiosErr.response?.data);
       showToast(errorMessage, "danger");
     } finally {
       setAddCommentsLoader(false);
+    }
+  };
+  const getBookmarkAPI = async () => {
+    try {
+      const response = await getPinnedNews();
+      console.log("BookmarkResponse=>", response.data[0].bookmark_status);
+      // setBookmarked(response.data[0].bookmark_status);
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      showToast(errorMessage, "danger");
+    }
+  };
+  const checkUserLikeNewsStatusAPI = async (newsId: string) => {
+    console.log("Inside checkUserLikeNewsStatusAPI=>");
+    try {
+      const response = await checkUserLikeNewsStatus(newsId);
+      console.log("checkUserLikeNewsStatusAPI=>", response.data);
+      // setLiked(response.data.liked);
+      setBookmarked(response.data.is_pinned);
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      console.log("checkUserLikeNewsStatusAPIError=>", axiosErr.response?.data);
+      showToast(errorMessage, "danger");
     }
   };
   const addReactionAPI = async (newsId: any) => {
@@ -421,274 +415,480 @@ const HeadlineDetailsScreen = () => {
       return `${diffInDays}d`;
     }
   };
+  const renderImage = () => {
+    if (typeof imageKey === "string" && imageKey in imageMap) {
+      const ImageComponent = imageMap[imageKey];
+      return (
+        ImageComponent && (
+          <ClippedSVG
+            width={width * 0.89}
+            height={200}
+            radius={16}
+            ImageComponent={ImageComponent}
+          />
+        )
+      );
+    }
+    return null;
+  };
   // if (loading) return <Loader />;
   // if (addCommentsLoader) return <LoaderOverlay visible={true} />;
   // Split by \n
-  const summaryArray = (newsData?.summary ?? "")
-    .split("\n")
-    .map((p) => p.replace(/^•\s*/, "")) // Remove leading • and space if present
-    .filter((p) => p.trim() !== ""); // Remove empty lines
+  // Remove leading/trailing whitespace and split by "•"
+  const summaryArray = (newsData.summary ?? "")
+    .split("•")
+    .map((point) => point.trim())
+    .filter((point) => point.length > 0);
   return (
     <>
-      <ScrollView
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={[
-          globalStyles.pageContainerWithBackground(theme),
-          { flex: 0 },
-        ]}
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0} // tweak this if needed
       >
-        <View style={styles.headerContainer}>
-          <Header
-            onBackClick={() => navigation.navigate("Home")}
-            liked={liked}
-            setLiked={setLiked}
-            bookmarked={bookmarked}
-            setBookmarked={setBookmarked}
-            onToggleLikeClick={handleToggleLike}
-            shareUrl={newsData.url}
-            onToggleBookmarkClick={handleToggleBookmark}
-          />
-        </View>
-        <View style={styles.headingDetailsContainer}>
-          <View
-            style={{
-              width: "100%",
-              marginTop: 16,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {/* {renderImage()} */}
-            <ClippedSVG
-              width={width * 0.89}
-              height={200}
-              radius={16}
-              ImageComponent={CurrencyImage2}
-            />
-          </View>
-          <View style={styles.headingContainer}>
-            <Text
-              style={[
-                styles.articleDetailsHeading,
-                {
-                  color:
-                    theme === "dark"
-                      ? colors.darkPrimaryText
-                      : colors.primaryText,
-                },
-              ]}
-            >
-              {newsData.title}
-            </Text>
-            <View style={styles.detailsHeader}>
-              <View style={styles.tagContainer}>
-                {newsData.tag == "bearish" ? (
-                  <Tag
-                    label={"Bearish"}
-                    backgroundColor={"#10B98126"}
-                    textColor={"#10B981"}
-                  />
-                ) : newsData.tag == "bullish" ? (
-                  <Tag
-                    label={"Bullish"}
-                    backgroundColor={"#EF444426"}
-                    textColor={"#EF4444"}
-                  />
-                ) : (
-                  ""
-                )}
-              </View>
-
-              <View style={styles.profileNameContainer}>
-                <ImpactLabel
-                  variant={"contained"}
-                  label={newsData.impact_label}
-                  value={newsData.impact_score}
-                  backgroundColor={colors.quindenaryBackground}
-                  textColor={colors.quattuordenaryBackground}
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={[
+            globalStyles.pageContainerWithBackground(theme),
+            { flex: 0 },
+          ]}
+        >
+          {addCommentsLoader ? (
+            <LoaderOverlay visible={true} />
+          ) : (
+            <>
+              <View style={styles.headerContainer}>
+                <Header
+                  onBackClick={() => {
+                    navigation.navigate("Home");
+                    console.log("Back to Home");
+                  }}
+                  liked={liked}
+                  setLiked={setLiked}
+                  bookmarked={bookmarked}
+                  setBookmarked={setBookmarked}
+                  onToggleLikeClick={handleToggleLike}
+                  shareUrl={newsData.url}
+                  onToggleBookmarkClick={handleToggleBookmark}
+                  showActivityIcons={true}
                 />
               </View>
-            </View>
-          </View>
-
-          <View style={styles.headingDetails}>
-            <View>
-              {summaryArray.map((point, index) => (
-                <View key={index} style={styles.listItem}>
+              <View style={styles.headingDetailsContainer}>
+                <View
+                  style={{
+                    width: "100%",
+                    marginTop: 16,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {/* {renderImage()} */}
+                  <ClippedSVG
+                    width={width * 0.89}
+                    height={200}
+                    radius={16}
+                    ImageComponent={CurrencyImage2}
+                  />
+                </View>
+                <View style={styles.headingContainer}>
+                  <View style={styles.detailsHeader}>
+                    <View style={styles.tagContainer}>
+                      {newsData.tag == "bearish" ? (
+                        <Tag
+                          label={"Bearish"}
+                          backgroundColor={"#FFE5E5"}
+                          textColor={"#FF5247"}
+                        />
+                      ) : newsData.tag == "bullish" ? (
+                        <Tag
+                          label={"Bullish"}
+                          backgroundColor={"#ECFCE5"}
+                          textColor={"#23C16B"}
+                        />
+                      ) : newsData.tag == "market" ? (
+                        <Tag
+                          label={"Market"}
+                          backgroundColor={"#E7E7FF"}
+                          textColor={"#6B4EFF"}
+                        />
+                      ) : newsData.tag == "neutral" ? (
+                        <Tag
+                          label={"Neutral"}
+                          backgroundColor={"#ECFCE5"}
+                          textColor={"#23C16B"}
+                        />
+                      ) : newsData.tag == "important" ? (
+                        <Tag
+                          label={"Important"}
+                          backgroundColor={"#E7E7FF"}
+                          textColor={"#6B4EFF"}
+                        />
+                      ) : (
+                        ""
+                      )}
+                    </View>
+                    <View style={styles.profileNameContainer}>
+                      <ImpactLabel
+                        variant={"contained"}
+                        label={newsData.impact_label}
+                        value={newsData.impact_score}
+                        backgroundColor={colors.quindenaryBackground}
+                        textColor={colors.quattuordenaryBackground}
+                      />
+                    </View>
+                  </View>
                   <Text
                     style={[
-                      styles.listIndex,
+                      styles.articleDetailsHeading,
                       {
                         color:
                           theme === "dark"
                             ? colors.darkPrimaryText
-                            : colors.primaryText,
+                            : colors.octodenaryText,
                       },
                     ]}
                   >
-                    {index + 1}.
-                  </Text>
-                  <Text
-                    style={[
-                      styles.listPoints,
-                      {
-                        color:
-                          theme === "dark"
-                            ? colors.darkPrimaryText
-                            : colors.primaryText,
-                      },
-                    ]}
-                  >
-                    {point}
+                    {newsData.title}
                   </Text>
                 </View>
-              ))}
-            </View>
-          </View>
-        </View>
-        <View style={styles.relatedDiscussionsContainer}>
-          <Text
-            style={[
-              styles.relatedDiscussionsHeading,
-              {
-                color:
-                  theme === "dark"
-                    ? colors.darkPrimaryText
-                    : colors.primaryText,
-              },
-            ]}
-          >
-            Related Discussions
-          </Text>
-          <View style={styles.relatedDiscussionsDetails}>
-            {Array.isArray(commentsData) &&
-              commentsData.map((comment) => (
-                <View key={comment.id} style={styles.relatedDiscussionsArticle}>
-                  {
-                    //@ts-ignore
-                    getProfileIcon("male")
-                  }
-                  <View style={{ flex: 1 }}>
-                    <View style={styles.relatedDiscussionsArticle}>
+                <View style={styles.authorIconContainer}>
+                  <NewsAuthorIcon />
+                  <View style={styles.authorTimeContainer}>
+                    <Text
+                      style={[
+                        styles.authorTimeText,
+                        {
+                          color:
+                            theme === "light"
+                              ? colors.octodenaryText
+                              : colors.white,
+                          fontSize: 16,
+                        },
+                      ]}
+                    >
+                      {`${newsData?.authors?.[0] || "--"} ·`}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.authorTimeText,
+                        {
+                          fontSize: 16,
+                          color:
+                            theme === "dark"
+                              ? colors.darkQuaternaryText
+                              : colors.unvigintaryText,
+                        },
+                      ]}
+                    >
+                      {`${newsData.time_ago || "--"}`}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.summaryDetailsConatiner}>
+                  <Text
+                    style={[
+                      styles.keyTakeStyle,
+                      {
+                        color:
+                          theme == "light"
+                            ? colors.octodenaryText
+                            : colors.white,
+                      },
+                    ]}
+                  >
+                    Key Takeaways :
+                  </Text>
+
+                  {summaryArray.map((point: any, index: number) => (
+                    <View key={index} style={styles.listItem}>
                       <Text
                         style={[
-                          styles.authorName,
+                          styles.listPoints,
                           {
                             color:
                               theme === "dark"
                                 ? colors.darkPrimaryText
-                                : colors.senaryText,
+                                : colors.duovigintaryText,
                           },
                         ]}
                       >
-                        {"--"}
+                        {index + 1}.{/* • */}
                       </Text>
-                      <Text style={styles.articleTime}>
-                        {getShortTimeAgo(comment.commented_at)}
+                      <Text
+                        style={[
+                          styles.listPoints,
+                          {
+                            color:
+                              theme === "dark"
+                                ? colors.darkPrimaryText
+                                : colors.duovigintaryText,
+                          },
+                        ]}
+                      >
+                        {point}
                       </Text>
                     </View>
-                    <Text style={styles.relatedArticleText}>
-                      {comment.comment}
-                    </Text>
-                    <View style={styles.likeUnlikeContainer}>
-                      <View style={styles.iconCountContainer}>
-                        <TouchableOpacity
-                          onPress={() => {
-                            console.log(
-                              "👍 Like icon pressed for comment:",
-                              comment.id
-                            );
-                            handleToggleLikeComment();
-                          }}
-                        >
-                          <LikeCommentIcon width={20} height={20} />
-                        </TouchableOpacity>
-                        <Text style={styles.articleTime}>{comment.likes}</Text>
-                      </View>
-                      <View style={styles.iconCountContainer}>
-                        <TouchableOpacity
-                          onPress={() => {
-                            console.log(
-                              "👎 Dislike icon pressed for comment:",
-                              comment.id
-                            );
-                            handleToggleLikeComment();
-                          }}
-                        >
-                          <UnlikeCommentIcon width={20} height={20} />
-                        </TouchableOpacity>
-                        <Text style={styles.articleTime}>{0}</Text>
-                      </View>
-                    </View>
-                  </View>
+                  ))}
                 </View>
-              ))}
-          </View>
-        </View>
-        <KeyboardAvoidingView
-          style={{ flex: 1 }}
-          behavior={Platform.OS === "ios" ? "padding" : undefined}
-          keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0} // tweak this if needed
-        >
-          <View style={[styles.commentContainer]}>
-            <TextInput
-              style={[
-                styles.commentInput,
-                {
-                  backgroundColor:
-                    theme === "dark"
-                      ? colors.darkPrimaryBackground
-                      : colors.primaryBackground,
-
-                  color:
-                    theme === "dark"
-                      ? colors.darkPrimaryText
-                      : colors.undenaryBackground,
-
-                  borderColor:
-                    theme === "dark"
-                      ? colors.quaternaryBorderColor
-                      : colors.tertiaryBorderColor,
-                },
-              ]}
-              placeholder="Write a comment..."
-              placeholderTextColor={
-                theme == "dark"
-                  ? colors.tertiaryText
-                  : colors.primaryBorderColor
-              }
-              keyboardType="email-address"
-              value={comment}
-              onChangeText={(text) => {
-                setComment(text);
-              }}
-            />
-            <TouchableOpacity
-              onPress={() => {
-                addCommentsAPI(newsId);
-              }}
-              disabled={comment.trim() === ""}
-              style={{
-                opacity: comment.trim() === "" ? 0.4 : 1,
-              }}
-            >
+                <Divider
+                  style={[
+                    styles.dividerStyle,
+                    {
+                      backgroundColor:
+                        theme == "light"
+                          ? colors.nonaryBorder
+                          : colors.darkUndenaryBackground,
+                    },
+                  ]}
+                />
+              </View>
+              <View style={styles.relatedDiscussionsContainer}>
+                <View style={styles.relatedDiscussionsHeader}>
+                  <Text
+                    style={[
+                      styles.relatedDiscussionsHeading,
+                      {
+                        color:
+                          theme === "dark"
+                            ? colors.darkPrimaryText
+                            : colors.octodenaryText,
+                      },
+                    ]}
+                  >
+                    Related Discussions
+                  </Text>
+                  {commentsData.length > 0 && (
+                    <Text
+                      style={[
+                        styles.commentCount,
+                        {
+                          color:
+                            theme === "dark"
+                              ? colors.darkPrimaryText
+                              : colors.octodenaryText,
+                        },
+                      ]}
+                    >
+                      {`${
+                        commentsData.length < 2
+                          ? `${commentsData.length} Comment`
+                          : `${commentsData.length} Comments`
+                      }`}
+                    </Text>
+                  )}
+                </View>
+                <View style={styles.relatedDiscussionsDetails}>
+                  {(commentsData || []).map((comment: any) => (
+                    <View
+                      key={comment.id}
+                      style={styles.relatedDiscussionsArticle}
+                    >
+                      {
+                        //@ts-ignore
+                        getProfileIcon("male")
+                      }
+                      <View style={{ flex: 1 }}>
+                        <View style={styles.relatedDiscussionsArticle}>
+                          <Text
+                            style={[
+                              styles.authorName,
+                              {
+                                color:
+                                  theme === "dark"
+                                    ? colors.darkPrimaryText
+                                    : colors.octodenaryText,
+                              },
+                            ]}
+                          >
+                            {comment.name || "--"}
+                          </Text>
+                          <Text
+                            style={[
+                              styles.articleTime,
+                              {
+                                color:
+                                  theme === "dark"
+                                    ? colors.darkSenaryText
+                                    : colors.unvigintaryText,
+                              },
+                            ]}
+                          >
+                            {getShortTimeAgo(comment.commented_at)}
+                          </Text>
+                        </View>
+                        <Text
+                          style={[
+                            styles.relatedArticleText,
+                            {
+                              color:
+                                theme === "dark"
+                                  ? colors.white
+                                  : colors.octodenaryText,
+                            },
+                          ]}
+                        >
+                          {comment.comment}
+                        </Text>
+                        <View style={styles.likeUnlikeContainer}>
+                          <View style={styles.iconCountContainer}>
+                            <TouchableOpacity
+                              onPress={() => {
+                                handleToggleLikeComment(comment.id);
+                              }}
+                            >
+                              {!likedComments[comment.id] ? (
+                                <HeartCommentIcon width={20} height={20} />
+                              ) : (
+                                <HeartCommentIconFilled
+                                  width={20}
+                                  height={20}
+                                />
+                              )}
+                            </TouchableOpacity>
+                            <Text
+                              style={[
+                                styles.articleTime,
+                                {
+                                  color:
+                                    theme === "dark"
+                                      ? colors.darkSenaryText
+                                      : colors.unvigintaryText,
+                                },
+                              ]}
+                            >
+                              {comment.likes || 0}
+                            </Text>
+                            <Text
+                              style={[
+                                styles.articleTime,
+                                {
+                                  color:
+                                    theme === "dark"
+                                      ? colors.darkSenaryText
+                                      : colors.unvigintaryText,
+                                },
+                              ]}
+                            >
+                              Reply
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  ))}
+                </View>
+              </View>
+              {commentsData.length > 3 && (
+                <View style={styles.viewCommentsContainer}>
+                  <Text style={styles.viewCommentsText}>View All Comments</Text>
+                </View>
+              )}
               <View
                 style={[
-                  styles.commentButton,
-                  {
-                    backgroundColor:
-                      theme === "dark"
-                        ? colors.duodenaryBackground
-                        : colors.undenaryBackground,
-                  },
+                  styles.commentContainer,
+                  { alignItems: isFocused ? "flex-end" : "center" },
                 ]}
               >
-                {theme === "light" ? <CommentIcon /> : <CommentIconBlack />}
+                {
+                  //@ts-ignore
+                  getProfileIcon("male")
+                }
+                <View
+                  style={[
+                    styles.commentWrapper,
+                    {
+                      borderEndColor:
+                        theme === "dark"
+                          ? colors.duovigintaryText
+                          : colors.darkQuinaryText,
+                    },
+                    isFocused && {
+                      flexDirection: "column",
+                      alignItems: "stretch",
+                      height: "auto",
+                      minHeight: 100,
+                      //paddingBottom: 8,
+                    },
+                  ]}
+                >
+                  <TextInput
+                    style={[
+                      styles.commentInput,
+                      {
+                        backgroundColor:
+                          theme === "dark"
+                            ? colors.darkPrimaryBackground
+                            : colors.primaryBackground,
+
+                        color:
+                          theme === "dark"
+                            ? colors.darkPrimaryText
+                            : colors.undenaryBackground,
+
+                        borderColor:
+                          theme === "dark"
+                            ? colors.quaternaryBorderColor
+                            : colors.tertiaryBorderColor,
+                        height: isFocused ? 100 : 48, // Expand height when focused
+                        // width: isFocused ? "100%" : "80%", // Expand width when focused
+                        textAlignVertical: "top",
+                      },
+                    ]}
+                    placeholder="Add a comment..."
+                    placeholderTextColor={
+                      theme == "dark"
+                        ? colors.darkSenaryText
+                        : colors.unvigintaryText
+                    }
+                    multiline={isFocused}
+                    keyboardType="default"
+                    value={comment}
+                    onChangeText={(text) => {
+                      setComment(text);
+                    }}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => {
+                      if (comment.trim() === "") {
+                        setIsFocused(false);
+                      }
+                    }}
+                  />
+                  <TouchableOpacity
+                    onPress={() => {
+                      addCommentsAPI(newsId);
+                      Keyboard.dismiss(); // dismiss keyboard
+                      setIsFocused(false); // manually collapse the textarea
+                    }}
+                    disabled={comment.trim() === ""}
+                    style={{
+                      opacity: comment.trim() === "" ? 0.4 : 1,
+                    }}
+                  >
+                    <View
+                      style={[
+                        styles.commentButton,
+                        {
+                          alignSelf: isFocused ? "flex-end" : "center",
+                          backgroundColor:
+                            theme === "dark"
+                              ? colors.duodenaryBackground
+                              : colors.septendenaryBackground,
+                        },
+                      ]}
+                    >
+                      {theme === "light" ? (
+                        <CommentIcon />
+                      ) : (
+                        <CommentIconBlack />
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </TouchableOpacity>
-          </View>
-        </KeyboardAvoidingView>
-      </ScrollView>
+            </>
+          )}
+        </ScrollView>
+      </KeyboardAvoidingView>
     </>
   );
 };
@@ -706,22 +906,12 @@ const styles = StyleSheet.create({
     gap: 16,
   },
 
-  bearishTagContainer: {
-    backgroundColor: "##FEE2E2",
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 100,
-    alignSelf: "flex-start",
-    gap: 8,
+  summaryDetailsConatiner: {
+    gap: 16,
   },
-  bearishTagText: {
-    color: "##DC2626",
-    fontWeight: "600",
-    fontSize: 14,
-    fontFamily: fontFamily.Satoshi500,
-  },
-  headingDetails: {
-    gap: 12,
+  keyTakeStyle: {
+    fontFamily: fontFamily.Inter700,
+    fontSize: 18,
   },
   listItem: {
     flexDirection: "row",
@@ -734,9 +924,8 @@ const styles = StyleSheet.create({
     color: colors.tertiaryText,
   },
   articleDetailsHeading: {
-    fontFamily: fontFamily.Cabinet700,
-    fontSize: 32,
-    color: colors.primaryText,
+    fontFamily: fontFamily.Inter700,
+    fontSize: 30,
   },
   detailsHeader: {
     flexDirection: "row",
@@ -767,31 +956,27 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.Satoshi500,
     color: colors.tertiaryText,
   },
-
-  impactLabel: {
-    borderRadius: 24,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    backgroundColor: colors.senaryBackground,
-  },
-  impactLabelText: {
-    fontSize: 12,
-    fontFamily: fontFamily.Satoshi500,
-    color: colors.quaternaryText,
-  },
   listPoints: {
     fontSize: 16,
-    fontFamily: fontFamily.Satoshi500,
-    color: colors.tertiaryText,
+    fontFamily: fontFamily.Inter400,
   },
   relatedDiscussionsContainer: {
     marginTop: 32,
     gap: 28,
   },
+  relatedDiscussionsHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 12,
+  },
   relatedDiscussionsHeading: {
-    fontFamily: fontFamily.Cabinet700,
-    fontSize: 20,
-    color: colors.senaryText,
+    fontFamily: fontFamily.Inter700,
+    fontSize: 18,
+  },
+  commentCount: {
+    fontFamily: fontFamily.Inter400,
+    fontSize: 16,
   },
   relatedDiscussionsDetails: {
     gap: 20,
@@ -801,19 +986,18 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   authorName: {
-    fontFamily: fontFamily.Cabinet700,
+    fontFamily: fontFamily.Inter500,
     fontSize: 16,
-    color: colors.senaryText,
   },
   articleTime: {
     fontSize: 14,
     fontFamily: fontFamily.Inter400,
-    color: colors.septenaryText,
+    color: colors.unvigintaryText,
   },
   relatedArticleText: {
-    fontSize: 14,
-    fontFamily: fontFamily.Satoshi400,
-    color: colors.tertiaryText,
+    fontSize: 16,
+    fontFamily: fontFamily.Inter400,
+    color: colors.duovigintaryText,
   },
   likeUnlikeContainer: {
     flexDirection: "row",
@@ -825,24 +1009,30 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   commentContainer: {
-    paddingHorizontal: 12,
+    //paddingHorizontal: 12,
     marginTop: 32,
     flexDirection: "row",
+    alignItems: "center",
     flex: 1,
     width: "100%",
     gap: 16,
   },
-  commentInput: {
-    width: "85%",
+  commentWrapper: {
+    width: "84%",
+    borderRadius: 12,
     borderWidth: 1,
-    borderRadius: 10,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    gap: 8,
-    borderColor: colors.tertiaryBorderColor,
-    fontFamily: fontFamily.Satoshi500,
+    borderColor: colors.darkQuinaryText,
+    padding: 12,
+    gap: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    height: 64,
+  },
+  commentInput: {
+    width: "80%",
+    fontFamily: fontFamily.Inter500,
     fontSize: 16,
-    height: 48,
+    //height: 48,
   },
   commentButton: {
     height: 40,
@@ -851,5 +1041,33 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 999,
     backgroundColor: colors.primaryText,
+  },
+  authorIconContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  authorTimeContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  authorTimeText: {
+    fontFamily: fontFamily.Inter400,
+    fontSize: 12,
+  },
+  dividerStyle: {
+    height: 1,
+  },
+  viewCommentsContainer: {
+    marginTop: 20,
+    paddingVertical: 16,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  viewCommentsText: {
+    fontFamily: fontFamily.Inter700,
+    fontSize: 16,
+    color: colors.sexdenaryText,
   },
 });

@@ -8,6 +8,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ImageSourcePropType,
+  Platform,
 } from "react-native";
 import { colors } from "../../assets/styles/colors";
 import fontFamily from "../../assets/styles/fontFamily";
@@ -72,6 +73,7 @@ export default SocialLoginButton;
 
 const styles = StyleSheet.create({
   button: {
+    width: Platform.OS == "web" ? "60%" : "100%",
     paddingVertical: 12,
     paddingHorizontal: 16,
     //backgroundColor: colors.denaryBackground,

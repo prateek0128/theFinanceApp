@@ -15,11 +15,18 @@ const TabLabel = ({ label, selected, onPress }: any) => {
             backgroundColor:
               theme === "light"
                 ? selected
-                  ? colors.quindenaryBackground // active color
-                  : colors.quattuordenaryBackground
+                  ? colors.sexdenaryText // active color
+                  : colors.octodenaryBackground
                 : selected
-                ? colors.quindenaryBackground
-                : colors.darkSenaryBackground, // default color
+                ? colors.vigenaryText
+                : colors.darkUndenaryBackground, // default color
+            borderWidth: selected ? 1 : 0, // active border width
+            borderColor:
+              theme == "light"
+                ? selected
+                  ? colors.sexdenaryText
+                  : "transparent"
+                : "",
           },
         ]}
       >
@@ -30,11 +37,11 @@ const TabLabel = ({ label, selected, onPress }: any) => {
               color:
                 theme === "dark"
                   ? selected
-                    ? colors.darkPrimaryText
-                    : colors.darkSecondaryText
+                    ? colors.octodenaryText
+                    : colors.white
                   : selected
-                  ? colors.darkSecondaryText // active text color
-                  : colors.quattuordenaryText, // default text color
+                  ? colors.white // active text color
+                  : colors.octodenaryText, // default text color
             },
           ]}
         >
@@ -50,13 +57,13 @@ const styles = StyleSheet.create({
   tabLabelContainer: {
     borderRadius: 24,
     paddingVertical: 8,
-    paddingHorizontal: 12,
+    paddingHorizontal: 16,
     gap: 10,
     //backgroundColor: colors.quattuordenaryBackground,
   },
   labelText: {
-    fontFamily: fontFamily.Satoshi500,
-    fontSize: 12,
+    fontFamily: fontFamily.Inter400,
+    fontSize: 16,
     //color: colors.quattuordenaryText,
   },
 });

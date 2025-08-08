@@ -47,10 +47,11 @@ export const colors = {
   darkDenaryBackground: "#E8EDFB0D", //10
   darkUndenaryBackground: "#202325", //11
   darkDuodenaryBackground: "#5538EE1A", //12
+  darkTridenaryBackground: "#181818",
   //Text Colors
   primaryText: "#28262C", //1
   secondaryText: "#111111", //2
-  tertiaryText: "#5B5C60", //3
+  tertiaryText: "#4148b4ff", //3
   quaternaryText: "#000000", //4
   quinaryText: "#121417", //5
   senaryText: "#0D141C", //6
@@ -68,14 +69,24 @@ export const colors = {
   octodenaryText: "#090A0A", //18
   novemdenaryText: "#6C7072", // 19
   vigenaryText: "#9990FF", //20
+  unvigintaryText: "#72777A", // 21
+  duovigintaryText: "#404446", // 22
+  // tresvigintaryText: "#D5E6F7", // 23
+  // quattuorvigintaryText: "#E7F8A9", // 24
+  // quinvigintaryText: "#F9A1B2", // 25
+  // sexvigintaryText: "#1A2B3C", // 26
+  // septenvigintaryText: "#3C4D5E", // 27
+  // octovigintaryText: "#5E6F7A", // 28
+  // novemvigintaryText: "#7A8B9C", // 29
+  // trigintaryText: "#9CADBE", // 30
   //Dark Text Colors
   darkPrimaryText: "#EDEDED", //1
   darkSecondaryText: "#F7F8F9", //2
   darkTertiaryText: "#A0ABBB", //3
   darkQuaternaryText: "#B8C0CC", //4
   darkQuinaryText: "#CDCFD0", //5
-    darkSenaryText: "#979C9E",//6
-  darkSeptanaryText: "#9990FF",//7
+  darkSenaryText: "#979C9E", //6
+  darkSeptanaryText: "#9990FF", //7
   //Border Colors
   primaryBorderColor: "#3C3744", //1
   secondaryBorderColor: "#6B7280", //2
@@ -85,10 +96,10 @@ export const colors = {
   senaryBorderColor: "#383838", //6
   septnaryBorderColor: "#1D4ED8", //7
   octonaryBorderColor: "#5538EE", //8
-    nonaryBorder: "#E3E5E5", //9
-    denaryBorder: "#C6C4FF",
+  nonaryBorder: "#E3E5E5", //9
+  denaryBorder: "#C6C4FF",
   //Button Colors
   primaryButtonColor: "#007AFF", //1
   secondaryButtonColor: "#2B22E2", //2
-  tertiaryButtonColor: "#303437",//3
+  tertiaryButtonColor: "#303437", //3
 };

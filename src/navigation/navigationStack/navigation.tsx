@@ -11,6 +11,8 @@ import TellUsSomething from "../../screens/tellUsSomething/tellUsSomething";
 import BottomTabNavigator from "../bottomNavigation/bottomNavigation";
 import ChooseYourInterests from "../../screens/chooseYourInterests/chooseYourInterests";
 import HeadlineDetailsScreen from "../../screens/homePage/headlineDetailsScreen/headlineDetailsScreen";
+import SavedArticles from "../../screens/savedArticle/savedArticle";
+import ProfileScreen from "../../screens/profileScreen/profileScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -35,11 +37,10 @@ export default function Navigation() {
           name="BottomTabNavigator"
           component={BottomTabNavigator}
         />
-        {/* <Stack.Screen
+        <Stack.Screen
           name="HeadlineDetailsScreen"
           component={HeadlineDetailsScreen}
-          //options={{ headerShown: true }}
-        /> */}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

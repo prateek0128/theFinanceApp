@@ -33,10 +33,10 @@ export const getAllInterests = async () => {
 };
 
 // Post Submit Onboarding
-export const submitOnboarding = async () => {
+export const submitOnboarding = async (data: any) => {
   const client = await apiClient();
   try {
-    const response = await client.post("/onboarding/selection");
+    const response = await client.post("/onboarding/selection", data);
     return response;
   } catch (error) {
     throw error;

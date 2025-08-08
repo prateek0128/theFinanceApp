@@ -30,6 +30,7 @@ import {
   LikePostIconWhite,
 } from "../../assets/icons/components/headlineDetailsView";
 import ShareSheet from "../sharedSheet/sharedSheet";
+import { BackArrow, BackArrowWhite } from "../../assets/icons/components/logIn";
 
 const { width } = Dimensions.get("window");
 type HeaderProps = {
@@ -41,6 +42,8 @@ type HeaderProps = {
   setBookmarked?: React.Dispatch<React.SetStateAction<boolean>>;
   onToggleBookmarkClick?: () => void;
   shareUrl?: string;
+  showThemeIcon?: boolean;
+  showActivityIcons?: boolean;
 };
 
 const Header = ({
@@ -52,6 +55,8 @@ const Header = ({
   setBookmarked,
   onToggleBookmarkClick,
   shareUrl,
+  showThemeIcon,
+  showActivityIcons = false,
 }: HeaderProps) => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const [open, setOpen] = useState(false);
@@ -61,52 +66,54 @@ const Header = ({
     <View style={styles.headerConatiner}>
       <TouchableOpacity onPress={onBackClick}>
         <View style={styles.leftHeaderPart}>
-          {theme === "light" ? <BackArrowIcon /> : <BackArrowIconWhite />}
+          {/* {theme === "light" ? <BackArrowIcon /> : <BackArrowIconWhite />} */}
+          {theme === "dark" ? <BackArrowWhite /> : <BackArrow />}
         </View>
       </TouchableOpacity>
-      <View style={styles.rightHeaderPart}>
-        <TouchableOpacity onPress={onToggleLikeClick}>
-          {theme === "light" ? (
-            liked ? (
-              <LikePostIconFilled />
+      {showActivityIcons && (
+        <View style={styles.rightHeaderPart}>
+          <TouchableOpacity onPress={onToggleLikeClick}>
+            {theme === "light" ? (
+              liked ? (
+                <LikePostIconFilled />
+              ) : (
+                <LikePostIcon />
+              )
+            ) : liked ? (
+              <LikePostIconFilledWhite />
             ) : (
-              <LikePostIcon />
-            )
-          ) : liked ? (
-            <LikePostIconFilledWhite />
-          ) : (
-            <LikePostIconWhite />
-          )}
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onToggleBookmarkClick}>
-          {theme === "light" ? (
-            bookmarked ? (
-              <BookmarkIconFilled />
+              <LikePostIconWhite />
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onToggleBookmarkClick}>
+            {theme === "light" ? (
+              bookmarked ? (
+                <BookmarkIconFilled />
+              ) : (
+                <BookmarkIcon />
+              )
+            ) : bookmarked ? (
+              <BookmarkIconFilledWhite />
             ) : (
-              <BookmarkIcon />
-            )
-          ) : bookmarked ? (
-            <BookmarkIconFilledWhite />
-          ) : (
-            <BookmarkIconWhite />
-          )}
+              <BookmarkIconWhite />
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setOpen(true)}>
+            {theme === "light" ? <ShareIcon /> : <ShareIconWhite />}
+          </TouchableOpacity>
+          <ShareSheet
+            visible={open}
+            onClose={() => setOpen(false)}
+            url={shareUrl}
+            message={`Have a look at  "URL"`}
+          />
+        </View>
+      )}
+      {showThemeIcon && (
+        <TouchableOpacity onPress={toggleTheme}>
+          <Text style={styles.text}>{theme === "dark" ? "☀️" : "🌙"}</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setOpen(true)}>
-          {theme === "light" ? <ShareIcon /> : <ShareIconWhite />}
-        </TouchableOpacity>
-        {/* <ShareSheet
-          visible={open}
-          onClose={() => setOpen(false)}
-          url={shareUrl}
-          message={`Have a look at  "URL"`}
-        /> */}
-        <ShareSheet
-          visible={open}
-          onClose={() => setOpen(false)}
-          url={shareUrl}
-          message={`Have a look at  "URL"`}
-        />
-      </View>
+      )}
     </View>
   );
 };
@@ -125,5 +132,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 16,
     alignItems: "center",
+  },
+  text: {
+    fontSize: 24,
+    color: "#fff",
   },
 });
