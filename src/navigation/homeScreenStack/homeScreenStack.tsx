@@ -1,8 +1,9 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "../../screens/homePage/homeScreen/homeScreen";
 import HeadlineDetailsScreen from "../../screens/homePage/headlineDetailsScreen/headlineDetailsScreen";
+import { HomeStackParamList, RootStackParamList } from "../../types/navigation";
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<HomeStackParamList>();
 
 export default function HomeScreenStack() {
   return (
@@ -11,7 +12,6 @@ export default function HomeScreenStack() {
       <Stack.Screen
         name="HeadlineDetailsScreen"
         component={HeadlineDetailsScreen}
-        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

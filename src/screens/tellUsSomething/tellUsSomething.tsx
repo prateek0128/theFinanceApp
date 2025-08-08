@@ -25,6 +25,7 @@ import {
   getAllInterests,
   getAllRoles,
 } from "../../apiServices/onboarding";
+import { getComments } from "../../apiServices/newsEngagement";
 const QuestionBlock = ({
   title,
   options,
@@ -34,7 +35,7 @@ const QuestionBlock = ({
   message,
 }: {
   title: string;
-  options: string[];
+  options: { key: string; value: string }[]; // array of objects like [{ key: "beginner", value: "Beginner" }, ...]
   selectedValue: string;
   onSelect: (value: string) => void;
   message: string;
@@ -43,12 +44,10 @@ const QuestionBlock = ({
   <View style={styles.titleoptioncontainer}>
     <Text style={[globalStyles.title(theme)]}>{title}</Text>
     <Text
-      style={[
-        {
-          color:
-            theme === "dark" ? colors.darkSenaryText : colors.novemdenaryText,
-        },
-      ]}
+      style={{
+        color:
+          theme === "dark" ? colors.darkSenaryText : colors.novemdenaryText,
+      }}
     >
       {message}
     </Text>
@@ -64,13 +63,12 @@ const QuestionBlock = ({
           },
         ]}
       >
-        {options.map((option: any, index: any) => {
-          const isSelected = selectedValue === option.value;
-
+        {options.map((option) => {
+          const isSelected = selectedValue === option.key;
           return (
             <TouchableOpacity
-              key={option.id}
-              onPress={() => onSelect(option.value)}
+              key={option.key}
+              onPress={() => onSelect(option.key)}
               style={[
                 styles.optionBox,
                 {
@@ -108,7 +106,7 @@ const QuestionBlock = ({
                     : fontFamily.Inter400,
                 }}
               >
-                {option.label}
+                {option.value}
               </Text>
             </TouchableOpacity>
           );
@@ -121,130 +119,50 @@ const QuestionBlock = ({
 const TellUsSomething = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { theme, toggleTheme } = useContext(ThemeContext);
-  const [openRole, setOpenRole] = useState(false);
-  const [openGoal, setOpenGoal] = useState(false);
-  const [selectedWhoAreYou, setSelectedWhoAreYou] = useState("");
-  const [selectedGoal, setSelectedGoal] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [roles, setRoles] = useState([]);
-  const [goals, setGoals] = useState([]);
+  const [selectedExpertLevel, setSelectedExpertLevel] = useState<any>(null);
   const [showSecondQuestion, setShowSecondQuestion] = useState(false);
   const progress = !showSecondQuestion ? 0.5 : 1;
-  const isFormValid = showSecondQuestion
-    ? selectedGoal !== ""
-    : selectedWhoAreYou !== "";
-
   const handleNextOrContinue = () => {
-    if (!showSecondQuestion) {
-      setShowSecondQuestion(true);
-    } else {
-      navigation.navigate("ChooseYourInterests");
+    if (!setSelectedExpertLevel || selectedExpertLevel === "") {
+      showToast("Please select your experience level.", "warning");
+      return;
     }
+    navigation.navigate("ChooseYourInterests", {
+      expertiseLevel: selectedExpertLevel,
+    });
+    // navigation.navigate("BottomTabNavigator");
   };
-  const getAllRolesAPI = async () => {
-    try {
-      const response = await getAllRoles();
-      console.log("RolesResponse=>", response.data.data);
-      setRoles(response.data.data);
-    } catch (err) {
-      // Narrow / cast to AxiosError
-      const axiosErr = err as AxiosError<{
-        status: string;
-        message: string;
-      }>;
-      const errorMessage =
-        axiosErr.response?.data?.message ?? "Something went wrong";
-      showToast(errorMessage, "danger");
-    }
-  };
-  const getAllGoalsAPI = async () => {
-    try {
-      const response = await getAllGoals();
-      console.log("GoalsResponse=>", response.data.data);
-      setGoals(response.data.data);
-    } catch (err) {
-      // Narrow / cast to AxiosError
-      const axiosErr = err as AxiosError<{
-        status: string;
-        message: string;
-      }>;
-      const errorMessage =
-        axiosErr.response?.data?.message ?? "Something went wrong";
-      showToast(errorMessage, "danger");
-    }
-  };
-  useEffect(() => {
-    getAllRolesAPI();
-    getAllGoalsAPI();
-  }, []);
+  const expertiseLevel = [
+    { key: "novice", value: "Novice" },
+    { key: "beginner", value: "Beginner" },
+    { key: "intermediate", value: "Intermediate" },
+    { key: "expert", value: "Expert" },
+  ];
+  console.log("expertiseLevel:", selectedExpertLevel);
   return (
     <ScrollView
       contentContainerStyle={{ flex: 1 }}
       showsVerticalScrollIndicator={false}
       keyboardShouldPersistTaps="handled"
     >
-      <View style={[globalStyles.pageContainerWithBackground(theme)]}>
-        <View style={[styles.topContainer]}>
-          <View>
-            {showSecondQuestion && (
-              <TouchableOpacity
-                onPress={() => {
-                  setShowSecondQuestion(false);
-                }}
-              >
-                {theme === "dark" ? <BackArrowWhite /> : <BackArrow />}
-              </TouchableOpacity>
-            )}
-          </View>
-          <View>
-            {/* <TouchableOpacity>
-              <Text
-                style={[
-                  styles.emailText,
-                  {
-                    color:
-                      theme === "dark"
-                        ? colors.darkSeptanaryText
-                        : colors.sexdenaryText,
-                  },
-                ]}
-              >
-                Skip
-              </Text>
-            </TouchableOpacity> */}
-          </View>
-        </View>
-        <View style={styles.progressContainer}>
-          <ProgressBar
-            progress={progress}
-            color={colors.sexdenaryText}
-            style={styles.progressBar}
-          />
-        </View>
-        {!showSecondQuestion && (
-          <QuestionBlock
-            title="Tell us a bit about you?"
-            message="Helps us know you better and make your experience more relevant."
-            options={roles}
-            selectedValue={selectedWhoAreYou}
-            onSelect={setSelectedWhoAreYou}
-            theme={theme}
-          />
-        )}
-        {showSecondQuestion && (
-          <QuestionBlock
-            title="What bring you here ?"
-            message="We’ll customize your news and insights based on your interests"
-            options={goals}
-            selectedValue={selectedGoal}
-            onSelect={setSelectedGoal}
-            theme={theme}
-          />
-        )}
+      <View
+        style={[
+          globalStyles.pageContainerWithBackground(theme),
+          { paddingTop: 80 },
+        ]}
+      >
+        <QuestionBlock
+          title="What's your experience level?"
+          message="Select the one that best matches your skill."
+          options={expertiseLevel || []}
+          selectedValue={selectedExpertLevel}
+          onSelect={(option) => setSelectedExpertLevel(option)}
+          theme={theme}
+        />
         <Button
-          title={showSecondQuestion ? "Continue" : "Next"}
+          title={"Continue"}
           onPress={handleNextOrContinue}
-          disabled={!isFormValid}
+          disabled={selectedExpertLevel !== "" ? false : true}
           buttonStyle={[
             styles.submitButton,
             {
@@ -290,15 +208,7 @@ const styles = StyleSheet.create({
   backButton: {
     gap: 6,
   },
-  topContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    justifyContent: "space-between",
-    marginTop: 20,
-    marginBottom: 30,
-    width: "100%",
-  },
+
   emailText: {
     fontSize: 16,
     color: colors.sexdenaryText,

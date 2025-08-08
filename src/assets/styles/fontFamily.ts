@@ -7,8 +7,8 @@ const fontFamily = {
   bottomNavigationText: "Chillax-Medium",
   Inter400: "Inter_400Regular",
   Inter500: "Inter_500Medium",
-  Inter700:"Inter_700Bold"
-
+  Inter600: "Inter_600SemiBold",
+  Inter700: "Inter_700Bold",
 };
 
 export default fontFamily;

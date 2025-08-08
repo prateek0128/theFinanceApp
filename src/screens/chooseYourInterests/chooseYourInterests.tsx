@@ -20,8 +20,16 @@ import { ScrollView } from "react-native-gesture-handler";
 import showToast from "../../utilis/showToast";
 import Button from "../../components/button/button";
 import globalStyles from "../../assets/styles/globalStyles";
-import { getAllInterests } from "../../apiServices/onboarding";
+import {
+  getAllInterests,
+  submitOnboarding,
+} from "../../apiServices/onboarding";
 import { AxiosError } from "axios";
+import { RouteProp, useRoute } from "@react-navigation/native";
+import * as Device from "expo-device";
+import * as Localization from "expo-localization";
+import { getUserProfile } from "../../apiServices/user";
+import Loader from "../../components/Loader/loader";
 const interests = [
   "Stock Market News",
   "Indian Companies",
@@ -40,30 +48,63 @@ const interests = [
   "Quarterly Reports",
 ];
 const { width, height } = Dimensions.get("window");
+type ChooseYourInterestsRouteProp = RouteProp<
+  RootStackParamList,
+  "ChooseYourInterests"
+>;
+type BottomTabNavigatorRouteProp = RouteProp<
+  RootStackParamList,
+  "BottomTabNavigator"
+>;
 export default function ChooseYourInterests() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [selected, setSelected] = useState<string[]>([]);
-  const groupedInterests = Array.from(
-    { length: Math.ceil(interests.length / 3) },
-    (_, i) => interests.slice(i * 3, i * 3 + 3)
-  );
-  const toggleInterest = (item: any) => {
-    setSelected((prevSelected: any) =>
-      prevSelected.includes(item)
-        ? prevSelected.filter((i: any) => i !== item)
-        : [...prevSelected, item]
-    );
-  };
+  const [interests, setInterests] = useState<any[]>([]);
+  const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+  const [deviceInfo, setDeviceInfo] = useState<any>({});
+  const [isLoading, setIsLoading] = useState(false);
 
+  const [selectedInterestIds, setSelectedInterestIds] = useState<string[]>([]);
+  const route = useRoute<
+    ChooseYourInterestsRouteProp | BottomTabNavigatorRouteProp
+  >();
+  const { expertiseLevel } = route.params || {};
+  console.log("expertiseLevel:", expertiseLevel || "");
+  const toggleInterest = (item: any) => {
+    setSelected((prevSelected) => {
+      const isAlreadySelected = prevSelected.some(
+        (selectedItem: any) => selectedItem.id === item.id
+      );
+
+      const updatedSelected = isAlreadySelected
+        ? prevSelected.filter((i: any) => i.id !== item.id)
+        : [...prevSelected, item];
+
+      // Update interest IDs as well
+      const updatedIds = updatedSelected.map((i) => i.interestId);
+      setSelectedInterestIds(updatedIds);
+
+      return updatedSelected;
+    });
+  };
   const canContinue = selected.length >= 3;
   const { theme, toggleTheme } = useContext(ThemeContext);
-  const handleContinue = () => {
-    navigation.navigate("BottomTabNavigator");
-  };
-  const getAllInterestsAPI = async () => {
+  const handleContinue = async () => {
+    const onboardingData = {
+      experience_level: expertiseLevel,
+      interests: selectedInterestIds,
+      clientMeta: {
+        deviceId: Device.osInternalBuildId ?? Device.modelId ?? "unknown",
+        locale: Localization.getLocales()[0].languageTag,
+        tz: Localization.getCalendars?.()[0]?.timeZone ?? "Asia/Kolkata",
+      },
+    };
+    console.log("OnboardingDataPayload=>", onboardingData);
     try {
-      const response = await getAllInterests();
-      console.log("InterestsResponse=>", response.data);
+      const response = await submitOnboarding(onboardingData);
+      console.log("OnboardingResponse=>", response.data);
+      showToast(response.data.message, "success");
+      navigation.navigate("BottomTabNavigator");
     } catch (err) {
       // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
@@ -73,97 +114,175 @@ export default function ChooseYourInterests() {
       const errorMessage =
         axiosErr.response?.data?.message ?? "Something went wrong";
       showToast(errorMessage, "danger");
+      return;
+    }
+  };
+  const getAllInterestsAPI = async () => {
+    setIsLoading(true);
+    try {
+      const response = await getAllInterests();
+      console.log("InterestsResponse=>", response.data.data);
+      setInterests(response.data.data);
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      showToast(errorMessage, "danger");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const getUserProfileAPI = async () => {
+       setIsLoading(true);
+    try {
+      const response = await getUserProfile();
+      console.log("SelectedInterestsResponse=>", response.data);
+      setSelectedInterests(response.data.interests || []);
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      showToast(errorMessage, "danger");
+    } finally {
+      setIsLoading(false);
     }
   };
   useEffect(() => {
     getAllInterestsAPI();
+    getUserProfileAPI();
   }, []);
+  const groupedInterests = interests
+    ? Array.from({ length: Math.ceil(interests.length / 3) }, (_, i) =>
+        interests.slice(i * 3, i * 3 + 3)
+      )
+    : [];
+  const buttonTitle =
+    selectedInterestIds.length < 0 ? "Get Started" : "Update Interests";
+  console.log("GroupInterests=>", groupedInterests);
+  console.log("SelectedInterests=>", selectedInterests);
+  // Add this useEffect to map API-selected names to your full interest objects
+  useEffect(() => {
+    if (interests.length && selectedInterests.length) {
+      const matched = interests.filter((item) =>
+        selectedInterests.includes(item.name)
+      );
+      setSelected(matched); // This ensures toggleInterest highlighting works
+      setSelectedInterestIds(matched.map((i) => i.interestId));
+    }
+  }, [interests, selectedInterests]);
   return (
-    <View
-      style={[
-        globalStyles.pageContainerWithBackground(theme),
-        styles.interestsContainer,
-      ]}
-    >
-      <View style={styles.headingContainer}>
-        <Text style={[globalStyles.title(theme)]}>Choose Your Interests</Text>
-        <Text
-          style={[
-            styles.paragraph,
-            {
-              color:
-                theme === "dark"
-                  ? colors.darkPrimaryText // pick a muted light color
-                  : colors.tertiaryText, // pick a muted dark color
-            },
-          ]}
-        >
-          Choose at least 3 fields
-        </Text>
-      </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.cardsContainer}>
-          {groupedInterests.map((group: any, rowIndex: any) => (
-            <View key={rowIndex} style={styles.cardRow}>
-              {group.map((item: any) => (
-                <TouchableOpacity
-                  key={item}
-                  onPress={() => toggleInterest(item)}
-                  style={[
-                    styles.cardDimension,
-                    selected.includes(item) && styles.cardSelected,
-                    {
-                      backgroundColor:
-                        theme == "light"
-                          ? selected.includes(item)
-                            ? colors.septendenaryBackground
-                            : colors.octodenaryBackground
-                          : selected.includes(item)
-                          ? colors.darkDuodenaryBackground
-                          : colors.darkUndenaryBackground,
-                      borderColor: selected.includes(item)
-                        ? colors.vigenaryText
-                        : colors.octonaryBorderColor,
-                      borderWidth: selected.includes(item) ? 1 : 0,
-                    },
-                  ]}
-                >
-                  <Text
+    <View style={{ flex: 1 }}>
+      <View
+        style={[
+          globalStyles.pageContainerWithBackground(theme),
+          styles.interestsContainer,
+        ]}
+      >
+        <View style={styles.headingContainer}>
+          <Text style={[globalStyles.title(theme)]}>Choose Your Interests</Text>
+          <Text
+            style={[
+              styles.paragraph,
+              {
+                color:
+                  theme === "dark"
+                    ? colors.darkPrimaryText // pick a muted light color
+                    : colors.tertiaryText, // pick a muted dark color
+              },
+            ]}
+          >
+            Choose at least 3 fields
+          </Text>
+        </View>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.cardsContainer}>
+            {groupedInterests.map((group: any, rowIndex: any) => (
+              <View key={rowIndex} style={styles.cardRow}>
+                {group.map((item: any, index: any) => (
+                  <TouchableOpacity
+                    key={item.id}
+                    onPress={() => toggleInterest(item)}
                     style={[
-                      styles.cardText,
+                      styles.cardDimension,
+                      selected.includes(item) && styles.cardSelected,
                       {
-                        color:
+                        backgroundColor:
                           theme == "light"
                             ? selected.includes(item)
-                              ? colors.sexdenaryText
-                              : colors.octodenaryText
+                              ? colors.septendenaryBackground
+                              : colors.octodenaryBackground
                             : selected.includes(item)
-                            ? colors.vigenaryText
-                            : colors.white,
+                            ? colors.darkDuodenaryBackground
+                            : "transparent",
+                        borderColor:
+                          theme === "light"
+                            ? selected.includes(item)
+                              ? colors.sexdenaryText
+                              : "transparent"
+                            : selected.includes(item)
+                            ? "transparent"
+                            : colors.darkUndenaryBackground,
+                        borderWidth:
+                          theme === "dark" && selected.includes(item) ? 0 : 1,
                       },
                     ]}
                   >
-                    {item}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          ))}
-        </View>
-      </ScrollView>
-      <Button
-        title="Get Started"
-        onPress={() => {
-          if (canContinue) {
-            handleContinue(); // navigate next
-            showToast("Your interests saved successfully", "success");
-          } else {
-            showToast("Please choose at least 3 fields", "warning");
-          }
-        }}
-        disabled={!canContinue}
-        buttonStyle={{ marginBottom: 20 }}
-      />
+                    <Text
+                      style={[
+                        styles.cardText,
+                        {
+                          color:
+                            theme == "light"
+                              ? selected.includes(item)
+                                ? colors.sexdenaryText
+                                : colors.octodenaryText
+                              : selected.includes(item)
+                              ? colors.vigenaryText
+                              : colors.white,
+                          fontFamily: selected.includes(item)
+                            ? fontFamily.Inter700
+                            : fontFamily.Inter400,
+                        },
+                      ]}
+                    >
+                      {item.name}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            ))}
+          </View>
+        </ScrollView>
+        <Button
+          title={isLoading ? "Please wait..." : buttonTitle}
+          onPress={async () => {
+            if (selected.length >= 3) {
+              setIsLoading(true);
+              try {
+                await handleContinue();
+                showToast("Your interests saved successfully", "success");
+              } catch (error) {
+                console.error(error);
+                showToast("Something went wrong", "danger");
+              } finally {
+                setIsLoading(false);
+              }
+            } else {
+              showToast("Please choose at least 3 fields", "warning");
+            }
+          }}
+          disabled={isLoading}
+          buttonStyle={{ marginBottom: 20 }}
+        />
+      </View>
     </View>
   );
 }

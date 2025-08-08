@@ -5,37 +5,29 @@ export type RootStackParamList = {
   Welcome: undefined;
   SignUp: undefined;
   Login: undefined;
-  TellUsSomething: { name?: string | null; email?: string };
-  ChooseYourInterests: undefined;
+  TellUsSomething?: { name?: string | null; email?: string };
+  ChooseYourInterests?: { expertiseLevel?: string | null };
   BottomTabNavigator: undefined;
   Home: undefined;
-  HeadlineDetailsScreen: {
+  HeadlineDetailsScreen?: {
     newsId?: string;
     imageKey?: string;
-    title?: string;
-    author?: string;
-    time?: string;
-    impactLabel?: string;
-    impactScore?: number;
-    points?: string[];
-    discussions?: {
-      id?: string;
-      name?: string;
-      time?: string;
-      text?: string;
-      likes?: number;
-      unlikes?: number;
-      profileType?: "male" | "female";
-    }[];
   };
+  Profile: undefined;
+  SavedArticles: undefined;
 };
 export type BottomTabParamList = {
   Home: undefined;
-  Portfolio: undefined;
-  News: undefined;
+  Interests: undefined;
+  Saved: undefined;
   Profile: undefined;
 };
 export type HomeStackParamList = {
-  HomeScreen: undefined;
+  Home: undefined;
   HeadlineDetailsScreen: undefined;
+};
+
+export type ProfileStackParamList = {
+  SavedArticles: undefined;
+  Profile: undefined;
 };

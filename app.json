@@ -3,11 +3,9 @@
     "name": "MarketBriefs",
     "slug": "marketBriefs",
     "owner": "prateek2812",
-    "scheme": "marketBriefs",
+    "scheme": ["marketBriefs", "fb743854988102436"],
     "platforms": ["ios", "android", "web"],
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
+    "runtimeVersion": "1.0.0",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "src/assets/MarketBriefsLogo.png",
@@ -50,7 +48,7 @@
     "web": {
       "favicon": "src/assets/favicon.png"
     },
-    "plugins": ["expo-font", "expo-web-browser"],
+    "plugins": ["expo-font", "expo-web-browser", "expo-localization"],
     "extra": {
       "facebookAppId": "743854988102436",
       "eas": {

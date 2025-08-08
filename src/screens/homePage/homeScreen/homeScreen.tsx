@@ -16,21 +16,17 @@ import fontFamily from "../../../assets/styles/fontFamily";
 import axios, { AxiosError } from "axios";
 import { getHighImpactNews, getNewsFeed } from "../../../apiServices/news";
 import Loader from "../../../components/Loader/loader";
-import {
-  GraphImage,
-  IncrementArrow,
-  ProfileIcon,
-  CurrencyImage,
-} from "../../../assets/icons/components/homepage";
-import {
-  CurrencyImage2,
-  GraphImage2,
-} from "../../../assets/icons/components/headlineDetailsView";
+import { ProfileIcon } from "../../../assets/icons/components/homepage";
+import { GraphImage2 } from "../../../assets/icons/components/headlineDetailsView";
 import { ThemeContext } from "../../../context/themeContext";
 import DiscoverDetailsCard from "../../../components/discoverDetailsCard/discoverDetailsCard";
 import TabLabel from "../../../components/tabLabel/tabLabel";
 import showToast from "../../../utilis/showToast";
 import globalStyles from "../../../assets/styles/globalStyles";
+import { Divider } from "react-native-paper";
+import { data } from "./homeScreenData"; // Importing the data from homeScreenData.ts
+import { getUserProfile } from "../../../apiServices/user";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const { width, height } = Dimensions.get("window");
 type NewsItem = {
   id: string;
@@ -66,8 +62,8 @@ const HomeScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [allNewsData, setAllNewsData] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [selectedTab, setSelectedTab] = useState("All");
-
+  const [selectedTag, setSelectedTag] = useState("All");
+  const [userName, setUserName] = useState("");
   const articles = [
     {
       title: "RBI holds rates steady, signals caution on inflation",
@@ -80,12 +76,31 @@ const HomeScreen = () => {
       time: "4h ago",
     },
   ];
-
-  const getAllNewsAPI = async () => {
+  const profile = {
+    created_at: "2025-07-31T12:24:03.247Z",
+    device_token: "",
+    device_type: "",
+    email: "rajput.prateek28@gmail.com",
+    id: "688b6063744fe82c289f5561",
+    interests: ["Startups", "Mutual Funds", "Crypto", "Economy"],
+    name: "New User",
+    notification__settings: {
+      enable_market_summaries: false,
+      enable_news_alerts: false,
+      enable_price_alerts: false,
+    },
+    onboarding_completed: true,
+    phone: "",
+    preferred_index: "",
+  };
+  const getAllNewsAPI = async (selectedTag: string) => {
+    setLoading(true);
     try {
-      const response = await getHighImpactNews();
-      console.log("newsResponse:", response.data);
-      setAllNewsData(response.data);
+      const response = await getHighImpactNews(selectedTag);
+      //const newsData = response.data;
+      const newsData = response.data.data;
+      //console.log("newsResponse:", newsData);
+      setAllNewsData(newsData);
     } catch (err) {
       // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
@@ -99,26 +114,79 @@ const HomeScreen = () => {
       setLoading(false);
     }
   };
+  const getUserProfileAPI = async () => {
+    try {
+      const response = await getUserProfile();
+      console.log("ProfileResponse=>", response.data);
+      const profileData = response.data;
+      AsyncStorage.multiSet([
+        ["userId", profileData.id || ""],
+        ["userName", profileData.name || ""],
+        ["userEmail", profileData.email || ""],
+        ["userPhone", profileData.phone || ""],
+        ["userInterests", JSON.stringify(profileData.interests || [])],
+      ]);
+      setUserName(profileData.name || "");
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      showToast(errorMessage, "danger");
+    }
+  };
   useEffect(() => {
-    getAllNewsAPI();
-  }, []);
+    if (selectedTag !== "") {
+      getAllNewsAPI(selectedTag);
+    }
+    getUserProfileAPI();
+  }, [selectedTag]);
   if (loading) return <Loader />;
   return (
     <View style={[globalStyles.pageContainerWithBackground(theme)]}>
       <View style={styles.headingContainer}>
-        <Text
+        <View style={styles.headingThemeContainer}>
+          <View style={styles.userHeadingContainer}>
+            <Text
+              style={[
+                styles.userNameStyle,
+                {
+                  color:
+                    theme == "light"
+                      ? colors.novemdenaryText
+                      : colors.darkSenaryText,
+                },
+              ]}
+            >
+              Hello {userName || "--"},
+            </Text>
+            <Text
+              style={[
+                globalStyles.title(theme),
+                { textAlign: "left", marginBottom: 0 },
+              ]}
+            >
+              Top Headlines
+            </Text>
+          </View>
+          <TouchableOpacity onPress={toggleTheme}>
+            <Text style={styles.text}>{theme === "dark" ? "☀️" : "🌙"}</Text>
+          </TouchableOpacity>
+        </View>
+        <Divider
           style={[
-            styles.heading,
+            styles.dividerStyle,
             {
-              color:
-                theme === "dark"
-                  ? colors.darkPrimaryText
-                  : colors.quaternaryText,
+              backgroundColor:
+                theme == "light"
+                  ? colors.octodenaryBackground
+                  : colors.darkUndenaryBackground,
             },
           ]}
-        >
-          Discover
-        </Text>
+        />
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -126,71 +194,75 @@ const HomeScreen = () => {
         >
           <TabLabel
             label="All"
-            selected={selectedTab === "All"}
-            onPress={() => setSelectedTab("All")}
+            selected={selectedTag === "All"}
+            onPress={() => setSelectedTag("All")}
           />
           <TabLabel
             label="Stock Market"
-            selected={selectedTab === "Stock Market"}
-            onPress={() => setSelectedTab("Stock Market")}
+            selected={selectedTag === "Stock Market"}
+            onPress={() => setSelectedTag("Stock Market")}
           />
           <TabLabel
             label="IPO’s"
-            selected={selectedTab === "IPO’s"}
-            onPress={() => setSelectedTab("IPO’s")}
+            selected={selectedTag === "IPO’s"}
+            onPress={() => setSelectedTag("IPO’s")}
           />
           <TabLabel
             label="Crypto"
-            selected={selectedTab === "Crypto"}
-            onPress={() => setSelectedTab("Crypto")}
+            selected={selectedTag === "Crypto"}
+            onPress={() => setSelectedTag("Crypto")}
           />
           <TabLabel
             label="Mutual Funds"
-            selected={selectedTab === "Mutual Funds"}
-            onPress={() => setSelectedTab("Mutual Funds")}
+            selected={selectedTag === "Mutual Funds"}
+            onPress={() => setSelectedTag("Mutual Funds")}
           />
         </ScrollView>
       </View>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.swiperWrapper}>
           {!loading && allNewsData.length === 0 && (
             <EmptyState message="No data found. Pull to refresh." />
           )}
           {allNewsData.map((news, index) => {
             {
-              /* {allNewsDiscover.map((news, index) => { */
+              /* {data.map((news, index) => { */
             }
             return (
-              <DiscoverDetailsCard
-                key={news.id}
-                index={index}
-                authorName={news.authors[0]}
-                timeAgo={news.time_ago}
-                impactLabel={news.impact_label}
-                impactScore={news.impact_score}
-                likes={news.engagement.likes}
-                comments={news.engagement.comments}
-                tag={news.tag}
-                heading={news.title}
-                summary={news.summary}
-                HeadlineImageComponent={GraphImage2}
-                ProfileIconComponent={ProfileIcon}
-                ImpactIconComponent={IncrementArrow}
-                onPress={() =>
-                  navigation.navigate("HeadlineDetailsScreen", {
-                    newsId: news.id,
-                    imageKey: "",
-                    title: news.title,
-                    author: "",
-                    time: "",
-                    impactLabel: news.impact_label,
-                    impactScore: news.impact_score,
-                    points: [],
-                    //@ts-ignore
-                    discussions: news.discussions,
-                  })
-                }
-              />
+              <React.Fragment key={news.id}>
+                <DiscoverDetailsCard
+                  key={news.id}
+                  index={index}
+                  authorName={news.authors[0]}
+                  timeAgo={news.time_ago}
+                  impactLabel={news.impact_label}
+                  impactScore={news.impact_score.toFixed(2)}
+                  likes={news.engagement.likes}
+                  comments={news.engagement.comments}
+                  tag={news.tag}
+                  heading={news.title}
+                  summary={news.summary}
+                  HeadlineImageComponent={GraphImage2}
+                  ProfileIconComponent={ProfileIcon}
+                  onPress={() =>
+                    navigation.navigate("HeadlineDetailsScreen", {
+                      newsId: news.id,
+                      imageKey: "",
+                    })
+                  }
+                />
+                <Divider
+                  style={[
+                    styles.dividerStyle,
+                    {
+                      backgroundColor:
+                        theme == "light"
+                          ? colors.octodenaryBackground
+                          : colors.darkUndenaryBackground,
+                    },
+                  ]}
+                />
+              </React.Fragment>
             );
           })}
         </View>
@@ -209,7 +281,20 @@ const styles = StyleSheet.create({
     backgroundColor: colors.nonaryBackground,
   },
   headingContainer: {
-    marginTop: 30,
+    marginTop: 40,
+    marginBottom: 20,
+  },
+  headingThemeContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  userHeadingContainer: {
+    gap: 0,
+  },
+  userNameStyle: {
+    fontSize: 16,
+    fontFamily: fontFamily.Inter500,
   },
   heading: {
     fontSize: 32,
@@ -221,8 +306,7 @@ const styles = StyleSheet.create({
     gap: 12,
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 12,
-    marginBottom: 20,
+    //marginTop: 12,
   },
   button: {
     backgroundColor: colors.quinaryBackground,
@@ -237,7 +321,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   swiperWrapper: {
-    // marginTop: 8,
+    //marginTop: 40,
     marginBottom: 20,
+  },
+  dividerStyle: {
+    height: 1,
+    // backgroundColor: colors.nonaryBorder,
+    marginVertical: 24,
+  },
+  text: {
+    fontSize: 24,
+    color: "#fff",
   },
 });
