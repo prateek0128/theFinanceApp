@@ -151,7 +151,7 @@ const SavedArticles = () => {
         <View style={styles.arrowSavedContainer}>
           <Header
             onBackClick={() => {
-              navigation.navigate("Profile");
+              navigation.navigate("ProfileStack");
             }}
             showThemeIcon={true}
           />

@@ -7,7 +7,7 @@ export function useGoogleLogin() {
 
   // Use proxy URI in Expo Go, native URI otherwise
   const redirectUri = AuthSession.makeRedirectUri({
-    native: "fb743854988102436://",
+    native: "marketBriefs://",
     // Do NOT include useProxy anymore; handled implicitly by URL
   });
 

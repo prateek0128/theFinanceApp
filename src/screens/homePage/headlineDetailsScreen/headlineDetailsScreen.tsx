@@ -730,34 +730,36 @@ const HeadlineDetailsScreen = () => {
                           {comment.comment}
                         </Text>
                         <View style={styles.likeUnlikeContainer}>
-                          <View style={styles.iconCountContainer}>
-                            <TouchableOpacity
-                              onPress={() => {
-                                handleToggleLikeComment(comment.id);
-                              }}
-                            >
-                              {!likedComments[comment.id] ? (
-                                <HeartCommentIcon width={20} height={20} />
-                              ) : (
-                                <HeartCommentIconFilled
-                                  width={20}
-                                  height={20}
-                                />
-                              )}
-                            </TouchableOpacity>
-                            <Text
-                              style={[
-                                styles.articleTime,
-                                {
-                                  color:
-                                    theme === "dark"
-                                      ? colors.darkSenaryText
-                                      : colors.unvigintaryText,
-                                },
-                              ]}
-                            >
-                              {comment.likes || 0}
-                            </Text>
+                          <View style={styles.likeReplyContainer}>
+                            <View style={styles.iconCountContainer}>
+                              <TouchableOpacity
+                                onPress={() => {
+                                  handleToggleLikeComment(comment.id);
+                                }}
+                              >
+                                {!likedComments[comment.id] ? (
+                                  <HeartCommentIcon width={20} height={20} />
+                                ) : (
+                                  <HeartCommentIconFilled
+                                    width={20}
+                                    height={20}
+                                  />
+                                )}
+                              </TouchableOpacity>
+                              <Text
+                                style={[
+                                  styles.articleTime,
+                                  {
+                                    color:
+                                      theme === "dark"
+                                        ? colors.darkSenaryText
+                                        : colors.unvigintaryText,
+                                  },
+                                ]}
+                              >
+                                {comment.likes || 0}
+                              </Text>
+                            </View>
                             <Text
                               style={[
                                 styles.articleTime,
@@ -1004,9 +1006,15 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     gap: 36,
   },
+  likeReplyContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 24,
+  },
   iconCountContainer: {
     flexDirection: "row",
-    gap: 8,
+    alignItems: "center",
+    gap: 6,
   },
   commentContainer: {
     //paddingHorizontal: 12,

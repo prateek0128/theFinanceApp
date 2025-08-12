@@ -24,7 +24,11 @@ import {
 } from "../../assets/icons/components/Profile";
 
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation, NavigationProp } from "@react-navigation/native";
+import {
+  useNavigation,
+  NavigationProp,
+  CommonActions,
+} from "@react-navigation/native";
 import { RootStackParamList } from "../../types/navigation";
 import fontFamily from "../../assets/styles/fontFamily";
 import { ThemeContext } from "../../context/themeContext";
@@ -50,7 +54,12 @@ const ProfileScreen = () => {
   const handleLogout = () => {
     console.log("Logged out");
     logout();
-    navigation.navigate("Welcome");
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: "Welcome" }],
+      })
+    );
   };
   const accountOptions: OptionItem[] = [
     {
@@ -91,146 +100,152 @@ const ProfileScreen = () => {
     darkIcon,
     lightIcon,
     onPress,
-  }: OptionItem) => (
-    <TouchableOpacity key={label} onPress={onPress} style={styles.optionRow}>
-      <View style={styles.iconOptionContainer}>
-        {theme === "dark" ? darkIcon : lightIcon}
+  }: OptionItem) => {
+    console.log("ProfileScreen...renderOption...");
+    return (
+      <TouchableOpacity key={label} onPress={onPress} style={styles.optionRow}>
+        {/* <View style={styles.iconOptionContainer}>
+          {theme === "dark" ? darkIcon : lightIcon}
+          <Text
+            style={[
+              styles.labelText,
+              {
+                color:
+                  theme === "dark"
+                    ? colors.nonaryBorder
+                    : colors.tertiaryButtonColor,
+              },
+            ]}
+          >
+            {label}
+          </Text>
+        </View> */}
+        <ForwardIcon />
+      </TouchableOpacity>
+    );
+  };
+  const renderSection = (title: string, options: OptionItem[]) => {
+    console.log("ProfileScreen...renderSection...");
+    return (
+      <View style={styles.section}>
         <Text
           style={[
-            styles.labelText,
+            styles.sectionTitle,
             {
               color:
-                theme === "dark"
-                  ? colors.nonaryBorder
-                  : colors.tertiaryButtonColor,
+                theme === "light"
+                  ? colors.octodenaryText
+                  : colors.darkPrimaryText,
             },
           ]}
         >
-          {label}
+          {title}
         </Text>
+        <View>{options.map(renderOption)}</View>
       </View>
-      <ForwardIcon />
-    </TouchableOpacity>
-  );
-  const renderSection = (title: string, options: OptionItem[]) => (
-    <View style={styles.section}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color:
-              theme === "light"
-                ? colors.octodenaryText
-                : colors.darkPrimaryText,
-          },
-        ]}
-      >
-        {title}
-      </Text>
-      <View>{options.map(renderOption)}</View>
-    </View>
-  );
-
+    );
+  };
+  console.log("ProfileScreen...");
   return (
-    <SafeAreaView style={[globalStyles.pageContainerWithBackground(theme)]}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.headerContainer}>
-          <Header
+    // <SafeAreaView style={[globalStyles.pageContainerWithBackground(theme)]}>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <View style={styles.headerContainer}>
+        {/* <Header
             onBackClick={() => {
               navigation.navigate("Home");
             }}
             showThemeIcon={false}
-          />
-        </View>
-        <View
-          style={[
-            styles.profileContainer,
-            {
-              backgroundColor:
-                theme === "dark"
-                  ? colors.darkQuinaryBackground
-                  : colors.primaryBackground,
-            },
-          ]}
-        >
-          <Image
-            source={require("../../assets/Images/Prateek.jpg")}
-            style={styles.profileImage}
-          />
-          <View style={[styles.userDetailsContainer]}>
-            <Text
-              style={[
-                styles.userName,
-                {
-                  color:
-                    theme === "dark"
-                      ? colors.darkPrimaryText
-                      : colors.octodenaryText,
-                },
-              ]}
-            >
-              {userName || "--"}
-            </Text>
-            <Text
-              style={[
-                styles.userEmail,
-                {
-                  color:
-                    theme === "light"
-                      ? colors.novemdenaryText
-                      : colors.darkSenaryText,
-                },
-              ]}
-            >
-              {userEmail || "--"}
-            </Text>
-          </View>
-        </View>
-        <TouchableOpacity
-          style={[
-            styles.premiumButton,
-            {
-              backgroundColor:
-                theme === "dark" ? colors.vigenaryText : colors.sexdenaryText,
-            },
-          ]}
-        >
-          <Text style={[styles.premiumText]}>Premium Membership</Text>
+          /> */}
+      </View>
+      <View
+        style={[
+          styles.profileContainer,
+          // {
+          //   backgroundColor:
+          //     theme === "dark"
+          //       ? colors.darkQuinaryBackground
+          //       : colors.primaryBackground,
+          // },
+        ]}
+      >
+        {/* <Image
+          source={require("../../assets/Images/Prateek.jpg")}
+          style={styles.profileImage}
+        /> */}
+        <View style={[styles.userDetailsContainer]}>
           <Text
             style={[
-              styles.premiumSubText,
+              styles.userName,
               {
                 color:
-                  theme === "light"
-                    ? colors.septendenaryBackground
-                    : colors.white,
+                  theme === "dark"
+                    ? colors.darkPrimaryText
+                    : colors.octodenaryText,
               },
             ]}
           >
-            Upgrade for more features
+            {userName || "--"}
           </Text>
-        </TouchableOpacity>
-        <View style={styles.optionContainer}>
-          {renderSection("Account", accountOptions)}
-          {renderSection("More", moreOptions)}
-        </View>
-        <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
           <Text
             style={[
-              styles.logoutText,
+              styles.userEmail,
               {
                 color:
                   theme === "light"
-                    ? colors.darkSenaryText
-                    : colors.darkPrimaryText,
+                    ? colors.novemdenaryText
+                    : colors.darkSenaryText,
               },
             ]}
           >
-            Log out
+            {userEmail || "--"}
           </Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </SafeAreaView>
+        </View>
+      </View>
+      {/* <TouchableOpacity
+        style={[
+          styles.premiumButton,
+          {
+            backgroundColor:
+              theme === "dark" ? colors.vigenaryText : colors.sexdenaryText,
+          },
+        ]}
+      >
+        <Text style={[styles.premiumText]}>Premium Membership</Text>
+        <Text
+          style={[
+            styles.premiumSubText,
+            {
+              color:
+                theme === "light"
+                  ? colors.septendenaryBackground
+                  : colors.white,
+            },
+          ]}
+        >
+          Upgrade for more features
+        </Text>
+      </TouchableOpacity> */}
+      {/* <View style={styles.optionContainer}>
+        {renderSection("Account", accountOptions)}
+        {renderSection("More", moreOptions)}
+      </View> */}
+      <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+        <Text
+          style={[
+            styles.logoutText,
+            {
+              color:
+                theme === "light"
+                  ? colors.darkSenaryText
+                  : colors.darkPrimaryText,
+            },
+          ]}
+        >
+          Log out
+        </Text>
+      </TouchableOpacity>
+    </ScrollView>
+    // </SafeAreaView>
   );
 };
 

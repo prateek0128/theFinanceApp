@@ -11,7 +11,7 @@ const Stack = createNativeStackNavigator<ProfileStackParamList>();
 export default function ProfileScreenStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Profile" component={ProfileScreen} />
+      <Stack.Screen name="ProfileStack" component={ProfileScreen} />
       <Stack.Screen name="SavedArticles" component={SavedArticles} />
     </Stack.Navigator>
   );

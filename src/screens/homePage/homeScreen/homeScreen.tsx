@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
+  FlatList,
 } from "react-native";
 import { colors } from "../../../assets/styles/colors";
 import EmptyState from "../../../components/EmptyStatte/emptyState";
@@ -64,6 +65,8 @@ const HomeScreen = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedTag, setSelectedTag] = useState("All");
   const [userName, setUserName] = useState("");
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
   const articles = [
     {
       title: "RBI holds rates steady, signals caution on inflation",
@@ -93,10 +96,15 @@ const HomeScreen = () => {
     phone: "",
     preferred_index: "",
   };
-  const getAllNewsAPI = async (selectedTag: string) => {
+  const getAllNewsAPI = async (
+    selectedTag: string,
+    page: number,
+    append = false,
+    limit?: number
+  ) => {
     setLoading(true);
     try {
-      const response = await getHighImpactNews(selectedTag);
+      const response = await getHighImpactNews(selectedTag, limit ?? 10);
       //const newsData = response.data;
       const newsData = response.data.data;
       //console.log("newsResponse:", newsData);
@@ -140,11 +148,24 @@ const HomeScreen = () => {
   };
   useEffect(() => {
     if (selectedTag !== "") {
-      getAllNewsAPI(selectedTag);
+      setPage(1);
+      getAllNewsAPI(selectedTag, 1);
     }
     getUserProfileAPI();
   }, [selectedTag]);
-  if (loading) return <Loader />;
+  const handleRefresh = () => {
+    setRefreshing(true);
+    setPage(1);
+    getAllNewsAPI(selectedTag, 1);
+  };
+
+  const handleLoadMore = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    getAllNewsAPI(selectedTag, nextPage, true);
+  };
+
+  if (loading && !refreshing) return <Loader />;
   return (
     <View style={[globalStyles.pageContainerWithBackground(theme)]}>
       <View style={styles.headingContainer}>
@@ -219,54 +240,54 @@ const HomeScreen = () => {
           />
         </ScrollView>
       </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.swiperWrapper}>
-          {!loading && allNewsData.length === 0 && (
+      <FlatList
+        data={allNewsData}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item, index }) => (
+          <React.Fragment key={item.id}>
+            <DiscoverDetailsCard
+              index={index}
+              authorName={item.authors[0]}
+              timeAgo={item.time_ago}
+              impactLabel={item.impact_label}
+              impactScore={item.impact_score.toFixed(2)}
+              likes={item.engagement.likes}
+              comments={item.engagement.comments}
+              tag={item.tag}
+              heading={item.title}
+              summary={item.summary}
+              HeadlineImageComponent={GraphImage2}
+              ProfileIconComponent={ProfileIcon}
+              onPress={() =>
+                navigation.navigate("HeadlineDetailsScreen", {
+                  newsId: item.id,
+                  imageKey: "",
+                })
+              }
+            />
+            <Divider
+              style={[
+                styles.dividerStyle,
+                {
+                  backgroundColor:
+                    theme == "light"
+                      ? colors.octodenaryBackground
+                      : colors.darkUndenaryBackground,
+                },
+              ]}
+            />
+          </React.Fragment>
+        )}
+        refreshing={refreshing}
+        onRefresh={handleRefresh}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.5}
+        ListEmptyComponent={
+          !loading ? (
             <EmptyState message="No data found. Pull to refresh." />
-          )}
-          {allNewsData.map((news, index) => {
-            {
-              /* {data.map((news, index) => { */
-            }
-            return (
-              <React.Fragment key={news.id}>
-                <DiscoverDetailsCard
-                  key={news.id}
-                  index={index}
-                  authorName={news.authors[0]}
-                  timeAgo={news.time_ago}
-                  impactLabel={news.impact_label}
-                  impactScore={news.impact_score.toFixed(2)}
-                  likes={news.engagement.likes}
-                  comments={news.engagement.comments}
-                  tag={news.tag}
-                  heading={news.title}
-                  summary={news.summary}
-                  HeadlineImageComponent={GraphImage2}
-                  ProfileIconComponent={ProfileIcon}
-                  onPress={() =>
-                    navigation.navigate("HeadlineDetailsScreen", {
-                      newsId: news.id,
-                      imageKey: "",
-                    })
-                  }
-                />
-                <Divider
-                  style={[
-                    styles.dividerStyle,
-                    {
-                      backgroundColor:
-                        theme == "light"
-                          ? colors.octodenaryBackground
-                          : colors.darkUndenaryBackground,
-                    },
-                  ]}
-                />
-              </React.Fragment>
-            );
-          })}
-        </View>
-      </ScrollView>
+          ) : null
+        }
+      />
     </View>
   );
 };

@@ -60,8 +60,6 @@ const Header = ({
 }: HeaderProps) => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const [open, setOpen] = useState(false);
-  console.log("LikedStatus=>", liked);
-  console.log("BookmarkedStatus=>", bookmarked);
   return (
     <View style={styles.headerConatiner}>
       <TouchableOpacity onPress={onBackClick}>

@@ -13,7 +13,7 @@ export type RootStackParamList = {
     newsId?: string;
     imageKey?: string;
   };
-  Profile: undefined;
+  ProfileStack: undefined;
   SavedArticles: undefined;
 };
 export type BottomTabParamList = {
@@ -29,5 +29,5 @@ export type HomeStackParamList = {
 
 export type ProfileStackParamList = {
   SavedArticles: undefined;
-  Profile: undefined;
+  ProfileStack: undefined;
 };
