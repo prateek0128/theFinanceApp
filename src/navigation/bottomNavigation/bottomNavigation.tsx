@@ -19,8 +19,6 @@ import {
   ProfileIconFilledLight,
   ProfileIconFilledDark,
 } from "../../assets/icons/components/bottomNavigation";
-import NewsScreen from "../../screens/newsScreen/newsScreen";
-
 import fontFamily from "../../assets/styles/fontFamily";
 import HomeScreenStack from "../homeScreenStack/homeScreenStack";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
