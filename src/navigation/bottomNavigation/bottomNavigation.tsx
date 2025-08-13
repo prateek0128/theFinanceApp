@@ -1,5 +1,5 @@
 import React from "react";
-import ProfileScreen from "../../screens/profileScreen/profileScreen";
+import ProfileScreen from "../../screens/profilePage/profileScreen/profileScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Dimensions } from "react-native";
 import HomeScreen from "../../screens/homePage/homeScreen/homeScreen";
@@ -28,7 +28,7 @@ import { colors } from "../../assets/styles/colors";
 import ChooseYourInterests from "../../screens/chooseYourInterests/chooseYourInterests";
 import { BottomTabParamList, HomeStackParamList } from "../../types/navigation";
 import ProfileScreenStack from "../profileScreenStack/profileScreenStack";
-import SavedArticles from "../../screens/savedArticle/savedArticle";
+import SavedArticles from "../../screens/profilePage/savedArticle/savedArticle";
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 const { width, height } = Dimensions.get("window");
 

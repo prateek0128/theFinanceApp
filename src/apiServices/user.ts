@@ -21,3 +21,14 @@ export const updateUserProfile = async () => {
     throw error;
   }
 };
+
+// Update User Interest
+export const updateUserInterest = async () => {
+  const client = await apiClient();
+  try {
+    const response = await client.put("/user/interests");
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

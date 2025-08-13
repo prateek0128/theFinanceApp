@@ -29,26 +29,15 @@
       "intentFilters": [
         {
           "action": "VIEW",
-          "data": [
-            {
-              "scheme": "marketbriefs",
-              "host": "redirect"
-            }
-          ],
+          "data": [{ "scheme": "marketbriefs", "host": "redirect" }],
           "category": ["BROWSABLE", "DEFAULT"]
         }
       ],
       "manifest": {
         "queries": [
-          {
-            "package": "com.whatsapp"
-          },
-          {
-            "package": "com.instagram.android"
-          },
-          {
-            "package": "com.twitter.android"
-          }
+          { "package": "com.whatsapp" },
+          { "package": "com.instagram.android" },
+          { "package": "com.twitter.android" }
         ]
       }
     },
@@ -66,6 +55,9 @@
         }
       ]
     ],
+    "updates": {
+      "url": "https://u.expo.dev/f348fc7b-94d7-4e80-ab1f-814df370353e"
+    },
     "extra": {
       "facebookAppId": "743854988102436",
       "eas": {

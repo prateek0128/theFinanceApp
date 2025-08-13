@@ -21,7 +21,7 @@ import {
   SavedIcon,
   SettingIcon,
   ForwardIcon,
-} from "../../assets/icons/components/Profile";
+} from "../../../assets/icons/components/Profile";
 
 import { Ionicons } from "@expo/vector-icons";
 import {
@@ -29,15 +29,18 @@ import {
   NavigationProp,
   CommonActions,
 } from "@react-navigation/native";
-import { RootStackParamList } from "../../types/navigation";
-import fontFamily from "../../assets/styles/fontFamily";
-import { ThemeContext } from "../../context/themeContext";
-import { BackArrow, BackArrowWhite } from "../../assets/icons/components/logIn";
-import { colors } from "../../assets/styles/colors";
-import globalStyles from "../../assets/styles/globalStyles";
+import { RootStackParamList } from "../../../types/navigation";
+import fontFamily from "../../../assets/styles/fontFamily";
+import { ThemeContext } from "../../../context/themeContext";
+import {
+  BackArrow,
+  BackArrowWhite,
+} from "../../../assets/icons/components/logIn";
+import { colors } from "../../../assets/styles/colors";
+import globalStyles from "../../../assets/styles/globalStyles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { AuthContext } from "../../context/loginAuthContext";
-import Header from "../../components/header/header";
+import { AuthContext } from "../../../context/loginAuthContext";
+import Header from "../../../components/header/header";
 type OptionItem = {
   label: string;
   darkIcon: React.ReactNode;
@@ -78,7 +81,8 @@ const ProfileScreen = () => {
       label: "Saved Articles",
       darkIcon: <DarkSavedIcon />,
       lightIcon: <SavedIcon />,
-      onPress: () => navigation.navigate("SavedArticles"),
+      onPress: () =>
+        navigation.navigate("Profile", { screen: "SavedArticles" }),
     },
   ];
   const moreOptions: OptionItem[] = [
