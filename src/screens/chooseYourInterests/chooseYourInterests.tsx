@@ -28,7 +28,7 @@ import { AxiosError } from "axios";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import * as Device from "expo-device";
 import * as Localization from "expo-localization";
-import { getUserProfile } from "../../apiServices/user";
+import { getUserProfile, updateUserInterest } from "../../apiServices/user";
 import Loader from "../../components/Loader/loader";
 const interests = [
   "Stock Market News",
@@ -63,12 +63,15 @@ export default function ChooseYourInterests() {
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [deviceInfo, setDeviceInfo] = useState<any>({});
   const [isLoading, setIsLoading] = useState(false);
-
   const [selectedInterestIds, setSelectedInterestIds] = useState<string[]>([]);
+  const [updateInterests, setUpdateInterest] = useState<string[]>([]);
   const route = useRoute<
     ChooseYourInterestsRouteProp | BottomTabNavigatorRouteProp
   >();
-  const { expertiseLevel } = route.params || {};
+  const expertiseLevel =
+    route.params && "expertiseLevel" in route.params
+      ? (route.params as { expertiseLevel?: string | null }).expertiseLevel
+      : undefined;
   console.log("expertiseLevel:", expertiseLevel || "");
   const toggleInterest = (item: any) => {
     setSelected((prevSelected) => {
@@ -83,7 +86,7 @@ export default function ChooseYourInterests() {
       // Update interest IDs as well
       const updatedIds = updatedSelected.map((i) => i.interestId);
       setSelectedInterestIds(updatedIds);
-
+      setUpdateInterest(updatedSelected.map((i) => i.name));
       return updatedSelected;
     });
   };
@@ -137,7 +140,7 @@ export default function ChooseYourInterests() {
     }
   };
   const getUserProfileAPI = async () => {
-       setIsLoading(true);
+    setIsLoading(true);
     try {
       const response = await getUserProfile();
       console.log("SelectedInterestsResponse=>", response.data);
@@ -155,6 +158,16 @@ export default function ChooseYourInterests() {
       setIsLoading(false);
     }
   };
+  const handleUpdateInterestsAPI = async () => {
+    const interestsData: string[] = updateInterests;
+    try {
+      const response = await updateUserInterest(interestsData);
+      console.log("UpdateRespone=>", response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getAllInterestsAPI();
     getUserProfileAPI();
@@ -168,6 +181,9 @@ export default function ChooseYourInterests() {
     selectedInterestIds.length < 0 ? "Get Started" : "Update Interests";
   console.log("GroupInterests=>", groupedInterests);
   console.log("SelectedInterests=>", selectedInterests);
+  console.log("SelectedInterests2=>", selected);
+  console.log("SelectedInterests3=>", updateInterests);
+
   // Add this useEffect to map API-selected names to your full interest objects
   useEffect(() => {
     if (interests.length && selectedInterests.length) {
@@ -267,7 +283,9 @@ export default function ChooseYourInterests() {
             if (selected.length >= 3) {
               setIsLoading(true);
               try {
-                await handleContinue();
+                selectedInterestIds.length < 0
+                  ? await handleContinue()
+                  : await handleUpdateInterestsAPI();
                 showToast("Your interests saved successfully", "success");
               } catch (error) {
                 console.error(error);

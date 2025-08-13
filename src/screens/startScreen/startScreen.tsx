@@ -168,18 +168,12 @@ const StartScreen = () => {
         <Button
           title="Continue"
           onPress={() => {
-            // navigation.navigate("Welcome");
-            // rootNavigation.navigate("Profile", {
-            //   screen: "EditProfileScreen",
-            // });
-            navigation.navigate("BottomTabNavigator", {
-              screen: "Profile",
-              params: {
-                screen: "EditProfileScreen",
-              },
-            });
-            // navigation.getParent()?.navigate("Profile", {
-            //   screen: "EditProfileScreen",
+            navigation.navigate("Welcome");
+            // navigation.navigate("BottomTabNavigator", {
+            //   screen: "Profile",
+            //   params: {
+            //     screen: "EditProfileScreen",
+            //   },
             // });
           }}
         />
