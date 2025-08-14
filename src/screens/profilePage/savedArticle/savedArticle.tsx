@@ -28,6 +28,7 @@ import {
   ViewMoreIconWhite,
 } from "../../../assets/icons/components/savedArticles";
 import Header from "../../../components/header/header";
+import { useBackPressNavigate } from "../../../hooks/useBackPressNavigate";
 
 const savedArticles = [
   {
@@ -147,7 +148,7 @@ const SavedArticles = () => {
       </View>
     </TouchableOpacity>
   );
-
+  useBackPressNavigate("Home");
   return (
     <SafeAreaView style={[globalStyles.pageContainerWithBackground(theme)]}>
       <View style={styles.headerContainer}>

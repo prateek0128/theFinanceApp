@@ -66,6 +66,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import globalStyles from "../../../assets/styles/globalStyles";
 import { NewsAuthorIcon } from "../../../assets/icons/components/homepage";
 import { Divider } from "react-native-paper";
+import { useBackPressNavigate } from "../../../hooks/useBackPressNavigate";
 
 dayjs.extend(relativeTime);
 const { width, height } = Dimensions.get("window");
@@ -439,6 +440,7 @@ const HeadlineDetailsScreen = () => {
     .split("•")
     .map((point) => point.trim())
     .filter((point) => point.length > 0);
+  useBackPressNavigate("Home");
   return (
     <>
       <KeyboardAvoidingView

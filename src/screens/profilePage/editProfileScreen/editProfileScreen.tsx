@@ -22,6 +22,10 @@ import {
 } from "../../../assets/icons/components/logIn";
 import Header from "../../../components/header/header";
 import globalStyles from "../../../assets/styles/globalStyles";
+import { useBackPressNavigate } from "../../../hooks/useBackPressNavigate";
+import { getUserProfile } from "../../../apiServices/user";
+import { AxiosError } from "axios";
+import showToast from "../../../utilis/showToast";
 
 export default function EditProfileScreen() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -34,7 +38,14 @@ export default function EditProfileScreen() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [expertiseLevel, setExpertiseLevel] = useState("");
-
+  const [isLoading, setIsLoading] = useState(false);
+  type ProfileDetails = {
+    name?: string;
+    experience_level?: string;
+    email?: string;
+    // add other properties as needed
+  };
+  const [profileDetails, setProfileDetails] = useState<ProfileDetails>({});
   // Simulate API fetch
   useEffect(() => {
     setTimeout(() => {
@@ -70,7 +81,31 @@ export default function EditProfileScreen() {
       alert("Profile updated successfully!");
     }, 1500);
   };
-
+  const getUserProfileAPI = async () => {
+    setIsLoading(true);
+    try {
+      const response = await getUserProfile();
+      console.log(" ProfileResponse=>", response.data);
+      setProfileDetails(response.data || []);
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      showToast(errorMessage, "danger");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    getUserProfileAPI();
+  }, []);
+  useBackPressNavigate<RootStackParamList>("Profile", {
+    screen: "ProfileStack",
+  });
   if (loading) {
     return (
       <View style={styles.loader}>
@@ -83,73 +118,78 @@ export default function EditProfileScreen() {
     <ScrollView
       style={[globalStyles.pageContainerWithBackground(theme)]}
       showsVerticalScrollIndicator={false}
+      contentContainerStyle={{
+        justifyContent: "space-between",
+        flex: 1,
+        height: "100%",
+      }}
     >
-      <View style={styles.arrowSavedContainer}>
-        <Header
-          onBackClick={() => {
-            navigation.navigate("Profile", {
-              screen: "ProfileStack",
-            });
-          }}
-        />
-      </View>
-      <View style={styles.subContainer}>
-        {/* Profile Image */}
-        <View style={styles.avatarContainer}>
-          <Image source={{ uri: avatar }} style={styles.avatar} />
-          <TouchableOpacity style={styles.cameraIcon} onPress={pickImage}>
-            <Ionicons name="camera" size={20} color="#fff" />
-          </TouchableOpacity>
+      <View>
+        <View style={styles.arrowSavedContainer}>
+          <Header
+            onBackClick={() => {
+              navigation.navigate("Profile", {
+                screen: "ProfileStack",
+              });
+            }}
+          />
         </View>
-        <View
-          style={[
-            styles.form,
-            {
-              backgroundColor:
-                theme === "dark"
-                  ? colors.octodenaryText
-                  : colors.primaryBackground,
-            },
-          ]}
-        >
-          <View style={styles.Fields}>
-            <Text
-              style={[
-                styles.label,
-                {
-                  color:
-                    theme === "dark"
-                      ? colors.darkPrimaryText
-                      : colors.octodenaryText,
-                },
-              ]}
-            >
-              Full Name
-            </Text>
-            <TextInput
-              style={[
-                styles.input,
-                {
-                  backgroundColor:
-                    theme === "dark" ? colors.octodenaryText : colors.white,
-                  color:
-                    theme === "dark"
-                      ? colors.darkSenaryText
-                      : colors.unvigintaryText,
-                },
-              ]}
-              placeholder="Enter your full name"
-              placeholderTextColor={
-                theme === "dark"
-                  ? colors.darkSenaryText
-                  : colors.unvigintaryText
-              }
-              value={fullName}
-              onChangeText={setFullName}
-            />
+        <View style={styles.subContainer}>
+          <View style={styles.avatarContainer}>
+            <Image source={{ uri: avatar }} style={styles.avatar} />
+            <TouchableOpacity style={styles.cameraIcon} onPress={pickImage}>
+              <Ionicons name="camera" size={20} color="#fff" />
+            </TouchableOpacity>
           </View>
-
-          {/* <Text
+          <View
+            style={[
+              styles.form,
+              {
+                backgroundColor:
+                  theme === "dark"
+                    ? colors.octodenaryText
+                    : colors.primaryBackground,
+              },
+            ]}
+          >
+            <View style={styles.Fields}>
+              <Text
+                style={[
+                  styles.label,
+                  {
+                    color:
+                      theme === "dark"
+                        ? colors.darkPrimaryText
+                        : colors.octodenaryText,
+                  },
+                ]}
+              >
+                Full Name
+              </Text>
+              <TextInput
+                style={[
+                  styles.input,
+                  {
+                    backgroundColor:
+                      theme === "dark" ? colors.octodenaryText : colors.white,
+                    color:
+                      theme === "dark"
+                        ? colors.darkSenaryText
+                        : colors.unvigintaryText,
+                  },
+                ]}
+                placeholder="Enter your full name"
+                placeholderTextColor={
+                  theme === "dark"
+                    ? colors.darkSenaryText
+                    : colors.unvigintaryText
+                }
+                value={profileDetails?.name ?? ""}
+                onChangeText={setFullName}
+              />
+            </View>
+            <>
+              {/*<View> <Text
           style={[
             styles.label,
             {
@@ -173,74 +213,74 @@ export default function EditProfileScreen() {
           ]}
           value={dob}
           onChangeText={setDob}
-        /> */}
+        /></View> */}
+            </>
+            <View style={styles.Fields}>
+              <Text
+                style={[
+                  styles.label,
+                  {
+                    color:
+                      theme === "dark" ? colors.white : colors.octodenaryText,
+                  },
+                ]}
+              >
+                Expertise Level
+              </Text>
+              <TextInput
+                style={[
+                  styles.input,
+                  {
+                    backgroundColor:
+                      theme === "dark" ? colors.octodenaryText : colors.white,
+                    color:
+                      theme === "dark"
+                        ? colors.darkSenaryText
+                        : colors.unvigintaryText,
+                  },
+                ]}
+                placeholder="Enter your expertise level"
+                placeholderTextColor={
+                  theme === "dark"
+                    ? colors.darkSenaryText
+                    : colors.unvigintaryText
+                }
+                value={profileDetails?.experience_level ?? ""}
+                onChangeText={setExpertiseLevel}
+              />
+            </View>
 
-          <View style={styles.Fields}>
-            <Text
-              style={[
-                styles.label,
-                {
-                  color:
-                    theme === "dark" ? colors.white : colors.octodenaryText,
-                },
-              ]}
-            >
-              Expertise Level
-            </Text>
-            <TextInput
-              style={[
-                styles.input,
-                {
-                  backgroundColor:
-                    theme === "dark" ? colors.octodenaryText : colors.white,
-                  color:
-                    theme === "dark"
-                      ? colors.darkSenaryText
-                      : colors.unvigintaryText,
-                },
-              ]}
-              placeholder="Enter your expertise level"
-              placeholderTextColor={
-                theme === "dark"
-                  ? colors.darkSenaryText
-                  : colors.unvigintaryText
-              }
-              value={expertiseLevel}
-              onChangeText={setExpertiseLevel}
-            />
-          </View>
+            <View style={styles.Fields}>
+              <Text
+                style={[
+                  styles.label,
+                  {
+                    color:
+                      theme === "dark" ? colors.white : colors.octodenaryText,
+                  },
+                ]}
+              >
+                Email
+              </Text>
+              <TextInput
+                style={[
+                  styles.input,
+                  {
+                    backgroundColor:
+                      theme === "dark" ? colors.octodenaryText : colors.white,
+                    color:
+                      theme === "dark"
+                        ? colors.darkSenaryText
+                        : colors.unvigintaryText,
+                  },
+                ]}
+                value={profileDetails?.email ?? ""}
+                keyboardType="email-address"
+                onChangeText={setEmail}
+              />
+            </View>
 
-          <View style={styles.Fields}>
-            <Text
-              style={[
-                styles.label,
-                {
-                  color:
-                    theme === "dark" ? colors.white : colors.octodenaryText,
-                },
-              ]}
-            >
-              Email
-            </Text>
-            <TextInput
-              style={[
-                styles.input,
-                {
-                  backgroundColor:
-                    theme === "dark" ? colors.octodenaryText : colors.white,
-                  color:
-                    theme === "dark"
-                      ? colors.darkSenaryText
-                      : colors.unvigintaryText,
-                },
-              ]}
-              value={email}
-              keyboardType="email-address"
-              onChangeText={setEmail}
-            />
-          </View>
-
-          {/* <Text
+            {/* <Text
           style={[
             styles.label,
             {
@@ -266,12 +306,12 @@ export default function EditProfileScreen() {
           secureTextEntry
           onChangeText={setPassword}
         /> */}
+          </View>
         </View>
       </View>
-      {/* Save Button */}
-      <View style={styles.saveButtonContainer}>
+      <View style={{ flexDirection: "row", justifyContent: "center" }}>
         <TouchableOpacity
-          style={[styles.saveButton, saving && { opacity: 0.6 }]}
+          style={[styles.saveButtonContainer, saving && { opacity: 0.6 }]}
           onPress={handleSave}
           disabled={saving}
         >
@@ -348,10 +388,10 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   saveButton: {
-    borderRadius: 8,
-    paddingVertical: 14,
-    marginTop: 10,
-    alignItems: "center",
+    // borderRadius: 8,
+    // paddingVertical: 14,
+    // marginTop: 10,
+    // alignItems: "center",
   },
   saveButtonText: {
     color: "#6B4EFF",

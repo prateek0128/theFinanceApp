@@ -30,6 +30,7 @@ import * as Device from "expo-device";
 import * as Localization from "expo-localization";
 import { getUserProfile, updateUserInterest } from "../../apiServices/user";
 import Loader from "../../components/Loader/loader";
+import { useBackPressNavigate } from "../../hooks/useBackPressNavigate";
 const interests = [
   "Stock Market News",
   "Indian Companies",
@@ -143,7 +144,7 @@ export default function ChooseYourInterests() {
     setIsLoading(true);
     try {
       const response = await getUserProfile();
-      console.log("SelectedInterestsResponse=>", response.data);
+      console.log("SelectedInterestsResponse=>", response.data.interests);
       setSelectedInterests(response.data.interests || []);
     } catch (err) {
       // Narrow / cast to AxiosError
@@ -194,6 +195,8 @@ export default function ChooseYourInterests() {
       setSelectedInterestIds(matched.map((i) => i.interestId));
     }
   }, [interests, selectedInterests]);
+  selectedInterestIds.length < 0 &&
+    useBackPressNavigate("BottomTabNavigator", {});
   return (
     <View style={{ flex: 1 }}>
       <View

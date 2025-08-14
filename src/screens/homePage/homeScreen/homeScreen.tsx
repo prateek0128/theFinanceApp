@@ -135,6 +135,8 @@ const HomeScreen = () => {
       const response = await getUserProfile();
       console.log("ProfileResponse=>", response.data);
       const profileData = response.data;
+      console.log("userName=>", profileData.name);
+      console.log("userEmail=>", profileData.email);
       AsyncStorage.multiSet([
         ["userId", profileData.id || ""],
         ["userName", profileData.name || ""],

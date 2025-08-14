@@ -1,4 +1,4 @@
-import React, { use, useContext } from "react";
+import React, { use, useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -32,15 +32,12 @@ import {
 import { RootStackParamList } from "../../../types/navigation";
 import fontFamily from "../../../assets/styles/fontFamily";
 import { ThemeContext } from "../../../context/themeContext";
-import {
-  BackArrow,
-  BackArrowWhite,
-} from "../../../assets/icons/components/logIn";
 import { colors } from "../../../assets/styles/colors";
 import globalStyles from "../../../assets/styles/globalStyles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../../../context/loginAuthContext";
 import Header from "../../../components/header/header";
+import { useBackPressNavigate } from "../../../hooks/useBackPressNavigate";
 type OptionItem = {
   label: string;
   darkIcon: React.ReactNode;
@@ -52,38 +49,39 @@ const ProfileScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { theme } = useContext(ThemeContext);
   const { user, logout } = useContext(AuthContext);
-  const userName = AsyncStorage.getItem("userName") || "--";
-  const userEmail = AsyncStorage.getItem("userEmail") || "--";
+  const [userName, setUserName] = useState("--");
+  const [userEmail, setUserEmail] = useState("--");
   const handleLogout = () => {
     console.log("Logged out");
     logout();
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{ name: "Welcome" }],
-      })
-    );
+    // navigation.dispatch(
+    //   CommonActions.reset({
+    //     index: 0,
+    //     routes: [{ name: "Welcome" }],
+    //   })
+    // );
   };
   const accountOptions: OptionItem[] = [
     {
       label: "Edit Profile",
       darkIcon: <DarkProfileIcon />,
       lightIcon: <EditProfileIcon />,
-      onPress: () => {},
-    },
-    {
-      label: "My Interests",
-      darkIcon: <DarkMyintresetIcon />,
-      lightIcon: <MyIntrestIcon />,
-      onPress: () => navigation.navigate("ChooseYourInterests", {}),
-    },
-    {
-      label: "Saved Articles",
-      darkIcon: <DarkSavedIcon />,
-      lightIcon: <SavedIcon />,
       onPress: () =>
-        navigation.navigate("Profile", { screen: "SavedArticles" }),
+        navigation.navigate("Profile", { screen: "EditProfileScreen" }),
     },
+    // {
+    //   label: "My Interests",
+    //   darkIcon: <DarkMyintresetIcon />,
+    //   lightIcon: <MyIntrestIcon />,
+    //   onPress: () => navigation.navigate("ChooseYourInterests", {}),
+    // },
+    // {
+    //   label: "Saved Articles",
+    //   darkIcon: <DarkSavedIcon />,
+    //   lightIcon: <SavedIcon />,
+    //   onPress: () =>
+    //     navigation.navigate("Profile", { screen: "SavedArticles" }),
+    // },
   ];
   const moreOptions: OptionItem[] = [
     {
@@ -108,7 +106,7 @@ const ProfileScreen = () => {
     console.log("ProfileScreen...renderOption...");
     return (
       <TouchableOpacity key={label} onPress={onPress} style={styles.optionRow}>
-        {/* <View style={styles.iconOptionContainer}>
+        <View style={styles.iconOptionContainer}>
           {theme === "dark" ? darkIcon : lightIcon}
           <Text
             style={[
@@ -123,7 +121,7 @@ const ProfileScreen = () => {
           >
             {label}
           </Text>
-        </View> */}
+        </View>
         <ForwardIcon />
       </TouchableOpacity>
     );
@@ -149,107 +147,131 @@ const ProfileScreen = () => {
       </View>
     );
   };
+  useEffect(() => {
+    const loadProfileData = async () => {
+      try {
+        const name = await AsyncStorage.getItem("userName");
+        const email = await AsyncStorage.getItem("userEmail");
+        setUserName(name || "--");
+        setUserEmail(email || "--");
+      } catch (error) {
+        console.error("Error loading profile data:", error);
+      }
+    };
+
+    loadProfileData();
+  }, []);
   console.log("ProfileScreen...");
+  console.log("userNameProfile=>", userName);
+  console.log("userEmailProfile=>", userEmail);
+  useBackPressNavigate("Home");
   return (
-    // <SafeAreaView style={[globalStyles.pageContainerWithBackground(theme)]}>
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={styles.headerContainer}>
-        {/* <Header
-            onBackClick={() => {
-              navigation.navigate("Home");
-            }}
-            showThemeIcon={false}
-          /> */}
-      </View>
-      <View
-        style={[
-          styles.profileContainer,
-          // {
-          //   backgroundColor:
-          //     theme === "dark"
-          //       ? colors.darkQuinaryBackground
-          //       : colors.primaryBackground,
-          // },
-        ]}
+    <SafeAreaView style={[globalStyles.pageContainerWithBackground(theme)]}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ justifyContent: "space-between", flex: 1 }}
       >
-        {/* <Image
-          source={require("../../assets/Images/Prateek.jpg")}
-          style={styles.profileImage}
-        /> */}
-        <View style={[styles.userDetailsContainer]}>
-          <Text
+        <View>
+          <View style={styles.headerContainer}>
+            <Header
+              onBackClick={() => {
+                navigation.navigate("BottomTabNavigator");
+              }}
+              showThemeIcon={false}
+            />
+          </View>
+          <View
             style={[
-              styles.userName,
+              styles.profileContainer,
+              // {
+              //   backgroundColor:
+              //     theme === "dark"
+              //       ? colors.darkQuinaryBackground
+              //       : colors.primaryBackground,
+              // },
+            ]}
+          >
+            <Image
+              source={require("../../../assets/Images/Prateek.jpg")}
+              style={styles.profileImage}
+            />
+            <View style={[styles.userDetailsContainer]}>
+              <Text
+                style={[
+                  styles.userNameStyle,
+                  {
+                    color:
+                      theme === "dark"
+                        ? colors.darkPrimaryText
+                        : colors.octodenaryText,
+                  },
+                ]}
+              >
+                {userName || "--"}
+              </Text>
+              <Text
+                style={[
+                  styles.userEmailStyle,
+                  {
+                    color:
+                      theme === "light"
+                        ? colors.novemdenaryText
+                        : colors.darkSenaryText,
+                  },
+                ]}
+              >
+                {userEmail || "--"}
+              </Text>
+            </View>
+          </View>
+          <TouchableOpacity
+            style={[
+              styles.premiumButton,
               {
-                color:
-                  theme === "dark"
-                    ? colors.darkPrimaryText
-                    : colors.octodenaryText,
+                backgroundColor:
+                  theme === "dark" ? colors.vigenaryText : colors.sexdenaryText,
               },
             ]}
           >
-            {userName || "--"}
-          </Text>
-          <Text
-            style={[
-              styles.userEmail,
-              {
-                color:
-                  theme === "light"
-                    ? colors.novemdenaryText
-                    : colors.darkSenaryText,
-              },
-            ]}
-          >
-            {userEmail || "--"}
-          </Text>
+            <Text style={[styles.premiumText]}>Premium Membership</Text>
+            <Text
+              style={[
+                styles.premiumSubText,
+                {
+                  color:
+                    theme === "light"
+                      ? colors.septendenaryBackground
+                      : colors.white,
+                },
+              ]}
+            >
+              Upgrade for more features
+            </Text>
+          </TouchableOpacity>
+          <View style={styles.optionContainer}>
+            {renderSection("Account", accountOptions)}
+            {renderSection("More", moreOptions)}
+          </View>
         </View>
-      </View>
-      {/* <TouchableOpacity
-        style={[
-          styles.premiumButton,
-          {
-            backgroundColor:
-              theme === "dark" ? colors.vigenaryText : colors.sexdenaryText,
-          },
-        ]}
-      >
-        <Text style={[styles.premiumText]}>Premium Membership</Text>
-        <Text
-          style={[
-            styles.premiumSubText,
-            {
-              color:
-                theme === "light"
-                  ? colors.septendenaryBackground
-                  : colors.white,
-            },
-          ]}
-        >
-          Upgrade for more features
-        </Text>
-      </TouchableOpacity> */}
-      {/* <View style={styles.optionContainer}>
-        {renderSection("Account", accountOptions)}
-        {renderSection("More", moreOptions)}
-      </View> */}
-      <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-        <Text
-          style={[
-            styles.logoutText,
-            {
-              color:
-                theme === "light"
-                  ? colors.darkSenaryText
-                  : colors.darkPrimaryText,
-            },
-          ]}
-        >
-          Log out
-        </Text>
-      </TouchableOpacity>
-    </ScrollView>
-    // </SafeAreaView>
+        <View style={{ flexDirection: "row", justifyContent: "center" }}>
+          <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+            <Text
+              style={[
+                styles.logoutText,
+                {
+                  color:
+                    theme === "light"
+                      ? colors.darkSenaryText
+                      : colors.darkPrimaryText,
+                },
+              ]}
+            >
+              Log out
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -270,11 +292,11 @@ const styles = StyleSheet.create({
     borderRadius: 9999,
   },
   userDetailsContainer: { gap: 10, alignItems: "center" },
-  userName: {
+  userNameStyle: {
     fontSize: 18,
     fontFamily: fontFamily.Cabinet700,
   },
-  userEmail: {
+  userEmailStyle: {
     fontSize: 14,
     fontFamily: fontFamily.Inter400,
   },
@@ -322,6 +344,8 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     alignItems: "center",
+    position: "absolute",
+    bottom: 0,
   },
   logoutText: {
     fontFamily: fontFamily.Inter400,

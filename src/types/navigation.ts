@@ -16,6 +16,7 @@ export type RootStackParamList = {
     imageKey?: string;
   };
   Profile: NavigatorScreenParams<ProfileStackParamList>;
+  EditProfileScreen?: undefined;
 };
 export type BottomTabParamList = {
   Home?: undefined;
