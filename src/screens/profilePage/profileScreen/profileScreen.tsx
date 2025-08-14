@@ -54,12 +54,12 @@ const ProfileScreen = () => {
   const handleLogout = () => {
     console.log("Logged out");
     logout();
-    // navigation.dispatch(
-    //   CommonActions.reset({
-    //     index: 0,
-    //     routes: [{ name: "Welcome" }],
-    //   })
-    // );
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: "Welcome" }],
+      })
+    );
   };
   const accountOptions: OptionItem[] = [
     {
