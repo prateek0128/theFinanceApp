@@ -1,4 +1,12 @@
-import React, { useEffect, useRef, useState, useContext } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useContext,
+  useCallback,
+} from "react";
+import { BackHandler, Alert } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   View,
   Text,
@@ -165,6 +173,26 @@ const HomeScreen = () => {
     getAllNewsAPI(selectedTag, nextPage, true);
   };
 
+  // Inside your HomeScreen component
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        // Optional: Ask for confirmation before exiting
+        Alert.alert("Exit App", "Are you sure you want to exit?", [
+          { text: "Cancel", style: "cancel" },
+          { text: "Yes", onPress: () => BackHandler.exitApp() },
+        ]);
+        return true; // Prevent default behavior (going back in navigation)
+      };
+
+      const subscription = BackHandler.addEventListener(
+        "hardwareBackPress",
+        onBackPress
+      );
+
+      return () => subscription.remove();
+    }, [])
+  );
   if (loading && !refreshing) return <Loader />;
   return (
     <View style={[globalStyles.pageContainerWithBackground(theme)]}>
