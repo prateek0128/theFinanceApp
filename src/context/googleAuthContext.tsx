@@ -50,7 +50,7 @@ export const useGoogleAuth = () => {
       // Force the account chooser by signing out first
       await GoogleSignin.signOut(); // or await GoogleSignin.revokeAccess();
       const response = await GoogleSignin.signIn();
-
+      console.log("GoogleResonse=>", response);
       if (isSuccessResponse(response)) {
         // Extract tokens
         const { idToken, accessToken } = await GoogleSignin.getTokens();
@@ -60,6 +60,8 @@ export const useGoogleAuth = () => {
           idToken,
           accessToken,
         };
+        console.log("GoogleResonseIdToken=>", fullData.idToken);
+        console.log("GoogleResonseAccessToken=>", fullData.accessToken);
         setIdToken(fullData.idToken);
         setAccessToken(fullData.accessToken);
         setGoogleUserInfo(response.data);

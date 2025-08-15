@@ -80,6 +80,8 @@ const WelcomeScreen = () => {
   //   }
   // }, [userInfoGoogle]);
   const handleGoogleLogin = async () => {
+    console.log("Idtoken", idToken);
+    console.log("AccessToken", accessToken);
     const userData = await signIn();
     if (userData) {
       console.log("UserData", userData);
