@@ -27,12 +27,10 @@ export const GoogleAuthProvider = ({
 
   const isExpoGo = Constants.appOwnership === "expo";
   const redirectUri = AuthSession.makeRedirectUri({
+    scheme: "marketBriefs",
     useProxy: true,
   } as any);
 
-  // const finalRedirectUri = isExpoGo
-  //   ? `https://auth.expo.io/@prateek2812/marketBriefs`
-  //   : redirectUri;
   const finalRedirectUri = isExpoGo
     ? `https://auth.expo.io/@prateek2812/marketBriefs`
     : redirectUri;
@@ -46,7 +44,7 @@ export const GoogleAuthProvider = ({
     // androidClientId:
     //   "1030825305394-ntfuoou9uu4mpvsuhsq01ma72kp0sl62.apps.googleusercontent.com",
     // webClientId:
-    //   "1030825305394-i5rjh8ccaidfbbk4f71i28f13612pdv0.apps.googleusercontent.com",
+    //  "1030825305394-i5rjh8ccaidfbbk4f71i28f13612pdv0.apps.googleusercontent.com",
     clientId:
       "1030825305394-i5rjh8ccaidfbbk4f71i28f13612pdv0.apps.googleusercontent.com",
     redirectUri: finalRedirectUri,
