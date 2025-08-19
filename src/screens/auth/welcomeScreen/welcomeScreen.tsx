@@ -164,7 +164,7 @@ const WelcomeScreen = () => {
             IconComponent={GoogleIcon}
             text="Continue with Google"
             onPress={promptGoogleLogin}
-           // onPress={handleGoogleLogin}
+            // onPress={handleGoogleLogin}
             // disabled={!requestGoogle}
           />
           {/* <GoogleSigninButton

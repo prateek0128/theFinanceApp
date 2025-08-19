@@ -49,7 +49,9 @@ const SignUpScreen = () => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const otpInputs = useRef<Array<RNTextInput | null>>([]);
   const [isValid, setIsValid] = useState(false);
-  const { googleUserInfo, idToken, accessToken, signIn, signOut } =
+  // const { googleUserInfo, idToken, accessToken, signIn, signOut } =
+  //   useGoogleAuth();
+  const { googleAccessToken, userInfoGoogle, promptGoogleLogin } =
     useGoogleAuth();
   const { userInfoFacebook, promptFacebookLogin } = useFacebookAuth();
   const { userInfoApple, promptAppleLogin } = useAppleAuth();
@@ -188,19 +190,29 @@ const SignUpScreen = () => {
     setShowOTPInputs(false);
     setOtp(["", "", "", "", "", ""]);
   };
-  const handleGoogleLogin = async () => {
-    const userData = await signIn();
-    if (userData) {
-      console.log("UserData", userData);
-      console.log("Idtoken", idToken);
-      console.log("AccessToken", accessToken);
-      saveGoogleData(idToken ?? "", userData);
-      navigation.navigate("TellUsSomething", {
-        name: userData.user.name,
-        email: userData.user.email,
-      });
+  useEffect(() => {
+    if (userInfoGoogle && googleAccessToken?.accessToken) {
+      console.log("GoogleToken:", googleAccessToken);
+      console.log("GoogleAccessToken:", googleAccessToken.accessToken);
+      console.log("GoogleIDToken:", googleAccessToken.idToken);
+      console.log("LoggedInUser:", userInfoGoogle);
+      saveGoogleData(googleAccessToken.accessToken, userInfoGoogle.name);
+      navigation.navigate("TellUsSomething", {});
     }
-  };
+  }, [userInfoGoogle]);
+  // const handleGoogleLogin = async () => {
+  //   const userData = await signIn();
+  //   if (userData) {
+  //     console.log("UserData", userData);
+  //     console.log("Idtoken", idToken);
+  //     console.log("AccessToken", accessToken);
+  //     saveGoogleData(idToken ?? "", userData);
+  //     navigation.navigate("TellUsSomething", {
+  //       name: userData.user.name,
+  //       email: userData.user.email,
+  //     });
+  //   }
+  // };
   const saveGoogleData = async (accessToken: string, userData: any) => {
     const signinData = {
       google_token: accessToken,
@@ -293,8 +305,8 @@ const SignUpScreen = () => {
             <SocialLoginButton
               IconComponent={GoogleIcon}
               text="Continue with Google"
-              // onPress={promptGoogleLogin}
-              onPress={handleGoogleLogin}
+              onPress={promptGoogleLogin}
+              // onPress={handleGoogleLogin}
               // disabled={!requestGoogle}
             />
             <SocialLoginButton

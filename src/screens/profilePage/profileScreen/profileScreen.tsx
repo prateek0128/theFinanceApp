@@ -191,10 +191,10 @@ const ProfileScreen = () => {
               // },
             ]}
           >
-            <Image
+            {/* <Image
               source={require("../../../assets/Images/Prateek.jpg")}
               style={styles.profileImage}
-            />
+            /> */}
             <View style={[styles.userDetailsContainer]}>
               <Text
                 style={[

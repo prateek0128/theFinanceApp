@@ -108,9 +108,12 @@ const HomeScreen = () => {
     selectedTag: string,
     page: number,
     append = false,
-    limit?: number
+    limit?: number,
+    isRefresh = false
   ) => {
-    setLoading(true);
+    if (!isRefresh && !append) {
+      setLoading(true); // show loader only on first load
+    }
     try {
       const response = await getHighImpactNews(selectedTag, limit ?? 10);
       //const newsData = response.data;
@@ -127,7 +130,8 @@ const HomeScreen = () => {
         axiosErr.response?.data?.message ?? "Something went wrong";
       showToast(errorMessage, "danger");
     } finally {
-      setLoading(false);
+      if (!isRefresh) setLoading(false);
+      setRefreshing(false); // always stop refresh spinner
     }
   };
   const getUserProfileAPI = async () => {
@@ -166,7 +170,7 @@ const HomeScreen = () => {
   const handleRefresh = () => {
     setRefreshing(true);
     setPage(1);
-    getAllNewsAPI(selectedTag, 1);
+    getAllNewsAPI(selectedTag, 1, false, 10, true); // pass isRefresh=true
   };
 
   const handleLoadMore = () => {
@@ -337,7 +341,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.nonaryBackground,
   },
   headingContainer: {
-    marginTop: 40,
+    marginTop: 24,
     marginBottom: 20,
   },
   headingThemeContainer: {
