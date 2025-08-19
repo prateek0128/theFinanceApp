@@ -14,7 +14,7 @@ import { AuthProvider } from "./src/context/loginAuthContext";
 import { ThemeProvider } from "./src/context/themeContext";
 import ThemeToggleButton from "./src/components/themeToggleButton/themeToggleButton";
 import { ThemeContext } from "./src/context/themeContext";
-// import { GoogleAuthProvider } from "./src/context/googleAuthContext";
+import { GoogleAuthProvider } from "./src/context/googleAuthContext";
 import { FacebookAuthProvider } from "./src/context/facebookAuthContext";
 import { AppleAuthProvider } from "./src/context/appleAuthContext";
 export default function App() {
@@ -34,7 +34,7 @@ export default function App() {
   });
   return (
     <>
-      {/* <GoogleAuthProvider> */}
+      <GoogleAuthProvider>
       <FacebookAuthProvider>
         <AppleAuthProvider>
           <AuthProvider>
@@ -61,7 +61,7 @@ export default function App() {
           </AuthProvider>
         </AppleAuthProvider>
       </FacebookAuthProvider>
-      {/* </GoogleAuthProvider> */}
+      </GoogleAuthProvider>
     </>
   );
 }

@@ -1,150 +1,18 @@
-import { useState, useEffect } from "react";
-import {
-  GoogleSignin,
-  isErrorWithCode,
-  isSuccessResponse,
-  statusCodes,
-} from "@react-native-google-signin/google-signin";
-import { Alert } from "react-native";
-import { useState, useEffect } from "react";
-import {
-  GoogleSignin,
-  isErrorWithCode,
-  isSuccessResponse,
-  statusCodes,
-} from "@react-native-google-signin/google-signin";
-import { Alert } from "react-native";
-
-GoogleSignin.configure({
-  webClientId:
-    "1030825305394-i5rjh8ccaidfbbk4f71i28f13612pdv0.apps.googleusercontent.com",
-  scopes: ["https://www.googleapis.com/auth/drive.readonly"],
-  offlineAccess: true,
-  iosClientId:
-    "1030825305394-hc58lnam3pc57elggvs3d9hjkpeut4ql.apps.googleusercontent.com",
-  profileImageSize: 120,
-});
-
-const userData = {
-  idToken:
-    "eyJhbGciOiJSUzI1NiIsImtpZCI6ImJhNjNiNDM2ODM2YTkzOWI3OTViNDEyMmQzZjRkMGQyMjVkMWM3MDAiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiIxMDMwODI1MzA1Mzk0LW50ZnVvb3U5dXU0bXB2c3Voc3EwMW1hNzJrcDBzbDYyLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiMTAzMDgyNTMwNTM5NC1pNXJqaDhjY2FpZGZiYms0ZjcxaTI4ZjEzNjEycGR2MC5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsInN1YiI6IjEwNDI3NDY5OTg2ODk1NTYwMzMxMyIsImVtYWlsIjoicy5yb25pdDI4MTJAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJSb25pdCBTaW5naCIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BQ2c4b2NJcFJlY01GWEtlaEZwdU9WSVRsMDVsWTI1dV9DT01fWFRSMGxDVFRnYk5kYzRhQ1k4PXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IlJvbml0IiwiZmFtaWx5X25hbWUiOiJTaW5naCIsImlhdCI6MTc1NDkwNjM4NiwiZXhwIjoxNzU0OTA5OTg2fQ.AAtHsOW70-6vgHRbuUpsvHrVAlCbHVowwAnpgOx9cB-c6tkzwWSDeZP0hiPPYvCk_9kEDcRj3U_gBJsAZ_M8zbFjrIl3lvVyxTojti8wctPL9qFd9I31RBGKWRHagk7jBGxPN0CCgEBy4ScZriruiKpA2WWCPdWh7UGQCd-bDZFVqf44DXz9I6a5RQ21KGBxtDWJeKOKezIcEQDnbOkjjRaG_cUdUtzpuCZ1fm5gHKJJcWt1XXzBQlxNHkjzOIuYlnNDMKLyqd95glifZ0k2SOjydK-SLfabl5ZchouZxFlwX63qzvK5lajLD5xDGJONzEXtWw-O5vJKGfWTGGrbLg",
-  scopes: [
-    "https://www.googleapis.com/auth/userinfo.profile",
-    "https://www.googleapis.com/auth/userinfo.email",
-    "openid",
-    "profile",
-    "https://www.googleapis.com/auth/drive.readonly",
-    "email",
-  ],
-  serverAuthCode:
-    "4/0AVMBsJjQWak6AMOtQYxvbb86sl60A3iIqmvAhfeAdyRaFEhvZZL0FFFbnLNXa1gekFLhyQ",
-  user: {
-    email: "s.ronit2812@gmail.com",
-    familyName: "Singh",
-    givenName: "Ronit",
-    id: "104274699868955603313",
-    name: "Ronit Singh",
-    photo:
-      "https://lh3.googleusercontent.com/a/ACg8ocIpRecMFXKehFpuOVITl05lY25u_COM_XTR0lCTTgbNdc4aCY8=s96-c",
-  },
+import React, { createContext, useContext, useEffect, useState } from "react";
+import * as Google from "expo-auth-session/providers/google";
+import * as AuthSession from "expo-auth-session";
+import Constants from "expo-constants";
+import * as WebBrowser from "expo-web-browser";
+WebBrowser.maybeCompleteAuthSession();
+type GoogleAuthContextType = {
+  userInfoGoogle: any;
+  googleAccessToken: {
+    accessToken?: string;
+    idToken?: string;
+  } | null;
+  promptGoogleLogin: () => void;
 };
-export const useGoogleAuth = () => {
-  const [googleUserInfo, setGoogleUserInfo] = useState<any>(null);
-  const [idToken, setIdToken] = useState<any>(null);
-  const [accessToken, setAccessToken] = useState<any>(null);
-  const signIn = async () => {
-    try {
-      await GoogleSignin.hasPlayServices();
-      // Force the account chooser by signing out first
-      await GoogleSignin.signOut(); // or await GoogleSignin.revokeAccess();
-      const response = await GoogleSignin.signIn();
-      console.log("GoogleResonse=>", response);
-      if (isSuccessResponse(response)) {
-        // Extract tokens
-        const tokens = await GoogleSignin.getTokens();
-        console.log("ID Token:", tokens.idToken);
-        console.log("Access Token:", tokens.accessToken);
-        const fullData = {
-          ...response.data, // contains user info
-          idToken,
-          accessToken,
-        };
-        console.log("GoogleResonseIdToken=>", fullData.idToken);
-        console.log("GoogleResonseAccessToken=>", fullData.accessToken);
-        setIdToken(fullData.idToken);
-        setAccessToken(fullData.accessToken);
-        setGoogleUserInfo(response.data);
-        return response.data;
-      } else {
-        console.log("Google sign in was cancelled by user");
-        return null;
-      }
-    } catch (error) {
-      if (isErrorWithCode(error)) {
-        switch (error.code) {
-          case statusCodes.IN_PROGRESS:
-            Alert.alert("Sign in already in progress");
-            break;
-          case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
-            Alert.alert("Play services not available or outdated");
-            break;
-          default:
-            Alert.alert("Google sign in failed");
-        }
-      } else {
-        Alert.alert("An unknown error occurred during Google sign in");
-      }
-      return null;
-    }
-  };
-
-  const signOut = async () => {
-    try {
-      await GoogleSignin.signOut();
-      setGoogleUserInfo(null);
-    } catch (error) {
-      console.error("Google sign out error:", error);
-    }
-  };
-
-  return { googleUserInfo, idToken, accessToken, signIn, signOut };
-};
-
-GoogleSignin.configure({
-  webClientId:
-    "1030825305394-i5rjh8ccaidfbbk4f71i28f13612pdv0.apps.googleusercontent.com",
-  scopes: ["https://www.googleapis.com/auth/drive.readonly"],
-  offlineAccess: true,
-  iosClientId:
-    "1030825305394-hc58lnam3pc57elggvs3d9hjkpeut4ql.apps.googleusercontent.com",
-  profileImageSize: 120,
-});
-
-const userData = {
-  idToken:
-    "eyJhbGciOiJSUzI1NiIsImtpZCI6ImJhNjNiNDM2ODM2YTkzOWI3OTViNDEyMmQzZjRkMGQyMjVkMWM3MDAiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiIxMDMwODI1MzA1Mzk0LW50ZnVvb3U5dXU0bXB2c3Voc3EwMW1hNzJrcDBzbDYyLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiMTAzMDgyNTMwNTM5NC1pNXJqaDhjY2FpZGZiYms0ZjcxaTI4ZjEzNjEycGR2MC5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsInN1YiI6IjEwNDI3NDY5OTg2ODk1NTYwMzMxMyIsImVtYWlsIjoicy5yb25pdDI4MTJAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJSb25pdCBTaW5naCIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BQ2c4b2NJcFJlY01GWEtlaEZwdU9WSVRsMDVsWTI1dV9DT01fWFRSMGxDVFRnYk5kYzRhQ1k4PXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IlJvbml0IiwiZmFtaWx5X25hbWUiOiJTaW5naCIsImlhdCI6MTc1NDkwNjM4NiwiZXhwIjoxNzU0OTA5OTg2fQ.AAtHsOW70-6vgHRbuUpsvHrVAlCbHVowwAnpgOx9cB-c6tkzwWSDeZP0hiPPYvCk_9kEDcRj3U_gBJsAZ_M8zbFjrIl3lvVyxTojti8wctPL9qFd9I31RBGKWRHagk7jBGxPN0CCgEBy4ScZriruiKpA2WWCPdWh7UGQCd-bDZFVqf44DXz9I6a5RQ21KGBxtDWJeKOKezIcEQDnbOkjjRaG_cUdUtzpuCZ1fm5gHKJJcWt1XXzBQlxNHkjzOIuYlnNDMKLyqd95glifZ0k2SOjydK-SLfabl5ZchouZxFlwX63qzvK5lajLD5xDGJONzEXtWw-O5vJKGfWTGGrbLg",
-  scopes: [
-    "https://www.googleapis.com/auth/userinfo.profile",
-    "https://www.googleapis.com/auth/userinfo.email",
-    "openid",
-    "profile",
-    "https://www.googleapis.com/auth/drive.readonly",
-    "email",
-  ],
-  serverAuthCode:
-    "4/0AVMBsJjQWak6AMOtQYxvbb86sl60A3iIqmvAhfeAdyRaFEhvZZL0FFFbnLNXa1gekFLhyQ",
-  user: {
-    email: "s.ronit2812@gmail.com",
-    familyName: "Singh",
-    givenName: "Ronit",
-    id: "104274699868955603313",
-    name: "Ronit Singh",
-    photo:
-      "https://lh3.googleusercontent.com/a/ACg8ocIpRecMFXKehFpuOVITl05lY25u_COM_XTR0lCTTgbNdc4aCY8=s96-c",
-  },
-};
-<<<<<<< HEAD
-const GoogleAuthContext = createContext<GoogleAuthContextType | null>(null);
+const GoogleAuthContext2 = createContext<GoogleAuthContextType | null>(null);
 
 export const GoogleAuthProvider = ({
   children,
@@ -152,15 +20,16 @@ export const GoogleAuthProvider = ({
   children: React.ReactNode;
 }) => {
   const [userInfoGoogle, setUserInfoGoogle] = useState<any>(null);
-  const [googleToken, setGoogleToken] = useState<{
+  const [googleAccessToken, setGoogleAccessToken] = useState<{
     accessToken?: string;
     idToken?: string;
   } | null>(null);
 
   const isExpoGo = Constants.appOwnership === "expo";
   const redirectUri = AuthSession.makeRedirectUri({
-    scheme: "marketBriefs",
-    useProxy: true,
+    //native: "https://auth.expo.io/@prateek2812/marketBriefs",
+    // scheme: "marketBriefs",
+    useProxy: isExpoGo,
   } as any);
 
   const finalRedirectUri = isExpoGo
@@ -169,21 +38,24 @@ export const GoogleAuthProvider = ({
   console.log("Final Redirect URI:", finalRedirectUri);
   console.log("Redirect URI:", redirectUri);
   //@ts-ignore
-  console.log(AuthSession.makeRedirectUri({ useProxy: true }));
+  console.log("AUTHURI=>", AuthSession.makeRedirectUri({ useProxy: false }));
+  console.log("isEXPOGO=>", isExpoGo);
+  console.log("SLUG=>", Constants?.expoConfig?.slug);
+  console.log("OWNER=>", Constants?.expoConfig?.owner);
   const [request, response, promptAsync] = Google.useAuthRequest({
     // iosClientId:
     //   "1030825305394-hc58lnam3pc57elggvs3d9hjkpeut4ql.apps.googleusercontent.com",
     // androidClientId:
     //   "1030825305394-ntfuoou9uu4mpvsuhsq01ma72kp0sl62.apps.googleusercontent.com",
     // webClientId:
-    //  "1030825305394-i5rjh8ccaidfbbk4f71i28f13612pdv0.apps.googleusercontent.com",
+    //   "1030825305394-i5rjh8ccaidfbbk4f71i28f13612pdv0.apps.googleusercontent.com",
     clientId:
       "1030825305394-i5rjh8ccaidfbbk4f71i28f13612pdv0.apps.googleusercontent.com",
     redirectUri: finalRedirectUri,
-    scopes: ["openid", "profile", "email"],
-    responseType: "id_token", //Don't use 'code'
+    scopes: ["profile", "email"],
+    //responseType: "id_token",
     //@ts-ignore
-    useProxy: true,
+    useProxy: isExpoGo,
     usePKCE: false,
     extraParams: { prompt: "select_account" },
   });
@@ -196,7 +68,7 @@ export const GoogleAuthProvider = ({
     if (response?.type === "success") {
       const { authentication, params } = response;
       // Store tokens
-      setGoogleToken({
+      setGoogleAccessToken({
         accessToken: authentication?.accessToken,
         idToken: params?.id_token,
       });
@@ -205,73 +77,98 @@ export const GoogleAuthProvider = ({
         headers: { Authorization: `Bearer ${authentication?.accessToken}` },
       })
         .then((res) => res.json())
-        .then(setUserInfoGoogle)
+        .then((response) => {
+          console.log("Google User Data", response);
+          setUserInfoGoogle(response);
+        })
         .catch((err) => console.error("Failed to fetch user info", err));
     }
   }, [response]);
 
+  // useEffect(() => {
+  //   async function exchangeCodeForToken() {
+  //     if (response?.type === "success" && response.params.code) {
+  //       // Your token exchange logic here
+  //       const tokenResponse = await fetch(
+  //         "https://oauth2.googleapis.com/token",
+  //         {
+  //           method: "POST",
+  //           headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  //           //@ts-ignore
+  //           body: new URLSearchParams({
+  //             code: response.params.code,
+  //             client_id:
+  //               "1030825305394-i5rjh8ccaidfbbk4f71i28f13612pdv0.apps.googleusercontent.com",
+  //             redirect_uri: finalRedirectUri,
+  //             grant_type: "authorization_code",
+  //             code_verifier: request?.codeVerifier ?? "",
+  //           }).toString(),
+  //         }
+  //       );
+
+  //       const tokens = await tokenResponse.json();
+  //       console.log("Tokens:", tokens);
+  //       // You also need to set the tokens here
+  //       setGoogleAccessToken({
+  //         accessToken: tokens.access_token,
+  //         idToken: tokens.id_token,
+  //       });
+  //       // And fetch user info using the new access token
+  //       fetchUserInfo(tokens.access_token);
+  //     }
+  //   }
+  //   const fetchUserInfo = async (accessToken: string) => {
+  //     try {
+  //       const res = await fetch("https://www.googleapis.com/userinfo/v2/me", {
+  //         headers: { Authorization: `Bearer ${accessToken}` },
+  //       });
+  //       const userInfo = await res.json();
+  //       console.log("Google User Data=>", userInfo);
+  //       setUserInfoGoogle(userInfo);
+  //     } catch (err) {
+  //       console.error("Failed to fetch user info", err);
+  //     }
+  //   };
+  //   // Call the async function
+  //   exchangeCodeForToken();
+  // }, [response, finalRedirectUri, request]);
   const promptGoogleLogin = async () => {
     console.log("Google Login Request:", request);
-=======
+    try {
+      //@ts-ignore
+      const result = await promptAsync({
+        //@ts-ignore
+        useProxy: true,
+        showInRecents: true,
+      });
+      if (result.type === "success") {
+        console.log("Google login successful:", result);
+        console.log("IdToken", result.params.id_token);
+        // setGoogleAccessToken({
+        //   accessToken: "",
+        //   idToken: result.params.id_token,
+        // });
+        // Handle successful login
+      } else {
+        console.log("Google login cancelled or failed:", result);
+      }
+    } catch (error) {
+      console.error("Error during Google login:", error);
+    }
+  };
+
+  return (
+    <GoogleAuthContext2.Provider
+      value={{ userInfoGoogle, googleAccessToken, promptGoogleLogin }}
+    >
+      {children}
+    </GoogleAuthContext2.Provider>
+  );
+};
+
 export const useGoogleAuth = () => {
-  const [googleUserInfo, setGoogleUserInfo] = useState<any>(null);
-  const [idToken, setIdToken] = useState<any>(null);
-  const [accessToken, setAccessToken] = useState<any>(null);
-  const signIn = async () => {
->>>>>>> 1529af813f93831ed62754a6a46f0e4887a9db29
-    try {
-      await GoogleSignin.hasPlayServices();
-      // Force the account chooser by signing out first
-      await GoogleSignin.signOut(); // or await GoogleSignin.revokeAccess();
-      const response = await GoogleSignin.signIn();
-      console.log("GoogleResonse=>", response);
-      if (isSuccessResponse(response)) {
-        // Extract tokens
-        const tokens = await GoogleSignin.getTokens();
-        console.log("ID Token:", tokens.idToken);
-        console.log("Access Token:", tokens.accessToken);
-        const fullData = {
-          ...response.data, // contains user info
-          idToken,
-          accessToken,
-        };
-        console.log("GoogleResonseIdToken=>", fullData.idToken);
-        console.log("GoogleResonseAccessToken=>", fullData.accessToken);
-        setIdToken(fullData.idToken);
-        setAccessToken(fullData.accessToken);
-        setGoogleUserInfo(response.data);
-        return response.data;
-      } else {
-        console.log("Google sign in was cancelled by user");
-        return null;
-      }
-    } catch (error) {
-      if (isErrorWithCode(error)) {
-        switch (error.code) {
-          case statusCodes.IN_PROGRESS:
-            Alert.alert("Sign in already in progress");
-            break;
-          case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
-            Alert.alert("Play services not available or outdated");
-            break;
-          default:
-            Alert.alert("Google sign in failed");
-        }
-      } else {
-        Alert.alert("An unknown error occurred during Google sign in");
-      }
-      return null;
-    }
-  };
-
-  const signOut = async () => {
-    try {
-      await GoogleSignin.signOut();
-      setGoogleUserInfo(null);
-    } catch (error) {
-      console.error("Google sign out error:", error);
-    }
-  };
-
-  return { googleUserInfo, idToken, accessToken, signIn, signOut };
+  const context = useContext(GoogleAuthContext2);
+  if (!context)
+    throw new Error("useGoogleAuth must be used within GoogleAuthProvider");
+  return context;
 };

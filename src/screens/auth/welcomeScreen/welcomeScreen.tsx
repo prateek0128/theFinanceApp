@@ -36,66 +36,45 @@ import { useGoogleAuth } from "../../../context/googleAuthContext";
 import { useFacebookAuth } from "../../../context/facebookAuthContext";
 import { useAppleAuth } from "../../../context/appleAuthContext";
 import { googleSignIn } from "../../../apiServices/auth";
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-  isErrorWithCode,
-  isSuccessResponse,
-  statusCodes,
-} from "@react-native-google-signin/google-signin";
 import showToast from "../../../utilis/showToast";
 import { AxiosError } from "axios";
 
-GoogleSignin.configure({
-  webClientId:
-    "1030825305394-i5rjh8ccaidfbbk4f71i28f13612pdv0.apps.googleusercontent.com", // client ID of type WEB for your server. Required to get the `idToken` on the user object, and for offline access.
-  scopes: ["https://www.googleapis.com/auth/drive.readonly"], // what API you want to access on behalf of the user, default is email and profile
-  offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
-  hostedDomain: "", // specifies a hosted domain restriction
-  forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
-  accountName: "", // [Android] specifies an account name on the device that should be used
-  iosClientId:
-    "1030825305394-hc58lnam3pc57elggvs3d9hjkpeut4ql.apps.googleusercontent.com", // [iOS] if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
-  googleServicePlistPath: "", // [iOS] if you renamed your GoogleService-Info file, new name here, e.g. "GoogleService-Info-Staging"
-  openIdRealm: "", // [iOS] The OpenID2 realm of the home web server. This allows Google to include the user's OpenID Identifier in the OpenID Connect ID token.
-  profileImageSize: 120, // [iOS] The desired height (and width) of the profile image. Defaults to 120px
-});
 WebBrowser.maybeCompleteAuthSession();
 const WelcomeScreen = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  // const { googleAccessToken, userInfoGoogle, promptGoogleLogin } =
-  //   useGoogleAuth();
-  const { googleUserInfo, idToken, accessToken, signIn, signOut } =
+  const { googleAccessToken, userInfoGoogle, promptGoogleLogin } =
     useGoogleAuth();
+  // const { googleUserInfo, idToken, accessToken, signIn, signOut } =
+  //   useGoogleAuth();
   const { facebookAccessToken, userInfoFacebook, promptFacebookLogin } =
     useFacebookAuth();
   const { userInfoApple, promptAppleLogin } = useAppleAuth();
-  // useEffect(() => {
-  //   if (userInfoGoogle && googleAccessToken?.accessToken) {
-  //     console.log("GoogleToken:", googleAccessToken);
-  //     console.log("GoogleAccessToken:", googleAccessToken.accessToken);
-  //     console.log("GoogleIDToken:", googleAccessToken.idToken);
-  //     console.log("LoggedInUser:", userInfoGoogle);
-  //     saveGoogleData(googleAccessToken.accessToken, userInfoGoogle.name);
-  //     navigation.navigate("TellUsSomething", {});
-  //   }
-  // }, [userInfoGoogle]);
-  const handleGoogleLogin = async () => {
-    console.log("Idtoken", idToken);
-    console.log("AccessToken", accessToken);
-    const userData = await signIn();
-    if (userData) {
-      console.log("UserData", userData);
-      console.log("Idtoken", userData.idToken);
-      console.log("AccessToken", accessToken);
-      saveGoogleData(accessToken ?? "", userData);
-      // navigation.navigate("TellUsSomething", {
-      //   name: userData.user.name,
-      //   email: userData.user.email,
-      // });
+  useEffect(() => {
+    if (userInfoGoogle && googleAccessToken?.accessToken) {
+      console.log("GoogleToken:", googleAccessToken);
+      console.log("GoogleAccessToken:", googleAccessToken.accessToken);
+      console.log("GoogleIDToken:", googleAccessToken.idToken);
+      console.log("LoggedInUser:", userInfoGoogle);
+      saveGoogleData(googleAccessToken.accessToken, userInfoGoogle.name);
+      navigation.navigate("TellUsSomething", {});
     }
-  };
+  }, [userInfoGoogle]);
+  // const handleGoogleLogin = async () => {
+  //   console.log("Idtoken", idToken);
+  //   console.log("AccessToken", accessToken);
+  //   const userData = await signIn();
+  //   if (userData) {
+  //     console.log("UserData", userData);
+  //     console.log("Idtoken", userData.idToken);
+  //     console.log("AccessToken", accessToken);
+  //     saveGoogleData(accessToken ?? "", userData);
+  //     // navigation.navigate("TellUsSomething", {
+  //     //   name: userData.user.name,
+  //     //   email: userData.user.email,
+  //     // });
+  //   }
+  // };
   const saveGoogleData = async (token: string, userData: any) => {
     const signinData = {
       google_token: token,
@@ -184,8 +163,8 @@ const WelcomeScreen = () => {
           <SocialLoginButton
             IconComponent={GoogleIcon}
             text="Continue with Google"
-            //onPress={promptGoogleLogin}
-            onPress={handleGoogleLogin}
+            onPress={promptGoogleLogin}
+           // onPress={handleGoogleLogin}
             // disabled={!requestGoogle}
           />
           {/* <GoogleSigninButton
