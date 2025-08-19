@@ -86,19 +86,19 @@ const LoginScreen = () => {
     };
     try {
       await login(loginData); // throws if OTP invalid
-      const onboardingRequiredStr = await AsyncStorage.getItem(
-        "onboardingRequired"
+      const onboardingCompletedStr = await AsyncStorage.getItem(
+        "onboardingCompleted"
       );
-      console.log("Onboarding Raw:", onboardingRequiredStr);
-      const onboardingRequired = onboardingRequiredStr
-        ? JSON.parse(onboardingRequiredStr)
+      console.log("Onboarding Raw:", onboardingCompletedStr);
+      const onboardingCompleted = onboardingCompletedStr
+        ? JSON.parse(onboardingCompletedStr)
         : false; // default if null
 
-      console.log("Onboarding Required:", onboardingRequired);
-      if (onboardingRequired) {
-        navigation.navigate("TellUsSomething", {});
-      } else {
+      console.log("Onboarding Required:", onboardingCompleted);
+      if (onboardingCompleted) {
         navigation.navigate("BottomTabNavigator");
+      } else {
+        navigation.navigate("TellUsSomething", {});
       }
       showToast("OTP verified successfully!", "success");
     } catch (err) {

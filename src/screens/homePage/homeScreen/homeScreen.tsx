@@ -115,7 +115,7 @@ const HomeScreen = () => {
       const response = await getHighImpactNews(selectedTag, limit ?? 10);
       //const newsData = response.data;
       const newsData = response.data.data;
-      //console.log("newsResponse:", newsData);
+      console.log("newsResponse:", newsData);
       setAllNewsData(newsData);
     } catch (err) {
       // Narrow / cast to AxiosError
@@ -277,24 +277,29 @@ const HomeScreen = () => {
           <React.Fragment key={item.id}>
             <DiscoverDetailsCard
               index={index}
-              authorName={item.authors[0]}
-              timeAgo={item.time_ago}
-              impactLabel={item.impact_label}
-              impactScore={item.impact_score.toFixed(2)}
-              likes={item.engagement.likes}
-              comments={item.engagement.comments}
-              tag={item.tag}
-              heading={item.title}
-              summary={item.summary}
+              authorName={item?.authors?.[0] ?? "--"}
+              timeAgo={item?.time_ago ?? "--"}
+              impactLabel={item?.impact_label ?? ""}
+              impactScore={
+                item?.impact_score != null
+                  ? item.impact_score.toFixed(2)
+                  : "0.00"
+              }
+              likes={item?.engagement?.likes ?? 0}
+              comments={item?.engagement?.comments ?? 0}
+              tag={item?.tag ?? ""}
+              heading={item?.title ?? ""}
+              summary={item?.summary ?? ""}
               HeadlineImageComponent={GraphImage2}
               ProfileIconComponent={ProfileIcon}
               onPress={() =>
                 navigation.navigate("HeadlineDetailsScreen", {
-                  newsId: item.id,
+                  newsId: item?.id ?? "",
                   imageKey: "",
                 })
               }
             />
+
             <Divider
               style={[
                 styles.dividerStyle,

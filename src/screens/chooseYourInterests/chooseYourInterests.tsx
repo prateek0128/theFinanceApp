@@ -62,6 +62,7 @@ export default function ChooseYourInterests() {
   const [selected, setSelected] = useState<string[]>([]);
   const [interests, setInterests] = useState<any[]>([]);
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+  const [isFirstTime, setIsFirstTime] = useState(true);
   const [deviceInfo, setDeviceInfo] = useState<any>({});
   const [isLoading, setIsLoading] = useState(false);
   const [selectedInterestIds, setSelectedInterestIds] = useState<string[]>([]);
@@ -73,7 +74,6 @@ export default function ChooseYourInterests() {
     route.params && "expertiseLevel" in route.params
       ? (route.params as { expertiseLevel?: string | null }).expertiseLevel
       : undefined;
-  console.log("expertiseLevel:", expertiseLevel || "");
   const toggleInterest = (item: any) => {
     setSelected((prevSelected) => {
       const isAlreadySelected = prevSelected.some(
@@ -145,7 +145,13 @@ export default function ChooseYourInterests() {
     try {
       const response = await getUserProfile();
       console.log("SelectedInterestsResponse=>", response.data.interests);
-      setSelectedInterests(response.data.interests || []);
+      const userInterests = response.data.interests || [];
+      setSelectedInterests(userInterests);
+
+      // If user already has saved interests, it's not first time
+      if (userInterests.length > 0) {
+        setIsFirstTime(false);
+      }
     } catch (err) {
       // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
@@ -178,8 +184,7 @@ export default function ChooseYourInterests() {
         interests.slice(i * 3, i * 3 + 3)
       )
     : [];
-  const buttonTitle =
-    selectedInterestIds.length < 0 ? "Get Started" : "Update Interests";
+  const buttonTitle = isFirstTime ? "Get Started" : "Update Interests";
   console.log("GroupInterests=>", groupedInterests);
   console.log("SelectedInterests=>", selectedInterests);
   console.log("SelectedInterests2=>", selected);
@@ -286,9 +291,12 @@ export default function ChooseYourInterests() {
             if (selected.length >= 3) {
               setIsLoading(true);
               try {
-                selectedInterestIds.length < 0
-                  ? await handleContinue()
-                  : await handleUpdateInterestsAPI();
+                if (isFirstTime) {
+                  await handleContinue();
+                } else {
+                  await handleContinue();
+                  // await handleUpdateInterestsAPI();
+                }
                 showToast("Your interests saved successfully", "success");
               } catch (error) {
                 console.error(error);

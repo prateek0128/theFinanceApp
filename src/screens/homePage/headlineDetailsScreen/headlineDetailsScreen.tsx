@@ -28,6 +28,9 @@ import {
   CurrencyImage2,
   HeartCommentIcon,
   HeartCommentIconFilled,
+  Positive,
+  Neutral,
+  Worried,
 } from "../../../assets/icons/components/headlineDetailsView";
 import HeadlineDetailCard from "../../../components/headlineDetailedCard/headlineDetailedCard";
 import Tag from "../../../components/tag/tag";
@@ -91,6 +94,7 @@ interface NewsData {
   tag?: string;
   authors?: string;
   time_ago?: string;
+  source?: string;
 }
 const HeadlineDetailsScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -111,26 +115,28 @@ const HeadlineDetailsScreen = () => {
   const [isFocused, setIsFocused] = useState(false);
   const token = AsyncStorage.getItem("authToken");
   const news = {
-    authors: ["LiveMint"],
-    categories: ["Mutual Funds"],
+    authors: null,
+    categories: ["Stocks"],
     content: "",
     date_extracted: false,
     engagement: { comments: 0, likes: 0 },
-    id: "68944d6c34238d9538791cd2",
+    id: "68a2f6802f4a47f56be48c9e",
     impact_label: "Exceptional Impact",
-    impact_score: 9.225,
-    published_at: "2025-08-07T06:42:19Z",
+    impact_score: 8.5,
+    published_at: "2025-08-18T07:38:49Z",
     related_stocks: null,
     sentiment_label: "neutral",
-    sentiment_score: 0.75,
+    sentiment_score: 0.85,
     source: "LiveMint",
     summary:
-      "• SoftBank Group announced a net profit of $2.87 billion for the first quarter. • This positive result was driven by strong performance in its portfolio companies. • This means that investors might see potential growth in SoftBank's stock value.",
+      "Stock Market News: Share Market Today: India stock market news, world share market news and updates on Mint. Indian investors, Sensex latest updates.",
     tags: null,
-    time_ago: "57 minutes ago",
-    title: "SoftBank Group reports $2.87 billion profit",
-    url: "https://www.livemint.com/companies/company-results/softbank-group-posts-2-87-billion-net-profit-in-first-quarter-11754548939913.html",
+    time_ago: "4 hours ago",
+    title:
+      "1400% rally in five years! Multibagger stock hits upper circuit; Do you own?",
+    url: "https://www.livemint.com/market/stock-market-news/1400-rally-in-five-years-multibagger-stock-spice-islands-industries-hits-upper-circuit-do-you-own-11755499624561.html",
   };
+
   useEffect(() => {
     if (newsId) {
       getNewsByIDAPI(newsId);
@@ -476,21 +482,53 @@ const HeadlineDetailsScreen = () => {
                 />
               </View>
               <View style={styles.headingDetailsContainer}>
-                <View
-                  style={{
-                    width: "100%",
-                    marginTop: 16,
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  {/* {renderImage()} */}
-                  <ClippedSVG
-                    width={width * 0.89}
-                    height={200}
-                    radius={16}
-                    ImageComponent={CurrencyImage2}
-                  />
+                <View style={styles.authorIconContainer}>
+                  <NewsAuthorIcon />
+                  <View style={styles.authorTimeContainer}>
+                    <Text
+                      style={[
+                        styles.authorTimeText,
+                        {
+                          color:
+                            theme === "light"
+                              ? colors.octodenaryText
+                              : colors.white,
+                          fontSize: 14,
+                        },
+                      ]}
+                    >
+                      {`${newsData?.source || "--"} ·`}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.authorTimeText,
+                        {
+                          fontSize: 12,
+                          color:
+                            theme === "dark"
+                              ? colors.darkQuaternaryText
+                              : colors.unvigintaryText,
+                        },
+                      ]}
+                    >
+                      {`${newsData.time_ago || "--"}`}
+                    </Text>
+                  </View>
+                </View>
+                <View>
+                  <Text
+                    style={[
+                      styles.articleDetailsHeading,
+                      {
+                        color:
+                          theme === "dark"
+                            ? colors.darkPrimaryText
+                            : colors.octodenaryText,
+                      },
+                    ]}
+                  >
+                    {newsData.title}
+                  </Text>
                 </View>
                 <View style={styles.headingContainer}>
                   <View style={styles.detailsHeader}>
@@ -539,53 +577,24 @@ const HeadlineDetailsScreen = () => {
                       />
                     </View>
                   </View>
-                  <Text
-                    style={[
-                      styles.articleDetailsHeading,
-                      {
-                        color:
-                          theme === "dark"
-                            ? colors.darkPrimaryText
-                            : colors.octodenaryText,
-                      },
-                    ]}
-                  >
-                    {newsData.title}
-                  </Text>
                 </View>
-                <View style={styles.authorIconContainer}>
-                  <NewsAuthorIcon />
-                  <View style={styles.authorTimeContainer}>
-                    <Text
-                      style={[
-                        styles.authorTimeText,
-                        {
-                          color:
-                            theme === "light"
-                              ? colors.octodenaryText
-                              : colors.white,
-                          fontSize: 16,
-                        },
-                      ]}
-                    >
-                      {`${newsData?.authors?.[0] || "--"} ·`}
-                    </Text>
-                    <Text
-                      style={[
-                        styles.authorTimeText,
-                        {
-                          fontSize: 16,
-                          color:
-                            theme === "dark"
-                              ? colors.darkQuaternaryText
-                              : colors.unvigintaryText,
-                        },
-                      ]}
-                    >
-                      {`${newsData.time_ago || "--"}`}
-                    </Text>
-                  </View>
+                <View
+                  style={{
+                    width: "100%",
+                    marginTop: 16,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {/* {renderImage()} */}
+                  <ClippedSVG
+                    width={width * 0.89}
+                    height={200}
+                    radius={16}
+                    ImageComponent={CurrencyImage2}
+                  />
                 </View>
+
                 <View style={styles.summaryDetailsConatiner}>
                   <Text
                     style={[
@@ -631,6 +640,116 @@ const HeadlineDetailsScreen = () => {
                       </Text>
                     </View>
                   ))}
+                </View>
+                <Divider
+                  style={[
+                    styles.dividerStyle,
+                    {
+                      backgroundColor:
+                        theme == "light"
+                          ? colors.nonaryBorder
+                          : colors.darkUndenaryBackground,
+                    },
+                  ]}
+                />
+
+                <View style={styles.marketMoodContainer}>
+                  <View>
+                    <Text
+                      style={[
+                        styles.marketMoodText,
+                        {
+                          color:
+                            theme === "dark"
+                              ? colors.white
+                              : colors.octodenaryText,
+                        },
+                      ]}
+                    >
+                      Market Mood :
+                    </Text>
+                  </View>
+                  <View style={styles.marketCardsContainer}>
+                    <View style={styles.marketCard}>
+                      <View>
+                        <Text style={styles.positiveValue}>16%</Text>
+                        <Positive />
+                      </View>
+                      <View>
+                        <Text
+                          style={[
+                            styles.positiveText,
+                            {
+                              color:
+                                theme === "dark"
+                                  ? colors.white
+                                  : colors.octodenaryText,
+                            },
+                          ]}
+                        >
+                          Positive
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={styles.marketCard}>
+                      <View>
+                        <Text style={styles.positiveValue}>52%</Text>
+                        <Neutral />
+                      </View>
+                      <View>
+                        <Text
+                          style={[
+                            styles.positiveText,
+                            {
+                              color:
+                                theme === "dark"
+                                  ? colors.white
+                                  : colors.octodenaryText,
+                            },
+                          ]}
+                        >
+                          Neutral
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={styles.marketCard}>
+                      <View>
+                        <Text style={styles.positiveValue}>16%</Text>
+                        <Worried />
+                      </View>
+                      <View>
+                        <Text
+                          style={[
+                            styles.positiveText,
+                            {
+                              color:
+                                theme === "dark"
+                                  ? colors.white
+                                  : colors.octodenaryText,
+                            },
+                          ]}
+                        >
+                          Worried
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                  <View>
+                    <Text
+                      style={[
+                        styles.marketMoodDescription,
+                        {
+                          color:
+                            theme === "dark"
+                              ? colors.white
+                              : colors.octodenaryText,
+                        },
+                      ]}
+                    >
+                      Market sentiments leans towards bearish with significant
+                      concern over international factors.
+                    </Text>
+                  </View>
                 </View>
                 <Divider
                   style={[
@@ -904,7 +1023,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   headingDetailsContainer: {
-    gap: 32,
+    gap: 24,
   },
   headingContainer: {
     gap: 16,
@@ -1055,7 +1174,7 @@ const styles = StyleSheet.create({
   authorIconContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
+    gap: 10,
   },
   authorTimeContainer: {
     flexDirection: "row",
@@ -1064,10 +1183,41 @@ const styles = StyleSheet.create({
   },
   authorTimeText: {
     fontFamily: fontFamily.Inter400,
-    fontSize: 12,
   },
   dividerStyle: {
     height: 1,
+  },
+  marketMoodContainer: {
+    gap: 24,
+  },
+  marketMoodText: {
+    fontFamily: fontFamily.Inter700,
+    fontSize: 18,
+  },
+  marketCardsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 16,
+  },
+  marketCard: {
+    gap: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+    padding: 12,
+  },
+  positiveValue: {
+    fontFamily: fontFamily.Inter700,
+    fontSize: 24,
+    color: colors.tresvigintaryText,
+  },
+  positiveText: {
+    fontFamily: fontFamily.Inter400,
+    fontSize: 14,
+  },
+  marketMoodDescription: {
+    fontFamily: fontFamily.Inter400,
+    fontSize: 16,
   },
   viewCommentsContainer: {
     marginTop: 20,

@@ -43,6 +43,8 @@ import {
   isSuccessResponse,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
+import showToast from "../../../utilis/showToast";
+import { AxiosError } from "axios";
 
 GoogleSignin.configure({
   webClientId:
@@ -50,7 +52,7 @@ GoogleSignin.configure({
   scopes: ["https://www.googleapis.com/auth/drive.readonly"], // what API you want to access on behalf of the user, default is email and profile
   offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
   hostedDomain: "", // specifies a hosted domain restriction
-  forceCodeForRefreshToken: false, // [Android] related to `serverAuthCode`, read the docs link below *.
+  forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
   accountName: "", // [Android] specifies an account name on the device that should be used
   iosClientId:
     "1030825305394-hc58lnam3pc57elggvs3d9hjkpeut4ql.apps.googleusercontent.com", // [iOS] if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
@@ -85,18 +87,18 @@ const WelcomeScreen = () => {
     const userData = await signIn();
     if (userData) {
       console.log("UserData", userData);
-      console.log("Idtoken", idToken);
+      console.log("Idtoken", userData.idToken);
       console.log("AccessToken", accessToken);
-      saveGoogleData(idToken ?? "", userData);
-      navigation.navigate("TellUsSomething", {
-        name: userData.user.name,
-        email: userData.user.email,
-      });
+      saveGoogleData(accessToken ?? "", userData);
+      // navigation.navigate("TellUsSomething", {
+      //   name: userData.user.name,
+      //   email: userData.user.email,
+      // });
     }
   };
-  const saveGoogleData = async (accessToken: string, userData: any) => {
+  const saveGoogleData = async (token: string, userData: any) => {
     const signinData = {
-      google_token: accessToken,
+      google_token: token,
       name: userData.user.name,
     };
     console.log("signinData=>", signinData);
@@ -107,8 +109,16 @@ const WelcomeScreen = () => {
       //   email: userData.user.email,
       // });
       console.log("Google data saved successfully", response.data);
-    } catch (error) {
-      console.error("Error saving Google data:", error);
+    } catch (err) {
+      // Narrow / cast to AxiosError
+      const axiosErr = err as AxiosError<{
+        status: string;
+        message: string;
+      }>;
+      const errorMessage =
+        axiosErr.response?.data?.message ?? "Something went wrong";
+      console.error("Error saving Google data:", errorMessage);
+      showToast(errorMessage, "danger");
     }
   };
   useEffect(() => {

@@ -53,8 +53,9 @@ export const useGoogleAuth = () => {
       console.log("GoogleResonse=>", response);
       if (isSuccessResponse(response)) {
         // Extract tokens
-        const { idToken, accessToken } = await GoogleSignin.getTokens();
-
+        const tokens = await GoogleSignin.getTokens();
+        console.log("ID Token:", tokens.idToken);
+        console.log("Access Token:", tokens.accessToken);
         const fullData = {
           ...response.data, // contains user info
           idToken,

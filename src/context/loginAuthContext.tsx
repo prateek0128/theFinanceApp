@@ -104,7 +104,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         console.log("Loginsuccessful=>", responseData.data);
         const user = responseData.data.user;
         const accesstoken = responseData.data.access_token;
-        const onboardingRequired = responseData.data.onboarding_required;
+        const onboardingCompleted = responseData.data.user.onboarding_completed;
         const sessionExpiresIn = responseData.data.expires_in;
         const accessTokenExpiry =
           Math.floor(Date.now() / 1000) + sessionExpiresIn;
@@ -115,7 +115,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           ["status", status],
           ["message", responseData.message],
           ["user", JSON.stringify(user)],
-          ["onboardingRequired", onboardingRequired.toString()],
+          ["onboardingCompleted", onboardingCompleted.toString()],
           ["tokenExpiry", accessTokenExpiry.toString()],
           ["refreshToken", responseData.data.refresh_token],
           ["refreshTokenExpiry", refreshTokenExpiry.toString()],

@@ -71,7 +71,7 @@ export const colors = {
   vigenaryText: "#9990FF", //20
   unvigintaryText: "#72777A", // 21
   duovigintaryText: "#404446", // 22
-  // tresvigintaryText: "#D5E6F7", // 23
+  tresvigintaryText: "#23C16B", // 23
   // quattuorvigintaryText: "#E7F8A9", // 24
   // quinvigintaryText: "#F9A1B2", // 25
   // sexvigintaryText: "#1A2B3C", // 26
