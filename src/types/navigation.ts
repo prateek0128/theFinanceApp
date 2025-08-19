@@ -1,3 +1,5 @@
+import { NavigatorScreenParams } from "@react-navigation/native";
+
 // types/navigation.ts
 export type RootStackParamList = {
   Splash: undefined;
@@ -7,20 +9,20 @@ export type RootStackParamList = {
   Login: undefined;
   TellUsSomething?: { name?: string | null; email?: string };
   ChooseYourInterests?: { expertiseLevel?: string | null };
-  BottomTabNavigator: undefined;
+  BottomTabNavigator: NavigatorScreenParams<BottomTabParamList>;
   Home: undefined;
   HeadlineDetailsScreen?: {
     newsId?: string;
     imageKey?: string;
   };
-  Profile: undefined;
-  SavedArticles: undefined;
+  Profile: NavigatorScreenParams<ProfileStackParamList>;
+  EditProfileScreen?: undefined;
 };
 export type BottomTabParamList = {
-  Home: undefined;
-  Interests: undefined;
-  Saved: undefined;
-  Profile: undefined;
+  Home?: undefined;
+  Interests?: undefined;
+  Saved?: undefined;
+  Profile?: NavigatorScreenParams<ProfileStackParamList>;
 };
 export type HomeStackParamList = {
   Home: undefined;
@@ -28,6 +30,7 @@ export type HomeStackParamList = {
 };
 
 export type ProfileStackParamList = {
-  SavedArticles: undefined;
-  Profile: undefined;
+  SavedArticles?: undefined;
+  ProfileStack?: undefined;
+  EditProfileScreen?: undefined;
 };

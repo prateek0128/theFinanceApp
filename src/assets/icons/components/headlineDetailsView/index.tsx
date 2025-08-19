@@ -18,5 +18,8 @@ export { default as LikePostIconFilled } from "./LikePostIconFilled";
 export { default as LikePostIconFilledWhite } from "./LikePostIconFilledWhite";
 export { default as LikePostIconWhite } from "./LikePostIconWhite";
 export { default as MaleProfileIcon } from "./MaleProfileIcon";
+export { default as Neutral } from "./Neutral";
+export { default as Positive } from "./Positive";
 export { default as UnlikeCommentIcon } from "./UnlikeCommentIcon";
 export { default as UnlikeCommentIconFilled } from "./UnlikeCommentIconFilled";
+export { default as Worried } from "./Worried";

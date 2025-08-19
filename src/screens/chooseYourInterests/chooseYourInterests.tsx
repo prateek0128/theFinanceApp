@@ -28,8 +28,9 @@ import { AxiosError } from "axios";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import * as Device from "expo-device";
 import * as Localization from "expo-localization";
-import { getUserProfile } from "../../apiServices/user";
+import { getUserProfile, updateUserInterest } from "../../apiServices/user";
 import Loader from "../../components/Loader/loader";
+import { useBackPressNavigate } from "../../hooks/useBackPressNavigate";
 const interests = [
   "Stock Market News",
   "Indian Companies",
@@ -61,15 +62,18 @@ export default function ChooseYourInterests() {
   const [selected, setSelected] = useState<string[]>([]);
   const [interests, setInterests] = useState<any[]>([]);
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+  const [isFirstTime, setIsFirstTime] = useState(true);
   const [deviceInfo, setDeviceInfo] = useState<any>({});
   const [isLoading, setIsLoading] = useState(false);
-
   const [selectedInterestIds, setSelectedInterestIds] = useState<string[]>([]);
+  const [updateInterests, setUpdateInterest] = useState<string[]>([]);
   const route = useRoute<
     ChooseYourInterestsRouteProp | BottomTabNavigatorRouteProp
   >();
-  const { expertiseLevel } = route.params || {};
-  console.log("expertiseLevel:", expertiseLevel || "");
+  const expertiseLevel =
+    route.params && "expertiseLevel" in route.params
+      ? (route.params as { expertiseLevel?: string | null }).expertiseLevel
+      : undefined;
   const toggleInterest = (item: any) => {
     setSelected((prevSelected) => {
       const isAlreadySelected = prevSelected.some(
@@ -83,7 +87,7 @@ export default function ChooseYourInterests() {
       // Update interest IDs as well
       const updatedIds = updatedSelected.map((i) => i.interestId);
       setSelectedInterestIds(updatedIds);
-
+      setUpdateInterest(updatedSelected.map((i) => i.name));
       return updatedSelected;
     });
   };
@@ -137,11 +141,17 @@ export default function ChooseYourInterests() {
     }
   };
   const getUserProfileAPI = async () => {
-       setIsLoading(true);
+    setIsLoading(true);
     try {
       const response = await getUserProfile();
-      console.log("SelectedInterestsResponse=>", response.data);
-      setSelectedInterests(response.data.interests || []);
+      console.log("SelectedInterestsResponse=>", response.data.interests);
+      const userInterests = response.data.interests || [];
+      setSelectedInterests(userInterests);
+
+      // If user already has saved interests, it's not first time
+      if (userInterests.length > 0) {
+        setIsFirstTime(false);
+      }
     } catch (err) {
       // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
@@ -155,6 +165,16 @@ export default function ChooseYourInterests() {
       setIsLoading(false);
     }
   };
+  const handleUpdateInterestsAPI = async () => {
+    const interestsData: string[] = updateInterests;
+    try {
+      const response = await updateUserInterest(interestsData);
+      console.log("UpdateRespone=>", response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getAllInterestsAPI();
     getUserProfileAPI();
@@ -164,10 +184,12 @@ export default function ChooseYourInterests() {
         interests.slice(i * 3, i * 3 + 3)
       )
     : [];
-  const buttonTitle =
-    selectedInterestIds.length < 0 ? "Get Started" : "Update Interests";
+  const buttonTitle = isFirstTime ? "Get Started" : "Update Interests";
   console.log("GroupInterests=>", groupedInterests);
   console.log("SelectedInterests=>", selectedInterests);
+  console.log("SelectedInterests2=>", selected);
+  console.log("SelectedInterests3=>", updateInterests);
+
   // Add this useEffect to map API-selected names to your full interest objects
   useEffect(() => {
     if (interests.length && selectedInterests.length) {
@@ -178,6 +200,8 @@ export default function ChooseYourInterests() {
       setSelectedInterestIds(matched.map((i) => i.interestId));
     }
   }, [interests, selectedInterests]);
+  selectedInterestIds.length < 0 &&
+    useBackPressNavigate("BottomTabNavigator", {});
   return (
     <View style={{ flex: 1 }}>
       <View
@@ -267,7 +291,12 @@ export default function ChooseYourInterests() {
             if (selected.length >= 3) {
               setIsLoading(true);
               try {
-                await handleContinue();
+                if (isFirstTime) {
+                  await handleContinue();
+                } else {
+                  await handleContinue();
+                  // await handleUpdateInterestsAPI();
+                }
                 showToast("Your interests saved successfully", "success");
               } catch (error) {
                 console.error(error);

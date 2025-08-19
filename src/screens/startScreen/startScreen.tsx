@@ -169,7 +169,12 @@ const StartScreen = () => {
           title="Continue"
           onPress={() => {
             navigation.navigate("Welcome");
-            //navigation.navigate("BottomTabNavigator");
+            // navigation.navigate("BottomTabNavigator", {
+            //   screen: "Profile",
+            //   params: {
+            //     screen: "EditProfileScreen",
+            //   },
+            // });
           }}
         />
       ) : (

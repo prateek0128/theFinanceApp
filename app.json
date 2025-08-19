@@ -11,10 +11,6 @@
     "icon": "src/assets/MarketBriefsLogo.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-    "splash": {
-      "image": "src/assets/MarketBriefsLogo.png",
-      "resizeMode": "contain"
-    },
     "ios": {
       "supportsTablet": true,
       "usesAppleSignIn": true,
@@ -30,25 +26,38 @@
       },
       "edgeToEdgeEnabled": true,
       "package": "com.prateek2812.marketBriefs",
-      "intentFilters": [],
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [{ "scheme": "marketbriefs", "host": "redirect" }],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ],
       "manifest": {
         "queries": [
-          {
-            "package": "com.whatsapp"
-          },
-          {
-            "package": "com.instagram.android"
-          },
-          {
-            "package": "com.twitter.android"
-          }
+          { "package": "com.whatsapp" },
+          { "package": "com.instagram.android" },
+          { "package": "com.twitter.android" }
         ]
       }
     },
     "web": {
       "favicon": "src/assets/favicon.png"
     },
-    "plugins": ["expo-font", "expo-web-browser", "expo-localization"],
+    "plugins": [
+      "expo-font",
+      "expo-web-browser",
+      "expo-localization",
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.1030825305394-hc58lnam3pc57elggvs3d9hjkpeut4ql"
+        }
+      ]
+    ],
+    "updates": {
+      "url": "https://u.expo.dev/f348fc7b-94d7-4e80-ab1f-814df370353e"
+    },
     "extra": {
       "facebookAppId": "743854988102436",
       "eas": {

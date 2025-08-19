@@ -10,21 +10,25 @@ import {
   SafeAreaView,
   ScrollView,
 } from "react-native";
-import { BackArrow, BackArrowWhite } from "../../assets/icons/components/logIn";
+import {
+  BackArrow,
+  BackArrowWhite,
+} from "../../../assets/icons/components/logIn";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
-import { RootStackParamList } from "../../types/navigation";
+import { RootStackParamList } from "../../../types/navigation";
 import { Ionicons } from "@expo/vector-icons"; // Make sure you have expo vector icons installed
-import fontFamily from "../../assets/styles/fontFamily";
-import { ThemeContext } from "../../context/themeContext";
-import { colors } from "../../assets/styles/colors";
+import fontFamily from "../../../assets/styles/fontFamily";
+import { ThemeContext } from "../../../context/themeContext";
+import { colors } from "../../../assets/styles/colors";
 import { Divider } from "react-native-paper";
-import globalStyles from "../../assets/styles/globalStyles";
-import { NewsAuthorIcon } from "../../assets/icons/components/homepage";
+import globalStyles from "../../../assets/styles/globalStyles";
+import { NewsAuthorIcon } from "../../../assets/icons/components/homepage";
 import {
   ViewMoreIcon,
   ViewMoreIconWhite,
-} from "../../assets/icons/components/savedArticles";
-import Header from "../../components/header/header";
+} from "../../../assets/icons/components/savedArticles";
+import Header from "../../../components/header/header";
+import { useBackPressNavigate } from "../../../hooks/useBackPressNavigate";
 
 const savedArticles = [
   {
@@ -32,42 +36,42 @@ const savedArticles = [
     source: "Moneycontrol",
     title: "RBI’s rate pause : Impact on Lending Rates",
     time: "17 hours ago",
-    image: require("../../assets/Images/Image1.png"),
+    image: require("../../../assets/Images/Image1.png"),
   },
   {
     id: "2",
     source: "Moneycontrol",
     title: "Reliance Industries Q3 Results Beat Estimates, St...",
     time: "17 hours ago",
-    image: require("../../assets/Images/Image.png"),
+    image: require("../../../assets/Images/Image.png"),
   },
   {
     id: "3",
     source: "Fstoppers",
     title: "RBI’s rate pause : Impact on Lending Rates",
     time: "18 hours ago",
-    image: require("../../assets/Images/Image2.png"),
+    image: require("../../../assets/Images/Image2.png"),
   },
   {
     id: "4",
     source: "Moneycontrol",
     title: "RBI’s rate pause : Impact on Lending Rates",
     time: "17 hours ago",
-    image: require("../../assets/Images/Image1.png"),
+    image: require("../../../assets/Images/Image1.png"),
   },
   {
     id: "5",
     source: "Moneycontrol",
     title: "Reliance Industries Q3 Results Beat Estimates, St...",
     time: "17 hours ago",
-    image: require("../../assets/Images/Image.png"),
+    image: require("../../../assets/Images/Image.png"),
   },
   {
     id: "6",
     source: "Fstoppers",
     title: "RBI’s rate pause : Impact on Lending Rates",
     time: "18 hours ago",
-    image: require("../../assets/Images/Image2.png"),
+    image: require("../../../assets/Images/Image2.png"),
   },
 ];
 
@@ -144,14 +148,16 @@ const SavedArticles = () => {
       </View>
     </TouchableOpacity>
   );
-
+  useBackPressNavigate("Home");
   return (
     <SafeAreaView style={[globalStyles.pageContainerWithBackground(theme)]}>
       <View style={styles.headerContainer}>
         <View style={styles.arrowSavedContainer}>
           <Header
             onBackClick={() => {
-              navigation.navigate("Profile");
+              navigation.navigate("Profile", {
+                screen: "ProfileStack",
+              });
             }}
             showThemeIcon={true}
           />

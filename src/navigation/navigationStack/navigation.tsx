@@ -11,8 +11,8 @@ import TellUsSomething from "../../screens/tellUsSomething/tellUsSomething";
 import BottomTabNavigator from "../bottomNavigation/bottomNavigation";
 import ChooseYourInterests from "../../screens/chooseYourInterests/chooseYourInterests";
 import HeadlineDetailsScreen from "../../screens/homePage/headlineDetailsScreen/headlineDetailsScreen";
-import SavedArticles from "../../screens/savedArticle/savedArticle";
-import ProfileScreen from "../../screens/profileScreen/profileScreen";
+import SavedArticles from "../../screens/profilePage/savedArticle/savedArticle";
+import ProfileScreen from "../../screens/profilePage/profileScreen/profileScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

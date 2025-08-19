@@ -14,7 +14,7 @@ import { AuthProvider } from "./src/context/loginAuthContext";
 import { ThemeProvider } from "./src/context/themeContext";
 import ThemeToggleButton from "./src/components/themeToggleButton/themeToggleButton";
 import { ThemeContext } from "./src/context/themeContext";
-import { GoogleAuthProvider } from "./src/context/googleAuthContext";
+// import { GoogleAuthProvider } from "./src/context/googleAuthContext";
 import { FacebookAuthProvider } from "./src/context/facebookAuthContext";
 import { AppleAuthProvider } from "./src/context/appleAuthContext";
 export default function App() {
@@ -34,34 +34,34 @@ export default function App() {
   });
   return (
     <>
-      <GoogleAuthProvider>
-        <FacebookAuthProvider>
-          <AppleAuthProvider>
-            <AuthProvider>
-              <ThemeProvider>
-                <GestureHandlerRootView style={{ flex: 1 }}>
-                  <SafeAreaProvider>
-                    <StatusBar
-                      backgroundColor={
-                        theme === "dark"
-                          ? colors.darkPrimaryBackground
-                          : colors.nonaryBackground
-                      } // Android background color
-                      barStyle={
-                        theme === "dark" ? "light-content" : "dark-content"
-                      } // iOS & Android text/icons
-                      // translucent={true}
-                    />
-                    <Navigation />
-                    <ThemeToggleButton />
-                    <FlashMessage position="top" />
-                  </SafeAreaProvider>
-                </GestureHandlerRootView>
-              </ThemeProvider>
-            </AuthProvider>
-          </AppleAuthProvider>
-        </FacebookAuthProvider>
-      </GoogleAuthProvider>
+      {/* <GoogleAuthProvider> */}
+      <FacebookAuthProvider>
+        <AppleAuthProvider>
+          <AuthProvider>
+            <ThemeProvider>
+              <GestureHandlerRootView style={{ flex: 1 }}>
+                <SafeAreaProvider>
+                  <StatusBar
+                    backgroundColor={
+                      theme === "dark"
+                        ? colors.darkPrimaryBackground
+                        : colors.nonaryBackground
+                    } // Android background color
+                    barStyle={
+                      theme === "dark" ? "light-content" : "dark-content"
+                    } // iOS & Android text/icons
+                    // translucent={true}
+                  />
+                  <Navigation />
+                  <ThemeToggleButton />
+                  <FlashMessage position="top" />
+                </SafeAreaProvider>
+              </GestureHandlerRootView>
+            </ThemeProvider>
+          </AuthProvider>
+        </AppleAuthProvider>
+      </FacebookAuthProvider>
+      {/* </GoogleAuthProvider> */}
     </>
   );
 }

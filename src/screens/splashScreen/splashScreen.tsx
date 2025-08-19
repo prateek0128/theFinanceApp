@@ -14,6 +14,7 @@ import { colors } from "../../assets/styles/colors";
 import fontFamily from "../../assets/styles/fontFamily";
 import { AuthContext } from "../../context/loginAuthContext";
 import { MarketBriefsLogo } from "../../assets/icons/components/logo";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const { width } = Dimensions.get("window");
 
@@ -51,9 +52,14 @@ const SplashScreen = () => {
       }, 300);
     }, 1000);
 
-    const navDelay = setTimeout(() => {
-      if (isLoggedIn) {
+    const navDelay = setTimeout(async () => {
+      const onboardingCompleted = await AsyncStorage.getItem(
+        "onboardingCompleted"
+      );
+      console.log("OnboardingCompleted:", Boolean(onboardingCompleted));
+      if (isLoggedIn && Boolean(onboardingCompleted)) {
         navigation.replace("BottomTabNavigator");
+        // navigation.replace("Start");
       } else {
         navigation.replace("Start");
       }
