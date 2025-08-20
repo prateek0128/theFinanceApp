@@ -15,13 +15,15 @@ import fontFamily from "../../assets/styles/fontFamily";
 import { AuthContext } from "../../context/loginAuthContext";
 import { MarketBriefsLogo } from "../../assets/icons/components/logo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ThemeContext } from "../../context/themeContext";
+import globalStyles from "../../assets/styles/globalStyles";
 
 const { width } = Dimensions.get("window");
 
 const SplashScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const { isLoggedIn, isLoading } = useContext(AuthContext);
-
   const logoTranslateX = useRef(new Animated.Value(80)).current;
   const logoScale = useRef(new Animated.Value(1)).current;
   const textOpacity = useRef(new Animated.Value(0)).current;
@@ -30,7 +32,7 @@ const SplashScreen = () => {
     const initialDelay = setTimeout(() => {
       Animated.parallel([
         Animated.timing(logoTranslateX, {
-          toValue: -10, // fine-tuned for visual center alignment
+          toValue: -5, // fine-tuned for visual center alignment
           duration: 600,
           useNativeDriver: true,
           easing: Easing.out(Easing.cubic),
@@ -61,11 +63,10 @@ const SplashScreen = () => {
         : false; // default if null
       if (isLoggedIn && onboardingCompleted) {
         navigation.replace("BottomTabNavigator");
-        // navigation.replace("Start");
       } else {
         navigation.replace("Start");
       }
-    }, 2500);
+    }, 3000);
 
     return () => {
       clearTimeout(initialDelay);
@@ -74,7 +75,13 @@ const SplashScreen = () => {
   }, [isLoggedIn, isLoading]);
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        globalStyles.pageContainerWithBackground(theme),
+        styles.container,
+        { padding: 0 },
+      ]}
+    >
       <View style={styles.row}>
         <Animated.View
           style={[
@@ -90,8 +97,26 @@ const SplashScreen = () => {
         <Animated.View style={[styles.nameBlock, { opacity: textOpacity }]}>
           <View style={styles.divider} />
           <View>
-            <Text style={styles.appNameText}>Market</Text>
-            <Text style={styles.appNameText}>Briefs</Text>
+            <Text
+              style={[
+                styles.appNameText,
+                {
+                  color: theme == "dark" ? colors.white : colors.octodenaryText,
+                },
+              ]}
+            >
+              Market
+            </Text>
+            <Text
+              style={[
+                styles.appNameText,
+                {
+                  color: theme == "dark" ? colors.white : colors.octodenaryText,
+                },
+              ]}
+            >
+              Briefs
+            </Text>
           </View>
         </Animated.View>
       </View>
@@ -127,12 +152,12 @@ const styles = StyleSheet.create({
     fontSize: 56,
     color: colors.octodenaryText,
     fontFamily: fontFamily.Inter600,
-    textAlign: "center",
+    //textAlign: "center",
   },
   divider: {
     width: 1,
     height: 112,
     backgroundColor: colors.darkSenaryText,
-    marginRight: 25,
+    marginRight: 20,
   },
 });

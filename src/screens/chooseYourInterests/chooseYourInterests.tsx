@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
   },
   cardRow: {
     flexDirection: "row",
-    columnGap: 12,
+    columnGap: 10,
   },
   cardDimension: {
     width: width * 0.27,
