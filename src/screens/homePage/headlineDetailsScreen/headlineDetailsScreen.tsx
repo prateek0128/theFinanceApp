@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
+  Image,
 } from "react-native";
 import { colors } from "../../../assets/styles/colors";
 import Loader from "../../../components/Loader/loader";
@@ -23,8 +24,8 @@ import {
   LikeCommentIconFilled,
   UnlikeCommentIcon,
   UnlikeCommentIconFilled,
-  CommentIcon,
-  CommentIconBlack,
+  CommentIconLight,
+  CommentIconDark,
   CurrencyImage2,
   HeartCommentIcon,
   HeartCommentIconFilled,
@@ -114,6 +115,7 @@ const HeadlineDetailsScreen = () => {
   const [addCommentsLoader, setAddCommentsLoader] = useState<boolean>(false);
   const [isFocused, setIsFocused] = useState(false);
   const token = AsyncStorage.getItem("authToken");
+  const [showAllComments, setShowAllComments] = useState(false);
   const news = {
     authors: null,
     categories: ["Stocks"],
@@ -136,7 +138,29 @@ const HeadlineDetailsScreen = () => {
       "1400% rally in five years! Multibagger stock hits upper circuit; Do you own?",
     url: "https://www.livemint.com/market/stock-market-news/1400-rally-in-five-years-multibagger-stock-spice-islands-industries-hits-upper-circuit-do-you-own-11755499624561.html",
   };
-
+  const newsData2 = {
+    authors: ["LiveMint"],
+    categories: ["Stocks", "Economy"],
+    content:
+      "Penny stock under ₹2: IT (Information Technology) stock hits upper circuit after Q1 (First Quarter) results 2025 Avance Technologies share price has gained 38% in one month, and has jumped by a staggering 155% in three months. The penny stock has rallied 162% in six months and is up 91% on a year-to-date (YTD) basis. Ankit Gohel Published 18 Aug 2025, 03:00 PM IST Avance Technologies share price has delivered multibagger returns of 3,260% in five years.(Image: Pexel) Avance Technologies share price was locked in at 2% upper circuit of ₹1.68 apiece on the BSE (Bombay Stock Exchange) Monday after the small-cap IT (Information Technology) company announced its Q1 (First Quarter) results. The penny hit the upper circuit for the twenty eighth consecutive trading session. Avance Technologies reported a net profit of ₹54.13 lakh in the first quarter of FY26, registering a significant growth of 35% from ₹40.02 lakh in the corresponding quarter of the last fiscal year. The company had posted a net loss of ₹37.80 lakh in the quarter ended March 2025. The company’s total revenue from operations in Q1FY26 jumped 496% to ₹25.21 crore from ₹4.23 crore, year-on-year (YoY). The company’s revenue in the previous quarter was ₹13.21 crore. Also Read | Market Strategy: Emkay Global raises Nifty 50 target to 28,000 on GST (Goods and Services Tax) reforms Avance Technologies Rights Issue Avance Technologies said its board of directors considered and approved raising of funds through issue of fully paid-up equity shares on rights basis to the existing equity shareholders of the company for an amount not exceeding ₹49.90 crore. Additionally, the company’s board also approved the re-designation of Latesh Poojary, Executive Director, as Chairman and Managing Director (MD) of Avance Technologies, subject to the approval of shareholders at the ensuing General Meeting and such other statutory approvals as may be required. Avance Technologies Share Price Performance Avance Technologies share price has gained 38% in one month, and has jumped by a staggering 155% in three months. The penny stock has rallied 162% in six months and is up 91% on a year-to-date (YTD) basis. Over the past two years, Avance Technologies shares have surged 442%, while it has delivered multibagger returns of 3,260% in five years. At 3:00 PM, Avance Technologies share price was still locked in 2% upper circuit of ₹1.68 apiece on the BSE (Bombay Stock Exchange). Disclaimer: The views and recommendations made above are those of individual analysts or broking companies, and not of Mint. We advise investors to check with certified experts before making any investment decisions. Avance Technologies Penny Stock Smallcap Stocks Get Latest real-time updates Catch all the Business News , Market News , Breaking News Events and Latest News Updates on Live Mint. Download The Mint News App to get Daily Market Updates. Business NewsMarketsStock MarketsPenny stock under ₹2: IT (Information Technology) stock hits upper circuit after Q1 (First Quarter) results 2025 More",
+    date_extracted: false,
+    engagement: { comments: 0, likes: 0 },
+    id: "68a39869c6943ae3b151032b",
+    impact_label: "Exceptional Impact",
+    impact_score: 8.5,
+    published_at: "2025-08-18T09:30:31Z",
+    related_stocks: null,
+    sentiment_label: "neutral",
+    sentiment_score: 0.85,
+    source: "LiveMint",
+    summary:
+      "Stock Market News: Share Market Today: India stock market news, world share market news and updates on Mint. Indian investors, Sensex latest updates.",
+    tags: null,
+    time_ago: "1 day ago",
+    title:
+      "Penny stock under ₹2: IT (Information Technology) stock hits upper circuit after Q1 (First Quarter) results 2025",
+    url: "https://www.livemint.com/market/stock-market-news/penny-stock-under-rs-2-it-stock-avance-technologies-share-price-hits-upper-circuit-after-q1-results-2025-11755508959248.html",
+  };
   useEffect(() => {
     if (newsId) {
       getNewsByIDAPI(newsId);
@@ -153,7 +177,7 @@ const HeadlineDetailsScreen = () => {
       console.log("newsResponseByID:", response.data);
       setNewsData(response.data);
     } catch (err) {
-      // Narrow / cast to AxiosError
+      // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
         status?: string;
         message?: string;
@@ -180,7 +204,7 @@ const HeadlineDetailsScreen = () => {
       console.log("CommentsResponse=>", response.data.data);
       setCommentsData(response.data.data.comments);
     } catch (err) {
-      // Narrow / cast to AxiosError
+      // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
         status: string;
         message: string;
@@ -199,7 +223,7 @@ const HeadlineDetailsScreen = () => {
       setLiked(response.data.liked);
       setBookmarked(response.data.is_pinned);
     } catch (err) {
-      // Narrow / cast to AxiosError
+      // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
         status: string;
         message: string;
@@ -224,7 +248,7 @@ const HeadlineDetailsScreen = () => {
       console.log("Toggle Like=>", response.data);
       showToast(response.data.message, "success");
     } catch (err) {
-      // Narrow / cast to AxiosError
+      // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
         status: string;
         message: string;
@@ -258,7 +282,7 @@ const HeadlineDetailsScreen = () => {
       // setUnlikeComment(commentData.user_has_liked);
       showToast(response.data.message, "success");
     } catch (err) {
-      // Narrow / cast to AxiosError
+      // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
         status: string;
         message: string;
@@ -292,7 +316,7 @@ const HeadlineDetailsScreen = () => {
       console.log("PinNews=>", response.data.success);
       showToast("News bookmarked successfully", "success");
     } catch (err) {
-      // Narrow / cast to AxiosError
+      // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
         status: string;
         message: string;
@@ -311,7 +335,7 @@ const HeadlineDetailsScreen = () => {
       console.log("UninNews=>", response.data.success);
       showToast("News bookmarked unsuccessfully", "success");
     } catch (err) {
-      // Narrow / cast to AxiosError
+      // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
         status: string;
         message: string;
@@ -336,7 +360,7 @@ const HeadlineDetailsScreen = () => {
       setComment("");
       getCommentsAPI(newsId);
     } catch (err) {
-      // Narrow / cast to AxiosError
+      // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
         status: string;
         message: string;
@@ -355,7 +379,7 @@ const HeadlineDetailsScreen = () => {
       console.log("BookmarkResponse=>", response.data[0].bookmark_status);
       // setBookmarked(response.data[0].bookmark_status);
     } catch (err) {
-      // Narrow / cast to AxiosError
+      // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
         status: string;
         message: string;
@@ -373,7 +397,7 @@ const HeadlineDetailsScreen = () => {
       // setLiked(response.data.liked);
       setBookmarked(response.data.is_pinned);
     } catch (err) {
-      // Narrow / cast to AxiosError
+      // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
         status: string;
         message: string;
@@ -390,7 +414,7 @@ const HeadlineDetailsScreen = () => {
       console.log(response.data);
       showToast(response.data.message, "success");
     } catch (err) {
-      // Narrow / cast to AxiosError
+      // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
         status: string;
         message: string;
@@ -447,6 +471,29 @@ const HeadlineDetailsScreen = () => {
     .map((point) => point.trim())
     .filter((point) => point.length > 0);
   useBackPressNavigate("Home");
+  const marketSentiments = [
+    {
+      label: "Positive",
+      value: "16%",
+      emoji: "assets/images/positionIcon.png",
+      color: "#23C16B",
+    },
+    {
+      label: "Neutral",
+      value: "52%",
+      emoji: "assets/images/neutralIcon.png",
+      color: "#72777A",
+    },
+    {
+      label: "Worried",
+      value: "32%",
+      emoji: "assets/images/worriedIcon.png",
+      color: "#FF5247",
+    },
+  ];
+  const visibleComments = showAllComments
+    ? commentsData
+    : commentsData.slice(0, 3);
   return (
     <>
       <KeyboardAvoidingView
@@ -471,6 +518,7 @@ const HeadlineDetailsScreen = () => {
                     navigation.navigate("Home");
                     console.log("Back to Home");
                   }}
+                  backArrow={true}
                   liked={liked}
                   setLiked={setLiked}
                   bookmarked={bookmarked}
@@ -594,7 +642,6 @@ const HeadlineDetailsScreen = () => {
                     ImageComponent={CurrencyImage2}
                   />
                 </View>
-
                 <View style={styles.summaryDetailsConatiner}>
                   <Text
                     style={[
@@ -652,7 +699,6 @@ const HeadlineDetailsScreen = () => {
                     },
                   ]}
                 />
-
                 <View style={styles.marketMoodContainer}>
                   <View>
                     <Text
@@ -670,69 +716,47 @@ const HeadlineDetailsScreen = () => {
                     </Text>
                   </View>
                   <View style={styles.marketCardsContainer}>
-                    <View style={styles.marketCard}>
-                      <View>
-                        <Text style={styles.positiveValue}>16%</Text>
-                        <Positive />
+                    {marketSentiments.map((item, index) => (
+                      <View
+                        key={index}
+                        style={[
+                          styles.marketCard,
+                          {
+                            borderColor:
+                              theme === "dark"
+                                ? colors.undenaryBorder
+                                : colors.nonaryBorder,
+                          },
+                        ]}
+                      >
+                        <View>
+                          <Text
+                            style={[
+                              styles.positiveValue,
+                              { color: item.color },
+                            ]}
+                          >
+                            {item.value}
+                          </Text>
+                          <Image source={{ uri: item.emoji }} />
+                        </View>
+                        <View>
+                          <Text
+                            style={[
+                              styles.positiveText,
+                              {
+                                color:
+                                  theme === "dark"
+                                    ? colors.white
+                                    : colors.octodenaryText,
+                              },
+                            ]}
+                          >
+                            {item.label}
+                          </Text>
+                        </View>
                       </View>
-                      <View>
-                        <Text
-                          style={[
-                            styles.positiveText,
-                            {
-                              color:
-                                theme === "dark"
-                                  ? colors.white
-                                  : colors.octodenaryText,
-                            },
-                          ]}
-                        >
-                          Positive
-                        </Text>
-                      </View>
-                    </View>
-                    <View style={styles.marketCard}>
-                      <View>
-                        <Text style={styles.positiveValue}>52%</Text>
-                        <Neutral />
-                      </View>
-                      <View>
-                        <Text
-                          style={[
-                            styles.positiveText,
-                            {
-                              color:
-                                theme === "dark"
-                                  ? colors.white
-                                  : colors.octodenaryText,
-                            },
-                          ]}
-                        >
-                          Neutral
-                        </Text>
-                      </View>
-                    </View>
-                    <View style={styles.marketCard}>
-                      <View>
-                        <Text style={styles.positiveValue}>16%</Text>
-                        <Worried />
-                      </View>
-                      <View>
-                        <Text
-                          style={[
-                            styles.positiveText,
-                            {
-                              color:
-                                theme === "dark"
-                                  ? colors.white
-                                  : colors.octodenaryText,
-                            },
-                          ]}
-                        >
-                          Worried
-                        </Text>
-                      </View>
-                    </View>
+                    ))}
                   </View>
                   <View>
                     <Text
@@ -785,8 +809,8 @@ const HeadlineDetailsScreen = () => {
                         {
                           color:
                             theme === "dark"
-                              ? colors.darkPrimaryText
-                              : colors.octodenaryText,
+                              ? colors.vigenaryText
+                              : colors.sexdenaryText,
                         },
                       ]}
                     >
@@ -799,7 +823,7 @@ const HeadlineDetailsScreen = () => {
                   )}
                 </View>
                 <View style={styles.relatedDiscussionsDetails}>
-                  {(commentsData || []).map((comment: any) => (
+                  {(visibleComments || []).map((comment: any) => (
                     <View
                       key={comment.id}
                       style={styles.relatedDiscussionsArticle}
@@ -901,10 +925,25 @@ const HeadlineDetailsScreen = () => {
                   ))}
                 </View>
               </View>
-              {commentsData.length > 3 && (
-                <View style={styles.viewCommentsContainer}>
-                  <Text style={styles.viewCommentsText}>View All Comments</Text>
-                </View>
+              {commentsData.length > 3 && !showAllComments && (
+                <TouchableOpacity
+                  style={styles.viewCommentsContainer}
+                  onPress={() => setShowAllComments(true)}
+                >
+                  <Text
+                    style={[
+                      styles.viewCommentsText,
+                      {
+                        color:
+                          theme === "dark"
+                            ? colors.vigenaryText
+                            : colors.sexdenaryText,
+                      },
+                    ]}
+                  >
+                    View All Comments
+                  </Text>
+                </TouchableOpacity>
               )}
               <View
                 style={[
@@ -994,15 +1033,15 @@ const HeadlineDetailsScreen = () => {
                           alignSelf: isFocused ? "flex-end" : "center",
                           backgroundColor:
                             theme === "dark"
-                              ? colors.duodenaryBackground
+                              ? colors.darkQuaternaryBackground
                               : colors.septendenaryBackground,
                         },
                       ]}
                     >
                       {theme === "light" ? (
-                        <CommentIcon />
+                        <CommentIconLight />
                       ) : (
-                        <CommentIconBlack />
+                        <CommentIconDark />
                       )}
                     </View>
                   </TouchableOpacity>
@@ -1021,6 +1060,7 @@ export default HeadlineDetailsScreen;
 const styles = StyleSheet.create({
   headerContainer: {
     marginTop: 24,
+    marginBottom: 24,
   },
   headingDetailsContainer: {
     gap: 24,
@@ -1199,12 +1239,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     gap: 16,
+    width: "100%",
   },
   marketCard: {
     gap: 16,
     borderRadius: 12,
     borderWidth: 1,
     padding: 12,
+    flex: 1,
   },
   positiveValue: {
     fontFamily: fontFamily.Inter700,

@@ -53,11 +53,13 @@ const SplashScreen = () => {
     }, 1000);
 
     const navDelay = setTimeout(async () => {
-      const onboardingCompleted = await AsyncStorage.getItem(
+      const onboardingCompletedStr = await AsyncStorage.getItem(
         "onboardingCompleted"
       );
-      console.log("OnboardingCompleted:", Boolean(onboardingCompleted));
-      if (isLoggedIn && Boolean(onboardingCompleted)) {
+      const onboardingCompleted = onboardingCompletedStr
+        ? JSON.parse(onboardingCompletedStr)
+        : false; // default if null
+      if (isLoggedIn && onboardingCompleted) {
         navigation.replace("BottomTabNavigator");
         // navigation.replace("Start");
       } else {

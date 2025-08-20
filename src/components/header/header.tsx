@@ -13,6 +13,8 @@ import { ThemeContext } from "../../context/themeContext";
 import {
   BackArrowIcon,
   BackArrowIconWhite,
+  BackArrowDetailsDark,
+  BackArrowDetailsLight,
   ShareIcon,
   ShareIconWhite,
 } from "../../assets/icons/components/header";
@@ -34,6 +36,7 @@ import { BackArrow, BackArrowWhite } from "../../assets/icons/components/logIn";
 
 const { width } = Dimensions.get("window");
 type HeaderProps = {
+  backArrow?: boolean;
   onBackClick?: () => void;
   liked?: boolean;
   setLiked?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -47,6 +50,7 @@ type HeaderProps = {
 };
 
 const Header = ({
+  backArrow,
   onBackClick,
   liked,
   setLiked,
@@ -75,7 +79,17 @@ const Header = ({
           ]}
         >
           {/* {theme === "light" ? <BackArrowIcon /> : <BackArrowIconWhite />} */}
-          {theme === "dark" ? <BackArrowWhite /> : <BackArrow />}
+          {backArrow ? (
+            theme === "dark" ? (
+              <BackArrowDetailsDark />
+            ) : (
+              <BackArrowDetailsLight />
+            )
+          ) : theme === "dark" ? (
+            <BackArrowWhite />
+          ) : (
+            <BackArrow />
+          )}
         </View>
       </TouchableOpacity>
       {showActivityIcons && (
