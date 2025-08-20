@@ -343,9 +343,10 @@ const styles = StyleSheet.create({
   },
   cardRow: {
     flexDirection: "row",
-    columnGap: 12,
+    columnGap: 10,
   },
   cardDimension: {
+    //flex: 1,
     width: width * 0.27,
     height: 108,
     // backgroundColor: colors.quaternaryBackground,

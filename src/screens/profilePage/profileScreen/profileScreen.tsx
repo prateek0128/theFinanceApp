@@ -103,7 +103,6 @@ const ProfileScreen = () => {
     lightIcon,
     onPress,
   }: OptionItem) => {
-    console.log("ProfileScreen...renderOption...");
     return (
       <TouchableOpacity key={label} onPress={onPress} style={styles.optionRow}>
         <View style={styles.iconOptionContainer}>
@@ -127,7 +126,6 @@ const ProfileScreen = () => {
     );
   };
   const renderSection = (title: string, options: OptionItem[]) => {
-    console.log("ProfileScreen...renderSection...");
     return (
       <View style={styles.section}>
         <Text
@@ -161,9 +159,6 @@ const ProfileScreen = () => {
 
     loadProfileData();
   }, []);
-  console.log("ProfileScreen...");
-  console.log("userNameProfile=>", userName);
-  console.log("userEmailProfile=>", userEmail);
   useBackPressNavigate("Home");
   return (
     <SafeAreaView style={[globalStyles.pageContainerWithBackground(theme)]}>
