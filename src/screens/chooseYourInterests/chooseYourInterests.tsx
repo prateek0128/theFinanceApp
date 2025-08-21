@@ -353,6 +353,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 12,
+
     //borderWidth: 1,
     paddingHorizontal: 10,
     paddingVertical: 10,

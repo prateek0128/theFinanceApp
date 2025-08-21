@@ -186,10 +186,10 @@ const ProfileScreen = () => {
               // },
             ]}
           >
-            {/* <Image
-              source={require("../../../assets/Images/Prateek.jpg")}
+            <Image
+              source={{ uri: "https://randomuser.me/api/portraits/men/32.jpg" }}
               style={styles.profileImage}
-            /> */}
+            />
             <View style={[styles.userDetailsContainer]}>
               <Text
                 style={[

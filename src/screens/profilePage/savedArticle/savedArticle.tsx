@@ -36,42 +36,42 @@ const savedArticles = [
     source: "Moneycontrol",
     title: "RBI’s rate pause : Impact on Lending Rates",
     time: "17 hours ago",
-    // image: require("../../../assets/Images/Image1.png"),
+    image: require("../../../assets/images/Image1.png"),
   },
   {
     id: "2",
     source: "Moneycontrol",
     title: "Reliance Industries Q3 Results Beat Estimates, St...",
     time: "17 hours ago",
-    // image: require("../../../assets/Images/Image.png"),
+    image: require("../../../assets/images/Image.png"),
   },
   {
     id: "3",
     source: "Fstoppers",
     title: "RBI’s rate pause : Impact on Lending Rates",
     time: "18 hours ago",
-    // image: require("../../../assets/Images/Image2.png"),
+    image: require("../../../assets/images/Image2.png"),
   },
   {
     id: "4",
     source: "Moneycontrol",
     title: "RBI’s rate pause : Impact on Lending Rates",
     time: "17 hours ago",
-    // image: require("../../../assets/Images/Image1.png"),
+    image: require("../../../assets/images/Image1.png"),
   },
   {
     id: "5",
     source: "Moneycontrol",
     title: "Reliance Industries Q3 Results Beat Estimates, St...",
     time: "17 hours ago",
-    // image: require("../../../assets/Images/Image.png"),
+    image: require("../../../assets/images/Image.png"),
   },
   {
     id: "6",
     source: "Fstoppers",
     title: "RBI’s rate pause : Impact on Lending Rates",
     time: "18 hours ago",
-    // image: require("../../../assets/Images/Image2.png"),
+    image: require("../../../assets/images/Image2.png"),
   },
 ];
 
@@ -122,12 +122,12 @@ const SavedArticles = () => {
           </Text>
         </View>
         <View style={[styles.imageContainer]}>
-          {/* <Image
+          <Image
             source={item.image}
             style={styles.image}
             width={100}
             height={100}
-          /> */}
+          />
         </View>
       </View>
       <View style={[styles.cardBottomSection]}>
