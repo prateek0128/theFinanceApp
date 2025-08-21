@@ -1,5 +1,5 @@
 import React from "react";
-import ProfileScreen from "../../screens/profileScreen/profileScreen";
+import ProfileScreen from "../../screens/profilePage/profileScreen/profileScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Dimensions } from "react-native";
 import HomeScreen from "../../screens/homePage/homeScreen/homeScreen";
@@ -19,8 +19,6 @@ import {
   ProfileIconFilledLight,
   ProfileIconFilledDark,
 } from "../../assets/icons/components/bottomNavigation";
-import NewsScreen from "../../screens/newsScreen/newsScreen";
-
 import fontFamily from "../../assets/styles/fontFamily";
 import HomeScreenStack from "../homeScreenStack/homeScreenStack";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
@@ -30,7 +28,7 @@ import { colors } from "../../assets/styles/colors";
 import ChooseYourInterests from "../../screens/chooseYourInterests/chooseYourInterests";
 import { BottomTabParamList, HomeStackParamList } from "../../types/navigation";
 import ProfileScreenStack from "../profileScreenStack/profileScreenStack";
-import SavedArticles from "../../screens/savedArticle/savedArticle";
+import SavedArticles from "../../screens/profilePage/savedArticle/savedArticle";
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 const { width, height } = Dimensions.get("window");
 

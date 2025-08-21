@@ -13,6 +13,8 @@ import { ThemeContext } from "../../context/themeContext";
 import {
   BackArrowIcon,
   BackArrowIconWhite,
+  BackArrowDetailsDark,
+  BackArrowDetailsLight,
   ShareIcon,
   ShareIconWhite,
 } from "../../assets/icons/components/header";
@@ -34,6 +36,7 @@ import { BackArrow, BackArrowWhite } from "../../assets/icons/components/logIn";
 
 const { width } = Dimensions.get("window");
 type HeaderProps = {
+  backArrow?: boolean;
   onBackClick?: () => void;
   liked?: boolean;
   setLiked?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -47,6 +50,7 @@ type HeaderProps = {
 };
 
 const Header = ({
+  backArrow,
   onBackClick,
   liked,
   setLiked,
@@ -60,19 +64,48 @@ const Header = ({
 }: HeaderProps) => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const [open, setOpen] = useState(false);
-  console.log("LikedStatus=>", liked);
-  console.log("BookmarkedStatus=>", bookmarked);
   return (
     <View style={styles.headerConatiner}>
       <TouchableOpacity onPress={onBackClick}>
-        <View style={styles.leftHeaderPart}>
+        <View
+          style={[
+            styles.leftHeaderPart,
+            {
+              borderColor:
+                theme === "dark"
+                  ? colors.tertiaryButtonColor
+                  : colors.nonaryBorder,
+            },
+          ]}
+        >
           {/* {theme === "light" ? <BackArrowIcon /> : <BackArrowIconWhite />} */}
-          {theme === "dark" ? <BackArrowWhite /> : <BackArrow />}
+          {backArrow ? (
+            theme === "dark" ? (
+              <BackArrowDetailsDark />
+            ) : (
+              <BackArrowDetailsLight />
+            )
+          ) : theme === "dark" ? (
+            <BackArrowWhite />
+          ) : (
+            <BackArrow />
+          )}
         </View>
       </TouchableOpacity>
       {showActivityIcons && (
         <View style={styles.rightHeaderPart}>
-          <TouchableOpacity onPress={onToggleLikeClick}>
+          <TouchableOpacity
+            onPress={onToggleLikeClick}
+            style={[
+              styles.leftHeaderPart,
+              {
+                borderColor:
+                  theme === "dark"
+                    ? colors.tertiaryButtonColor
+                    : colors.nonaryBorder,
+              },
+            ]}
+          >
             {theme === "light" ? (
               liked ? (
                 <LikePostIconFilled />
@@ -85,7 +118,18 @@ const Header = ({
               <LikePostIconWhite />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={onToggleBookmarkClick}>
+          <TouchableOpacity
+            onPress={onToggleBookmarkClick}
+            style={[
+              styles.leftHeaderPart,
+              {
+                borderColor:
+                  theme === "dark"
+                    ? colors.tertiaryButtonColor
+                    : colors.nonaryBorder,
+              },
+            ]}
+          >
             {theme === "light" ? (
               bookmarked ? (
                 <BookmarkIconFilled />
@@ -98,7 +142,18 @@ const Header = ({
               <BookmarkIconWhite />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setOpen(true)}>
+          <TouchableOpacity
+            onPress={() => setOpen(true)}
+            style={[
+              styles.leftHeaderPart,
+              {
+                borderColor:
+                  theme === "dark"
+                    ? colors.tertiaryButtonColor
+                    : colors.nonaryBorder,
+              },
+            ]}
+          >
             {theme === "light" ? <ShareIcon /> : <ShareIconWhite />}
           </TouchableOpacity>
           <ShareSheet
@@ -127,7 +182,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
-  leftHeaderPart: {},
+  leftHeaderPart: {
+    width: 40,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 999,
+    borderWidth: 1,
+  },
   rightHeaderPart: {
     flexDirection: "row",
     gap: 16,

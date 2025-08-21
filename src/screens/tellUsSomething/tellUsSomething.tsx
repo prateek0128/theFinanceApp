@@ -26,6 +26,7 @@ import {
   getAllRoles,
 } from "../../apiServices/onboarding";
 import { getComments } from "../../apiServices/newsEngagement";
+import { useBackPressNavigate } from "../../hooks/useBackPressNavigate";
 const QuestionBlock = ({
   title,
   options,

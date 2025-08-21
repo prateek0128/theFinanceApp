@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
+  Image,
 } from "react-native";
 import { colors } from "../../../assets/styles/colors";
 import Loader from "../../../components/Loader/loader";
@@ -23,11 +24,14 @@ import {
   LikeCommentIconFilled,
   UnlikeCommentIcon,
   UnlikeCommentIconFilled,
-  CommentIcon,
-  CommentIconBlack,
+  CommentIconLight,
+  CommentIconDark,
   CurrencyImage2,
   HeartCommentIcon,
   HeartCommentIconFilled,
+  Positive,
+  Neutral,
+  Worried,
 } from "../../../assets/icons/components/headlineDetailsView";
 import HeadlineDetailCard from "../../../components/headlineDetailedCard/headlineDetailedCard";
 import Tag from "../../../components/tag/tag";
@@ -66,6 +70,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import globalStyles from "../../../assets/styles/globalStyles";
 import { NewsAuthorIcon } from "../../../assets/icons/components/homepage";
 import { Divider } from "react-native-paper";
+import { useBackPressNavigate } from "../../../hooks/useBackPressNavigate";
 
 dayjs.extend(relativeTime);
 const { width, height } = Dimensions.get("window");
@@ -90,6 +95,7 @@ interface NewsData {
   tag?: string;
   authors?: string;
   time_ago?: string;
+  source?: string;
 }
 const HeadlineDetailsScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -109,26 +115,51 @@ const HeadlineDetailsScreen = () => {
   const [addCommentsLoader, setAddCommentsLoader] = useState<boolean>(false);
   const [isFocused, setIsFocused] = useState(false);
   const token = AsyncStorage.getItem("authToken");
+  const [showAllComments, setShowAllComments] = useState(false);
   const news = {
-    authors: ["LiveMint"],
-    categories: ["Mutual Funds"],
+    authors: null,
+    categories: ["Stocks"],
     content: "",
     date_extracted: false,
     engagement: { comments: 0, likes: 0 },
-    id: "68944d6c34238d9538791cd2",
+    id: "68a2f6802f4a47f56be48c9e",
     impact_label: "Exceptional Impact",
-    impact_score: 9.225,
-    published_at: "2025-08-07T06:42:19Z",
+    impact_score: 8.5,
+    published_at: "2025-08-18T07:38:49Z",
     related_stocks: null,
     sentiment_label: "neutral",
-    sentiment_score: 0.75,
+    sentiment_score: 0.85,
     source: "LiveMint",
     summary:
-      "• SoftBank Group announced a net profit of $2.87 billion for the first quarter. • This positive result was driven by strong performance in its portfolio companies. • This means that investors might see potential growth in SoftBank's stock value.",
+      "Stock Market News: Share Market Today: India stock market news, world share market news and updates on Mint. Indian investors, Sensex latest updates.",
     tags: null,
-    time_ago: "57 minutes ago",
-    title: "SoftBank Group reports $2.87 billion profit",
-    url: "https://www.livemint.com/companies/company-results/softbank-group-posts-2-87-billion-net-profit-in-first-quarter-11754548939913.html",
+    time_ago: "4 hours ago",
+    title:
+      "1400% rally in five years! Multibagger stock hits upper circuit; Do you own?",
+    url: "https://www.livemint.com/market/stock-market-news/1400-rally-in-five-years-multibagger-stock-spice-islands-industries-hits-upper-circuit-do-you-own-11755499624561.html",
+  };
+  const newsData2 = {
+    authors: ["LiveMint"],
+    categories: ["Stocks", "Economy"],
+    content:
+      "Penny stock under ₹2: IT (Information Technology) stock hits upper circuit after Q1 (First Quarter) results 2025 Avance Technologies share price has gained 38% in one month, and has jumped by a staggering 155% in three months. The penny stock has rallied 162% in six months and is up 91% on a year-to-date (YTD) basis. Ankit Gohel Published 18 Aug 2025, 03:00 PM IST Avance Technologies share price has delivered multibagger returns of 3,260% in five years.(Image: Pexel) Avance Technologies share price was locked in at 2% upper circuit of ₹1.68 apiece on the BSE (Bombay Stock Exchange) Monday after the small-cap IT (Information Technology) company announced its Q1 (First Quarter) results. The penny hit the upper circuit for the twenty eighth consecutive trading session. Avance Technologies reported a net profit of ₹54.13 lakh in the first quarter of FY26, registering a significant growth of 35% from ₹40.02 lakh in the corresponding quarter of the last fiscal year. The company had posted a net loss of ₹37.80 lakh in the quarter ended March 2025. The company’s total revenue from operations in Q1FY26 jumped 496% to ₹25.21 crore from ₹4.23 crore, year-on-year (YoY). The company’s revenue in the previous quarter was ₹13.21 crore. Also Read | Market Strategy: Emkay Global raises Nifty 50 target to 28,000 on GST (Goods and Services Tax) reforms Avance Technologies Rights Issue Avance Technologies said its board of directors considered and approved raising of funds through issue of fully paid-up equity shares on rights basis to the existing equity shareholders of the company for an amount not exceeding ₹49.90 crore. Additionally, the company’s board also approved the re-designation of Latesh Poojary, Executive Director, as Chairman and Managing Director (MD) of Avance Technologies, subject to the approval of shareholders at the ensuing General Meeting and such other statutory approvals as may be required. Avance Technologies Share Price Performance Avance Technologies share price has gained 38% in one month, and has jumped by a staggering 155% in three months. The penny stock has rallied 162% in six months and is up 91% on a year-to-date (YTD) basis. Over the past two years, Avance Technologies shares have surged 442%, while it has delivered multibagger returns of 3,260% in five years. At 3:00 PM, Avance Technologies share price was still locked in 2% upper circuit of ₹1.68 apiece on the BSE (Bombay Stock Exchange). Disclaimer: The views and recommendations made above are those of individual analysts or broking companies, and not of Mint. We advise investors to check with certified experts before making any investment decisions. Avance Technologies Penny Stock Smallcap Stocks Get Latest real-time updates Catch all the Business News , Market News , Breaking News Events and Latest News Updates on Live Mint. Download The Mint News App to get Daily Market Updates. Business NewsMarketsStock MarketsPenny stock under ₹2: IT (Information Technology) stock hits upper circuit after Q1 (First Quarter) results 2025 More",
+    date_extracted: false,
+    engagement: { comments: 0, likes: 0 },
+    id: "68a39869c6943ae3b151032b",
+    impact_label: "Exceptional Impact",
+    impact_score: 8.5,
+    published_at: "2025-08-18T09:30:31Z",
+    related_stocks: null,
+    sentiment_label: "neutral",
+    sentiment_score: 0.85,
+    source: "LiveMint",
+    summary:
+      "Stock Market News: Share Market Today: India stock market news, world share market news and updates on Mint. Indian investors, Sensex latest updates.",
+    tags: null,
+    time_ago: "1 day ago",
+    title:
+      "Penny stock under ₹2: IT (Information Technology) stock hits upper circuit after Q1 (First Quarter) results 2025",
+    url: "https://www.livemint.com/market/stock-market-news/penny-stock-under-rs-2-it-stock-avance-technologies-share-price-hits-upper-circuit-after-q1-results-2025-11755508959248.html",
   };
   useEffect(() => {
     if (newsId) {
@@ -146,7 +177,7 @@ const HeadlineDetailsScreen = () => {
       console.log("newsResponseByID:", response.data);
       setNewsData(response.data);
     } catch (err) {
-      // Narrow / cast to AxiosError
+      // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
         status?: string;
         message?: string;
@@ -173,7 +204,7 @@ const HeadlineDetailsScreen = () => {
       console.log("CommentsResponse=>", response.data.data);
       setCommentsData(response.data.data.comments);
     } catch (err) {
-      // Narrow / cast to AxiosError
+      // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
         status: string;
         message: string;
@@ -192,7 +223,7 @@ const HeadlineDetailsScreen = () => {
       setLiked(response.data.liked);
       setBookmarked(response.data.is_pinned);
     } catch (err) {
-      // Narrow / cast to AxiosError
+      // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
         status: string;
         message: string;
@@ -217,7 +248,7 @@ const HeadlineDetailsScreen = () => {
       console.log("Toggle Like=>", response.data);
       showToast(response.data.message, "success");
     } catch (err) {
-      // Narrow / cast to AxiosError
+      // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
         status: string;
         message: string;
@@ -251,7 +282,7 @@ const HeadlineDetailsScreen = () => {
       // setUnlikeComment(commentData.user_has_liked);
       showToast(response.data.message, "success");
     } catch (err) {
-      // Narrow / cast to AxiosError
+      // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
         status: string;
         message: string;
@@ -285,7 +316,7 @@ const HeadlineDetailsScreen = () => {
       console.log("PinNews=>", response.data.success);
       showToast("News bookmarked successfully", "success");
     } catch (err) {
-      // Narrow / cast to AxiosError
+      // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
         status: string;
         message: string;
@@ -304,7 +335,7 @@ const HeadlineDetailsScreen = () => {
       console.log("UninNews=>", response.data.success);
       showToast("News bookmarked unsuccessfully", "success");
     } catch (err) {
-      // Narrow / cast to AxiosError
+      // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
         status: string;
         message: string;
@@ -329,7 +360,7 @@ const HeadlineDetailsScreen = () => {
       setComment("");
       getCommentsAPI(newsId);
     } catch (err) {
-      // Narrow / cast to AxiosError
+      // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
         status: string;
         message: string;
@@ -348,7 +379,7 @@ const HeadlineDetailsScreen = () => {
       console.log("BookmarkResponse=>", response.data[0].bookmark_status);
       // setBookmarked(response.data[0].bookmark_status);
     } catch (err) {
-      // Narrow / cast to AxiosError
+      // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
         status: string;
         message: string;
@@ -366,7 +397,7 @@ const HeadlineDetailsScreen = () => {
       // setLiked(response.data.liked);
       setBookmarked(response.data.is_pinned);
     } catch (err) {
-      // Narrow / cast to AxiosError
+      // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
         status: string;
         message: string;
@@ -383,7 +414,7 @@ const HeadlineDetailsScreen = () => {
       console.log(response.data);
       showToast(response.data.message, "success");
     } catch (err) {
-      // Narrow / cast to AxiosError
+      // Narrow / cast to AxiosError
       const axiosErr = err as AxiosError<{
         status: string;
         message: string;
@@ -439,6 +470,30 @@ const HeadlineDetailsScreen = () => {
     .split("•")
     .map((point) => point.trim())
     .filter((point) => point.length > 0);
+  useBackPressNavigate("Home");
+  const marketSentiments = [
+    {
+      label: "Positive",
+      value: "16%",
+      emoji: "assets/images/positionIcon.png",
+      color: "#23C16B",
+    },
+    {
+      label: "Neutral",
+      value: "52%",
+      emoji: "assets/images/neutralIcon.png",
+      color: "#72777A",
+    },
+    {
+      label: "Worried",
+      value: "32%",
+      emoji: "assets/images/worriedIcon.png",
+      color: "#FF5247",
+    },
+  ];
+  const visibleComments = showAllComments
+    ? commentsData
+    : commentsData.slice(0, 3);
   return (
     <>
       <KeyboardAvoidingView
@@ -463,6 +518,7 @@ const HeadlineDetailsScreen = () => {
                     navigation.navigate("Home");
                     console.log("Back to Home");
                   }}
+                  backArrow={true}
                   liked={liked}
                   setLiked={setLiked}
                   bookmarked={bookmarked}
@@ -474,21 +530,53 @@ const HeadlineDetailsScreen = () => {
                 />
               </View>
               <View style={styles.headingDetailsContainer}>
-                <View
-                  style={{
-                    width: "100%",
-                    marginTop: 16,
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  {/* {renderImage()} */}
-                  <ClippedSVG
-                    width={width * 0.89}
-                    height={200}
-                    radius={16}
-                    ImageComponent={CurrencyImage2}
-                  />
+                <View style={styles.authorIconContainer}>
+                  <NewsAuthorIcon />
+                  <View style={styles.authorTimeContainer}>
+                    <Text
+                      style={[
+                        styles.authorTimeText,
+                        {
+                          color:
+                            theme === "light"
+                              ? colors.octodenaryText
+                              : colors.white,
+                          fontSize: 14,
+                        },
+                      ]}
+                    >
+                      {`${newsData?.source || "--"} ·`}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.authorTimeText,
+                        {
+                          fontSize: 12,
+                          color:
+                            theme === "dark"
+                              ? colors.darkQuaternaryText
+                              : colors.unvigintaryText,
+                        },
+                      ]}
+                    >
+                      {`${newsData.time_ago || "--"}`}
+                    </Text>
+                  </View>
+                </View>
+                <View>
+                  <Text
+                    style={[
+                      styles.articleDetailsHeading,
+                      {
+                        color:
+                          theme === "dark"
+                            ? colors.darkPrimaryText
+                            : colors.octodenaryText,
+                      },
+                    ]}
+                  >
+                    {newsData.title}
+                  </Text>
                 </View>
                 <View style={styles.headingContainer}>
                   <View style={styles.detailsHeader}>
@@ -537,52 +625,22 @@ const HeadlineDetailsScreen = () => {
                       />
                     </View>
                   </View>
-                  <Text
-                    style={[
-                      styles.articleDetailsHeading,
-                      {
-                        color:
-                          theme === "dark"
-                            ? colors.darkPrimaryText
-                            : colors.octodenaryText,
-                      },
-                    ]}
-                  >
-                    {newsData.title}
-                  </Text>
                 </View>
-                <View style={styles.authorIconContainer}>
-                  <NewsAuthorIcon />
-                  <View style={styles.authorTimeContainer}>
-                    <Text
-                      style={[
-                        styles.authorTimeText,
-                        {
-                          color:
-                            theme === "light"
-                              ? colors.octodenaryText
-                              : colors.white,
-                          fontSize: 16,
-                        },
-                      ]}
-                    >
-                      {`${newsData?.authors?.[0] || "--"} ·`}
-                    </Text>
-                    <Text
-                      style={[
-                        styles.authorTimeText,
-                        {
-                          fontSize: 16,
-                          color:
-                            theme === "dark"
-                              ? colors.darkQuaternaryText
-                              : colors.unvigintaryText,
-                        },
-                      ]}
-                    >
-                      {`${newsData.time_ago || "--"}`}
-                    </Text>
-                  </View>
+                <View
+                  style={{
+                    width: "100%",
+                    marginTop: 16,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {/* {renderImage()} */}
+                  <ClippedSVG
+                    width={width * 0.89}
+                    height={200}
+                    radius={16}
+                    ImageComponent={CurrencyImage2}
+                  />
                 </View>
                 <View style={styles.summaryDetailsConatiner}>
                   <Text
@@ -641,6 +699,93 @@ const HeadlineDetailsScreen = () => {
                     },
                   ]}
                 />
+                <View style={styles.marketMoodContainer}>
+                  <View>
+                    <Text
+                      style={[
+                        styles.marketMoodText,
+                        {
+                          color:
+                            theme === "dark"
+                              ? colors.white
+                              : colors.octodenaryText,
+                        },
+                      ]}
+                    >
+                      Market Mood :
+                    </Text>
+                  </View>
+                  <View style={styles.marketCardsContainer}>
+                    {marketSentiments.map((item, index) => (
+                      <View
+                        key={index}
+                        style={[
+                          styles.marketCard,
+                          {
+                            borderColor:
+                              theme === "dark"
+                                ? colors.undenaryBorder
+                                : colors.nonaryBorder,
+                          },
+                        ]}
+                      >
+                        <View>
+                          <Text
+                            style={[
+                              styles.positiveValue,
+                              { color: item.color },
+                            ]}
+                          >
+                            {item.value}
+                          </Text>
+                          <Image source={{ uri: item.emoji }} />
+                        </View>
+                        <View>
+                          <Text
+                            style={[
+                              styles.positiveText,
+                              {
+                                color:
+                                  theme === "dark"
+                                    ? colors.white
+                                    : colors.octodenaryText,
+                              },
+                            ]}
+                          >
+                            {item.label}
+                          </Text>
+                        </View>
+                      </View>
+                    ))}
+                  </View>
+                  <View>
+                    <Text
+                      style={[
+                        styles.marketMoodDescription,
+                        {
+                          color:
+                            theme === "dark"
+                              ? colors.white
+                              : colors.octodenaryText,
+                        },
+                      ]}
+                    >
+                      Market sentiments leans towards bearish with significant
+                      concern over international factors.
+                    </Text>
+                  </View>
+                </View>
+                <Divider
+                  style={[
+                    styles.dividerStyle,
+                    {
+                      backgroundColor:
+                        theme == "light"
+                          ? colors.nonaryBorder
+                          : colors.darkUndenaryBackground,
+                    },
+                  ]}
+                />
               </View>
               <View style={styles.relatedDiscussionsContainer}>
                 <View style={styles.relatedDiscussionsHeader}>
@@ -664,8 +809,8 @@ const HeadlineDetailsScreen = () => {
                         {
                           color:
                             theme === "dark"
-                              ? colors.darkPrimaryText
-                              : colors.octodenaryText,
+                              ? colors.vigenaryText
+                              : colors.sexdenaryText,
                         },
                       ]}
                     >
@@ -678,7 +823,7 @@ const HeadlineDetailsScreen = () => {
                   )}
                 </View>
                 <View style={styles.relatedDiscussionsDetails}>
-                  {(commentsData || []).map((comment: any) => (
+                  {(visibleComments || []).map((comment: any) => (
                     <View
                       key={comment.id}
                       style={styles.relatedDiscussionsArticle}
@@ -730,34 +875,36 @@ const HeadlineDetailsScreen = () => {
                           {comment.comment}
                         </Text>
                         <View style={styles.likeUnlikeContainer}>
-                          <View style={styles.iconCountContainer}>
-                            <TouchableOpacity
-                              onPress={() => {
-                                handleToggleLikeComment(comment.id);
-                              }}
-                            >
-                              {!likedComments[comment.id] ? (
-                                <HeartCommentIcon width={20} height={20} />
-                              ) : (
-                                <HeartCommentIconFilled
-                                  width={20}
-                                  height={20}
-                                />
-                              )}
-                            </TouchableOpacity>
-                            <Text
-                              style={[
-                                styles.articleTime,
-                                {
-                                  color:
-                                    theme === "dark"
-                                      ? colors.darkSenaryText
-                                      : colors.unvigintaryText,
-                                },
-                              ]}
-                            >
-                              {comment.likes || 0}
-                            </Text>
+                          <View style={styles.likeReplyContainer}>
+                            <View style={styles.iconCountContainer}>
+                              <TouchableOpacity
+                                onPress={() => {
+                                  handleToggleLikeComment(comment.id);
+                                }}
+                              >
+                                {!likedComments[comment.id] ? (
+                                  <HeartCommentIcon width={20} height={20} />
+                                ) : (
+                                  <HeartCommentIconFilled
+                                    width={20}
+                                    height={20}
+                                  />
+                                )}
+                              </TouchableOpacity>
+                              <Text
+                                style={[
+                                  styles.articleTime,
+                                  {
+                                    color:
+                                      theme === "dark"
+                                        ? colors.darkSenaryText
+                                        : colors.unvigintaryText,
+                                  },
+                                ]}
+                              >
+                                {comment.likes || 0}
+                              </Text>
+                            </View>
                             <Text
                               style={[
                                 styles.articleTime,
@@ -778,10 +925,25 @@ const HeadlineDetailsScreen = () => {
                   ))}
                 </View>
               </View>
-              {commentsData.length > 3 && (
-                <View style={styles.viewCommentsContainer}>
-                  <Text style={styles.viewCommentsText}>View All Comments</Text>
-                </View>
+              {commentsData.length > 3 && !showAllComments && (
+                <TouchableOpacity
+                  style={styles.viewCommentsContainer}
+                  onPress={() => setShowAllComments(true)}
+                >
+                  <Text
+                    style={[
+                      styles.viewCommentsText,
+                      {
+                        color:
+                          theme === "dark"
+                            ? colors.vigenaryText
+                            : colors.sexdenaryText,
+                      },
+                    ]}
+                  >
+                    View All Comments
+                  </Text>
+                </TouchableOpacity>
               )}
               <View
                 style={[
@@ -871,15 +1033,15 @@ const HeadlineDetailsScreen = () => {
                           alignSelf: isFocused ? "flex-end" : "center",
                           backgroundColor:
                             theme === "dark"
-                              ? colors.duodenaryBackground
+                              ? colors.darkQuaternaryBackground
                               : colors.septendenaryBackground,
                         },
                       ]}
                     >
                       {theme === "light" ? (
-                        <CommentIcon />
+                        <CommentIconLight />
                       ) : (
-                        <CommentIconBlack />
+                        <CommentIconDark />
                       )}
                     </View>
                   </TouchableOpacity>
@@ -898,9 +1060,10 @@ export default HeadlineDetailsScreen;
 const styles = StyleSheet.create({
   headerContainer: {
     marginTop: 24,
+    marginBottom: 24,
   },
   headingDetailsContainer: {
-    gap: 32,
+    gap: 24,
   },
   headingContainer: {
     gap: 16,
@@ -1004,9 +1167,15 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     gap: 36,
   },
+  likeReplyContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 24,
+  },
   iconCountContainer: {
     flexDirection: "row",
-    gap: 8,
+    alignItems: "center",
+    gap: 6,
   },
   commentContainer: {
     //paddingHorizontal: 12,
@@ -1045,7 +1214,7 @@ const styles = StyleSheet.create({
   authorIconContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
+    gap: 10,
   },
   authorTimeContainer: {
     flexDirection: "row",
@@ -1054,10 +1223,43 @@ const styles = StyleSheet.create({
   },
   authorTimeText: {
     fontFamily: fontFamily.Inter400,
-    fontSize: 12,
   },
   dividerStyle: {
     height: 1,
+  },
+  marketMoodContainer: {
+    gap: 24,
+  },
+  marketMoodText: {
+    fontFamily: fontFamily.Inter700,
+    fontSize: 18,
+  },
+  marketCardsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 16,
+    width: "100%",
+  },
+  marketCard: {
+    gap: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+    padding: 12,
+    flex: 1,
+  },
+  positiveValue: {
+    fontFamily: fontFamily.Inter700,
+    fontSize: 24,
+    color: colors.tresvigintaryText,
+  },
+  positiveText: {
+    fontFamily: fontFamily.Inter400,
+    fontSize: 14,
+  },
+  marketMoodDescription: {
+    fontFamily: fontFamily.Inter400,
+    fontSize: 16,
   },
   viewCommentsContainer: {
     marginTop: 20,

@@ -7,7 +7,7 @@ const globalStyles = {
     flex: 1,
     backgroundColor:
       theme === "dark" ? colors.octodenaryText : colors.primaryBackground,
-    padding: 22,
+    padding: 24,
   }),
   title: (theme: string): TextStyle => ({
     fontFamily: fontFamily.Inter700,

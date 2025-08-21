@@ -4,7 +4,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //const apiUrl = "http://localhost:8080/api/v1";
 //const baseURL = "https://rationally-joint-swift.ngrok-free.app";
-//const baseURL = "https://d25d738fd5b9.ngrok-free.app";
 const baseURL = "https://marketbriefs.co.in";
 const apiUrl = `${baseURL}/api/v1`;
 // Create a basic axios instance without interceptors

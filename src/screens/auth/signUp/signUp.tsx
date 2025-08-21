@@ -28,7 +28,7 @@ import {
   FacebookIcon,
   AppleIconWhite,
 } from "../../../assets/icons/components/welcome";
-import { sendOTP } from "../../../apiServices/auth";
+import { googleSignIn, sendOTP } from "../../../apiServices/auth";
 import { AuthContext } from "../../../context/loginAuthContext";
 import { ThemeContext } from "../../../context/themeContext";
 import showToast from "../../../utilis/showToast";
@@ -49,7 +49,10 @@ const SignUpScreen = () => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const otpInputs = useRef<Array<RNTextInput | null>>([]);
   const [isValid, setIsValid] = useState(false);
-
+  const { googleUserInfo, idToken, accessToken, signIn, signOut } =
+    useGoogleAuth();
+  const { userInfoFacebook, promptFacebookLogin } = useFacebookAuth();
+  const { userInfoApple, promptAppleLogin } = useAppleAuth();
   const handleSendOTP = async () => {
     if (input.trim() === "") {
       showToast("Please enter your phone or email.", "warning");
@@ -84,7 +87,6 @@ const SignUpScreen = () => {
       showToast(errorMessage, "danger");
     }
   };
-
   const handleVerifyOTP = async () => {
     if (otp.some((digit) => digit === "")) {
       showToast("Please enter all OTP digits.", "warning");
@@ -97,11 +99,16 @@ const SignUpScreen = () => {
     };
     try {
       await login(loginData); // throws if OTP invalid
-      const onboardingRequired = await AsyncStorage.getItem(
-        "onboardingRequired"
+      const onboardingCompletedStr = await AsyncStorage.getItem(
+        "onboardingCompleted"
       );
-      console.log("Onboarding Required:", onboardingRequired);
-      if (Boolean(onboardingRequired)) {
+      console.log("Onboarding Raw:", onboardingCompletedStr);
+      const onboardingCompleted = onboardingCompletedStr
+        ? JSON.parse(onboardingCompletedStr)
+        : false; // default if null
+
+      console.log("Onboarding Required:", onboardingCompleted);
+      if (onboardingCompleted) {
         navigation.navigate("TellUsSomething", {});
       } else {
         navigation.navigate("BottomTabNavigator");
@@ -119,7 +126,6 @@ const SignUpScreen = () => {
       showToast(errorMessage, "danger");
     }
   };
-
   const handleSignUp = async () => {
     if (otp.some((digit) => digit === "")) {
       showToast("Please enter all OTP digits.", "warning");
@@ -182,17 +188,35 @@ const SignUpScreen = () => {
     setShowOTPInputs(false);
     setOtp(["", "", "", "", "", ""]);
   };
-  const isOtpComplete = otp.every((digit) => digit !== "");
-  const { userInfoGoogle, promptGoogleLogin } = useGoogleAuth();
-  const { userInfoFacebook, promptFacebookLogin } = useFacebookAuth();
-  const { userInfoApple, promptAppleLogin } = useAppleAuth();
-  useEffect(() => {
-    if (userInfoGoogle) {
-      console.log("LoggedInUser:", userInfoGoogle);
-      navigation.navigate("TellUsSomething", {});
+  const handleGoogleLogin = async () => {
+    const userData = await signIn();
+    if (userData) {
+      console.log("UserData", userData);
+      console.log("Idtoken", idToken);
+      console.log("AccessToken", accessToken);
+      saveGoogleData(idToken ?? "", userData);
+      navigation.navigate("TellUsSomething", {
+        name: userData.user.name,
+        email: userData.user.email,
+      });
     }
-  }, [userInfoGoogle]);
-
+  };
+  const saveGoogleData = async (accessToken: string, userData: any) => {
+    const signinData = {
+      google_token: accessToken,
+      name: userData.user.name,
+    };
+    try {
+      const response = await googleSignIn(signinData);
+      // navigation.navigate("TellUsSomething", {
+      //   name: userData.user.name,
+      //   email: userData.user.email,
+      // });
+      console.log("Google data saved successfully", response.data);
+    } catch (error) {
+      console.error("Error saving Google data:", error);
+    }
+  };
   useEffect(() => {
     if (userInfoFacebook) {
       console.log("FacebookUserInfo:", userInfoFacebook);
@@ -269,7 +293,8 @@ const SignUpScreen = () => {
             <SocialLoginButton
               IconComponent={GoogleIcon}
               text="Continue with Google"
-              onPress={promptGoogleLogin}
+              // onPress={promptGoogleLogin}
+              onPress={handleGoogleLogin}
               // disabled={!requestGoogle}
             />
             <SocialLoginButton

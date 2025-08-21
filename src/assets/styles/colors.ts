@@ -71,7 +71,7 @@ export const colors = {
   vigenaryText: "#9990FF", //20
   unvigintaryText: "#72777A", // 21
   duovigintaryText: "#404446", // 22
-  // tresvigintaryText: "#D5E6F7", // 23
+  tresvigintaryText: "#23C16B", // 23
   // quattuorvigintaryText: "#E7F8A9", // 24
   // quinvigintaryText: "#F9A1B2", // 25
   // sexvigintaryText: "#1A2B3C", // 26
@@ -97,7 +97,8 @@ export const colors = {
   septnaryBorderColor: "#1D4ED8", //7
   octonaryBorderColor: "#5538EE", //8
   nonaryBorder: "#E3E5E5", //9
-  denaryBorder: "#C6C4FF",
+  denaryBorder: "#C6C4FF", //10
+  undenaryBorder: "#262829", //11
   //Button Colors
   primaryButtonColor: "#007AFF", //1
   secondaryButtonColor: "#2B22E2", //2
